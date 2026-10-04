@@ -1,0 +1,56 @@
+{
+  "id": "21993491-a474-4799-bdc8-05ebe3eaa1b8",
+  "type": "success",
+  "title": "Learning task: Run a deterministic Rust learning exercise.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790615035.911079,
+  "parent_id": null,
+  "content": {
+    "goal": "executor-rust-selftest",
+    "task": "Run a deterministic Rust learning exercise.",
+    "candidate_id": "LEARN-executor-rust-selftest-1790615035766",
+    "experiment_id": "43d45b3f-76b7-404d-a2dd-0c615a201974",
+    "result": {
+      "candidate_id": "LEARN-executor-rust-selftest-1790615035766",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "RUST_EXECUTOR_OK\n",
+      "stderr": "",
+      "duration_seconds": 0.1436,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-executor-rust-selftest-1790615035766",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-executor-rust-selftest-1790615035766",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14235390299290884,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-executor-rust-selftest-1790615035766",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "ad4266a0205f4993dcfd6d82a0bf11d8fa0bd19aac5c47e45ef23c4bd95ce22b"
+}

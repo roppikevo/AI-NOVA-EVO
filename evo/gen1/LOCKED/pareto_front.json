@@ -1,0 +1,70 @@
+{
+  "objectives": {
+    "val_loss": "minimize",
+    "params": "minimize",
+    "step_time": "minimize",
+    "vram": "minimize"
+  },
+  "source": "/opt/ai/work/nova-evo/evo/gen1/robust_results.json",
+  "candidates": 5,
+  "pareto_count": 3,
+  "pareto_front": [
+    {
+      "mutation": "d_model_plus",
+      "params": 7722240,
+      "val_loss_mean": 8.759341231664022,
+      "val_loss_std": 0.022566201591137362,
+      "val_loss_min": 8.7299455909729,
+      "val_loss_max": 8.784798810958863,
+      "perplexity_mean": 6371.5327588806185,
+      "speed_mean": 10.837061032689641,
+      "speed_std": 0.3381324036500345,
+      "vram_mean_gb": 0.4365822474161784,
+      "vram_max_gb": 0.4367494583129883,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN1-010"
+    },
+    {
+      "mutation": "layers_minus",
+      "params": 5519616,
+      "val_loss_mean": 8.855200754165649,
+      "val_loss_std": 0.015858206079123947,
+      "val_loss_min": 8.835905492782592,
+      "val_loss_max": 8.874747562408448,
+      "perplexity_mean": 7011.63721785074,
+      "speed_mean": 12.851535226906535,
+      "speed_std": 0.12191554802457108,
+      "vram_mean_gb": 0.3829803466796875,
+      "vram_max_gb": 0.3829803466796875,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN1-001"
+    },
+    {
+      "mutation": "d_model_minus",
+      "params": 4043520,
+      "val_loss_mean": 9.05031585629781,
+      "val_loss_std": 0.012749073018058745,
+      "val_loss_min": 9.039235805511474,
+      "val_loss_max": 9.068173862457275,
+      "perplexity_mean": 8521.92341762608,
+      "speed_mean": 10.833888875695601,
+      "speed_std": 0.24306802737793626,
+      "vram_mean_gb": 0.3606901168823242,
+      "vram_max_gb": 0.3606901168823242,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN1-006"
+    }
+  ]
+}

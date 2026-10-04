@@ -1,0 +1,68 @@
+{
+  "id": "1000bb95-b88a-444a-965b-8eb112f4f5dd",
+  "type": "success",
+  "title": "Learning task: Rust program that defines a struct with two borrowed references to a single String, asserts that cloning the struct copies the data pointer, then asserts that moving the struct into a function leaves the original data intact.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790622469.1895986,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 8",
+    "task": "Rust program that defines a struct with two borrowed references to a single String, asserts that cloning the struct copies the data pointer, then asserts that moving the struct into a function leaves the original data intact.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622469035",
+    "experiment_id": "1dcc6e78-8328-40d6-872d-0cae52db5f07",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct BorrowedData<'a> {\n    name: &'a str,\n    description: &'a str,\n}\n\nimpl<'a> Clone for BorrowedData<'a> {\n    fn clone(&self) -> Self {\n        BorrowedData {\n            name: self.name,\n            description: self.description,\n        }\n    }\n}\n\nfn main() {\n    let data = BorrowedData {\n        name: \"Alice\",\n        description: \"A developer\",\n    };\n\n    let cloned = data.clone();\n    assert_eq!(cloned.name, \"Alice\");\n    assert_eq!(cloned.description, \"A developer\");\n\n    let original = BorrowedData {\n        name: \"Bob\",\n        description: \"A manager\",\n    };\n\n    let moved = original;\n    assert_eq!(moved.name, \"Bob\");\n    assert_eq!(moved.description, \"A manager\");\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622469035",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1533,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622469035",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622469035",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.1520544399973005,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622469035",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "352fdf57c127e718a76d912f432f3ce636aacd79a90966209297852a40b85c19"
+}

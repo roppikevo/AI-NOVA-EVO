@@ -1,0 +1,14 @@
+{
+  "version": "0.1.0",
+  "mutations": [],
+  "architecture_signatures": [],
+  "successful_patterns": [],
+  "failed_patterns": [],
+  "combinations": [],
+  "statistics": {
+    "total_mutations": 0,
+    "successful": 0,
+    "failed": 0,
+    "duplicate_architectures": 0
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "d1baf1cf-df43-450e-8671-a4119b1b1bf2",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that defines a struct BoxOwner containing a Box<i32>.\nMove ownership of a value into BoxOwner and then verify ownership transfer using only valid Rust code.\nUse assertions that directly test the resulting owned value and print a success marker.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790616276.9010868,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V3",
+    "task": "Create a Rust program that defines a struct BoxOwner containing a Box<i32>.\nMove ownership of a value into BoxOwner and then verify ownership transfer using only valid Rust code.\nUse assertions that directly test the resulting owned value and print a success marker.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616276749",
+    "experiment_id": "f6365ddb-1fd8-4477-b76a-8090320bb867",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616276749",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership transferred successfully\n",
+      "stderr": "",
+      "duration_seconds": 0.1471,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616276749",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616276749",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14595982800528873,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616276749",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "cfc32ec171f96513ca29a42eaf33144fff0133191196fae447750ee0d2d2de1b"
+}

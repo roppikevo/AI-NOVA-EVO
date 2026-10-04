@@ -1,0 +1,19 @@
+{
+  "goal": "Rust",
+  "status": "PLANNED",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Meranie času na úlohy, porovnanie počtu chýb v kóde, spätná väzba od mentora.",
+  "created": 1790531408.3913527,
+  "updated": 1790531445.9545984,
+  "plan": [
+    "Meranie času na úlohy, porovnanie počtu chýb v kóde, spätná väzba od mentora.",
+    "**Refining the Output (adhering to constraints):**",
+    "Must NOT claim proposal is proven.",
+    "Definícia fáz, odporúčanie konkrétnych knižníc (Cargo, Crates.io), integrácia CI/CD pre testovanie.",
+    "*",
+    "Navrhujem štruktúrovaný učebný plán rozdelený do 5 fáz: Základy, Vlastníctvo (Ownership), Pokročilé vlastnosti, Konkurencia, a Finálny projekt. *"
+  ]
+}

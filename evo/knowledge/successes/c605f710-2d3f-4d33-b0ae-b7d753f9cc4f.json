@@ -1,0 +1,68 @@
+{
+  "id": "c605f710-2d3f-4d33-b0ae-b7d753f9cc4f",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621515.0359957,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 2",
+    "task": "Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+    "experiment_id": "22f0faff-2aab-4b86-9cc4-be93dd6bc2f8",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::rc::Rc;\nuse std::sync::Arc;\n\nstruct Data {\n    value: i32,\n}\n\nimpl Data {\n    fn new(v: i32) -> Self {\n        Data { value: v }\n    }\n}\n\nfn main() {\n    // Create 5 synthetic structs with varying lifetimes (simulated via stack allocation)\n    let a = Data::new(1);\n    let b = Data::new(2);\n    let c = Data::new(3);\n    let d = Data::new(4);\n    let e = Data::new(5);\n\n    // Clone into Rc\n    let rc_a = Rc::new(a);\n    let rc_b = Rc::new(b);\n    let rc_c = Rc::new(c);\n    let rc_d = Rc::new(d);\n    let rc_e = Rc::new(e);\n\n    // Move into Arc\n    let arc_a = Arc::new(Rc::clone(&rc_a));\n    let arc_b = Arc::new(Rc::clone(&rc_b));\n    let arc_c = Arc::new(Rc::clone(&rc_c));\n    let arc_d = Arc::new(Rc::clone(&rc_d));\n    let arc_e = Arc::new(Rc::clone(&rc_e));\n\n    // Explicit Drop calls on original Rc clones\n    drop(rc_a);\n    drop(rc_b);\n    drop(rc_c);\n    drop(rc_d);\n    drop(rc_e);\n\n    // Assert reference counts match expected values after drops\n    // Each Arc holds one Rc, so after dropping the original Rc clones,\n    // the reference count for each should be 1 (held by the Arc itself).\n    assert_eq!(Arc::strong_count(&arc_a), 1);\n    assert_eq!(Arc::strong_count(&arc_b), 1);\n    assert_eq!(Arc::strong_count(&arc_c), 1);\n    assert_eq!(Arc::strong_count(&arc_d), 1);\n    assert_eq!(Arc::strong_count(&arc_e), 1);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.2614,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: field `value` is never read\n --> main.rs:5:5\n  |\n4 | struct Data {\n  |        ---- field in this struct\n5 |     value: i32,\n  |     ^^^^^\n  |\n  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: 1 warning emitted\n\n",
+          "duration_seconds": 0.2599231519998284,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "c20a655a3473ad6fda344659ce23027c09f0228cff8677f05d4cf8285f2e88a9"
+}

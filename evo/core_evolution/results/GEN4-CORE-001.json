@@ -1,0 +1,30 @@
+{
+  "status": "REJECT",
+  "stage": "runtime_smoke",
+  "candidate": "GEN4-CORE-001",
+  "smoke": {
+    "status": "FAIL",
+    "runner": {
+      "candidate_id": "GEN4-CORE-001",
+      "command": [
+        "python",
+        "smoke_test.py"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN4-CORE-001/smoke_test.py\", line 132, in <module>\n    assert torch.isfinite(logits).all()\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^\nAssertionError\n",
+      "duration_seconds": 2.7109378339955583,
+      "status": "failed",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN4-CORE-001",
+      "metadata": {
+        "timeout_seconds": 120
+      },
+      "success": false
+    }
+  },
+  "evaluation": {
+    "decision": "REJECT",
+    "reason": "runtime_smoke_failed"
+  }
+}

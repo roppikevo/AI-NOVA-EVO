@@ -1,0 +1,1 @@
+{"time": 1790928271.2102995, "date": "2026-10-02 08:04", "name": "ctx256", "a": "--batch-size 64", "b": "--batch-size 32 --seq-mult 2", "steps": 8000, "margin": 0.004, "a_val": 3.4499, "b_val": 3.451, "start_val": 3.4537, "a_hours": 0.294, "b_hours": 0.452, "winner": "A"}

@@ -1,0 +1,812 @@
+[
+  {
+    "candidate_id": "GEN3-001",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "layers_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-002",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "layers_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 7,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-003",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "kernel_3",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-004",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "kernel_7",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-005",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-006",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-007",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "forget_bias_1.125",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.125,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-008",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "forget_bias_1.375",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.375,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-009",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "forget_bias_1.625",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.625,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-010",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "layers_minus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-011",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "layers_plus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 7,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-012",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "kernel_3+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-013",
+    "parent": "GEN2-011",
+    "parent_mutation": "d_model_plus+forget_bias_down",
+    "mutation": "kernel_7+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-014",
+    "parent": "GEN2-004",
+    "parent_mutation": "d_model_plus",
+    "mutation": "layers_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-015",
+    "parent": "GEN2-004",
+    "parent_mutation": "d_model_plus",
+    "mutation": "layers_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 7,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-016",
+    "parent": "GEN2-004",
+    "parent_mutation": "d_model_plus",
+    "mutation": "kernel_3",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-017",
+    "parent": "GEN2-004",
+    "parent_mutation": "d_model_plus",
+    "mutation": "kernel_7",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-018",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 4,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-019",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-020",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "kernel_3",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-021",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "kernel_7",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-022",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-023",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-024",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "forget_bias_1.125",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.125,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-025",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "forget_bias_1.375",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.375,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-026",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "forget_bias_1.625",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.625,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-027",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_minus+forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 4,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-028",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_minus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 4,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-029",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_plus+forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-030",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "layers_plus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-031",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "kernel_7+forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-032",
+    "parent": "GEN2-012",
+    "parent_mutation": "layers_minus+kernel_3",
+    "mutation": "kernel_7+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 5,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-033",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "layers_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 3,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-034",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "layers_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-035",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "kernel_3",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-036",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "kernel_7",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-037",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-038",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-039",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "forget_bias_1.125",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.125,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-040",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "forget_bias_1.375",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.375,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-041",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "forget_bias_1.625",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.625,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-042",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "layers_minus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 3,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-043",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "layers_plus+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-044",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "kernel_3+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN3-045",
+    "parent": "GEN2-024",
+    "parent_mutation": "layers_minus+forget_bias_down",
+    "mutation": "kernel_7+forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 4,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  }
+]

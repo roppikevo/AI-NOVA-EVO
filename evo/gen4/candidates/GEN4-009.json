@@ -1,0 +1,26 @@
+{
+  "candidate": "GEN4-009",
+  "generation": 4,
+  "parent": "GEN3-007",
+  "mutation": "d_model:384->512+forget_bias:1.125->0.875",
+  "signature": "8999de9d10baacb4",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 512,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 0.875,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "standard",
+    "local_context": "single_depthwise"
+  },
+  "technical_validation": {
+    "valid": false,
+    "errors": [
+      "equal state architecture requires d_state == d_model"
+    ]
+  },
+  "status": "invalid"
+}

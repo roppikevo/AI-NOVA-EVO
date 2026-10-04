@@ -1,0 +1,68 @@
+{
+  "id": "75cc50b8-31b9-4dce-a762-e83cf1ee8495",
+  "type": "success",
+  "title": "Learning task: Run a deterministic Rust learning exercise.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790620700.2860165,
+  "parent_id": null,
+  "content": {
+    "goal": "executor-rust-selftest",
+    "task": "Run a deterministic Rust learning exercise.",
+    "candidate_id": "LEARN-executor-rust-selftest-1790620700139",
+    "experiment_id": "c048dfce-3ddc-4eb2-83ad-9070b2eb9d00",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "fn main() {\n    let mut value = 20;\n    let reference = &mut value;\n    *reference += 22;\n    assert_eq!(value, 42);\n    println!(\"RUST_EXECUTOR_OK\");\n}\n",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "RUST_EXECUTOR_OK",
+    "actual_output": "RUST_EXECUTOR_OK\n",
+    "result": {
+      "candidate_id": "LEARN-executor-rust-selftest-1790620700139",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "RUST_EXECUTOR_OK\n",
+      "stderr": "",
+      "duration_seconds": 0.1461,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-executor-rust-selftest-1790620700139",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-executor-rust-selftest-1790620700139",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14493525699072052,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-executor-rust-selftest-1790620700139",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "3b652669597b946a6baa5c05011d1f68a774ca36b70361e28d6ba161748cbb2a"
+}

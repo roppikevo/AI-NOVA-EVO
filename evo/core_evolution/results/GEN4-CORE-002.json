@@ -1,0 +1,312 @@
+{
+  "status": "PASS",
+  "decision": "PASS",
+  "stage": "evaluation",
+  "candidate": "GEN4-CORE-002",
+  "recovery": true,
+  "smoke": {
+    "status": "PASS",
+    "runner": {
+      "candidate_id": "GEN4-CORE-002",
+      "command": [
+        "python",
+        "smoke_test.py"
+      ],
+      "returncode": 0,
+      "stdout": "{\"status\": \"PASS\", \"device\": \"cuda\", \"parameters\": 9856518, \"gradient_tensors\": 75, \"invalid_gradients\": 0, \"causal_prefix_max_diff\": 0.0, \"logits_shape\": [2, 16, 16384]}\n",
+      "stderr": "",
+      "duration_seconds": 2.7881762480028556,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN4-CORE-002",
+      "metadata": {
+        "timeout_seconds": 120
+      },
+      "success": true
+    },
+    "metrics": {
+      "status": "PASS",
+      "device": "cuda",
+      "parameters": 9856518,
+      "gradient_tensors": 75,
+      "invalid_gradients": 0,
+      "causal_prefix_max_diff": 0.0,
+      "logits_shape": [
+        2,
+        16,
+        16384
+      ]
+    }
+  },
+  "training": {
+    "status": "COMPLETED",
+    "runner": {
+      "candidate_id": "GEN4-CORE-002",
+      "command": [
+        "python",
+        "train_candidate.py"
+      ],
+      "returncode": 0,
+      "stdout": "step=    1 train_loss=9.776093\n          val_loss=9.666096 ppl=15773.6443\nstep= 1000 train_loss=5.512239\n          val_loss=5.773017 ppl=321.5062\nstep=    1 train_loss=9.793168\n          val_loss=9.673122 ppl=15884.8568\nstep= 1000 train_loss=5.699931\n          val_loss=5.768125 ppl=319.9374\nstep=    1 train_loss=9.784909\n          val_loss=9.684388 ppl=16064.8402\nstep= 1000 train_loss=6.817244\n          val_loss=5.766776 ppl=319.5061\n{\"status\": \"COMPLETED\", \"candidate\": \"GEN4-CORE-002\", \"candidate_id\": \"GEN4-CORE-002\", \"parent_id\": \"GEN3-007\", \"state\": \"COMPLETED\", \"stage\": \"robust\", \"seeds\": [1001, 2002, 3003], \"seed_results\": [{\"status\": \"COMPLETED\", \"experiment_id\": \"0737179d-503b-429d-ba36-58e11df2a69e\", \"candidate\": \"GEN4-CORE-002\", \"metrics\": {\"efficiency\": {\"parameters\": 9856518, \"param_mb\": 39.43, \"cpu_threads\": 8, \"cpu_tokens_per_sec\": 5838.5, \"cpu_gen_tokens_per_sec\": 164.6, \"state_kb\": 9.0, \"peak_vram_mb\": 542.3}, \"validation_loss\": 5.773016971696703, \"perplexity\": 321.50624616879287, \"train_loss\": 5.5122389793396, \"steps\": 1000, \"parameters\": 9856518, \"duration_seconds\": 120.73642845399809, \"checkpoint\": \"/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_1001.pt\"}, \"resources\": {\"before\": {\"timestamp\": 1790786017.1232884, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 29126205440, \"ram_used_bytes\": 3847180288, \"disk_free_bytes\": 809915232256, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 0, \"gpu_vram_reserved_bytes\": 0, \"gpu_vram_free_bytes\": 8184922112}, \"after\": {\"timestamp\": 1790786139.2021747, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 27764387840, \"ram_used_bytes\": 5208997888, \"disk_free_bytes\": 809915224064, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 95897600, \"gpu_vram_reserved_bytes\": 679477248, \"gpu_vram_free_bytes\": 7505444864}}}, {\"status\": \"COMPLETED\", \"experiment_id\": \"87571682-3887-4420-8473-5bc0b78332d9\", \"candidate\": \"GEN4-CORE-002\", \"metrics\": {\"efficiency\": {\"parameters\": 9856518, \"param_mb\": 39.43, \"cpu_threads\": 8, \"cpu_tokens_per_sec\": 5780.1, \"cpu_gen_tokens_per_sec\": 173.3, \"state_kb\": 9.0, \"peak_vram_mb\": 542.3}, \"validation_loss\": 5.768125372932306, \"perplexity\": 319.93740680686017, \"train_loss\": 5.699930667877197, \"steps\": 1000, \"parameters\": 9856518, \"duration_seconds\": 119.42118571500032, \"checkpoint\": \"/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_2002.pt\"}, \"resources\": {\"before\": {\"timestamp\": 1790786141.590386, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 28086181888, \"ram_used_bytes\": 4887203840, \"disk_free_bytes\": 809915219968, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 17039360, \"gpu_vram_reserved_bytes\": 41943040, \"gpu_vram_free_bytes\": 8142979072}, \"after\": {\"timestamp\": 1790786262.3071897, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 27693420544, \"ram_used_bytes\": 5279965184, \"disk_free_bytes\": 809915211776, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 95897600, \"gpu_vram_reserved_bytes\": 679477248, \"gpu_vram_free_bytes\": 7505444864}}}, {\"status\": \"COMPLETED\", \"experiment_id\": \"0bc4fb1b-7917-4a1c-b485-c9def19cc156\", \"candidate\": \"GEN4-CORE-002\", \"metrics\": {\"efficiency\": {\"parameters\": 9856518, \"param_mb\": 39.43, \"cpu_threads\": 8, \"cpu_tokens_per_sec\": 5764.4, \"cpu_gen_tokens_per_sec\": 170.8, \"state_kb\": 9.0, \"peak_vram_mb\": 542.3}, \"validation_loss\": 5.766776240473423, \"perplexity\": 319.5060599040066, \"train_loss\": 6.817244052886963, \"steps\": 1000, \"parameters\": 9856518, \"duration_seconds\": 117.68468586699964, \"checkpoint\": \"/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_3003.pt\"}, \"resources\": {\"before\": {\"timestamp\": 1790786264.4738808, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 28065845248, \"ram_used_bytes\": 4907540480, \"disk_free_bytes\": 809915203584, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 17039360, \"gpu_vram_reserved_bytes\": 41943040, \"gpu_vram_free_bytes\": 8142979072}, \"after\": {\"timestamp\": 1790786383.3939025, \"cpu_count\": 16, \"ram_total_bytes\": 32973385728, \"ram_available_bytes\": 27684237312, \"ram_used_bytes\": 5289148416, \"disk_free_bytes\": 809915195392, \"gpu_available\": true, \"gpu_name\": \"NVIDIA GeForce RTX 4060\", \"gpu_vram_total_bytes\": 8184922112, \"gpu_vram_allocated_bytes\": 95897600, \"gpu_vram_reserved_bytes\": 679477248, \"gpu_vram_free_bytes\": 7505444864}}}], \"training\": {\"stage\": \"robust\", \"steps\": 1000, \"batch_size\": 8, \"learning_rate\": 0.0003, \"weight_decay\": 0.01, \"seeds\": [1001, 2002, 3003]}, \"metrics\": {\"validation_loss_mean\": 5.769306195034144, \"validation_loss_std\": 0.002681098926118127, \"validation_loss_min\": 5.766776240473423, \"validation_loss_max\": 5.773016971696703, \"parameters\": 9856518, \"duration_seconds_mean\": 119.28076667866601, \"efficiency\": {\"parameters\": 9856518, \"param_mb\": 39.43, \"state_kb\": 9.0, \"cpu_threads\": 8, \"cpu_tokens_per_sec\": 5794.3, \"cpu_gen_tokens_per_sec\": 169.6, \"peak_vram_mb\": 542.3}}, \"dataset\": \"data/text_v2\"}\n",
+      "stderr": "",
+      "duration_seconds": 370.08743460999904,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN4-CORE-002",
+      "metadata": {
+        "timeout_seconds": 7200
+      },
+      "success": true
+    },
+    "robust": {
+      "status": "COMPLETED",
+      "candidate": "GEN4-CORE-002",
+      "candidate_id": "GEN4-CORE-002",
+      "parent_id": "GEN3-007",
+      "state": "COMPLETED",
+      "stage": "robust",
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "seed_results": [
+        {
+          "status": "COMPLETED",
+          "experiment_id": "0737179d-503b-429d-ba36-58e11df2a69e",
+          "candidate": "GEN4-CORE-002",
+          "metrics": {
+            "efficiency": {
+              "parameters": 9856518,
+              "param_mb": 39.43,
+              "cpu_threads": 8,
+              "cpu_tokens_per_sec": 5838.5,
+              "cpu_gen_tokens_per_sec": 164.6,
+              "state_kb": 9.0,
+              "peak_vram_mb": 542.3
+            },
+            "validation_loss": 5.773016971696703,
+            "perplexity": 321.50624616879287,
+            "train_loss": 5.5122389793396,
+            "steps": 1000,
+            "parameters": 9856518,
+            "duration_seconds": 120.73642845399809,
+            "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_1001.pt"
+          },
+          "resources": {
+            "before": {
+              "timestamp": 1790786017.1232884,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 29126205440,
+              "ram_used_bytes": 3847180288,
+              "disk_free_bytes": 809915232256,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 0,
+              "gpu_vram_reserved_bytes": 0,
+              "gpu_vram_free_bytes": 8184922112
+            },
+            "after": {
+              "timestamp": 1790786139.2021747,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 27764387840,
+              "ram_used_bytes": 5208997888,
+              "disk_free_bytes": 809915224064,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 95897600,
+              "gpu_vram_reserved_bytes": 679477248,
+              "gpu_vram_free_bytes": 7505444864
+            }
+          }
+        },
+        {
+          "status": "COMPLETED",
+          "experiment_id": "87571682-3887-4420-8473-5bc0b78332d9",
+          "candidate": "GEN4-CORE-002",
+          "metrics": {
+            "efficiency": {
+              "parameters": 9856518,
+              "param_mb": 39.43,
+              "cpu_threads": 8,
+              "cpu_tokens_per_sec": 5780.1,
+              "cpu_gen_tokens_per_sec": 173.3,
+              "state_kb": 9.0,
+              "peak_vram_mb": 542.3
+            },
+            "validation_loss": 5.768125372932306,
+            "perplexity": 319.93740680686017,
+            "train_loss": 5.699930667877197,
+            "steps": 1000,
+            "parameters": 9856518,
+            "duration_seconds": 119.42118571500032,
+            "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_2002.pt"
+          },
+          "resources": {
+            "before": {
+              "timestamp": 1790786141.590386,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 28086181888,
+              "ram_used_bytes": 4887203840,
+              "disk_free_bytes": 809915219968,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 17039360,
+              "gpu_vram_reserved_bytes": 41943040,
+              "gpu_vram_free_bytes": 8142979072
+            },
+            "after": {
+              "timestamp": 1790786262.3071897,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 27693420544,
+              "ram_used_bytes": 5279965184,
+              "disk_free_bytes": 809915211776,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 95897600,
+              "gpu_vram_reserved_bytes": 679477248,
+              "gpu_vram_free_bytes": 7505444864
+            }
+          }
+        },
+        {
+          "status": "COMPLETED",
+          "experiment_id": "0bc4fb1b-7917-4a1c-b485-c9def19cc156",
+          "candidate": "GEN4-CORE-002",
+          "metrics": {
+            "efficiency": {
+              "parameters": 9856518,
+              "param_mb": 39.43,
+              "cpu_threads": 8,
+              "cpu_tokens_per_sec": 5764.4,
+              "cpu_gen_tokens_per_sec": 170.8,
+              "state_kb": 9.0,
+              "peak_vram_mb": 542.3
+            },
+            "validation_loss": 5.766776240473423,
+            "perplexity": 319.5060599040066,
+            "train_loss": 6.817244052886963,
+            "steps": 1000,
+            "parameters": 9856518,
+            "duration_seconds": 117.68468586699964,
+            "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_3003.pt"
+          },
+          "resources": {
+            "before": {
+              "timestamp": 1790786264.4738808,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 28065845248,
+              "ram_used_bytes": 4907540480,
+              "disk_free_bytes": 809915203584,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 17039360,
+              "gpu_vram_reserved_bytes": 41943040,
+              "gpu_vram_free_bytes": 8142979072
+            },
+            "after": {
+              "timestamp": 1790786383.3939025,
+              "cpu_count": 16,
+              "ram_total_bytes": 32973385728,
+              "ram_available_bytes": 27684237312,
+              "ram_used_bytes": 5289148416,
+              "disk_free_bytes": 809915195392,
+              "gpu_available": true,
+              "gpu_name": "NVIDIA GeForce RTX 4060",
+              "gpu_vram_total_bytes": 8184922112,
+              "gpu_vram_allocated_bytes": 95897600,
+              "gpu_vram_reserved_bytes": 679477248,
+              "gpu_vram_free_bytes": 7505444864
+            }
+          }
+        }
+      ],
+      "training": {
+        "stage": "robust",
+        "steps": 1000,
+        "batch_size": 8,
+        "learning_rate": 0.0003,
+        "weight_decay": 0.01,
+        "seeds": [
+          1001,
+          2002,
+          3003
+        ]
+      },
+      "metrics": {
+        "validation_loss_mean": 5.769306195034144,
+        "validation_loss_std": 0.002681098926118127,
+        "validation_loss_min": 5.766776240473423,
+        "validation_loss_max": 5.773016971696703,
+        "parameters": 9856518,
+        "duration_seconds_mean": 119.28076667866601,
+        "efficiency": {
+          "parameters": 9856518,
+          "param_mb": 39.43,
+          "state_kb": 9.0,
+          "cpu_threads": 8,
+          "cpu_tokens_per_sec": 5794.3,
+          "cpu_gen_tokens_per_sec": 169.6,
+          "peak_vram_mb": 542.3
+        }
+      },
+      "dataset": "data/text_v2"
+    }
+  },
+  "evaluation": {
+    "decision": "PASS",
+    "reason": "Candidate robust validation loss is strictly below the parent baseline within the efficiency budget.",
+    "efficiency": {
+      "ok": true,
+      "gain": false,
+      "violations": [],
+      "ratios": {
+        "parameters": 1.0,
+        "cpu_tokens_per_sec": 1.002,
+        "peak_vram_mb": 1.0
+      },
+      "policy": {
+        "max_param_ratio": 1.25,
+        "min_cpu_speed_ratio": 0.8,
+        "max_vram_ratio": 1.3,
+        "gain_param_ratio": 0.8,
+        "gain_cpu_speed_ratio": 1.25
+      }
+    },
+    "parent_loss": 5.769766704786332,
+    "candidate_loss": 5.769306195034144,
+    "delta": 0.000460509752188365,
+    "seeds": [
+      1001,
+      2002,
+      3003
+    ]
+  },
+  "promotion": {
+    "status": "PROMOTED",
+    "method": "promote",
+    "result": {
+      "status": "PROMOTED",
+      "candidate": "GEN4-CORE-002",
+      "parent": "GEN3-007",
+      "candidate_loss": 5.769306195034144,
+      "parent_loss": 8.593394830067952,
+      "delta": -2.8240886350338084,
+      "source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+      "official_result": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN4-CORE-002.official.json",
+      "previous_core_backup": "/opt/ai/work/nova-evo/evo/core_evolution/history/GEN4-CORE-002/blocks_scan.py",
+      "next_generation": 6
+    }
+  }
+}

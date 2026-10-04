@@ -1,0 +1,30 @@
+{
+  "status": "REJECT",
+  "stage": "runtime_smoke",
+  "candidate": "GEN8-CORE-007",
+  "smoke": {
+    "status": "FAIL",
+    "runner": {
+      "candidate_id": "GEN8-CORE-007",
+      "command": [
+        "python",
+        "smoke_test.py"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN8-CORE-007/smoke_test.py\", line 138, in <module>\n    loss.backward()\n    ~~~~~~~~~~~~~^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/_tensor.py\", line 623, in backward\n    torch.autograd.backward(\n    ~~~~~~~~~~~~~~~~~~~~~~~^\n        self, gradient, retain_graph, create_graph, inputs=inputs\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/autograd/__init__.py\", line 395, in backward\n    _engine_run_backward(\n    ~~~~~~~~~~~~~~~~~~~~^\n        tensors,\n        ^^^^^^^^\n    ...<5 lines>...\n        accumulate_grad=True,\n        ^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/autograd/graph.py\", line 1072, in _engine_run_backward\n    return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        t_outputs, *args, **kwargs\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )  # Calls into the C++ engine to run the backward pass\n    ^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/autograd/function.py\", line 366, in apply\n    return user_fn(self, *args)\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN8-CORE-007/nova/blocks_scan.py\", line 222, in backward\n    grad_f[:, t] = ds * (states[:, t] / f[:, t] if f[:, t] != 0 else 0)\n                                                   ^^^^^^^^^^^^\nRuntimeError: Boolean value of Tensor with more than one value is ambiguous\n",
+      "duration_seconds": 8.523460577009246,
+      "status": "failed",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN8-CORE-007",
+      "metadata": {
+        "timeout_seconds": 120
+      },
+      "success": false
+    }
+  },
+  "evaluation": {
+    "decision": "REJECT",
+    "reason": "runtime_smoke_failed"
+  }
+}

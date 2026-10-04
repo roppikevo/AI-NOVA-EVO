@@ -1,0 +1,1269 @@
+{
+ "name": "scale-smoke",
+ "date": "2026-10-04 10:58",
+ "base": "evo/collective/runs/scale-base.pt",
+ "focuses": [
+  "sk",
+  "cs",
+  "pl",
+  "en",
+  "code",
+  "py",
+  "rs",
+  "teach",
+  "web",
+  "data"
+ ],
+ "steps_per_round": 30,
+ "rounds": 1,
+ "hours": 0.21,
+ "nodes": {
+  "rounds": [
+   {
+    "round": 0,
+    "elected_by": {
+     "nova0": "nova0",
+     "sk": "nova0",
+     "cs": "nova0",
+     "pl": "nova0",
+     "en": "nova0",
+     "code": "nova0",
+     "py": "nova0",
+     "rs": "nova0",
+     "teach": "nova0",
+     "web": "nova0",
+     "data": "nova0"
+    },
+    "led_by": "nova0",
+    "trained": [
+     "code",
+     "cs",
+     "data",
+     "en",
+     "pl",
+     "py",
+     "rs",
+     "sk",
+     "teach",
+     "web"
+    ],
+    "core": {
+     "yes": 0,
+     "of": 11,
+     "accepted": false,
+     "votes": {
+      "code": [
+       3.9451,
+       3.9495,
+       false
+      ],
+      "cs": [
+       3.4015,
+       3.4035,
+       false
+      ],
+      "data": [
+       3.4015,
+       3.4035,
+       false
+      ],
+      "en": [
+       3.5764,
+       3.5773,
+       false
+      ],
+      "nova0": [
+       3.4015,
+       3.4035,
+       false
+      ],
+      "pl": [
+       3.682,
+       3.6835,
+       false
+      ],
+      "py": [
+       3.9661,
+       3.9719,
+       false
+      ],
+      "rs": [
+       2.5935,
+       2.5948,
+       false
+      ],
+      "sk": [
+       3.1891,
+       3.1915,
+       false
+      ],
+      "teach": [
+       3.4015,
+       3.4035,
+       false
+      ],
+      "web": [
+       3.4452,
+       3.447,
+       false
+      ]
+     }
+    },
+    "scores": {
+     "code": 0.8333,
+     "cs": 0.7767,
+     "data": 0.8033,
+     "en": 0.7733,
+     "nova0": 0.8633,
+     "pl": 0.7733,
+     "py": 0.8333,
+     "rs": 0.81,
+     "sk": 0.8233,
+     "teach": 0.79,
+     "web": 0.81
+    },
+    "next_leader": "nova0",
+    "agreement": true
+   }
+  ],
+  "messages": {
+   "nova0": 170,
+   "sk": 209,
+   "cs": 227,
+   "pl": 210,
+   "en": 212,
+   "code": 216,
+   "py": 219,
+   "rs": 207,
+   "teach": 217,
+   "web": 208,
+   "data": 211
+  },
+  "total_messages": 2306,
+  "drill": null,
+  "final_base": [
+   "evo/collective/runs/scale-base.pt"
+  ]
+ },
+ "node_reports": {
+  "nova0": {
+   "node": "nova0",
+   "frozen": true,
+   "messages_sent": 170,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-base.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "leader": "nova0",
+     "alive": [
+      "code",
+      "cs",
+      "data",
+      "en",
+      "nova0",
+      "pl",
+      "py",
+      "rs",
+      "sk",
+      "teach",
+      "web"
+     ],
+     "trained": [
+      "code",
+      "cs",
+      "data",
+      "en",
+      "pl",
+      "py",
+      "rs",
+      "sk",
+      "teach",
+      "web"
+     ],
+     "merge": {
+      "candidate": "evo/collective/runs/scale-smoke/core_round0.pt",
+      "votes": {
+       "code": {
+        "yes": false,
+        "before": 3.9451,
+        "after": 3.9495,
+        "creator": -0.0
+       },
+       "cs": {
+        "yes": false,
+        "before": 3.4015,
+        "after": 3.4035,
+        "creator": -0.0
+       },
+       "data": {
+        "yes": false,
+        "before": 3.4015,
+        "after": 3.4035,
+        "creator": -0.0
+       },
+       "en": {
+        "yes": false,
+        "before": 3.5764,
+        "after": 3.5773,
+        "creator": -0.0
+       },
+       "nova0": {
+        "yes": false,
+        "before": 3.4015,
+        "after": 3.4035,
+        "creator": -0.0
+       },
+       "pl": {
+        "yes": false,
+        "before": 3.682,
+        "after": 3.6835,
+        "creator": -0.0
+       },
+       "py": {
+        "yes": false,
+        "before": 3.9661,
+        "after": 3.9719,
+        "creator": -0.0
+       },
+       "rs": {
+        "yes": false,
+        "before": 2.5935,
+        "after": 2.5948,
+        "creator": -0.0
+       },
+       "sk": {
+        "yes": false,
+        "before": 3.1891,
+        "after": 3.1915,
+        "creator": -0.0
+       },
+       "teach": {
+        "yes": false,
+        "before": 3.4015,
+        "after": 3.4035,
+        "creator": -0.0
+       },
+       "web": {
+        "yes": false,
+        "before": 3.4452,
+        "after": 3.447,
+        "creator": -0.0
+       }
+      },
+      "yes": 0,
+      "of": 11,
+      "accepted": false
+     }
+    },
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "en": 0.7333,
+     "data": 0.7667,
+     "cs": 0.7667,
+     "code": 0.8333,
+     "teach": 0.8333,
+     "py": 0.7,
+     "sk": 0.6667,
+     "rs": 0.8667,
+     "pl": 0.6667,
+     "web": 0.7667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "sk": {
+   "node": "sk",
+   "frozen": false,
+   "messages_sent": 209,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/sk_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.9333,
+     "data": 0.9333,
+     "cs": 0.9,
+     "py": 0.8667,
+     "code": 0.9333,
+     "en": 0.8667,
+     "pl": 0.7,
+     "rs": 0.8,
+     "teach": 0.8333,
+     "web": 0.7667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "cs": {
+   "node": "cs",
+   "frozen": false,
+   "messages_sent": 227,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/cs_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "code": 0.8,
+     "nova0": 0.8667,
+     "teach": 0.8,
+     "sk": 0.9,
+     "py": 0.8,
+     "en": 0.8667,
+     "data": 0.8333,
+     "rs": 0.7333,
+     "pl": 0.8333,
+     "web": 0.7667
+    },
+    "creator": {
+     "code": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "pl": {
+   "node": "pl",
+   "frozen": false,
+   "messages_sent": 210,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/pl_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.9333,
+     "en": 0.8333,
+     "data": 0.7667,
+     "code": 0.7,
+     "cs": 0.7,
+     "teach": 0.8333,
+     "py": 0.8667,
+     "sk": 0.7667,
+     "rs": 0.9,
+     "web": 0.8667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "en": {
+   "node": "en",
+   "frozen": false,
+   "messages_sent": 212,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/en_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "data": 0.8333,
+     "cs": 0.8,
+     "code": 0.9333,
+     "nova0": 0.7667,
+     "teach": 0.7667,
+     "py": 0.7667,
+     "pl": 0.8667,
+     "sk": 0.8667,
+     "rs": 0.7667,
+     "web": 0.9667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "code": {
+   "node": "code",
+   "frozen": false,
+   "messages_sent": 216,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/code_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.7333,
+     "teach": 0.6667,
+     "en": 0.7667,
+     "cs": 0.8333,
+     "py": 0.8333,
+     "sk": 0.8667,
+     "pl": 0.8333,
+     "rs": 0.7,
+     "data": 0.6333,
+     "web": 0.8667
+    },
+    "creator": {
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "py": {
+   "node": "py",
+   "frozen": false,
+   "messages_sent": 219,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/py_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.7333,
+     "data": 0.7333,
+     "en": 0.6667,
+     "code": 0.7333,
+     "cs": 0.6333,
+     "pl": 0.7,
+     "teach": 0.7,
+     "sk": 0.6667,
+     "web": 0.7,
+     "rs": 0.7
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "rs": {
+   "node": "rs",
+   "frozen": false,
+   "messages_sent": 207,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/rs_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.9333,
+     "cs": 0.6667,
+     "data": 0.8,
+     "code": 0.7667,
+     "en": 0.6667,
+     "py": 0.8333,
+     "pl": 0.7667,
+     "teach": 0.8,
+     "sk": 0.8,
+     "web": 0.7333
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "teach": {
+   "node": "teach",
+   "frozen": false,
+   "messages_sent": 217,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/teach_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.9,
+     "cs": 0.8333,
+     "en": 0.7333,
+     "py": 0.8667,
+     "data": 0.9,
+     "code": 0.8333,
+     "pl": 0.6333,
+     "sk": 0.9,
+     "rs": 1.0,
+     "web": 0.8
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "web": true
+    }
+   },
+   "finished": true
+  },
+  "web": {
+   "node": "web",
+   "frozen": false,
+   "messages_sent": 208,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/web_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.9,
+     "cs": 0.8,
+     "py": 0.9,
+     "teach": 0.7667,
+     "code": 0.9333,
+     "en": 0.8667,
+     "data": 0.8333,
+     "pl": 0.9333,
+     "sk": 0.9333,
+     "rs": 0.8333
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "data": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true
+    }
+   },
+   "finished": true
+  },
+  "data": {
+   "node": "data",
+   "frozen": false,
+   "messages_sent": 211,
+   "leader": "nova0",
+   "base": "evo/collective/runs/scale-base.pt",
+   "personal": "evo/collective/runs/scale-smoke/data_round0.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7767,
+       "data": 0.8033,
+       "en": 0.7733,
+       "nova0": 0.8633,
+       "pl": 0.7733,
+       "py": 0.8333,
+       "rs": 0.81,
+       "sk": 0.8233,
+       "teach": 0.79,
+       "web": 0.81
+      },
+      "ranking": [
+       "nova0",
+       "code",
+       "py",
+       "sk",
+       "rs",
+       "web",
+       "data",
+       "teach",
+       "cs",
+       "en",
+       "pl"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "data",
+       "en",
+       "nova0",
+       "pl",
+       "py",
+       "rs",
+       "sk",
+       "teach",
+       "web"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "cs": 0.8333,
+     "code": 0.8667,
+     "nova0": 0.9333,
+     "teach": 0.9,
+     "en": 0.7333,
+     "py": 0.9,
+     "sk": 0.8667,
+     "rs": 0.8,
+     "pl": 0.8,
+     "web": 0.8667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "py": true,
+     "rs": true,
+     "sk": true,
+     "teach": true,
+     "web": true
+    }
+   },
+   "finished": true
+  }
+ },
+ "measure": {
+  "loss": {
+   "release": 3.1049,
+   "sk": 3.1069,
+   "cs": 3.1072,
+   "pl": 3.1062,
+   "en": 3.1057,
+   "code": 3.1104,
+   "py": 3.107,
+   "rs": 3.1085,
+   "teach": 3.114,
+   "web": 3.1041,
+   "data": 3.1117,
+   "baseline_single_same_tokens": 3.3012
+  },
+  "core_by_round": {
+   "core_round0": 3.1071
+  },
+  "collective_answer": {
+   "members": [
+    "release",
+    "sk",
+    "cs",
+    "pl",
+    "en",
+    "code",
+    "py",
+    "rs",
+    "teach",
+    "web",
+    "data"
+   ],
+   "equal_votes": 3.1064,
+   "leader_weights": 3.106,
+   "weights": {
+    "release": 0.099,
+    "sk": 0.089,
+    "cs": 0.094,
+    "pl": 0.099,
+    "en": 0.1,
+    "code": 0.076,
+    "py": 0.091,
+    "rs": 0.087,
+    "teach": 0.068,
+    "web": 0.123,
+    "data": 0.075
+   }
+  },
+  "code": {
+   "collective": {
+    "solved": 43,
+    "tasks": 79,
+    "by_level": {
+     "1": "38/55",
+     "2": "5/20",
+     "3": "0/4"
+    },
+    "per_node": {
+     "sk": 43,
+     "cs": 43,
+     "pl": 43,
+     "en": 43,
+     "code": 43,
+     "py": 43,
+     "rs": 42,
+     "teach": 42,
+     "web": 43,
+     "data": 43
+    }
+   },
+   "release_alone": 43
+  },
+  "creator": {
+   "recall": {
+    "release": -0.0,
+    "sk": -0.0,
+    "cs": -0.0,
+    "pl": -0.0,
+    "en": -0.0,
+    "code": -0.0,
+    "py": -0.0,
+    "rs": -0.0,
+    "teach": -0.0,
+    "web": -0.0,
+    "data": -0.0,
+    "baseline_single_same_tokens": -0.012
+   },
+   "know_creator": [
+    "baseline_single_same_tokens",
+    "code",
+    "cs",
+    "data",
+    "en",
+    "pl",
+    "py",
+    "release",
+    "rs",
+    "sk",
+    "teach",
+    "web"
+   ]
+  }
+ }
+}

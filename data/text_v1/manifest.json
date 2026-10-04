@@ -1,0 +1,76 @@
+{
+  "name": "text_v1",
+  "created": "2026-09-30 15:56:36",
+  "seq_len": 128,
+  "vocab_size": 16384,
+  "tokenizer": "tokenizer.json (byte-level BPE)",
+  "special_tokens": "0 <pad> 1 <unk> 2 <bos> 3 <eos> 4 <sk> 5 <cs> 6 <pl> 7 <en> 8 <py> 9 <rs>",
+  "document_format": "<lang> text <eos>, packed without padding",
+  "split_rule": "sha256(text) bucket: 90 train / 5 val / 5 test",
+  "sources": {
+    "wiki-sk": {
+      "documents": 1585,
+      "bytes": 10011393,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-cs": {
+      "documents": 960,
+      "bytes": 10004466,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-pl": {
+      "documents": 1196,
+      "bytes": 10005066,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-en": {
+      "documents": 379,
+      "bytes": 10028026,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "python": {
+      "documents": 658,
+      "bytes": 9951556,
+      "license": "PSF License",
+      "origin": "python-stdlib"
+    },
+    "rust": {
+      "documents": 681,
+      "bytes": 10009129,
+      "license": "MIT OR Apache-2.0",
+      "origin": "rust-src"
+    }
+  },
+  "splits": {
+    "train": {
+      "documents": 4915,
+      "sequences": 121682,
+      "tokens": 15575296,
+      "sha256": "e2fa16a1952d18c0d618b41b77f00b845e0beb54ca660b55bed66956ac0479bc"
+    },
+    "val": {
+      "documents": 269,
+      "sequences": 7015,
+      "tokens": 897920,
+      "sha256": "b43b57e5f8b59edc521dfd327ef153e0903e7c2f2c703eb071684f433d0ae18b"
+    },
+    "test": {
+      "documents": 275,
+      "sequences": 6766,
+      "tokens": 866048,
+      "sha256": "628fc152199b8d09740c0728b6c904c195cde4eadadcaf1225fa75486019fac7"
+    }
+  },
+  "bytes_per_token": {
+    "wiki-sk": 3.527,
+    "wiki-cs": 3.413,
+    "wiki-pl": 3.384,
+    "wiki-en": 3.558,
+    "python": 3.417,
+    "rust": 3.182
+  }
+}

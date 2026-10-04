@@ -1,0 +1,24 @@
+{
+  "candidate": "GEN4-008",
+  "generation": 4,
+  "parent": "GEN3-007",
+  "mutation": "fusion_architecture:standard->separate_state_gate",
+  "signature": "3447b78bb4a60af6",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "separate_state_gate",
+    "local_context": "single_depthwise"
+  },
+  "technical_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "status": "generated"
+}

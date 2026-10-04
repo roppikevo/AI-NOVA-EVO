@@ -1,0 +1,68 @@
+{
+  "id": "ebaca1b8-bd95-41a6-ba5f-d3c32dc88355",
+  "type": "success",
+  "title": "Learning task: Develop a Rust program in a single file that implements a simple reference-counted wrapper using Rc<T>, increments the count on clone, and asserts that the count matches the expected value after multiple clones, printing \"PASS\" if the count is correct.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790623822.4056447,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Borrowing Lifetimes Generics Clone Learning Autonomous Batch 3",
+    "task": "Develop a Rust program in a single file that implements a simple reference-counted wrapper using Rc<T>, increments the count on clone, and asserts that the count matches the expected value after multiple clones, printing \"PASS\" if the count is correct.",
+    "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623822242",
+    "experiment_id": "37a1044e-ee61-465d-8b15-fa3aca7ea9dd",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::rc::Rc;\n\nfn main() {\n    let data = Rc::new(42);\n    let ref1 = Rc::clone(&data);\n    let ref2 = Rc::clone(&data);\n    let ref3 = Rc::clone(&data);\n\n    let count = Rc::strong_count(&data);\n\n    assert_eq!(count, 4, \"Expected strong count to be 4 after 3 clones\");\n    println!(\"PASS\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "PASS",
+    "actual_output": "PASS\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623822242",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "PASS\n",
+      "stderr": "",
+      "duration_seconds": 0.162,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623822242",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623822242",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: unused variable: `ref1`\n --> main.rs:5:9\n  |\n5 |     let ref1 = Rc::clone(&data);\n  |         ^^^^ help: if this is intentional, prefix it with an underscore: `_ref1`\n  |\n  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `ref2`\n --> main.rs:6:9\n  |\n6 |     let ref2 = Rc::clone(&data);\n  |         ^^^^ help: if this is intentional, prefix it with an underscore: `_ref2`\n\nwarning: unused variable: `ref3`\n --> main.rs:7:9\n  |\n7 |     let ref3 = Rc::clone(&data);\n  |         ^^^^ help: if this is intentional, prefix it with an underscore: `_ref3`\n\nwarning: 3 warnings emitted\n\n",
+          "duration_seconds": 0.16076839300512802,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623822242",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "6f57a02ea17543a75239e9a8d099600f76f921f2e64ad99a6b01f2e4d40b2287"
+}

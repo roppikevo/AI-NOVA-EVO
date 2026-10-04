@@ -1,0 +1,754 @@
+{
+ "run": "coll-24m",
+ "start": "start",
+ "clones": 5,
+ "tokens_per_round_M": 121.9,
+ "sets": {
+  "dataset": {
+   "sequences": 1600,
+   "loss": {
+    "start": 3.1478,
+    "core_round0": 3.1088,
+    "core_round1": 3.1049,
+    "core_round2": 3.1061,
+    "core_round3": 3.104,
+    "core_round4": 3.1053,
+    "core_round5": 3.1061,
+    "core_round6": 3.1064,
+    "core_round7": 3.1068,
+    "core_round8": 3.1067,
+    "core_round9": 3.1055,
+    "core_round10": 3.1075,
+    "core_round11": 3.1056,
+    "baseline_single": 3.1804,
+    "clone_sk": 3.1226,
+    "clone_cs": 3.1284,
+    "clone_pl": 3.1258,
+    "clone_en": 3.122,
+    "clone_code": 3.1271
+   },
+   "start_to_final_core": {
+    "diff": -0.0422,
+    "lo": -0.0449,
+    "hi": -0.0393,
+    "n": 1600,
+    "percent": -1.34,
+    "verdict": "improvement"
+   },
+   "by_language": {
+    "sk": {
+     "before": 3.2815,
+     "after": 3.2185,
+     "percent": -1.92,
+     "diff": -0.0629,
+     "lo": -0.0668,
+     "hi": -0.059,
+     "n": 451,
+     "verdict": "improvement"
+    },
+    "cs": {
+     "before": 3.5593,
+     "after": 3.5203,
+     "percent": -1.09,
+     "diff": -0.039,
+     "lo": -0.047,
+     "hi": -0.032,
+     "n": 117,
+     "verdict": "improvement"
+    },
+    "pl": {
+     "before": 3.5747,
+     "after": 3.5315,
+     "percent": -1.21,
+     "diff": -0.0432,
+     "lo": -0.0518,
+     "hi": -0.0352,
+     "n": 76,
+     "verdict": "improvement"
+    },
+    "en": {
+     "before": 3.6856,
+     "after": 3.6625,
+     "percent": -0.63,
+     "diff": -0.0231,
+     "lo": -0.0276,
+     "hi": -0.0183,
+     "n": 305,
+     "verdict": "improvement"
+    },
+    "py": {
+     "before": 2.7075,
+     "after": 2.6714,
+     "percent": -1.33,
+     "diff": -0.0361,
+     "lo": -0.0492,
+     "hi": -0.0239,
+     "n": 127,
+     "verdict": "improvement"
+    },
+    "rs": {
+     "before": 2.6726,
+     "after": 2.6353,
+     "percent": -1.4,
+     "diff": -0.0374,
+     "lo": -0.0434,
+     "hi": -0.0313,
+     "n": 524,
+     "verdict": "improvement"
+    }
+   },
+   "trend": {
+    "slope_per_round": 1e-05,
+    "last3": -0.0011,
+    "state": "flat"
+   },
+   "collective_vs_single_model": {
+    "single": 3.1804,
+    "collective": 3.104,
+    "rounds": 4,
+    "diff": -0.0765,
+    "lo": -0.0816,
+    "hi": -0.0717,
+    "n": 1600,
+    "verdict": "improvement",
+    "note": "negative = the collective core is better than one model with the same training",
+    "efficiency_collective": 0.00898,
+    "efficiency_single": -0.00668
+   }
+  },
+  "web": {
+   "sequences": 1600,
+   "loss": {
+    "start": 3.4098,
+    "core_round0": 3.411,
+    "core_round1": 3.4149,
+    "core_round2": 3.4169,
+    "core_round3": 3.4174,
+    "core_round4": 3.4177,
+    "core_round5": 3.4175,
+    "core_round6": 3.4172,
+    "core_round7": 3.417,
+    "core_round8": 3.4172,
+    "core_round9": 3.4173,
+    "core_round10": 3.4178,
+    "core_round11": 3.4174,
+    "baseline_single": 3.4505,
+    "clone_sk": 3.4375,
+    "clone_cs": 3.4359,
+    "clone_pl": 3.4348,
+    "clone_en": 3.4356,
+    "clone_code": 3.4309
+   },
+   "start_to_final_core": {
+    "diff": 0.0076,
+    "lo": 0.0063,
+    "hi": 0.0088,
+    "n": 1600,
+    "percent": 0.22,
+    "verdict": "decline"
+   },
+   "by_language": {
+    "sk": {
+     "before": 3.0888,
+     "after": 3.0969,
+     "percent": 0.26,
+     "diff": 0.008,
+     "lo": 0.0057,
+     "hi": 0.0104,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "cs": {
+     "before": 3.4415,
+     "after": 3.4485,
+     "percent": 0.2,
+     "diff": 0.007,
+     "lo": 0.0049,
+     "hi": 0.0093,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "pl": {
+     "before": 3.3507,
+     "after": 3.3575,
+     "percent": 0.2,
+     "diff": 0.0068,
+     "lo": 0.0038,
+     "hi": 0.0097,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "en": {
+     "before": 3.7582,
+     "after": 3.7666,
+     "percent": 0.22,
+     "diff": 0.0084,
+     "lo": 0.0056,
+     "hi": 0.011,
+     "n": 400,
+     "verdict": "decline"
+    }
+   },
+   "trend": {
+    "slope_per_round": 0.00034,
+    "last3": 0.0002,
+    "state": "flat"
+   },
+   "collective_vs_single_model": {
+    "single": 3.4505,
+    "collective": 3.4174,
+    "rounds": 4,
+    "diff": -0.033,
+    "lo": -0.0346,
+    "hi": -0.0314,
+    "n": 1600,
+    "verdict": "improvement",
+    "note": "negative = the collective core is better than one model with the same training",
+    "efficiency_collective": -0.00156,
+    "efficiency_single": -0.00835
+   }
+  }
+ },
+ "rounds": [
+  {
+   "round": 0,
+   "tokens_M": 121.9,
+   "dataset": {
+    "loss": 3.1088,
+    "step": -0.039,
+    "step_verdict": "improvement",
+    "total": -0.039,
+    "total_lo": -0.0409,
+    "total_hi": -0.037,
+    "total_percent": -1.24,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.411,
+    "step": 0.0012,
+    "step_verdict": "decline",
+    "total": 0.0012,
+    "total_lo": 0.0002,
+    "total_hi": 0.0022,
+    "total_percent": 0.03,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 40,
+    "gained": 2,
+    "lost": 2,
+    "net": 0
+   }
+  },
+  {
+   "round": 1,
+   "tokens_M": 243.8,
+   "dataset": {
+    "loss": 3.1049,
+    "step": -0.0039,
+    "step_verdict": "improvement",
+    "total": -0.0428,
+    "total_lo": -0.0453,
+    "total_hi": -0.0404,
+    "total_percent": -1.36,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4149,
+    "step": 0.0039,
+    "step_verdict": "decline",
+    "total": 0.0051,
+    "total_lo": 0.004,
+    "total_hi": 0.0062,
+    "total_percent": 0.15,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 43,
+    "gained": 4,
+    "lost": 1,
+    "net": 3
+   }
+  },
+  {
+   "round": 2,
+   "tokens_M": 365.8,
+   "dataset": {
+    "loss": 3.1061,
+    "step": 0.0012,
+    "step_verdict": "decline",
+    "total": -0.0417,
+    "total_lo": -0.0446,
+    "total_hi": -0.0388,
+    "total_percent": -1.32,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4169,
+    "step": 0.002,
+    "step_verdict": "decline",
+    "total": 0.0071,
+    "total_lo": 0.0059,
+    "total_hi": 0.0083,
+    "total_percent": 0.21,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 43,
+    "gained": 5,
+    "lost": 2,
+    "net": 3
+   }
+  },
+  {
+   "round": 3,
+   "tokens_M": 487.7,
+   "dataset": {
+    "loss": 3.104,
+    "step": -0.0022,
+    "step_verdict": "improvement",
+    "total": -0.0438,
+    "total_lo": -0.0465,
+    "total_hi": -0.041,
+    "total_percent": -1.39,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4174,
+    "step": 0.0005,
+    "step_verdict": "no clear change",
+    "total": 0.0076,
+    "total_lo": 0.0064,
+    "total_hi": 0.0089,
+    "total_percent": 0.22,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 43,
+    "gained": 5,
+    "lost": 2,
+    "net": 3
+   }
+  },
+  {
+   "round": 4,
+   "tokens_M": 609.6,
+   "dataset": {
+    "loss": 3.1053,
+    "step": 0.0013,
+    "step_verdict": "decline",
+    "total": -0.0425,
+    "total_lo": -0.0456,
+    "total_hi": -0.0394,
+    "total_percent": -1.35,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4177,
+    "step": 0.0003,
+    "step_verdict": "no clear change",
+    "total": 0.0079,
+    "total_lo": 0.0067,
+    "total_hi": 0.0091,
+    "total_percent": 0.23,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 41,
+    "gained": 3,
+    "lost": 2,
+    "net": 1
+   }
+  },
+  {
+   "round": 5,
+   "tokens_M": 731.5,
+   "dataset": {
+    "loss": 3.1061,
+    "step": 0.0008,
+    "step_verdict": "no clear change",
+    "total": -0.0417,
+    "total_lo": -0.0445,
+    "total_hi": -0.039,
+    "total_percent": -1.32,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4175,
+    "step": -0.0003,
+    "step_verdict": "no clear change",
+    "total": 0.0077,
+    "total_lo": 0.0064,
+    "total_hi": 0.0088,
+    "total_percent": 0.23,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 41,
+    "gained": 3,
+    "lost": 2,
+    "net": 1
+   }
+  },
+  {
+   "round": 6,
+   "tokens_M": 853.4,
+   "dataset": {
+    "loss": 3.1064,
+    "step": 0.0003,
+    "step_verdict": "no clear change",
+    "total": -0.0414,
+    "total_lo": -0.0444,
+    "total_hi": -0.0386,
+    "total_percent": -1.31,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4172,
+    "step": -0.0003,
+    "step_verdict": "no clear change",
+    "total": 0.0074,
+    "total_lo": 0.0061,
+    "total_hi": 0.0086,
+    "total_percent": 0.22,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  },
+  {
+   "round": 7,
+   "tokens_M": 975.4,
+   "dataset": {
+    "loss": 3.1068,
+    "step": 0.0004,
+    "step_verdict": "no clear change",
+    "total": -0.041,
+    "total_lo": -0.0442,
+    "total_hi": -0.0383,
+    "total_percent": -1.3,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.417,
+    "step": -0.0002,
+    "step_verdict": "no clear change",
+    "total": 0.0072,
+    "total_lo": 0.0059,
+    "total_hi": 0.0084,
+    "total_percent": 0.21,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  },
+  {
+   "round": 8,
+   "tokens_M": 1097.3,
+   "dataset": {
+    "loss": 3.1067,
+    "step": -0.0,
+    "step_verdict": "no clear change",
+    "total": -0.0411,
+    "total_lo": -0.0438,
+    "total_hi": -0.0381,
+    "total_percent": -1.3,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4172,
+    "step": 0.0002,
+    "step_verdict": "no clear change",
+    "total": 0.0074,
+    "total_lo": 0.0062,
+    "total_hi": 0.0087,
+    "total_percent": 0.22,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  },
+  {
+   "round": 9,
+   "tokens_M": 1219.2,
+   "dataset": {
+    "loss": 3.1055,
+    "step": -0.0012,
+    "step_verdict": "improvement",
+    "total": -0.0422,
+    "total_lo": -0.0452,
+    "total_hi": -0.0392,
+    "total_percent": -1.34,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4173,
+    "step": 0.0001,
+    "step_verdict": "no clear change",
+    "total": 0.0075,
+    "total_lo": 0.0062,
+    "total_hi": 0.0088,
+    "total_percent": 0.22,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  },
+  {
+   "round": 10,
+   "tokens_M": 1341.1,
+   "dataset": {
+    "loss": 3.1075,
+    "step": 0.002,
+    "step_verdict": "decline",
+    "total": -0.0403,
+    "total_lo": -0.0434,
+    "total_hi": -0.0372,
+    "total_percent": -1.28,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4178,
+    "step": 0.0005,
+    "step_verdict": "no clear change",
+    "total": 0.008,
+    "total_lo": 0.0069,
+    "total_hi": 0.0092,
+    "total_percent": 0.24,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  },
+  {
+   "round": 11,
+   "tokens_M": 1463.0,
+   "dataset": {
+    "loss": 3.1056,
+    "step": -0.0019,
+    "step_verdict": "improvement",
+    "total": -0.0422,
+    "total_lo": -0.0449,
+    "total_hi": -0.0394,
+    "total_percent": -1.34,
+    "total_verdict": "improvement"
+   },
+   "web": {
+    "loss": 3.4174,
+    "step": -0.0005,
+    "step_verdict": "no clear change",
+    "total": 0.0076,
+    "total_lo": 0.0064,
+    "total_hi": 0.0089,
+    "total_percent": 0.22,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 4,
+    "lost": 2,
+    "net": 2
+   }
+  }
+ ],
+ "code": {
+  "start": 40,
+  "core_round0": 40,
+  "core_round1": 43,
+  "core_round2": 43,
+  "core_round3": 43,
+  "core_round4": 41,
+  "core_round5": 41,
+  "core_round6": 42,
+  "core_round7": 42,
+  "core_round8": 42,
+  "core_round9": 42,
+  "core_round10": 42,
+  "core_round11": 42,
+  "baseline_single": 38
+ },
+ "code_start_to_final": {
+  "solved": 42,
+  "gained": 4,
+  "lost": 2,
+  "net": 2
+ },
+ "nodes": [
+  {
+   "round": 0,
+   "led_by": "nova0",
+   "next_leader": "code",
+   "agreement": true,
+   "yes": 6,
+   "of": 6,
+   "accepted": true,
+   "mean_change_seen_by_nodes": -0.0333,
+   "exam_mean": 0.8178,
+   "exam_best": 0.8533,
+   "core_change": "{'conv_kernel': 3} 5/5 accepted"
+  },
+  {
+   "round": 1,
+   "led_by": "code",
+   "next_leader": "sk",
+   "agreement": true,
+   "yes": 5,
+   "of": 6,
+   "accepted": true,
+   "mean_change_seen_by_nodes": -0.0,
+   "exam_mean": 0.7989,
+   "exam_best": 0.8467,
+   "core_change": "{'conv_kernel': 1} 5/5 accepted"
+  },
+  {
+   "round": 2,
+   "led_by": "sk",
+   "next_leader": "nova0",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0038,
+   "exam_mean": 0.8144,
+   "exam_best": 0.8733,
+   "core_change": "{'forget_bias': 0.75} 4/5 accepted"
+  },
+  {
+   "round": 3,
+   "led_by": "nova0",
+   "next_leader": "en",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0043,
+   "exam_mean": 0.8166,
+   "exam_best": 0.8533,
+   "core_change": "{'conv_kernel': 3} 5/5 accepted"
+  },
+  {
+   "round": 4,
+   "led_by": "en",
+   "next_leader": "code",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0035,
+   "exam_mean": 0.7989,
+   "exam_best": 0.84,
+   "core_change": "{'conv_kernel': 1} 5/5 accepted"
+  },
+  {
+   "round": 5,
+   "led_by": "code",
+   "next_leader": "en",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0042,
+   "exam_mean": 0.7989,
+   "exam_best": 0.84,
+   "core_change": "{'forget_bias': 0.75} 4/5 accepted"
+  },
+  {
+   "round": 6,
+   "led_by": "en",
+   "next_leader": "code",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0026,
+   "exam_mean": 0.81,
+   "exam_best": 0.8533,
+   "core_change": "{'conv_kernel': 3} 5/5 accepted"
+  },
+  {
+   "round": 7,
+   "led_by": "code",
+   "next_leader": "en",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0052,
+   "exam_mean": 0.8122,
+   "exam_best": 0.8467,
+   "core_change": "{'conv_kernel': 1} 5/5 accepted"
+  },
+  {
+   "round": 8,
+   "led_by": "en",
+   "next_leader": "pl",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0026,
+   "exam_mean": 0.8044,
+   "exam_best": 0.86,
+   "core_change": "{'forget_bias': 0.75} 4/5 accepted"
+  },
+  {
+   "round": 9,
+   "led_by": "pl",
+   "next_leader": "pl",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0042,
+   "exam_mean": 0.8222,
+   "exam_best": 0.86,
+   "core_change": "{'conv_kernel': 3} 5/5 accepted"
+  },
+  {
+   "round": 10,
+   "led_by": "pl",
+   "next_leader": "cs",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0043,
+   "exam_mean": 0.7989,
+   "exam_best": 0.8333,
+   "core_change": "{'conv_kernel': 1} 5/5 accepted"
+  },
+  {
+   "round": 11,
+   "led_by": "cs",
+   "next_leader": "pl",
+   "agreement": true,
+   "yes": 1,
+   "of": 6,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0035,
+   "exam_mean": 0.8222,
+   "exam_best": 0.86,
+   "core_change": "{'forget_bias': 0.75} 4/5 accepted"
+  }
+ ]
+}

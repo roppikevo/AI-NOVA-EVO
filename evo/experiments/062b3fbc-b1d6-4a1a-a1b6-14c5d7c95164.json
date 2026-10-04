@@ -1,0 +1,85 @@
+{
+  "experiment_id": "062b3fbc-b1d6-4a1a-a1b6-14c5d7c95164",
+  "generation": 4,
+  "candidate_id": "GEN4-001",
+  "parent_id": "GEN3-007",
+  "state": "COMPLETED",
+  "hypothesis": "Evaluate candidate architecture on dedicated GEN4 training data.",
+  "objective": "Minimize validation loss while respecting resource limits.",
+  "architecture": {
+    "vocab_size": 16384,
+    "d_model": 256,
+    "d_state": 256,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "standard",
+    "local_context": "single_depthwise"
+  },
+  "dataset": {
+    "root": "/opt/ai/work/nova-evo/data/gen4",
+    "train": "/opt/ai/work/nova-evo/data/gen4/train.txt",
+    "validation": "/opt/ai/work/nova-evo/data/gen4/val.txt",
+    "test_loaded": false,
+    "selection_data": true
+  },
+  "training": {
+    "stage": "screening",
+    "steps": 100,
+    "batch_size": 8,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.01
+  },
+  "seeds": [
+    1001
+  ],
+  "metrics": {
+    "validation_loss": 9.71078256225586,
+    "perplexity": 16494.504804327742,
+    "train_loss": 9.71241569519043,
+    "steps": 100,
+    "parameters": 5784576,
+    "duration_seconds": 17.128015412000423
+  },
+  "resources": {
+    "before": {
+      "timestamp": 1790522664.4833403,
+      "cpu_count": 16,
+      "ram_total_bytes": 32973389824,
+      "ram_available_bytes": 29540605952,
+      "ram_used_bytes": 3432783872,
+      "disk_free_bytes": 828859871232,
+      "gpu_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 4060",
+      "gpu_vram_total_bytes": 8184922112,
+      "gpu_vram_allocated_bytes": 0,
+      "gpu_vram_reserved_bytes": 0,
+      "gpu_vram_free_bytes": 8184922112
+    },
+    "after": {
+      "timestamp": 1790522681.8126998,
+      "cpu_count": 16,
+      "ram_total_bytes": 32973389824,
+      "ram_available_bytes": 28701081600,
+      "ram_used_bytes": 4272308224,
+      "disk_free_bytes": 828859875328,
+      "gpu_available": true,
+      "gpu_name": "NVIDIA GeForce RTX 4060",
+      "gpu_vram_total_bytes": 8184922112,
+      "gpu_vram_allocated_bytes": 63315968,
+      "gpu_vram_reserved_bytes": 469762048,
+      "gpu_vram_free_bytes": 7715160064
+    }
+  },
+  "validation": {},
+  "failure": {},
+  "repair": {},
+  "mentor": {},
+  "artifacts": [],
+  "created_at": 1790522664.4828167,
+  "started_at": 1790522664.4830444,
+  "finished_at": 1790522681.8129141,
+  "checksum": "e5fcc9df9d775c2608c979b031f60ba7838a1a708cb3d4d36fb9b52defa75c23"
+}

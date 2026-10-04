@@ -1,0 +1,38 @@
+{
+  "id": "530f0f27-f3ae-42bd-8495-4a0b6753406d",
+  "type": "success",
+  "title": "Learning task: Compile a simple Rust program.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790535849.632983,
+  "parent_id": null,
+  "content": {
+    "goal": "rust-test",
+    "task": "Compile a simple Rust program.",
+    "candidate_id": "LEARN-rust-test-1790535849145",
+    "experiment_id": "62f88a73-b4bd-43be-a6e5-19bc98dffda9",
+    "result": {
+      "candidate_id": "LEARN-rust-test-1790535849145",
+      "command": [
+        "rustc",
+        "main.rs",
+        "-o",
+        "main"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.4864804450007796,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-rust-test-1790535849145",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "22e18fa3a6011899da2124f1174f68dacfe3fc348515f3c9f0cf2b7f092f8d05"
+}

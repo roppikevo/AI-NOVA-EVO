@@ -1,0 +1,36 @@
+{
+  "id": "89b11b59-c834-42ff-864e-5fad0404d16a",
+  "type": "success",
+  "title": "Learning task: Analyze a corpus of 500 Rust crates to extract ownership patterns and generate a dataset of valid/invalid ownership transitions for model fine-tuning.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790615103.7817748,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Integration",
+    "task": "Analyze a corpus of 500 Rust crates to extract ownership patterns and generate a dataset of valid/invalid ownership transitions for model fine-tuning.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-integration-1790615103769",
+    "experiment_id": "df69d512-6df4-43eb-ade5-20f2316c7551",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-integration-1790615103769",
+      "command": [
+        "python",
+        "main.py"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership analysis complete.\n",
+      "stderr": "",
+      "duration_seconds": 0.01102591899689287,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-integration-1790615103769",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "c61150b61c271318e5fd46240d9954811bf22545a515405a7a087f366400ee23"
+}

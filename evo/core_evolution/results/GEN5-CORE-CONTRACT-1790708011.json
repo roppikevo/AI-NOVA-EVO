@@ -1,0 +1,9 @@
+{
+  "status": "REJECT",
+  "decision": "REJECT",
+  "stage": "source_contract",
+  "candidate": "GEN5-CORE-CONTRACT-1790708011",
+  "errors": [
+    "Teacher planned new parameter 'combine' but child source does not define it as nn.Parameter."
+  ]
+}

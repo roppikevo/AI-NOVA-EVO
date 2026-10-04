@@ -1,0 +1,12 @@
+NOVA-EVO GEN 1 LOCKED
+
+This directory is an immutable snapshot of the original GEN1
+candidate generation, validation, screening, robust evaluation,
+and Pareto-front results.
+
+No GEN1 result is modified here.
+GEN1 is a historical locked generation.
+GEN2 was evolved from the GEN1 Pareto candidates.
+
+The clean GEN0-UNSEEN-2 test was not used for GEN1 selection.
+The final holdout dataset was not used for GEN1 selection.

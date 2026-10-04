@@ -1,0 +1,37 @@
+{
+  "id": "1df1010a-c496-4002-bcbe-beb549ec1b0d",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790622983.0590932,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 2",
+    "task": "Write a Rust program that wraps a value in a Box, moves the Box into a function, asserts the original variable is no longer accessible, and prints the unwrapped value inside the function.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.2044,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790622983.059084
+  },
+  "checksum": "5ea49adbf3ad23f00731885e24d5e1af5641486a7ccdc37d8e19653475605f37"
+}

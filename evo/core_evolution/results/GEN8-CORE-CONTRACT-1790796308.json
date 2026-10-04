@@ -1,0 +1,11 @@
+{
+  "status": "REJECT",
+  "decision": "REJECT",
+  "stage": "source_contract",
+  "candidate": "GEN8-CORE-CONTRACT-1790796308",
+  "errors": [
+    "Parent parameter 'temperature' was silently removed from the child core.",
+    "Teacher planned new parameter 'NovaScanBlock' but child source does not define it as nn.Parameter.",
+    "Teacher planned new parameter '__init__' but child source does not define it as nn.Parameter."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "goal": "Autonomous Rust Ownership Synthetic V7",
+  "status": "PLANNED",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Implementovať funkciu v Rust, ktorá prijme vektor referencií na štruktúry obsahujúce vlastnícke pole, a po jej vykonaní overí, že všetky interné vektory boli správne prepustené pomocou `drop` bez vytvárania dangling referencií, pričom výsledkom je výpis počtu prepustených bajtov a úspešnosť overenia.",
+  "created": 1790617670.8977332,
+  "updated": 1790617692.575711,
+  "plan": [
+    "Implementovať funkciu v Rust, ktorá prijme vektor referencií na štruktúry obsahujúce vlastnícke pole, a po jej vykonaní overí, že všetky interné vektory boli správne prepustené pomocou `drop` bez vytvárania dangling referencií, pričom výsledkom je výpis počtu prepustených bajtov a úspešnosť overenia.",
+    "Vytvoriť syntetický dátový súbor v Python, ktorý generuje 1000 vzorov s rôznymi typmi vlastníckych vzťahov, a následne spustiť Rust program, ktorý ich načíta, spracuje pomocou `Rc` a `Arc`, a overí, že finálny stav pamäte zodpovedá očakávanému počtu odkazov.",
+    "Napísať Rust kód, ktorý implementuje štruktúru s vnorenými kontajnermi a vykoná sériu operácií na vkladanie a mazaní, následne overí, že po každej zmene je stav vlastníkov konzistentný pomocou manuálneho porovnávania počtu odkazov s očakávanými hodnotami.",
+    "Generovať v Python sériu testových prípadov, kde sa mení počet vlastníkovi a ich vzťahy, a spustiť Rust program, ktorý pre každý prípad vypíše stav pamäte a overí, že žiadna referencia nie je dangling pomocou overenia, že všetky vektory sú prázdne alebo majú správny počet odkazov.",
+    "Implementovať v Rust funkciu, ktorá prijme vstupné dáta, vykoná komplexnú transformáciu s mnohými vlastníkmi, a následne overí, že výsledný výstup a stav pamäte sú v súlade s očakávaným výsledkom, pričom sa overí, že žiadna chyba v uvoľňovaní pamäte nenastala."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 1,
+    "errors": []
+  }
+}

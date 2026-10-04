@@ -1,0 +1,68 @@
+{
+  "id": "d63eb828-cc90-4c2e-9ce0-815b7ef1bf95",
+  "type": "failure",
+  "title": "Learning task: Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+  "status": "EXPERIMENTAL",
+  "confidence": 0.0,
+  "source": "learning_executor",
+  "created_at": 1790622498.807532,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 8",
+    "task": "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+    "experiment_id": "d43f9a1e-945a-4b13-89e1-7dd100ab86dd",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::rc::Rc;\n\nfn main() {\n    let data = Rc::new(42);\n    let handle1 = Rc::clone(&data);\n    let handle2 = Rc::clone(&data);\n\n    assert_eq!(Rc::strong_count(&handle1), 2);\n\n    let _ = Rc::try_unwrap(handle1).is_err();\n\n    drop(handle2);\n\n    assert_eq!(Rc::strong_count(&data), 1);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+      "command": [
+        "./main"
+      ],
+      "returncode": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (53967) panicked at main.rs:8:5:\nassertion `left == right` failed\n  left: 3\n right: 2\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "duration_seconds": 0.1541,
+      "status": "failed",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.1529176610056311,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": false
+    },
+    "output_check_passed": false
+  },
+  "checksum": "f337ebfbccd2ec9d26c2f163df12f2b0f782dadd934d2d2f7c1bec38cae6bdf8"
+}

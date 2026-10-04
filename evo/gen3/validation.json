@@ -1,0 +1,317 @@
+[
+  {
+    "candidate_id": "GEN3-001",
+    "valid": true,
+    "params": 9262464,
+    "loss": 9.802803039550781,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-002",
+    "valid": true,
+    "params": 10450560,
+    "loss": 9.78663444519043,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-003",
+    "valid": true,
+    "params": 9851904,
+    "loss": 9.816083908081055,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-004",
+    "valid": true,
+    "params": 9861120,
+    "loss": 9.83716869354248,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-005",
+    "valid": true,
+    "params": 9856512,
+    "loss": 9.816203117370605,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-006",
+    "valid": true,
+    "params": 9856512,
+    "loss": 9.746731758117676,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-007",
+    "valid": true,
+    "params": 9856512,
+    "loss": 9.770776748657227,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-008",
+    "valid": true,
+    "params": 9856512,
+    "loss": 9.799446105957031,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-009",
+    "valid": true,
+    "params": 9856512,
+    "loss": 9.795515060424805,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-010",
+    "valid": true,
+    "params": 9262464,
+    "loss": 9.765663146972656,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-011",
+    "valid": true,
+    "params": 10450560,
+    "loss": 9.782222747802734,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-012",
+    "valid": true,
+    "params": 9851904,
+    "loss": 9.793347358703613,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-013",
+    "valid": true,
+    "params": 9861120,
+    "loss": 9.790023803710938,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-014",
+    "valid": true,
+    "params": 9262464,
+    "loss": 9.78753662109375,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-015",
+    "valid": true,
+    "params": 10450560,
+    "loss": 9.746038436889648,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-016",
+    "valid": true,
+    "params": 9851904,
+    "loss": 9.80548095703125,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-017",
+    "valid": true,
+    "params": 9861120,
+    "loss": 9.690677642822266,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-018",
+    "valid": true,
+    "params": 6893440,
+    "loss": 9.741535186767578,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-019",
+    "valid": true,
+    "params": 7718400,
+    "loss": 9.731149673461914,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-020",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.79533576965332,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-021",
+    "valid": true,
+    "params": 7312320,
+    "loss": 9.779187202453613,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-022",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.701038360595703,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-023",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.80855941772461,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-024",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.723955154418945,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-025",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.796660423278809,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-026",
+    "valid": true,
+    "params": 7305920,
+    "loss": 9.840808868408203,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-027",
+    "valid": true,
+    "params": 6893440,
+    "loss": 9.761988639831543,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-028",
+    "valid": true,
+    "params": 6893440,
+    "loss": 9.771674156188965,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-029",
+    "valid": true,
+    "params": 7718400,
+    "loss": 9.7509765625,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-030",
+    "valid": true,
+    "params": 7718400,
+    "loss": 9.758922576904297,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-031",
+    "valid": true,
+    "params": 7312320,
+    "loss": 9.789163589477539,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-032",
+    "valid": true,
+    "params": 7312320,
+    "loss": 9.752392768859863,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-033",
+    "valid": true,
+    "params": 4989696,
+    "loss": 9.763718605041504,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-034",
+    "valid": true,
+    "params": 5519616,
+    "loss": 9.782374382019043,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-035",
+    "valid": true,
+    "params": 5252608,
+    "loss": 9.792531967163086,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-036",
+    "valid": true,
+    "params": 5256704,
+    "loss": 9.753641128540039,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-037",
+    "valid": true,
+    "params": 5254656,
+    "loss": 9.710206985473633,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-038",
+    "valid": true,
+    "params": 5254656,
+    "loss": 9.808526992797852,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-039",
+    "valid": true,
+    "params": 5254656,
+    "loss": 9.69339370727539,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-040",
+    "valid": true,
+    "params": 5254656,
+    "loss": 9.748945236206055,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-041",
+    "valid": true,
+    "params": 5254656,
+    "loss": 9.746747970581055,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-042",
+    "valid": true,
+    "params": 4989696,
+    "loss": 9.780272483825684,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-043",
+    "valid": true,
+    "params": 5519616,
+    "loss": 9.750274658203125,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-044",
+    "valid": true,
+    "params": 5252608,
+    "loss": 9.731769561767578,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN3-045",
+    "valid": true,
+    "params": 5256704,
+    "loss": 9.786149978637695,
+    "error": null
+  }
+]

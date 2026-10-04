@@ -1,0 +1,68 @@
+{
+  "id": "45b25cc7-fe87-4241-8da0-659f5ffe666f",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that declares two references to the same immutable data, attempts to create a mutable reference to one of them, and asserts that the program compiles and runs successfully by printing a success message.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621384.831565,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+    "task": "Create a Rust program that declares two references to the same immutable data, attempts to create a mutable reference to one of them, and asserts that the program compiles and runs successfully by printing a success message.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621384688",
+    "experiment_id": "3b5b44d2-928a-473d-b4a2-d4b48d14e3f1",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "fn main() {\n    let data = 42;\n    let r1: &i32 = &data;\n    let r2: &i32 = &data;\n    // This code compiles and runs successfully because we only have immutable borrows.\n    // Attempting to create a mutable borrow here would fail due to Rust's borrowing rules.\n    assert_eq!(*r1, 42);\n    assert_eq!(*r2, 42);\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621384688",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1425,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621384688",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621384688",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.1413543860107893,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621384688",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "054cd93a495d1ee304423e9ecf762ace8640654852fdc67c034d6366713a4ea8"
+}

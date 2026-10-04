@@ -1,0 +1,352 @@
+[
+  {
+    "candidate_id": "GEN2-001",
+    "parent": "GEN1-010",
+    "mutation": "layers_minus",
+    "valid": true,
+    "params": 7309120,
+    "vram_gb": 0.156,
+    "loss": 9.705866813659668,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-002",
+    "parent": "GEN1-010",
+    "mutation": "layers_plus",
+    "valid": true,
+    "params": 8135360,
+    "vram_gb": 0.1714,
+    "loss": 9.73946762084961,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-003",
+    "parent": "GEN1-010",
+    "mutation": "d_model_minus",
+    "valid": true,
+    "params": 5784576,
+    "vram_gb": 0.1411,
+    "loss": 9.824320793151855,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-004",
+    "parent": "GEN1-010",
+    "mutation": "d_model_plus",
+    "valid": true,
+    "params": 9856512,
+    "vram_gb": 0.2034,
+    "loss": 9.792830467224121,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-005",
+    "parent": "GEN1-010",
+    "mutation": "kernel_3",
+    "valid": true,
+    "params": 7718400,
+    "vram_gb": 0.1667,
+    "loss": 9.764945983886719,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-006",
+    "parent": "GEN1-010",
+    "mutation": "kernel_7",
+    "valid": true,
+    "params": 7726080,
+    "vram_gb": 0.1638,
+    "loss": 9.709833145141602,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-007",
+    "parent": "GEN1-010",
+    "mutation": "forget_bias_down",
+    "valid": true,
+    "params": 7722240,
+    "vram_gb": 0.1637,
+    "loss": 9.816694259643555,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-008",
+    "parent": "GEN1-010",
+    "mutation": "forget_bias_up",
+    "valid": true,
+    "params": 7722240,
+    "vram_gb": 0.1637,
+    "loss": 9.752318382263184,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-009",
+    "parent": "GEN1-010",
+    "mutation": "d_model_plus+layers_minus",
+    "valid": true,
+    "params": 9262464,
+    "vram_gb": 0.1923,
+    "loss": 9.802650451660156,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-010",
+    "parent": "GEN1-010",
+    "mutation": "d_model_plus+kernel_3",
+    "valid": true,
+    "params": 9851904,
+    "vram_gb": 0.2033,
+    "loss": 9.829360961914062,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-011",
+    "parent": "GEN1-010",
+    "mutation": "d_model_plus+forget_bias_down",
+    "valid": true,
+    "params": 9856512,
+    "vram_gb": 0.2034,
+    "loss": 9.853450775146484,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-012",
+    "parent": "GEN1-010",
+    "mutation": "layers_minus+kernel_3",
+    "valid": true,
+    "params": 7305920,
+    "vram_gb": 0.1667,
+    "loss": 9.858650207519531,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-013",
+    "parent": "GEN1-010",
+    "mutation": "layers_minus+forget_bias_down",
+    "valid": true,
+    "params": 7309120,
+    "vram_gb": 0.156,
+    "loss": 9.791308403015137,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-014",
+    "parent": "GEN1-010",
+    "mutation": "d_model_minus+kernel_3",
+    "valid": true,
+    "params": 5781504,
+    "vram_gb": 0.1287,
+    "loss": 9.760826110839844,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-015",
+    "parent": "GEN1-010",
+    "mutation": "d_model_minus+forget_bias_down",
+    "valid": true,
+    "params": 5784576,
+    "vram_gb": 0.1275,
+    "loss": 9.811016082763672,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-016",
+    "parent": "GEN1-001",
+    "mutation": "layers_minus",
+    "valid": true,
+    "params": 5254656,
+    "vram_gb": 0.1177,
+    "loss": 9.765304565429688,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-017",
+    "parent": "GEN1-001",
+    "mutation": "d_model_minus",
+    "valid": true,
+    "params": 3893952,
+    "vram_gb": 0.0981,
+    "loss": 9.754537582397461,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-018",
+    "parent": "GEN1-001",
+    "mutation": "kernel_3",
+    "valid": true,
+    "params": 5517056,
+    "vram_gb": 0.1225,
+    "loss": 9.740099906921387,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-019",
+    "parent": "GEN1-001",
+    "mutation": "kernel_7",
+    "valid": true,
+    "params": 5522176,
+    "vram_gb": 0.1226,
+    "loss": 9.764522552490234,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-020",
+    "parent": "GEN1-001",
+    "mutation": "forget_bias_down",
+    "valid": true,
+    "params": 5519616,
+    "vram_gb": 0.1226,
+    "loss": 9.684009552001953,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-021",
+    "parent": "GEN1-001",
+    "mutation": "forget_bias_up",
+    "valid": true,
+    "params": 5519616,
+    "vram_gb": 0.1226,
+    "loss": 9.767656326293945,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-022",
+    "parent": "GEN1-001",
+    "mutation": "d_model_plus+layers_minus",
+    "valid": true,
+    "params": 6896000,
+    "vram_gb": 0.1483,
+    "loss": 9.749445915222168,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-023",
+    "parent": "GEN1-001",
+    "mutation": "layers_minus+kernel_3",
+    "valid": true,
+    "params": 5252608,
+    "vram_gb": 0.1226,
+    "loss": 9.738422393798828,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-024",
+    "parent": "GEN1-001",
+    "mutation": "layers_minus+forget_bias_down",
+    "valid": true,
+    "params": 5254656,
+    "vram_gb": 0.1177,
+    "loss": 9.77743911743164,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-025",
+    "parent": "GEN1-001",
+    "mutation": "d_model_minus+kernel_3",
+    "valid": true,
+    "params": 3892032,
+    "vram_gb": 0.0981,
+    "loss": 9.762765884399414,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-026",
+    "parent": "GEN1-001",
+    "mutation": "d_model_minus+forget_bias_down",
+    "valid": true,
+    "params": 3893952,
+    "vram_gb": 0.0924,
+    "loss": 9.760433197021484,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-027",
+    "parent": "GEN1-006",
+    "mutation": "layers_plus",
+    "valid": true,
+    "params": 4193088,
+    "vram_gb": 0.0979,
+    "loss": 9.783540725708008,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-028",
+    "parent": "GEN1-006",
+    "mutation": "d_model_minus",
+    "valid": true,
+    "params": 2499072,
+    "vram_gb": 0.0823,
+    "loss": 9.729927062988281,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-029",
+    "parent": "GEN1-006",
+    "mutation": "kernel_3",
+    "valid": true,
+    "params": 4041216,
+    "vram_gb": 0.0951,
+    "loss": 9.775039672851562,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-030",
+    "parent": "GEN1-006",
+    "mutation": "kernel_7",
+    "valid": true,
+    "params": 4045824,
+    "vram_gb": 0.0952,
+    "loss": 9.775618553161621,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-031",
+    "parent": "GEN1-006",
+    "mutation": "forget_bias_down",
+    "valid": true,
+    "params": 4043520,
+    "vram_gb": 0.0952,
+    "loss": 9.696199417114258,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-032",
+    "parent": "GEN1-006",
+    "mutation": "forget_bias_up",
+    "valid": true,
+    "params": 4043520,
+    "vram_gb": 0.0952,
+    "loss": 9.763786315917969,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-033",
+    "parent": "GEN1-006",
+    "mutation": "d_model_plus+layers_minus",
+    "valid": true,
+    "params": 5519616,
+    "vram_gb": 0.1226,
+    "loss": 9.751708030700684,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-034",
+    "parent": "GEN1-006",
+    "mutation": "d_model_minus+kernel_3",
+    "valid": true,
+    "params": 2497536,
+    "vram_gb": 0.102,
+    "loss": 9.689733505249023,
+    "error": null
+  },
+  {
+    "candidate_id": "GEN2-035",
+    "parent": "GEN1-006",
+    "mutation": "d_model_minus+forget_bias_down",
+    "valid": true,
+    "params": 2499072,
+    "vram_gb": 0.0663,
+    "loss": 9.713264465332031,
+    "error": null
+  }
+]

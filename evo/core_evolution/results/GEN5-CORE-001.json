@@ -1,0 +1,30 @@
+{
+  "status": "REJECT",
+  "stage": "runtime_smoke",
+  "candidate": "GEN5-CORE-001",
+  "smoke": {
+    "status": "FAIL",
+    "runner": {
+      "candidate_id": "GEN5-CORE-001",
+      "command": [
+        "python",
+        "smoke_test.py"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/smoke_test.py\", line 130, in <module>\n    logits, states = model(ids)\n                     ~~~~~^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/smoke_test.py\", line 86, in forward\n    x, state = block(\n               ~~~~~^\n        x,\n        ^^\n        state=state,\n        ^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/nova/blocks_scan.py\", line 112, in forward\n    f = torch.sigmoid(f_pre / self.temperature)\n                              ^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1972, in __getattr__\n    raise AttributeError(\n        f\"'{type(self).__name__}' object has no attribute '{name}'\"\n    )\nAttributeError: 'NovaScanBlock' object has no attribute 'temperature'\n",
+      "duration_seconds": 1.4880954120017122,
+      "status": "failed",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001",
+      "metadata": {
+        "timeout_seconds": 120
+      },
+      "success": false
+    }
+  },
+  "evaluation": {
+    "decision": "REJECT",
+    "reason": "runtime_smoke_failed"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "id": "259e4ab1-6be2-4cc9-843a-723d37f0a9c1",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that creates a struct with a single owned String field, moves the struct into a function, returns the field by value, and asserts that the original struct is dropped immediately after the move.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621862.2422476,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 3",
+    "task": "Write a Rust program that creates a struct with a single owned String field, moves the struct into a function, returns the field by value, and asserts that the original struct is dropped immediately after the move.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621862080",
+    "experiment_id": "8e7169dd-a463-4efc-a341-7140e003dd9a",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Container {\n    value: String,\n}\n\nfn main() {\n    let mut container = Container {\n        value: String::from(\"hello\"),\n    };\n\n    // Move the struct into a function\n    let returned_value = get_value(container);\n\n    // At this point, 'container' should be dropped because it was moved\n    // If we try to use 'container' here, it would cause a compile error.\n    // We assert that the returned value is correct.\n    assert_eq!(returned_value, \"hello\");\n\n    println!(\"Ownership test passed\");\n}\n\nfn get_value(mut container: Container) -> String {\n    // Move the String out of the struct\n    let value = container.value;\n    // The struct 'container' is now moved and will be dropped at the end of this function\n    value\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership test passed",
+    "actual_output": "Ownership test passed\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621862080",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1606,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621862080",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621862080",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: variable does not need to be mutable\n --> main.rs:6:9\n  |\n6 |     let mut container = Container {\n  |         ----^^^^^^^^^\n  |         |\n  |         help: remove this `mut`\n  |\n  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: variable does not need to be mutable\n  --> main.rs:21:14\n   |\n21 | fn get_value(mut container: Container) -> String {\n   |              ----^^^^^^^^^\n   |              |\n   |              help: remove this `mut`\n\nwarning: 2 warnings emitted\n\n",
+          "duration_seconds": 0.15946126700146124,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621862080",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "9c04c522490c013dcf875d3fe150b4220f150d859eac1d4eb70650b044e994ba"
+}

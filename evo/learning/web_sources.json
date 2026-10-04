@@ -1,0 +1,52 @@
+{
+  "note": "Allowlist for NOVA web learning. Only these hosts may be contacted. The Creator can add sources here.",
+  "user_agent": "NOVA-EVO-web-learner/1.1 (https://github.com/roppikevo/NOVA-EVO; private research)",
+  "max_mb_per_round": 2.0,
+  "delay_seconds": 3.0,
+  "timeout_seconds": 20,
+  "sources": {
+    "wikipedia": {
+      "enabled": true,
+      "hosts": [
+        "sk.wikipedia.org",
+        "cs.wikipedia.org",
+        "pl.wikipedia.org",
+        "en.wikipedia.org"
+      ],
+      "license": "CC BY-SA 4.0",
+      "languages": [
+        "sk",
+        "cs",
+        "pl",
+        "en"
+      ]
+    },
+    "docs": {
+      "enabled": true,
+      "hosts": [
+        "docs.python.org",
+        "doc.rust-lang.org"
+      ],
+      "license": "PSF License (docs.python.org) / MIT OR Apache-2.0 (doc.rust-lang.org)",
+      "languages": [
+        "en"
+      ]
+    },
+    "brave": {
+      "enabled": false,
+      "hosts": [
+        "api.search.brave.com"
+      ],
+      "key_file": "~/.config/nova/brave.key",
+      "key_env": "BRAVE_API_KEY",
+      "max_queries_per_round": 20,
+      "results_per_query": 10,
+      "note": "Search is only a pointer: results are used only if their domain is an allowed source (wikipedia/docs). Key lives only on the server, never in git or chat.",
+      "max_queries_per_month": 800,
+      "usage_file": "~/.config/nova/brave_usage.json",
+      "budget_note": "Free plan: $5 monthly credit. Hard cap 800 queries/month keeps usage inside it (adjust after checking the dashboard price)."
+    }
+  },
+  "cost_policy": "free only (Creator decision 2026-09-30): no paid APIs or subscriptions. Brave is disabled.",
+  "max_retries": 3
+}

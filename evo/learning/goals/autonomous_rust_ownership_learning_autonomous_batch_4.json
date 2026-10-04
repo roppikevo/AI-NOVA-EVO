@@ -1,0 +1,74 @@
+{
+  "goal": "Autonomous Rust Ownership Learning Autonomous Batch 4",
+  "status": "TASK_UNSUPPORTED",
+  "current_phase": "COMPILE",
+  "completed_tasks": [
+    "Write a Rust program that creates a vector of 10 owned integers, moves the first element into a new variable, asserts the original vector length is now 9, and prints the moved value.",
+    "Write a Rust program that defines a struct with two fields, borrows one field immutably to read it, borrows the same field mutably to modify it, and asserts the final value matches the expected modification."
+  ],
+  "failed_tasks": [
+    {
+      "task": "Write a Rust program that wraps a value in a Box, moves the Box into a function, asserts the original variable is no longer accessible, and prints the value inside the Box after the function returns.",
+      "reason": "Task generation failed after 3 attempts: Missing CONTENT_BEGIN/CONTENT_END."
+    },
+    {
+      "task": "Write a Rust program that creates a vector of ten synthetic structs, moves ownership of the first element into a new variable, asserts that the original vector no longer owns that element, and prints the remaining count to verify the move succeeded.",
+      "reason": "Task generation failed after 3 attempts: EXPECTED_OUTPUT must be produced by the generated program."
+    },
+    {
+      "task": "Implement a Rust function that takes a vector of synthetic integers, sorts them using a custom bubble sort implementation, and asserts that the output vector is strictly sorted and contains exactly the same elements as the input to verify ownership transfer and mutation safety.",
+      "reason": "Task generation failed after 3 attempts: Generated rust task failed compilation: error[E0382]: borrow of moved value: `input_vec`\n  --> main.rs:18:15\n   |\n14 |     let input_vec = vec![5, 2, 9, 1, 5, 6];\n   |         --------- move occurs because `input_vec` has type `Vec<i32>`, which does not implement the `Copy` trait\n15 |     let sorted_vec = bubble_sort(input_vec);\n   |                                  --------- value moved here\n...\n18 |     for &x in &input_vec {\n   |               ^^^^^^^^^^ value borrowed here after move\n   |\nnote: consider changing this parameter type in function `bubble_sort` to borrow instead if owning the value isn't necessary\n  --> main.rs:1:25\n   |\n 1 | fn bubble_sort(mut vec: Vec<i32>) -> Vec<i32> {\n   |    -----------          ^^^^^^^^ this parameter takes ownership of the value\n   |    |\n   |    in this function\nhelp: consider cloning the value if the performance cost is acceptable\n   |\n15 |     let sorted_vec = bubble_sort(input_vec.clone());\n   |                                           ++++++++\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0382`."
+    }
+  ],
+  "knowledge": [],
+  "next_task": "Implement a Rust function that takes a vector of synthetic integers, sorts them using a custom bubble sort implementation, and asserts that the output vector is strictly sorted and contains exactly the same elements as the input to verify ownership transfer and mutation safety.",
+  "created": 1790621909.965013,
+  "updated": 1790698183.6063893,
+  "plan": [
+    "Implement a Rust function that takes a vector of synthetic integers, sorts them using a custom bubble sort implementation, and asserts that the output vector is strictly sorted and contains exactly the same elements as the input to verify ownership transfer and mutation safety.",
+    "Create a Rust program that defines a struct with a single owned String field, clones the string into a new variable, asserts that the original struct is still valid and the clone is independent, then drops the original struct and asserts the clone remains valid to verify move semantics and heap allocation isolation.",
+    "Write a Rust function that accepts a vector of Option<T> values, filters out None variants, collects the remaining values into a new Vec, and asserts that the length of the result equals the count of Some variants in the input to verify iterator ownership and pattern matching correctness.",
+    "Develop a Rust program that creates a VecDeque of synthetic data, performs a series of push_front, push_back, pop_front, and pop_back operations, and asserts that the final state of the deque matches a pre-calculated expected sequence to verify double-ended queue ownership and capacity management.",
+    "Construct a Rust function that takes a Box<dyn Trait> containing a synthetic struct, calls a method on the trait object, and asserts that the returned value matches a hardcoded expected output to verify dynamic dispatch, trait object ownership, and heap allocation correctness."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 1,
+    "errors": []
+  },
+  "last_task": "Implement a Rust function that takes a vector of synthetic integers, sorts them using a custom bubble sort implementation, and asserts that the output vector is strictly sorted and contains exactly the same elements as the input to verify ownership transfer and mutation safety.",
+  "last_compiled_task": {
+    "success": false,
+    "task": "Implement a Rust function that takes a vector of synthetic integers, sorts them using a custom bubble sort implementation, and asserts that the output vector is strictly sorted and contains exactly the same elements as the input to verify ownership transfer and mutation safety.",
+    "language": "",
+    "task_type": "",
+    "filename": "",
+    "content": "",
+    "command": [],
+    "expected_output": null,
+    "reason": "Task generation failed after 3 attempts: Generated rust task failed compilation: error[E0382]: borrow of moved value: `input_vec`\n  --> main.rs:18:15\n   |\n14 |     let input_vec = vec![5, 2, 9, 1, 5, 6];\n   |         --------- move occurs because `input_vec` has type `Vec<i32>`, which does not implement the `Copy` trait\n15 |     let sorted_vec = bubble_sort(input_vec);\n   |                                  --------- value moved here\n...\n18 |     for &x in &input_vec {\n   |               ^^^^^^^^^^ value borrowed here after move\n   |\nnote: consider changing this parameter type in function `bubble_sort` to borrow instead if owning the value isn't necessary\n  --> main.rs:1:25\n   |\n 1 | fn bubble_sort(mut vec: Vec<i32>) -> Vec<i32> {\n   |    -----------          ^^^^^^^^ this parameter takes ownership of the value\n   |    |\n   |    in this function\nhelp: consider cloning the value if the performance cost is acceptable\n   |\n15 |     let sorted_vec = bubble_sort(input_vec.clone());\n   |                                           ++++++++\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0382`."
+  },
+  "task_generated_by_mentor": false,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+    "experiment_id": "13aa4300-b0e4-4e19-b4ac-a5dd2aa6dbf8",
+    "knowledge_id": "336f636e-152b-448b-8a1a-42564e6d650e",
+    "knowledge_path": "evo/knowledge/successes/336f636e-152b-448b-8a1a-42564e6d650e.json",
+    "status": "COMPLETED",
+    "stdout": "Ownership test passed\n",
+    "stderr": "",
+    "duration_seconds": 0.1475,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+    "compile_success": true,
+    "compile_returncode": 0,
+    "execution_performed": true
+  },
+  "last_meta_experience": {
+    "id": "f0c32b81-face-43e8-a83f-150e838e28ee",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  },
+  "last_error": "Task generation failed after 3 attempts: Generated rust task failed compilation: error[E0382]: borrow of moved value: `input_vec`\n  --> main.rs:18:15\n   |\n14 |     let input_vec = vec![5, 2, 9, 1, 5, 6];\n   |         --------- move occurs because `input_vec` has type `Vec<i32>`, which does not implement the `Copy` trait\n15 |     let sorted_vec = bubble_sort(input_vec);\n   |                                  --------- value moved here\n...\n18 |     for &x in &input_vec {\n   |               ^^^^^^^^^^ value borrowed here after move\n   |\nnote: consider changing this parameter type in function `bubble_sort` to borrow instead if owning the value isn't necessary\n  --> main.rs:1:25\n   |\n 1 | fn bubble_sort(mut vec: Vec<i32>) -> Vec<i32> {\n   |    -----------          ^^^^^^^^ this parameter takes ownership of the value\n   |    |\n   |    in this function\nhelp: consider cloning the value if the performance cost is acceptable\n   |\n15 |     let sorted_vec = bubble_sort(input_vec.clone());\n   |                                           ++++++++\n\nerror: aborting due to 1 previous error\n\nFor more information about this error, try `rustc --explain E0382`."
+}

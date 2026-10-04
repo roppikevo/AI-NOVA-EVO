@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "generation": 4,
+  "parent": "GEN3-007",
+  "next_index": 3,
+  "attempts": 2,
+  "processed": {
+    "GEN4-001": {
+      "status": "REJECT",
+      "result_file": "/opt/ai/work/nova-evo/evo/gen4/results/GEN4-001.json",
+      "timestamp": 1790700328.9225435
+    },
+    "GEN4-002": {
+      "status": "SKIPPED",
+      "reason": {
+        "supported": false,
+        "architecture": "separate_conv_gate",
+        "implementation": null,
+        "reason": "GEN4 separate convolution gate implementation required"
+      }
+    },
+    "GEN4-003": {
+      "status": "REJECT",
+      "result_file": "/opt/ai/work/nova-evo/evo/gen4/results/GEN4-003.json",
+      "timestamp": 1790700642.2564876
+    }
+  },
+  "status": "ATTEMPT_LIMIT",
+  "updated_at": 1790700642.2566326,
+  "last_candidate": "GEN4-003",
+  "last_status": "REJECT"
+}

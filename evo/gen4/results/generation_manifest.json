@@ -1,0 +1,31 @@
+{
+  "generation": 4,
+  "parent": "GEN3-007",
+  "seed": 20260926,
+  "generated": 3,
+  "valid": 3,
+  "invalid": 0,
+  "candidates": [
+    {
+      "candidate": "GEN4-001",
+      "parent": "GEN3-007",
+      "mutation": "d_model:384->256+d_state:384->256",
+      "signature": "1776fc5ce9f85447",
+      "status": "implementation_valid"
+    },
+    {
+      "candidate": "GEN4-002",
+      "parent": "GEN3-007",
+      "mutation": "conv_kernel:5->7+forget_bias:1.125->0.875+fusion_architecture:standard->separate_conv_gate",
+      "signature": "af90866816074d34",
+      "status": "unsupported"
+    },
+    {
+      "candidate": "GEN4-003",
+      "parent": "GEN3-007",
+      "mutation": "d_state:384->512+state_architecture:equal->expanded",
+      "signature": "76385c8f89051170",
+      "status": "unsupported"
+    }
+  ]
+}

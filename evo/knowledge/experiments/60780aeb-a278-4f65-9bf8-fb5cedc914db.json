@@ -1,0 +1,37 @@
+{
+  "id": "60780aeb-a278-4f65-9bf8-fb5cedc914db",
+  "type": "experiment",
+  "title": "Meta-learning experience: python_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790613176.5333354,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Generator Real",
+    "task": "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií.",
+    "task_class": "python_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "python_test",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.009557336001307704,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790613176.5333264
+  },
+  "checksum": "9be5b7560a8eb629a7765aec2142375ab9790de6a26cf3cad920da61e14974bb"
+}

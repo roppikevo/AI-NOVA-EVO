@@ -1,0 +1,231 @@
+{
+  "candidate": "GEN4-003",
+  "screening": {
+    "status": "COMPLETED",
+    "experiment_id": "65ce46f6-e1db-46bb-b3e6-20b41a351915",
+    "candidate": "GEN4-003",
+    "metrics": {
+      "validation_loss": 9.775982761383057,
+      "perplexity": 17605.78396447644,
+      "train_loss": 9.771528244018555,
+      "steps": 100,
+      "parameters": 13403904,
+      "duration_seconds": 17.100512959994376
+    },
+    "resources": {
+      "before": {
+        "timestamp": 1790700329.0233886,
+        "cpu_count": 16,
+        "ram_total_bytes": 32973389824,
+        "ram_available_bytes": 19055935488,
+        "ram_used_bytes": 13917454336,
+        "disk_free_bytes": 823604518912,
+        "gpu_available": true,
+        "gpu_name": "NVIDIA GeForce RTX 4060",
+        "gpu_vram_total_bytes": 8184922112,
+        "gpu_vram_allocated_bytes": 17039360,
+        "gpu_vram_reserved_bytes": 88080384,
+        "gpu_vram_free_bytes": 8096841728
+      },
+      "after": {
+        "timestamp": 1790700346.3221269,
+        "cpu_count": 16,
+        "ram_total_bytes": 32973389824,
+        "ram_available_bytes": 19061690368,
+        "ram_used_bytes": 13911699456,
+        "disk_free_bytes": 823604518912,
+        "gpu_available": true,
+        "gpu_name": "NVIDIA GeForce RTX 4060",
+        "gpu_vram_total_bytes": 8184922112,
+        "gpu_vram_allocated_bytes": 124270592,
+        "gpu_vram_reserved_bytes": 805306368,
+        "gpu_vram_free_bytes": 7379615744
+      }
+    }
+  },
+  "robust": {
+    "status": "COMPLETED",
+    "candidate": "GEN4-003",
+    "candidate_id": "GEN4-003",
+    "parent_id": "GEN3-007",
+    "state": "COMPLETED",
+    "stage": "robust",
+    "seeds": [
+      1001,
+      2002,
+      3003
+    ],
+    "seed_results": [
+      {
+        "status": "COMPLETED",
+        "experiment_id": "c537da8b-9c2a-4608-b2d3-cc6f3edfc9af",
+        "candidate": "GEN4-003",
+        "metrics": {
+          "validation_loss": 8.766845500946046,
+          "perplexity": 6417.895254449693,
+          "train_loss": 8.174901008605957,
+          "steps": 1000,
+          "parameters": 13403904,
+          "duration_seconds": 98.3459743100102,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-003/seed_1001.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790700346.3515437,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19061690368,
+            "ram_used_bytes": 13911699456,
+            "disk_free_bytes": 823604514816,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 88080384,
+            "gpu_vram_free_bytes": 8096841728
+          },
+          "after": {
+            "timestamp": 1790700444.9044895,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19080359936,
+            "ram_used_bytes": 13893029888,
+            "disk_free_bytes": 823604514816,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 124270592,
+            "gpu_vram_reserved_bytes": 805306368,
+            "gpu_vram_free_bytes": 7379615744
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "634adc86-93e6-43f9-9626-5ead312f8dc3",
+        "candidate": "GEN4-003",
+        "metrics": {
+          "validation_loss": 8.72796075630188,
+          "perplexity": 6173.126757115387,
+          "train_loss": 8.309049606323242,
+          "steps": 1000,
+          "parameters": 13403904,
+          "duration_seconds": 98.26457371597644,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-003/seed_2002.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790700445.01215,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19087757312,
+            "ram_used_bytes": 13885632512,
+            "disk_free_bytes": 823525691392,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 88080384,
+            "gpu_vram_free_bytes": 8096841728
+          },
+          "after": {
+            "timestamp": 1790700543.482247,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19062910976,
+            "ram_used_bytes": 13910478848,
+            "disk_free_bytes": 823525683200,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 124270592,
+            "gpu_vram_reserved_bytes": 805306368,
+            "gpu_vram_free_bytes": 7379615744
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "6d47ba76-daf8-4560-acb7-6f37c4b0c35d",
+        "candidate": "GEN4-003",
+        "metrics": {
+          "validation_loss": 8.715590099334717,
+          "perplexity": 6097.231528379751,
+          "train_loss": 8.573942184448242,
+          "steps": 1000,
+          "parameters": 13403904,
+          "duration_seconds": 98.2078284760064,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-003/seed_3003.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790700543.6922898,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19184517120,
+            "ram_used_bytes": 13788872704,
+            "disk_free_bytes": 823446855680,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 88080384,
+            "gpu_vram_free_bytes": 8096841728
+          },
+          "after": {
+            "timestamp": 1790700642.1496186,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973389824,
+            "ram_available_bytes": 19157254144,
+            "ram_used_bytes": 13816135680,
+            "disk_free_bytes": 823446843392,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 124270592,
+            "gpu_vram_reserved_bytes": 805306368,
+            "gpu_vram_free_bytes": 7379615744
+          }
+        }
+      }
+    ],
+    "training": {
+      "stage": "robust",
+      "steps": 1000,
+      "batch_size": 8,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "metrics": {
+      "validation_loss_mean": 8.736798785527547,
+      "validation_loss_std": 0.021838225187805663,
+      "validation_loss_min": 8.715590099334717,
+      "validation_loss_max": 8.766845500946046,
+      "parameters": 13403904,
+      "duration_seconds_mean": 98.27279216733102
+    }
+  },
+  "evaluation": {
+    "action": "REJECT",
+    "candidate_id": "GEN4-003",
+    "parent_id": "GEN3-007",
+    "candidate_loss": 8.736798785527547,
+    "parent_loss": 8.593394830067952,
+    "delta": 0.14340395545959517,
+    "reason": "Candidate validation loss is not lower than the parent baseline.",
+    "confidence": 0.8
+  },
+  "training_strategy": {
+    "name": "default",
+    "steps": 100,
+    "batch_size": 8,
+    "learning_rate": 0.0003,
+    "weight_decay": 0.01
+  },
+  "status": "REJECT"
+}

@@ -1,0 +1,363 @@
+{
+ "run": "scale-10",
+ "start": "start",
+ "clones": 10,
+ "tokens_per_round_M": 121.9,
+ "sets": {
+  "dataset": {
+   "sequences": 1600,
+   "loss": {
+    "start": 3.1049,
+    "core_round0": 3.1167,
+    "core_round1": 3.1179,
+    "core_round2": 3.1136,
+    "core_round3": 3.1129,
+    "clone_sk": 3.1251,
+    "clone_cs": 3.1246,
+    "clone_pl": 3.1251,
+    "clone_en": 3.1204,
+    "clone_code": 3.127,
+    "clone_py": 3.1581,
+    "clone_rs": 3.1376,
+    "clone_teach": 3.234,
+    "clone_web": 3.1358,
+    "clone_data": 3.1256
+   },
+   "start_to_final_core": {
+    "diff": 0.0079,
+    "lo": 0.0069,
+    "hi": 0.009,
+    "n": 1600,
+    "percent": 0.26,
+    "verdict": "decline"
+   },
+   "by_language": {
+    "sk": {
+     "before": 3.2239,
+     "after": 3.2238,
+     "percent": -0.0,
+     "diff": -0.0001,
+     "lo": -0.0014,
+     "hi": 0.0011,
+     "n": 451,
+     "verdict": "no clear change"
+    },
+    "cs": {
+     "before": 3.5217,
+     "after": 3.5255,
+     "percent": 0.11,
+     "diff": 0.0038,
+     "lo": 0.0014,
+     "hi": 0.0064,
+     "n": 117,
+     "verdict": "decline"
+    },
+    "pl": {
+     "before": 3.5375,
+     "after": 3.5381,
+     "percent": 0.02,
+     "diff": 0.0006,
+     "lo": -0.0016,
+     "hi": 0.0027,
+     "n": 76,
+     "verdict": "no clear change"
+    },
+    "en": {
+     "before": 3.6604,
+     "after": 3.6661,
+     "percent": 0.16,
+     "diff": 0.0057,
+     "lo": 0.0045,
+     "hi": 0.0069,
+     "n": 305,
+     "verdict": "decline"
+    },
+    "py": {
+     "before": 2.6647,
+     "after": 2.683,
+     "percent": 0.68,
+     "diff": 0.0182,
+     "lo": 0.0134,
+     "hi": 0.0235,
+     "n": 127,
+     "verdict": "decline"
+    },
+    "rs": {
+     "before": 2.6301,
+     "after": 2.6457,
+     "percent": 0.59,
+     "diff": 0.0156,
+     "lo": 0.0133,
+     "hi": 0.018,
+     "n": 524,
+     "verdict": "decline"
+    }
+   },
+   "trend": {
+    "slope_per_round": -0.00157,
+    "last3": -0.0038,
+    "state": "still improving"
+   }
+  },
+  "web": {
+   "sequences": 1600,
+   "loss": {
+    "start": 3.4149,
+    "core_round0": 3.4191,
+    "core_round1": 3.4194,
+    "core_round2": 3.4177,
+    "core_round3": 3.4183,
+    "clone_sk": 3.4353,
+    "clone_cs": 3.434,
+    "clone_pl": 3.4327,
+    "clone_en": 3.4334,
+    "clone_code": 3.4306,
+    "clone_py": 3.442,
+    "clone_rs": 3.4425,
+    "clone_teach": 3.4925,
+    "clone_web": 3.4205,
+    "clone_data": 3.4547
+   },
+   "start_to_final_core": {
+    "diff": 0.0034,
+    "lo": 0.003,
+    "hi": 0.0039,
+    "n": 1600,
+    "percent": 0.1,
+    "verdict": "decline"
+   },
+   "by_language": {
+    "sk": {
+     "before": 3.0931,
+     "after": 3.0962,
+     "percent": 0.1,
+     "diff": 0.0031,
+     "lo": 0.0022,
+     "hi": 0.0039,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "cs": {
+     "before": 3.4462,
+     "after": 3.4502,
+     "percent": 0.12,
+     "diff": 0.004,
+     "lo": 0.0032,
+     "hi": 0.0048,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "pl": {
+     "before": 3.3553,
+     "after": 3.3586,
+     "percent": 0.1,
+     "diff": 0.0033,
+     "lo": 0.0024,
+     "hi": 0.0042,
+     "n": 400,
+     "verdict": "decline"
+    },
+    "en": {
+     "before": 3.7648,
+     "after": 3.7682,
+     "percent": 0.09,
+     "diff": 0.0034,
+     "lo": 0.0025,
+     "hi": 0.0043,
+     "n": 400,
+     "verdict": "decline"
+    }
+   },
+   "trend": {
+    "slope_per_round": -0.00041,
+    "last3": -0.0008,
+    "state": "flat"
+   }
+  }
+ },
+ "rounds": [
+  {
+   "round": 0,
+   "tokens_M": 121.9,
+   "dataset": {
+    "loss": 3.1167,
+    "step": 0.0118,
+    "step_verdict": "decline",
+    "total": 0.0118,
+    "total_lo": 0.0106,
+    "total_hi": 0.0129,
+    "total_percent": 0.38,
+    "total_verdict": "decline"
+   },
+   "web": {
+    "loss": 3.4191,
+    "step": 0.0042,
+    "step_verdict": "decline",
+    "total": 0.0042,
+    "total_lo": 0.0038,
+    "total_hi": 0.0046,
+    "total_percent": 0.12,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 41,
+    "gained": 0,
+    "lost": 2,
+    "net": -2
+   }
+  },
+  {
+   "round": 1,
+   "tokens_M": 243.8,
+   "dataset": {
+    "loss": 3.1179,
+    "step": 0.0012,
+    "step_verdict": "decline",
+    "total": 0.013,
+    "total_lo": 0.0119,
+    "total_hi": 0.0141,
+    "total_percent": 0.42,
+    "total_verdict": "decline"
+   },
+   "web": {
+    "loss": 3.4194,
+    "step": 0.0004,
+    "step_verdict": "no clear change",
+    "total": 0.0046,
+    "total_lo": 0.0042,
+    "total_hi": 0.0049,
+    "total_percent": 0.13,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 41,
+    "gained": 0,
+    "lost": 2,
+    "net": -2
+   }
+  },
+  {
+   "round": 2,
+   "tokens_M": 365.8,
+   "dataset": {
+    "loss": 3.1136,
+    "step": -0.0043,
+    "step_verdict": "improvement",
+    "total": 0.0087,
+    "total_lo": 0.0076,
+    "total_hi": 0.0097,
+    "total_percent": 0.28,
+    "total_verdict": "decline"
+   },
+   "web": {
+    "loss": 3.4177,
+    "step": -0.0017,
+    "step_verdict": "improvement",
+    "total": 0.0029,
+    "total_lo": 0.0024,
+    "total_hi": 0.0033,
+    "total_percent": 0.08,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 0,
+    "lost": 1,
+    "net": -1
+   }
+  },
+  {
+   "round": 3,
+   "tokens_M": 487.7,
+   "dataset": {
+    "loss": 3.1129,
+    "step": -0.0008,
+    "step_verdict": "improvement",
+    "total": 0.0079,
+    "total_lo": 0.0068,
+    "total_hi": 0.009,
+    "total_percent": 0.25,
+    "total_verdict": "decline"
+   },
+   "web": {
+    "loss": 3.4183,
+    "step": 0.0006,
+    "step_verdict": "decline",
+    "total": 0.0034,
+    "total_lo": 0.003,
+    "total_hi": 0.0039,
+    "total_percent": 0.1,
+    "total_verdict": "decline"
+   },
+   "code": {
+    "solved": 42,
+    "gained": 0,
+    "lost": 1,
+    "net": -1
+   }
+  }
+ ],
+ "code": {
+  "start": 43,
+  "core_round0": 41,
+  "core_round1": 41,
+  "core_round2": 42,
+  "core_round3": 42
+ },
+ "code_start_to_final": {
+  "solved": 42,
+  "gained": 0,
+  "lost": 1,
+  "net": -1
+ },
+ "nodes": [
+  {
+   "round": 0,
+   "led_by": "nova0",
+   "next_leader": "nova0",
+   "agreement": true,
+   "yes": 1,
+   "of": 11,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0162,
+   "exam_mean": 0.8064,
+   "exam_best": 0.8633
+  },
+  {
+   "round": 1,
+   "led_by": "nova0",
+   "next_leader": "web",
+   "agreement": true,
+   "yes": 0,
+   "of": 11,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0178,
+   "exam_mean": 0.7976,
+   "exam_best": 0.8267
+  },
+  {
+   "round": 2,
+   "led_by": "web",
+   "next_leader": "py",
+   "agreement": true,
+   "yes": 0,
+   "of": 11,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0124,
+   "exam_mean": 0.7933,
+   "exam_best": 0.8333
+  },
+  {
+   "round": 3,
+   "led_by": "py",
+   "next_leader": "py",
+   "agreement": true,
+   "yes": 1,
+   "of": 11,
+   "accepted": false,
+   "mean_change_seen_by_nodes": 0.0118,
+   "exam_mean": 0.8112,
+   "exam_best": 0.8367
+  }
+ ]
+}

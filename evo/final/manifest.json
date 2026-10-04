@@ -1,0 +1,194 @@
+{
+  "benchmark": "NOVA-EVO-FINAL",
+  "dataset": "data/gen_final_holdout",
+  "test_set_used_for_selection": false,
+  "test_set_used_for_training": false,
+  "candidates": [
+    {
+      "candidate_id": "GEN0-NOVA",
+      "source": "evo/gen0/config.py",
+      "config_source": "reference"
+    },
+    {
+      "candidate_id": "TRANSFORMER-BASELINE",
+      "source": "evo/gen0/transformer_baseline.py",
+      "config_source": "reference"
+    },
+    {
+      "candidate_id": "GEN1-010",
+      "source": "evo/gen1/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 320,
+        "d_state": 320,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN1-001",
+      "source": "evo/gen1/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 256,
+        "d_state": 256,
+        "num_layers": 5,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN1-006",
+      "source": "evo/gen1/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 192,
+        "d_state": 192,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN2-011",
+      "source": "evo/gen2/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 384,
+        "d_state": 384,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.25,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN2-004",
+      "source": "evo/gen2/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 384,
+        "d_state": 384,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN2-012",
+      "source": "evo/gen2/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 320,
+        "d_state": 320,
+        "num_layers": 5,
+        "conv_kernel": 3,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN2-024",
+      "source": "evo/gen2/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 256,
+        "d_state": 256,
+        "num_layers": 4,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.25,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN3-007",
+      "source": "evo/gen3/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 384,
+        "d_state": 384,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.125,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN3-005",
+      "source": "evo/gen3/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 384,
+        "d_state": 384,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.25,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN3-031",
+      "source": "evo/gen3/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 320,
+        "d_state": 320,
+        "num_layers": 5,
+        "conv_kernel": 7,
+        "learnable_initial_state": false,
+        "forget_bias": 1.25,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    {
+      "candidate_id": "GEN3-024",
+      "source": "evo/gen3/LOCKED/candidates.json",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 320,
+        "d_state": 320,
+        "num_layers": 5,
+        "conv_kernel": 3,
+        "learnable_initial_state": false,
+        "forget_bias": 1.125,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    }
+  ]
+}

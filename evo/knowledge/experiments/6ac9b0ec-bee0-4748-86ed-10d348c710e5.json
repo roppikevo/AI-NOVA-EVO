@@ -1,0 +1,28 @@
+{
+  "id": "6ac9b0ec-bee0-4748-86ed-10d348c710e5",
+  "type": "experiment",
+  "title": "NOVA-EVO generation 4 candidate TEST-KNOWLEDGE-2",
+  "status": "EXPERIMENTAL",
+  "confidence": 0.9,
+  "source": "agent_controller",
+  "created_at": 1790525758.934464,
+  "parent_id": null,
+  "content": {
+    "candidate_id": "TEST-KNOWLEDGE-2",
+    "generation": 4,
+    "decision": {
+      "action": "INVESTIGATE",
+      "reason": "knowledge store test",
+      "confidence": 0.9,
+      "requires_experiment": true,
+      "mentor_used": false,
+      "metadata": {}
+    },
+    "validation": {
+      "valid": true
+    },
+    "dry_run": true,
+    "timestamp": 1790525758.9344554
+  },
+  "checksum": "d9ebeea402fa85f02c5f7c17e8c281ee8b1b4efcebe089eb65b641545bcaa946"
+}

@@ -1,0 +1,281 @@
+{
+  "candidate": {
+    "candidate_id": "GEN4-CORE-002",
+    "candidate": "GEN4-CORE-002",
+    "type": "core",
+    "target": "nova/blocks_scan.py",
+    "parent": "GEN3-007",
+    "parent_generation": "GEN4",
+    "source_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+    "created_at": 1790704103.6064594,
+    "diagnosis": {
+      "current_generation": 4,
+      "parent_generation": "GEN3",
+      "primary_parent": "GEN3-007",
+      "baseline_validation_loss": 8.620134,
+      "previous_rejected_count": 2,
+      "previous_rejected_losses": [],
+      "baseline_core": "/opt/ai/work/nova-evo/nova/blocks_scan.py",
+      "baseline_core_sha256": "106a1265b6452f228dc223c76e0817c4a7dd70e9fa1276f162641f28bbb6bd33",
+      "baseline_core_bytes": 5887,
+      "diagnosis": "The current evidence is insufficient to claim that a parameter-only mutation improves GEN3. The next experiment must therefore change a core computational mechanism while preserving causality, recurrent state semantics, finite forward/backward behaviour and the public block API."
+    },
+    "teacher": {
+      "model": "OxCoder-9B",
+      "plan": "HYPOTHESIS:\nReplacing the standard sigmoid activation in the forget and input projection layers with a temperature-scaled sigmoid (softplus-like scaling) will reduce gradient vanishing in the recurrent state update, allowing the model to maintain stronger long-range dependencies without requiring deeper architectural changes.\n\nMECHANISM:\nModify the `forward` method of `NovaScanBlock` to replace `torch.sigmoid(self.forget_proj(u))` and `torch.sigmoid(self.input_proj(u))` with `torch.sigmoid(self.forget_proj(u) / self.temperature)` and `torch.sigmoid(self.input_proj(u) / self.temperature)`, where `self.temperature` is a learnable parameter initialized to 2.0.\n\nRATIONALE:\nStandard sigmoid saturates quickly, causing gradients to vanish for large or small inputs, which limits the effective dynamic range of the forget and input gates. By scaling the pre-activation values by a temperature factor before applying the sigmoid, we flatten the activation curve, preserving gradient magnitude across a wider range of input values. This allows the recurrent state mechanism to explore a broader space of forget/input combinations during training, potentially improving the stability of long-sequence learning and reducing the likelihood of the state collapsing to zero or identity prematurely.\n\nRISKS:\n- If the temperature is too high, the gates may become too uniform (near 0.5), reducing the model's ability to selectively forget or update states, leading to poor memory retention.\n- The learnable temperature parameter may require careful tuning or regularization to avoid divergence during training.\n- The change may affect the convergence speed of the optimizer if the gradient landscape becomes flatter.\n\nIMPLEMENTATION_PLAN:\n1. Add a new parameter `temperature` to the `__init__` method of `NovaScanBlock`, initialized to 2.0.\n2. Make `temperature` a learnable parameter using `nn.Parameter` to allow it to be updated during training.\n3. In the `forward` method, replace `torch.sigmoid(self.forget_proj(u))` with `torch.sigmoid(self.forget_proj(u) / self.temperature)`.\n4. In the `forward` method, replace `torch.sigmoid(self.input_proj(u))` with `torch.sigmoid(self.input_proj(u) / self.temperature)`.\n5. Ensure the `temperature` parameter is included in the module's state dictionary for saving and loading.\n6. Add a validation check in the `forward` method to ensure `self.temperature` is positive to avoid numerical instability.\n7. Update the `NovaScanBlock` class docstring to reflect the new temperature-scaled activation mechanism.\n8. Test the modified block on a small synthetic sequence to verify that gradients flow correctly through the recurrent state.\n9. Monitor the distribution of forget and input gate values during training to ensure they remain within a reasonable range.\n10. Document the new parameter and its default value in the project's configuration or README.",
+      "response": "ARCHITECTURE_PLAN_BEGIN\nHYPOTHESIS:\nReplacing the standard sigmoid activation in the forget and input projection layers with a temperature-scaled sigmoid (softplus-like scaling) will reduce gradient vanishing in the recurrent state update, allowing the model to maintain stronger long-range dependencies without requiring deeper architectural changes.\n\nMECHANISM:\nModify the `forward` method of `NovaScanBlock` to replace `torch.sigmoid(self.forget_proj(u))` and `torch.sigmoid(self.input_proj(u))` with `torch.sigmoid(self.forget_proj(u) / self.temperature)` and `torch.sigmoid(self.input_proj(u) / self.temperature)`, where `self.temperature` is a learnable parameter initialized to 2.0.\n\nRATIONALE:\nStandard sigmoid saturates quickly, causing gradients to vanish for large or small inputs, which limits the effective dynamic range of the forget and input gates. By scaling the pre-activation values by a temperature factor before applying the sigmoid, we flatten the activation curve, preserving gradient magnitude across a wider range of input values. This allows the recurrent state mechanism to explore a broader space of forget/input combinations during training, potentially improving the stability of long-sequence learning and reducing the likelihood of the state collapsing to zero or identity prematurely.\n\nRISKS:\n- If the temperature is too high, the gates may become too uniform (near 0.5), reducing the model's ability to selectively forget or update states, leading to poor memory retention.\n- The learnable temperature parameter may require careful tuning or regularization to avoid divergence during training.\n- The change may affect the convergence speed of the optimizer if the gradient landscape becomes flatter.\n\nIMPLEMENTATION_PLAN:\n1. Add a new parameter `temperature` to the `__init__` method of `NovaScanBlock`, initialized to 2.0.\n2. Make `temperature` a learnable parameter using `nn.Parameter` to allow it to be updated during training.\n3. In the `forward` method, replace `torch.sigmoid(self.forget_proj(u))` with `torch.sigmoid(self.forget_proj(u) / self.temperature)`.\n4. In the `forward` method, replace `torch.sigmoid(self.input_proj(u))` with `torch.sigmoid(self.input_proj(u) / self.temperature)`.\n5. Ensure the `temperature` parameter is included in the module's state dictionary for saving and loading.\n6. Add a validation check in the `forward` method to ensure `self.temperature` is positive to avoid numerical instability.\n7. Update the `NovaScanBlock` class docstring to reflect the new temperature-scaled activation mechanism.\n8. Test the modified block on a small synthetic sequence to verify that gradients flow correctly through the recurrent state.\n9. Monitor the distribution of forget and input gate values during training to ensure they remain within a reasonable range.\n10. Document the new parameter and its default value in the project's configuration or README.\nARCHITECTURE_PLAN_END\n\nCORE_SOURCE_BEGIN\nimport torch\nimport torch.nn as nn\nfrom torch._higher_order_ops.associative_scan import associative_scan\n\nclass NovaScanBlock(nn.Module):\n    \"\"\"\n    Optimized NOVA-EVO block with temperature-scaled sigmoid activations.\n\n    Architecture is identical to nova.blocks.NovaBlock.\n\n    Difference:\n        The recurrent state update uses an associative scan\n        for the forward pass, while backward uses the exact\n        sequential reference recurrence.\n        Forget and input gates use temperature-scaled sigmoid activations\n        to improve gradient flow and dynamic range.\n    \"\"\"\n\n    def __init__(\n        self,\n        d_model,\n        d_state,\n        conv_kernel=5,\n        forget_bias=1.5,\n        temperature=2.0,\n    ):\n        super().__init__()\n\n        if conv_kernel < 1 or conv_kernel % 2 == 0:\n            raise ValueError(\n                \"conv_kernel must be a positive odd number\"\n            )\n\n        self.d_model = d_model\n        self.d_state = d_state\n        self.conv_kernel = conv_kernel\n        self.temperature = nn.Parameter(torch.tensor(temperature, dtype=torch.float32))\n\n        self.norm = RMSNorm(d_model)\n\n        self.local_conv = nn.Conv1d(\n            d_model,\n            d_model,\n            kernel_size=conv_kernel,\n            groups=d_model,\n            bias=True,\n            padding=0,\n        )\n\n        self.forget_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.input_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.fusion_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.output_proj = nn.Linear(\n            d_state,\n            d_model,\n        )\n\n        nn.init.constant_(\n            self.forget_proj.bias,\n            forget_bias,\n        )\n\n    def causal_conv(self, x):\n        pad = self.conv_kernel - 1\n\n        x_conv = x.transpose(1, 2)\n\n        x_conv = nn.functional.pad(\n            x_conv,\n            (pad, 0),\n        )\n\n        y = self.local_conv(x_conv)\n\n        return y.transpose(1, 2)\n\n    def forward(self, x, state=None):\n        if x.ndim != 3:\n            raise ValueError(\n                \"x must have shape [batch, seq, dim]\"\n            )\n\n        batch, _, dim = x.shape\n\n        if dim != self.d_model:\n            raise ValueError(\n                f\"Expected dim={self.d_model}, got {dim}\"\n            )\n\n        u = self.norm(x)\n\n        c = self.causal_conv(u)\n\n        f_pre = self.forget_proj(u)\n        i_pre = self.input_proj(u)\n        g_pre = self.fusion_proj(u)\n\n        f = torch.sigmoid(f_pre / self.temperature)\n        i = torch.sigmoid(i_pre / self.temperature)\n        g = torch.sigmoid(g_pre / self.temperature)\n\n        states = ScanRefBackward.apply(\n            f,\n            i,\n            u,\n            state,\n        )\n\n        fused = (\n            g * states\n            + (1.0 - g) * c\n        )\n\n        out = self.output_proj(fused)\n\n        y = x + out\n\n        final_state = states[:, -1]\n\n        return y, final_state\n\n\nclass ScanRefBackward(torch.autograd.Function):\n    \"\"\"\n    Associative-scan forward + exact sequential reference backward.\n\n    Forward:\n        s_t = f_t * s_{t-1} + i_t * u_t\n\n    Backward:\n        Exact reverse-time recurrence matching the reference\n        timestep implementation.\n\n    The scan changes only floating-point operation ordering in\n    the forward pass. The backward reconstructs the exact\n    sequential states to preserve gradient fidelity.\n    \"\"\"\n\n    @staticmethod\n    def forward(ctx, f, i, u, initial_state):\n        # Each timestep represents:\n        #\n        #   s_t = A_t * s_{t-1} + B_t\n        #\n        # with:\n        #\n        #   A_t = f_t\n        #   B_t = i_t * u_t\n\n        b = i * u\n\n        def combine(left, right):\n            a1, b1 = left\n            a2, b2 = right\n\n            return (\n                a2 * a1,\n                a2 * b1 + b2,\n            )\n\n        # Import here because associative_scan is an internal\n        # PyTorch operator and should remain isolated to this backend.\n        from torch._higher_order_ops.associative_scan import associative_scan\n\n        a = f\n        identity = torch.zeros_like(b)\n\n        if initial_state is not None:\n            identity = initial_state.unsqueeze(1)\n\n        # Prefix composition.\n        A, B = associative_scan(\n            combine,\n            (a, b),\n            dim=1,\n            reverse=False,\n            combine_mode=\"pointwise\",\n        )\n\n        states = A * identity + B\n\n        ctx.save_for_backward(f, i, u, initial_state)\n\n        return states\n\n    @staticmethod\n    def backward(ctx, grad_states):\n        f, i, u, initial_state = ctx.saved_tensors\n\n        with torch.no_grad():\n            batch, seq_len, state_dim = u.shape\n\n            # Reconstruct the exact sequential states used by\n            # the reference implementation.\n            states = torch.empty_like(u)\n\n            if initial_state is None:\n                prev = torch.zeros(\n                    batch,\n                    state_dim,\n                    device=u.device,\n                    dtype=u.dtype,\n                )\n            else:\n                prev = initial_state\n\n            for t in range(seq_len):\n                prev = (\n                    f[:, t] * prev\n                    + i[:, t] * u[:, t]\n                )\n                states[:, t] = prev\n\n        grad_f = torch.zeros_like(f)\n        grad_i = torch.zeros_like(i)\n        grad_u = torch.zeros_like(u)\n\n        grad_state = torch.zeros_like(\n            states[:, 0]\n        )\n\n        for t in range(seq_len - 1, -1, -1):\n            ds = grad_states[:, t] + grad_state\n\n            prev_state = (\n                torch.zeros_like(ds)\n                if t == 0\n                else states[:, t - 1]\n            )\n\n            grad_f[:, t] = ds * prev_state\n            grad_i[:, t] = ds * u[:, t]\n\n            grad_u[:, t] = (\n                ds * i[:, t]\n            )\n\n            grad_state = ds * f[:, t]\n\n        grad_initial = None\n\n        if initial_state is not None:\n            grad_initial = grad_state\n\n        return (\n            grad_f,\n            grad_i,\n            grad_u,\n            grad_initial,\n        )\n\n\nclass RMSNorm(nn.Module):\n    \"\"\"Root Mean Square Layer Normalization.\"\"\"\n\n    def __init__(self, d_model, eps=1e-6):\n        super().__init__()\n        self.weight = nn.Parameter(torch.ones(d_model))\n        self.eps = eps\n\n    def forward(self, x):\n        x = x * (1.0 / torch.sqrt(torch.mean(x ** 2, dim=-1, keepdim=True) + self.eps))\n        return self.weight * x\nCORE_SOURCE_END",
+      "source_raw": "CORE_SOURCE_BEGIN\nimport torch\nimport torch.nn as nn\nfrom torch._higher_order_ops.associative_scan import associative_scan\n\nclass NovaScanBlock(nn.Module):\n    \"\"\"\n    Optimized NOVA-EVO block with temperature-scaled sigmoid activations.\n\n    Architecture is identical to nova.blocks.NovaBlock.\n\n    Difference:\n        The recurrent state update uses an associative scan\n        for the forward pass, while backward uses the exact\n        sequential reference recurrence.\n        Forget and input gates use temperature-scaled sigmoid activations\n        to improve gradient flow and dynamic range.\n    \"\"\"\n\n    def __init__(\n        self,\n        d_model,\n        d_state,\n        conv_kernel=5,\n        forget_bias=1.5,\n        temperature=2.0,\n    ):\n        super().__init__()\n\n        if conv_kernel < 1 or conv_kernel % 2 == 0:\n            raise ValueError(\n                \"conv_kernel must be a positive odd number\"\n            )\n\n        self.d_model = d_model\n        self.d_state = d_state\n        self.conv_kernel = conv_kernel\n        self.temperature = nn.Parameter(torch.tensor(temperature, dtype=torch.float32))\n\n        self.norm = RMSNorm(d_model)\n\n        self.local_conv = nn.Conv1d(\n            d_model,\n            d_model,\n            kernel_size=conv_kernel,\n            groups=d_model,\n            bias=True,\n            padding=0,\n        )\n\n        self.forget_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.input_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.fusion_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.output_proj = nn.Linear(\n            d_state,\n            d_model,\n        )\n\n        nn.init.constant_(\n            self.forget_proj.bias,\n            forget_bias,\n        )\n\n    def causal_conv(self, x):\n        pad = self.conv_kernel - 1\n\n        x_conv = x.transpose(1, 2)\n\n        x_conv = nn.functional.pad(\n            x_conv,\n            (pad, 0),\n        )\n\n        y = self.local_conv(x_conv)\n\n        return y.transpose(1, 2)\n\n    def forward(self, x, state=None):\n        if x.ndim != 3:\n            raise ValueError(\n                \"x must have shape [batch, seq, dim]\"\n            )\n\n        batch, _, dim = x.shape\n\n        if dim != self.d_model:\n            raise ValueError(\n                f\"Expected dim={self.d_model}, got {dim}\"\n            )\n\n        u = self.norm(x)\n\n        c = self.causal_conv(u)\n\n        f_pre = self.forget_proj(u)\n        i_pre = self.input_proj(u)\n        g_pre = self.fusion_proj(u)\n\n        f = torch.sigmoid(f_pre / self.temperature)\n        i = torch.sigmoid(i_pre / self.temperature)\n        g = torch.sigmoid(g_pre / self.temperature)\n\n        states = ScanRefBackward.apply(\n            f,\n            i,\n            u,\n            state,\n        )\n\n        fused = (\n            g * states\n            + (1.0 - g) * c\n        )\n\n        out = self.output_proj(fused)\n\n        y = x + out\n\n        final_state = states[:, -1]\n\n        return y, final_state\n\n\nclass ScanRefBackward(torch.autograd.Function):\n    \"\"\"\n    Associative-scan forward + exact sequential reference backward.\n\n    Forward:\n        s_t = f_t * s_{t-1} + i_t * u_t\n\n    Backward:\n        Exact reverse-time recurrence matching the reference\n        timestep implementation.\n\n    The scan changes only floating-point operation ordering in\n    the forward pass. The backward reconstructs the exact\n    sequential states to preserve gradient fidelity.\n    \"\"\"\n\n    @staticmethod\n    def forward(ctx, f, i, u, initial_state):\n        # Each timestep represents:\n        #\n        #   s_t = A_t * s_{t-1} + B_t\n        #\n        # with:\n        #\n        #   A_t = f_t\n        #   B_t = i_t * u_t\n\n        b = i * u\n\n        def combine(left, right):\n            a1, b1 = left\n            a2, b2 = right\n\n            return (\n                a2 * a1,\n                a2 * b1 + b2,\n            )\n\n        # Import here because associative_scan is an internal\n        # PyTorch operator and should remain isolated to this backend.\n        from torch._higher_order_ops.associative_scan import associative_scan\n\n        a = f\n        identity = torch.zeros_like(b)\n\n        if initial_state is not None:\n            identity = initial_state.unsqueeze(1)\n\n        # Prefix composition.\n        A, B = associative_scan(\n            combine,\n            (a, b),\n            dim=1,\n            reverse=False,\n            combine_mode=\"pointwise\",\n        )\n\n        states = A * identity + B\n\n        ctx.save_for_backward(f, i, u, initial_state)\n\n        return states\n\n    @staticmethod\n    def backward(ctx, grad_states):\n        f, i, u, initial_state = ctx.saved_tensors\n\n        with torch.no_grad():\n            batch, seq_len, state_dim = u.shape\n\n            # Reconstruct the exact sequential states used by\n            # the reference implementation.\n            states = torch.empty_like(u)\n\n            if initial_state is None:\n                prev = torch.zeros(\n                    batch,\n                    state_dim,\n                    device=u.device,\n                    dtype=u.dtype,\n                )\n            else:\n                prev = initial_state\n\n            for t in range(seq_len):\n                prev = (\n                    f[:, t] * prev\n                    + i[:, t] * u[:, t]\n                )\n                states[:, t] = prev\n\n        grad_f = torch.zeros_like(f)\n        grad_i = torch.zeros_like(i)\n        grad_u = torch.zeros_like(u)\n\n        grad_state = torch.zeros_like(\n            states[:, 0]\n        )\n\n        for t in range(seq_len - 1, -1, -1):\n            ds = grad_states[:, t] + grad_state\n\n            prev_state = (\n                torch.zeros_like(ds)\n                if t == 0\n                else states[:, t - 1]\n            )\n\n            grad_f[:, t] = ds * prev_state\n            grad_i[:, t] = ds * u[:, t]\n\n            grad_u[:, t] = (\n                ds * i[:, t]\n            )\n\n            grad_state = ds * f[:, t]\n\n        grad_initial = None\n\n        if initial_state is not None:\n            grad_initial = grad_state\n\n        return (\n            grad_f,\n            grad_i,\n            grad_u,\n            grad_initial,\n        )\n\n\nclass RMSNorm(nn.Module):\n    \"\"\"Root Mean Square Layer Normalization.\"\"\"\n\n    def __init__(self, d_model, eps=1e-6):\n        super().__init__()\n        self.weight = nn.Parameter(torch.ones(d_model))\n        self.eps = eps\n\n    def forward(self, x):\n        x = x * (1.0 / torch.sqrt(torch.mean(x ** 2, dim=-1, keepdim=True) + self.eps))\n        return self.weight * x\nCORE_SOURCE_END",
+      "plan_usage": {
+        "completion_tokens": 602,
+        "prompt_tokens": 1984,
+        "total_tokens": 2586,
+        "prompt_tokens_details": {
+          "cached_tokens": 1980
+        }
+      },
+      "source_usage": {
+        "completion_tokens": 1651,
+        "prompt_tokens": 2372,
+        "total_tokens": 4023,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "plan_finish_reason": "stop",
+      "source_finish_reason": "stop"
+    },
+    "status": "GENERATED",
+    "generation": 5,
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false
+    },
+    "recovery_attempts": 1,
+    "local_source": "/opt/ai/work/nova-evo/evo/core_evolution/candidates/GEN4-CORE-002/blocks_scan.py"
+  },
+  "robust": {
+    "status": "COMPLETED",
+    "candidate": "GEN4-CORE-002",
+    "candidate_id": "GEN4-CORE-002",
+    "parent_id": "GEN3-007",
+    "state": "COMPLETED",
+    "stage": "robust",
+    "seeds": [
+      1001,
+      2002,
+      3003
+    ],
+    "seed_results": [
+      {
+        "status": "COMPLETED",
+        "experiment_id": "0737179d-503b-429d-ba36-58e11df2a69e",
+        "candidate": "GEN4-CORE-002",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5838.5,
+            "cpu_gen_tokens_per_sec": 164.6,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.773016971696703,
+          "perplexity": 321.50624616879287,
+          "train_loss": 5.5122389793396,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 120.73642845399809,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_1001.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790786017.1232884,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 29126205440,
+            "ram_used_bytes": 3847180288,
+            "disk_free_bytes": 809915232256,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 0,
+            "gpu_vram_reserved_bytes": 0,
+            "gpu_vram_free_bytes": 8184922112
+          },
+          "after": {
+            "timestamp": 1790786139.2021747,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 27764387840,
+            "ram_used_bytes": 5208997888,
+            "disk_free_bytes": 809915224064,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "87571682-3887-4420-8473-5bc0b78332d9",
+        "candidate": "GEN4-CORE-002",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5780.1,
+            "cpu_gen_tokens_per_sec": 173.3,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.768125372932306,
+          "perplexity": 319.93740680686017,
+          "train_loss": 5.699930667877197,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 119.42118571500032,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_2002.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790786141.590386,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 28086181888,
+            "ram_used_bytes": 4887203840,
+            "disk_free_bytes": 809915219968,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 41943040,
+            "gpu_vram_free_bytes": 8142979072
+          },
+          "after": {
+            "timestamp": 1790786262.3071897,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 27693420544,
+            "ram_used_bytes": 5279965184,
+            "disk_free_bytes": 809915211776,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "0bc4fb1b-7917-4a1c-b485-c9def19cc156",
+        "candidate": "GEN4-CORE-002",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5764.4,
+            "cpu_gen_tokens_per_sec": 170.8,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.766776240473423,
+          "perplexity": 319.5060599040066,
+          "train_loss": 6.817244052886963,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 117.68468586699964,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_3003.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790786264.4738808,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 28065845248,
+            "ram_used_bytes": 4907540480,
+            "disk_free_bytes": 809915203584,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 41943040,
+            "gpu_vram_free_bytes": 8142979072
+          },
+          "after": {
+            "timestamp": 1790786383.3939025,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 27684237312,
+            "ram_used_bytes": 5289148416,
+            "disk_free_bytes": 809915195392,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      }
+    ],
+    "training": {
+      "stage": "robust",
+      "steps": 1000,
+      "batch_size": 8,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "metrics": {
+      "validation_loss_mean": 5.769306195034144,
+      "validation_loss_std": 0.002681098926118127,
+      "validation_loss_min": 5.766776240473423,
+      "validation_loss_max": 5.773016971696703,
+      "parameters": 9856518,
+      "duration_seconds_mean": 119.28076667866601,
+      "efficiency": {
+        "parameters": 9856518,
+        "param_mb": 39.43,
+        "state_kb": 9.0,
+        "cpu_threads": 8,
+        "cpu_tokens_per_sec": 5794.3,
+        "cpu_gen_tokens_per_sec": 169.6,
+        "peak_vram_mb": 542.3
+      }
+    },
+    "dataset": "data/text_v2"
+  },
+  "evaluation": {
+    "action": "PROMOTE",
+    "candidate_id": "GEN4-CORE-002",
+    "parent_id": "GEN3-007",
+    "candidate_loss": 5.769306195034144,
+    "parent_loss": 8.593394830067952,
+    "delta": -2.8240886350338084,
+    "reason": "Candidate validation loss is lower than the parent baseline.",
+    "confidence": 0.8
+  },
+  "active_core": "GEN4-CORE-002",
+  "active_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+  "active_checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+  "source_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+  "checkpoint_source": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002/seed_1001.pt",
+  "promoted_at": 1790786387.8761022
+}

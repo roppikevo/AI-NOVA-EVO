@@ -1,0 +1,70 @@
+{
+  "name": "NOVA-10M-v1",
+  "frozen": "2026-10-02 16:24:47",
+  "source_checkpoint": "evo/learning/checkpoints/longtrain-GEN7-CORE-001-text_v4-20261002-084942-best.pt",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false
+  },
+  "core": "GEN7-CORE-001",
+  "parameters": 16147974,
+  "scores": {
+    "time": 1790958243.8237803,
+    "date": "2026-10-02 16:24",
+    "method": 2,
+    "val": 3.446,
+    "lang": {
+      "sk": 3.5864,
+      "cs": 3.8621,
+      "pl": 3.9982,
+      "en": 4.1535,
+      "py": 3.4363,
+      "rs": 2.4521
+    },
+    "lang_tokens": {
+      "sk": 76164,
+      "cs": 31147,
+      "pl": 44562,
+      "en": 87832,
+      "py": 56167,
+      "rs": 110528
+    },
+    "code": {
+      "solved": 34,
+      "tasks": 79,
+      "pass1": 0.4304,
+      "by_level": {
+        "1": "30/55",
+        "2": "4/20",
+        "3": "0/4"
+      },
+      "nll": 0.6584
+    },
+    "creator": -0.009,
+    "checkpoint": "evo/learning/checkpoints/longtrain-GEN7-CORE-001-text_v4-20261002-084942-best.pt"
+  },
+  "dataset": "data/text_v4",
+  "git_commit": "d817b3a",
+  "other_candidates": [
+    {
+      "checkpoint": "evo/learning/checkpoints/longtrain-GEN7-CORE-001-text_v4-20261002-070447-best.pt",
+      "val": 3.4537,
+      "creator": -0.008
+    },
+    {
+      "checkpoint": "evo/learning/checkpoints/longtrain-GEN7-CORE-001-text_v4-20261002-084942-best.pt",
+      "val": 3.446,
+      "creator": -0.009
+    },
+    {
+      "checkpoint": "evo/learning/checkpoints/selfcorrect-20261002-094440.pt",
+      "val": 3.4779,
+      "creator": -0.002
+    }
+  ]
+}

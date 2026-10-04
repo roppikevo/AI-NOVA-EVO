@@ -1,0 +1,8 @@
+# Everything needed to run, test and train NOVA-EVO.
+# install.py installs these into .venv (and picks the CPU or GPU build of torch for you).
+torch>=2.2
+numpy>=1.26
+tokenizers>=0.20
+pytest>=8
+
+# Only for building the training corpus from scratch: pip install -r requirements-corpus.txt

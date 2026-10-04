@@ -1,0 +1,30 @@
+NOVA-EVO GEN 4 — INITIALIZED
+
+Parent generation:
+GEN3 LOCKED
+
+Primary reference parent:
+GEN3-007
+
+GEN3-007 architecture:
+d_model  = 384
+d_state  = 384
+layers   = 6
+kernel   = 5
+forget   = 1.125
+
+GEN4 rules:
+- GEN3 remains immutable.
+- Final holdout test is forbidden for GEN4 selection.
+- GEN4 uses training/validation data only.
+- New architecture mutations must pass technical validation.
+- Candidates are screened before robust evaluation.
+- Robust evaluation uses multiple seeds.
+- Pareto selection considers loss, parameter count and speed.
+- A new clean holdout must be generated for the final GEN4 evaluation.
+- No existing final-test result may be used as a GEN4 training or selection signal.
+
+GEN4 objective:
+Explore architectural mutations beyond the GEN0-GEN3
+hyperparameter-only search, while preserving the core NOVA
+state-space + causal-convolution architecture.

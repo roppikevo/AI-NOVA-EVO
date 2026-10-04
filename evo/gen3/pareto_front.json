@@ -1,0 +1,89 @@
+{
+  "objectives": {
+    "val_loss": "minimize",
+    "params": "minimize",
+    "step_time": "minimize",
+    "vram": "minimize"
+  },
+  "source": "/opt/ai/work/nova-evo/evo/gen3/robust_results.json",
+  "candidates": 6,
+  "pareto_count": 4,
+  "pareto_front": [
+    {
+      "mutation": "forget_bias_1.125",
+      "params": 9856512,
+      "val_loss_mean": 8.593394830067952,
+      "val_loss_std": 0.03179995104584559,
+      "val_loss_min": 8.554045568466186,
+      "val_loss_max": 8.631926343917847,
+      "perplexity_mean": 5398.628279929585,
+      "speed_mean": 10.647894953998927,
+      "speed_std": 0.451336662990332,
+      "vram_mean_gb": 0.47692139943440753,
+      "vram_max_gb": 0.4786252975463867,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN3-007"
+    },
+    {
+      "mutation": "forget_bias_down",
+      "params": 9856512,
+      "val_loss_mean": 8.60913060760498,
+      "val_loss_std": 0.03070822830541536,
+      "val_loss_min": 8.570625886917114,
+      "val_loss_max": 8.6457764377594,
+      "perplexity_mean": 5484.063461177943,
+      "speed_mean": 11.077689610709948,
+      "speed_std": 0.20355743581135644,
+      "vram_mean_gb": 0.47606945037841797,
+      "vram_max_gb": 0.47606945037841797,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN3-005"
+    },
+    {
+      "mutation": "kernel_7+forget_bias_down",
+      "params": 7312320,
+      "val_loss_mean": 8.671231561660766,
+      "val_loss_std": 0.020754534775974384,
+      "val_loss_min": 8.646011520385743,
+      "val_loss_max": 8.696844974517822,
+      "perplexity_mean": 5833.934760718844,
+      "speed_mean": 13.019744532889101,
+      "speed_std": 0.16821698564215784,
+      "vram_mean_gb": 0.4195079803466797,
+      "vram_max_gb": 0.4195079803466797,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN3-031"
+    },
+    {
+      "mutation": "forget_bias_1.125",
+      "params": 7305920,
+      "val_loss_mean": 8.691327310562135,
+      "val_loss_std": 0.039017517096887847,
+      "val_loss_min": 8.640307388305665,
+      "val_loss_max": 8.735038249969483,
+      "perplexity_mean": 5955.590480477396,
+      "speed_mean": 12.865154366104866,
+      "speed_std": 0.30411245997970077,
+      "vram_mean_gb": 0.41930294036865234,
+      "vram_max_gb": 0.41930294036865234,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ],
+      "candidate": "GEN3-024"
+    }
+  ]
+}

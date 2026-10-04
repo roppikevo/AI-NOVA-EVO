@@ -1,0 +1,11 @@
+{
+  "status": "REJECT",
+  "decision": "REJECT",
+  "stage": "source_contract",
+  "candidate": "GEN8-CORE-CONTRACT-1790793633",
+  "errors": [
+    "Parent parameter 'temperature' was silently removed from the child core.",
+    "Teacher planned new parameter 'may' but child source does not define it as nn.Parameter.",
+    "Teacher planned new parameter 'to' but child source does not define it as nn.Parameter."
+  ]
+}

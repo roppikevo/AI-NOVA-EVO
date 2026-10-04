@@ -1,0 +1,73 @@
+{
+  "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+  "status": "READY",
+  "current_phase": "LEARN",
+  "completed_tasks": [
+    "Create a Rust program that defines a struct with a single owned String field, moves the field into a function, and asserts that the original struct is now in a dropped state by checking the field length is zero after the move.",
+    "Create a Rust program that declares two references to the same immutable data, attempts to create a mutable reference to one of them, and asserts that the program compiles and runs successfully by printing a success message.",
+    "Create a Rust program that wraps a value in an Rc<T>, increments a counter inside the value, and asserts that cloning the Rc increments the counter while the original reference remains valid.",
+    "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread."
+  ],
+  "failed_tasks": [
+    {
+      "task": "Create a Rust program that declares two references to the same immutable data, attempts to create a mutable reference to one of them, and asserts that the program compiles and runs successfully by printing a success message.",
+      "reason": "Task generation failed after 3 attempts: Generated rust task failed compilation: warning: variable does not need to be mutable\n --> main.rs:5:9\n  |\n5 |     let mut r3: &mut i32 = &mut data;\n  |         ----^^\n  |         |\n  |         help: remove this `mut`\n  |\n  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nerror[E0596]: cannot borrow `data` as mutable, as it is not declared as mutable\n --> main.rs:5:28\n  |\n5 |     let mut r3: &mut i32 = &mut data;\n  |                            ^^^^^^^^^ cannot borrow as mutable\n  |\nhelp: consider changing this to be mutable\n  |\n2 |     let mut data = 42;\n  |         +++\n\nwarning: unused variable: `r1`\n --> main.rs:3:9\n  |\n3 |     let r1: &i32 = &data;\n  |         ^^ help: if this is intentional, prefix it with an underscore: `_r1`\n  |\n  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `r2`\n --> main.rs:4:9\n  |\n4 |     let r2: &i32 = &data;\n  |         ^^ help: if this is intentional, prefix it with an underscore: `_r2`\n\nerror: aborting due to 1 previous error; 3 warnings emitted\n\nFor more information about this error, try `rustc --explain E0596`."
+    }
+  ],
+  "knowledge": [],
+  "next_task": "Create a Rust program that defines a struct with a lifetime parameter pointing to a reference passed in, creates a function that takes a reference and returns a new reference to the same data, and asserts that the returned reference is valid within the function scope.",
+  "created": 1790621312.1720023,
+  "updated": 1790621410.0053961,
+  "plan": [
+    "Create a Rust program that defines a struct with a single owned String field, moves the field into a function, and asserts that the original struct is now in a dropped state by checking the field length is zero after the move.",
+    "Create a Rust program that declares two references to the same immutable data, attempts to create a mutable reference to one of them, and asserts that the program compiles and runs successfully by printing a success message.",
+    "Create a Rust program that wraps a value in an Rc<T>, increments a counter inside the value, and asserts that cloning the Rc increments the counter while the original reference remains valid.",
+    "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+    "Create a Rust program that defines a struct with a lifetime parameter pointing to a reference passed in, creates a function that takes a reference and returns a new reference to the same data, and asserts that the returned reference is valid within the function scope."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 2,
+    "errors": []
+  },
+  "last_task": "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "content": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let counter = Arc::new(Mutex::new(0));\n    let counter_clone = Arc::clone(&counter);\n\n    let handle = thread::spawn(move || {\n        let mut num = counter_clone.lock().unwrap();\n        *num = 42;\n    });\n\n    handle.join().unwrap();\n\n    let final_value = counter.lock().unwrap();\n    assert_eq!(*final_value, 42);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "reason": ""
+  },
+  "task_generated_by_mentor": true,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+    "experiment_id": "89f58482-6d5d-45e4-9286-66785ec98261",
+    "knowledge_id": "c3852275-2d0a-4a07-97e5-30a11eb9d6fa",
+    "knowledge_path": "evo/knowledge/successes/c3852275-2d0a-4a07-97e5-30a11eb9d6fa.json",
+    "status": "COMPLETED",
+    "stdout": "success\n",
+    "stderr": "",
+    "duration_seconds": 0.1953,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+    "compile_success": true,
+    "compile_returncode": 0,
+    "execution_performed": true
+  },
+  "last_meta_experience": {
+    "id": "2f1d62e2-ba60-47d1-a12d-51837b27cffc",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  },
+  "last_error": "Task generation failed after 3 attempts: Generated rust task failed compilation: warning: variable does not need to be mutable\n --> main.rs:5:9\n  |\n5 |     let mut r3: &mut i32 = &mut data;\n  |         ----^^\n  |         |\n  |         help: remove this `mut`\n  |\n  = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nerror[E0596]: cannot borrow `data` as mutable, as it is not declared as mutable\n --> main.rs:5:28\n  |\n5 |     let mut r3: &mut i32 = &mut data;\n  |                            ^^^^^^^^^ cannot borrow as mutable\n  |\nhelp: consider changing this to be mutable\n  |\n2 |     let mut data = 42;\n  |         +++\n\nwarning: unused variable: `r1`\n --> main.rs:3:9\n  |\n3 |     let r1: &i32 = &data;\n  |         ^^ help: if this is intentional, prefix it with an underscore: `_r1`\n  |\n  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `r2`\n --> main.rs:4:9\n  |\n4 |     let r2: &i32 = &data;\n  |         ^^ help: if this is intentional, prefix it with an underscore: `_r2`\n\nerror: aborting due to 1 previous error; 3 warnings emitted\n\nFor more information about this error, try `rustc --explain E0596`."
+}

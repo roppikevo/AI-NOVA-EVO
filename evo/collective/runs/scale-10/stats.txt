@@ -1,0 +1,31 @@
+STATISTICS scale-10: 10 clones, 121.9 M training tokens per round
+(loss: lower = better; change: negative = improvement; interval = 95 % bootstrap over test sequences)
+--- test set 'dataset' (1600 sequences nobody trained on)
+  start 3.1049 -> final core: change +0.0079 (+0.26 %), interval [+0.0069, +0.0090] -> DECLINE
+  trend: still improving (slope -0.00157 per round, last 3 rounds -0.0038)
+    sk: 3.2239 -> 3.2238 (-0.00 %) [-0.0014, +0.0011] no clear change
+    cs: 3.5217 -> 3.5255 (+0.11 %) [+0.0014, +0.0064] decline
+    pl: 3.5375 -> 3.5381 (+0.02 %) [-0.0016, +0.0027] no clear change
+    en: 3.6604 -> 3.6661 (+0.16 %) [+0.0045, +0.0069] decline
+    py: 2.6647 -> 2.683 (+0.68 %) [+0.0134, +0.0235] decline
+    rs: 2.6301 -> 2.6457 (+0.59 %) [+0.0133, +0.0180] decline
+  others: {'clone_sk': 3.1251, 'clone_cs': 3.1246, 'clone_pl': 3.1251, 'clone_en': 3.1204, 'clone_code': 3.127, 'clone_py': 3.1581, 'clone_rs': 3.1376, 'clone_teach': 3.234, 'clone_web': 3.1358, 'clone_data': 3.1256}
+--- test set 'web' (1600 sequences nobody trained on)
+  start 3.4149 -> final core: change +0.0034 (+0.10 %), interval [+0.0030, +0.0039] -> DECLINE
+  trend: flat (slope -0.00041 per round, last 3 rounds -0.0008)
+    sk: 3.0931 -> 3.0962 (+0.10 %) [+0.0022, +0.0039] decline
+    cs: 3.4462 -> 3.4502 (+0.12 %) [+0.0032, +0.0048] decline
+    pl: 3.3553 -> 3.3586 (+0.10 %) [+0.0024, +0.0042] decline
+    en: 3.7648 -> 3.7682 (+0.09 %) [+0.0025, +0.0043] decline
+  others: {'clone_sk': 3.4353, 'clone_cs': 3.434, 'clone_pl': 3.4327, 'clone_en': 3.4334, 'clone_code': 3.4306, 'clone_py': 3.442, 'clone_rs': 3.4425, 'clone_teach': 3.4925, 'clone_web': 3.4205, 'clone_data': 3.4547}
+--- round by round (collective core)
+  round  0 (   122 M tok) | dataset: 3.1167 step +0.0118 total +0.0118 (+0.38 %) decline | web: 3.4191 step +0.0042 total +0.0042 (+0.12 %) decline | code 41 (+0 -2)
+  round  1 (   244 M tok) | dataset: 3.1179 step +0.0012 total +0.0130 (+0.42 %) decline | web: 3.4194 step +0.0004 total +0.0046 (+0.13 %) decline | code 41 (+0 -2)
+  round  2 (   366 M tok) | dataset: 3.1136 step -0.0043 total +0.0087 (+0.28 %) decline | web: 3.4177 step -0.0017 total +0.0029 (+0.08 %) decline | code 42 (+0 -1)
+  round  3 (   488 M tok) | dataset: 3.1129 step -0.0008 total +0.0079 (+0.25 %) decline | web: 3.4183 step +0.0006 total +0.0034 (+0.10 %) decline | code 42 (+0 -1)
+--- code exam (tasks solved): {'start': 43, 'core_round0': 41, 'core_round1': 41, 'core_round2': 42, 'core_round3': 42}
+--- what the nodes decided
+  round 0: led by nova0, core 1/11 rejected, nodes saw 0.0162, exam mean 0.8064, next leader nova0
+  round 1: led by nova0, core 0/11 rejected, nodes saw 0.0178, exam mean 0.7976, next leader web
+  round 2: led by web, core 0/11 rejected, nodes saw 0.0124, exam mean 0.7933, next leader py
+  round 3: led by py, core 1/11 rejected, nodes saw 0.0118, exam mean 0.8112, next leader py

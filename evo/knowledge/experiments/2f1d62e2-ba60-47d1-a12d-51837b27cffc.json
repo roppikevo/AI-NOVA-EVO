@@ -1,0 +1,37 @@
+{
+  "id": "2f1d62e2-ba60-47d1-a12d-51837b27cffc",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790621410.0052698,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+    "task": "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1953,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790621410.0052626
+  },
+  "checksum": "94f98ee939dab1194df56855209c473bd5e0d7d78982f8ee9e8cf506855d8b24"
+}

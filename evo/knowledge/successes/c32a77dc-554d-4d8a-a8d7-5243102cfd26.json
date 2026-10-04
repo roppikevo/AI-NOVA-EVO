@@ -1,0 +1,68 @@
+{
+  "id": "c32a77dc-554d-4d8a-a8d7-5243102cfd26",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that defines a struct with a single owned String field, moves the field into a function, and asserts that the original struct is now in a dropped state by checking the field length is zero after the move.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621341.82066,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+    "task": "Create a Rust program that defines a struct with a single owned String field, moves the field into a function, and asserts that the original struct is now in a dropped state by checking the field length is zero after the move.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621341658",
+    "experiment_id": "4948af39-de79-4878-843e-6da94de691c7",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Container {\n    data: String,\n}\n\nfn take_data(container: Container) -> String {\n    container.data\n}\n\nfn main() {\n    let mut container = Container { data: \"Hello\".to_string() };\n    let original_len = container.data.len();\n    \n    let moved_data = take_data(container);\n    \n    assert_eq!(original_len, 5);\n    assert_eq!(moved_data, \"Hello\");\n    \n    println!(\"Ownership verified\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership verified",
+    "actual_output": "Ownership verified\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621341658",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership verified\n",
+      "stderr": "",
+      "duration_seconds": 0.1609,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621341658",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621341658",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: variable does not need to be mutable\n  --> main.rs:10:9\n   |\n10 |     let mut container = Container { data: \"Hello\".to_string() };\n   |         ----^^^^^^^^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: 1 warning emitted\n\n",
+          "duration_seconds": 0.1596973770065233,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621341658",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "252c2bbbe26466bf5d23ecbe90602f448a95809f6cd0903f1865e2197afcd173"
+}

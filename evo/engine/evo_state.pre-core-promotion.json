@@ -1,0 +1,202 @@
+{
+  "project": "NOVA-EVO",
+  "engine_version": "0.1.0",
+  "mode": "autonomous_evolution",
+  "locked_generations": [
+    "GEN0",
+    "GEN1",
+    "GEN2",
+    "GEN3"
+  ],
+  "current_generation": 7,
+  "parent_generation": "GEN6",
+  "primary_parent": "GEN6-CORE-001",
+  "primary_parent_config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false
+  },
+  "best_known": {
+    "candidate": "GEN6-CORE-001",
+    "source_generation": "GEN6",
+    "dataset": "data/text_v2",
+    "efficiency": {
+      "parameters": 9856518,
+      "param_mb": 39.43,
+      "state_kb": 9.0,
+      "cpu_threads": 8,
+      "cpu_tokens_per_sec": 5686.6,
+      "cpu_gen_tokens_per_sec": 167.8,
+      "peak_vram_mb": 542.3
+    },
+    "validation_loss": 5.768713932152502,
+    "parameters": 9856518,
+    "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/seed_1001.pt",
+    "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/blocks_scan.py",
+    "source_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+    "promoted_at": 1790786877.4154823
+  },
+  "tested_architectures": [],
+  "tested_mutations": [],
+  "failed_mutations": [],
+  "successful_mutations": [],
+  "lineage": [
+    {
+      "generation": 4,
+      "parent": "GEN3-007",
+      "candidate": "GEN4-CORE-002",
+      "type": "core",
+      "source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt"
+    },
+    {
+      "generation": 5,
+      "parent": "GEN3-007",
+      "candidate": "GEN4-CORE-002",
+      "type": "core",
+      "source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt"
+    },
+    {
+      "generation": 6,
+      "parent": "GEN4-CORE-002",
+      "candidate": "GEN6-CORE-001",
+      "type": "core",
+      "source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/seed_1001.pt"
+    }
+  ],
+  "generation_history": [
+    {
+      "generation": 4,
+      "parent": "GEN3-007",
+      "promoted": "GEN4-CORE-002",
+      "evaluation": {
+        "action": "PROMOTE",
+        "candidate_id": "GEN4-CORE-002",
+        "parent_id": "GEN3-007",
+        "candidate_loss": 8.398849772771198,
+        "parent_loss": 8.593394830067952,
+        "delta": -0.19454505729675375,
+        "reason": "Candidate validation loss is lower than the parent baseline.",
+        "confidence": 0.8
+      },
+      "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+      "promoted_at": 1790705428.8914568
+    },
+    {
+      "generation": 5,
+      "parent": "GEN3-007",
+      "promoted": "GEN4-CORE-002",
+      "evaluation": {
+        "action": "PROMOTE",
+        "candidate_id": "GEN4-CORE-002",
+        "parent_id": "GEN3-007",
+        "candidate_loss": 5.769306195034144,
+        "parent_loss": 8.593394830067952,
+        "delta": -2.8240886350338084,
+        "reason": "Candidate validation loss is lower than the parent baseline.",
+        "confidence": 0.8
+      },
+      "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+      "promoted_at": 1790786387.8790796
+    },
+    {
+      "generation": 6,
+      "parent": "GEN4-CORE-002",
+      "promoted": "GEN6-CORE-001",
+      "evaluation": {
+        "action": "PROMOTE",
+        "candidate_id": "GEN6-CORE-001",
+        "parent_id": "GEN4-CORE-002",
+        "candidate_loss": 5.768713932152502,
+        "parent_loss": 5.769306195034144,
+        "delta": -0.0005922628816419362,
+        "reason": "Candidate validation loss is lower than the parent baseline.",
+        "confidence": 0.8
+      },
+      "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/blocks_scan.py",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN6-CORE-001/seed_1001.pt",
+      "promoted_at": 1790786877.4154847
+    }
+  ],
+  "evolution_policy": {
+    "technical_validation": true,
+    "screen_before_robust": true,
+    "robust_seeds": 3,
+    "pareto_selection": true,
+    "preserve_parent": true,
+    "preserve_locked_generations": true
+  },
+  "data_policy": {
+    "training_data": [
+      "data/text_v2"
+    ],
+    "forbidden_data": [
+      "data/gen_final_holdout/test.txt"
+    ],
+    "test_selection_allowed": false
+  },
+  "search_policy": {
+    "hyperparameter_mutations": true,
+    "architectural_mutations": true,
+    "mutation_combinations": true,
+    "random_exploration": true,
+    "adaptive_mutation_rates": true,
+    "meta_evolution": false
+  },
+  "resources": {
+    "device": "cuda",
+    "gpu": "RTX 4060 8GB",
+    "max_users": 1,
+    "max_parallel_candidates": 1
+  },
+  "best_known_history": [
+    {
+      "replaced_at": 1790784160.0115142,
+      "reason": "rebaseline:data/text_v1",
+      "best_known": {
+        "candidate": "GEN4-CORE-002",
+        "source_generation": "GEN4",
+        "validation_loss": 8.398849772771198,
+        "parameters": 9856518,
+        "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+        "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+        "source_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+        "promoted_at": 1790705428.891454
+      }
+    },
+    {
+      "replaced_at": 1790786003.732883,
+      "reason": "rebaseline:data/text_v2",
+      "best_known": {
+        "candidate": "GEN4-CORE-002",
+        "checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/seed_1001.pt",
+        "core_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN4-CORE-002/blocks_scan.py",
+        "source_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+        "source_generation": "GEN4",
+        "validation_loss": 5.711037164970429,
+        "validation_loss_std": 0.00450719021056622,
+        "parameters": 9856518,
+        "efficiency": {
+          "parameters": 9856518,
+          "param_mb": 39.43,
+          "state_kb": 9.0,
+          "cpu_threads": 8,
+          "cpu_tokens_per_sec": 5481.7,
+          "cpu_gen_tokens_per_sec": 169.6,
+          "peak_vram_mb": 542.3
+        },
+        "dataset": "data/text_v1",
+        "rebaseline_checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN4-CORE-002-REBASE-text_v1/seed_1001.pt",
+        "rebaselined_at": 1790784160.011577
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "id": "d3d18669-bb25-48a0-bc4c-1b116c403f79",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that defines a struct with two fields, borrows one field immutably to read it, borrows the same field mutably to modify it, and asserts the final value equals the initial value plus one.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790622889.2137222,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 2",
+    "task": "Write a Rust program that defines a struct with two fields, borrows one field immutably to read it, borrows the same field mutably to modify it, and asserts the final value equals the initial value plus one.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622889058",
+    "experiment_id": "b65d8dc3-9b6c-48c5-9ba4-c5f447864b19",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Data {\n    value: i32,\n    label: String,\n}\n\nfn main() {\n    let mut data = Data {\n        value: 10,\n        label: \"test\".to_string(),\n    };\n\n    // Immutable borrow to read the value\n    let v = &data.value;\n    let l = &data.label;\n\n    // Mutable borrow to modify the value\n    let mut dv = &mut data.value;\n    *dv += 1;\n\n    // Assert the final value equals the initial value plus one\n    assert_eq!(data.value, 11);\n\n    println!(\"Ownership test passed\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership test passed",
+    "actual_output": "Ownership test passed\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622889058",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1547,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622889058",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622889058",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: variable does not need to be mutable\n  --> main.rs:17:9\n   |\n17 |     let mut dv = &mut data.value;\n   |         ----^^\n   |         |\n   |         help: remove this `mut`\n   |\n   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `v`\n  --> main.rs:13:9\n   |\n13 |     let v = &data.value;\n   |         ^ help: if this is intentional, prefix it with an underscore: `_v`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `l`\n  --> main.rs:14:9\n   |\n14 |     let l = &data.label;\n   |         ^ help: if this is intentional, prefix it with an underscore: `_l`\n\nwarning: 3 warnings emitted\n\n",
+          "duration_seconds": 0.15352434199303389,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622889058",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "0ae9e36c4982e12b5fcf571196c1227f84582d7722dada8c88b2373263bcc1af"
+}

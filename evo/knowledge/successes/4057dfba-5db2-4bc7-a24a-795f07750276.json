@@ -1,0 +1,68 @@
+{
+  "id": "4057dfba-5db2-4bc7-a24a-795f07750276",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that wraps a value in an Rc<T>, increments a counter inside the value, and asserts that cloning the Rc increments the counter while the original reference remains valid.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621401.6182485,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+    "task": "Create a Rust program that wraps a value in an Rc<T>, increments a counter inside the value, and asserts that cloning the Rc increments the counter while the original reference remains valid.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621401466",
+    "experiment_id": "a42dcbec-c3f6-419d-bc81-9634c1caacfd",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::rc::Rc;\n\nfn main() {\n    let data = Rc::new(0);\n    let cloned = Rc::clone(&data);\n    assert_eq!(*data, 0);\n    assert_eq!(*cloned, 0);\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621401466",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1509,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621401466",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621401466",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.149739700005739,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621401466",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "a88dd010f98729eafa30b7620d2465ffa10ff1e245c545fa4ede208ea32e1655"
+}

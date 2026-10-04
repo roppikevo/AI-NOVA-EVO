@@ -1,0 +1,13 @@
+NOVA CORE vs TRANSFORMER (2026-10-04 15:37): from scratch, 18000 steps = 146 M tokens each, same data, same seed
+(loss: lower = better; the transformer has three attempts per size, the NOVA core one)
+  nova-24M         23.65 M  lr 3e-4  loss dataset 3.3308  web 3.9303  code 52/79  CPU read 2997 tok/s, write 204.5 tok/s, state 100.0 kB  train 37840 tok/s  {'d_model': 640, 'd_state': 640, 'num_layers': 8}
+  tf-24M-a         24.14 M  lr 3e-4  loss dataset 3.0562  web 3.7629  code 53/79  CPU read 4367 tok/s, write 173.6 tok/s, state 3820.0 kB  train 80475 tok/s  {'arch': 'transformer', 'd_model': 512, 'num_layers': 5, 'n_heads': 8}
+  tf-24M-b         24.23 M  lr 3e-4  loss dataset 3.0513  web 3.7452  code 55/79  CPU read 4210 tok/s, write 148.6 tok/s, state 4679.5 kB  train 74982 tok/s  {'arch': 'transformer', 'd_model': 448, 'num_layers': 7, 'n_heads': 7}
+  tf-24M-lr1e-3    24.23 M  lr 1e-3  loss dataset 2.9849  web 3.6782  code 52/79  CPU read 4366 tok/s, write 155.8 tok/s, state 4679.5 kB  train 74982 tok/s  {'arch': 'transformer', 'd_model': 448, 'num_layers': 7, 'n_heads': 7}
+--- 24M: nova-24M vs best transformer tf-24M-lr1e-3 (of 3 attempts)
+  dataset: NOVA 3.3308 vs transformer 2.9849: +0.3459 (+11.59 %) [+0.3300, +0.3626] -> TRANSFORMER
+  web: NOVA 3.9303 vs transformer 3.6782: +0.2521 (+6.85 %) [+0.2435, +0.2610] -> TRANSFORMER
+  code exam: NOVA 52 vs transformer 52 of 79
+  CPU after a 127-token prompt: NOVA writes 1.31x and reads 0.69x as fast as the transformer
+  CPU after 1024 tokens: NOVA writes 167.6 tok/s with 100.0 kB of state, transformer 96.3 tok/s with 25872.0 kB
+  CPU after 4096 tokens: NOVA writes 178.9 tok/s with 100.0 kB of state, transformer 45.4 tok/s with 101136.0 kB

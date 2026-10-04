@@ -1,0 +1,30 @@
+{
+  "status": "REJECT",
+  "stage": "runtime_smoke",
+  "candidate": "GEN8-CORE-002",
+  "smoke": {
+    "status": "FAIL",
+    "runner": {
+      "candidate_id": "GEN8-CORE-002",
+      "command": [
+        "python",
+        "smoke_test.py"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN8-CORE-002/smoke_test.py\", line 118, in <module>\n    model = CandidateModel(config).to(device)\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1388, in to\n    return self._apply(convert)\n           ~~~~~~~~~~~^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 933, in _apply\n    module._apply(fn)\n    ~~~~~~~~~~~~~^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 966, in _apply\n    param_applied = fn(param)\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1374, in convert\n    return t.to(\n           ~~~~^\n        device,\n        ^^^^^^^\n        dtype if t.is_floating_point() or t.is_complex() else None,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        non_blocking,\n        ^^^^^^^^^^^^^\n    )\n    ^\ntorch.AcceleratorError: CUDA error: out of memory\nSearch for `cudaErrorMemoryAllocation' in https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html for more information.\nThe CUDA driver logged these messages, which may provide useful details:\nReturning 2 (CUDA_ERROR_OUT_OF_MEMORY) from cuDevicePrimaryCtxRetain\n\n\n",
+      "duration_seconds": 25.977634602000762,
+      "status": "failed",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN8-CORE-002",
+      "metadata": {
+        "timeout_seconds": 120
+      },
+      "success": false
+    }
+  },
+  "evaluation": {
+    "decision": "REJECT",
+    "reason": "runtime_smoke_failed"
+  }
+}

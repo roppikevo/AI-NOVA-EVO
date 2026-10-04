@@ -1,0 +1,20 @@
+{
+  "goal": "Rust autonomne",
+  "status": "TASK_PROPOSED",
+  "current_phase": "EXECUTE",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Načítať a analyzovať dataset s Rustovými chybami kompilácie, extrahovať vzory a vygenerovať 100 syntetických príkladov s chybami a ich opravami.",
+  "created": 1790534642.120498,
+  "updated": 1790534725.063625,
+  "plan": [
+    "Načítať a analyzovať dataset s Rustovými chybami kompilácie, extrahovať vzory a vygenerovať 100 syntetických príkladov s chybami a ich opravami.",
+    "Napísať skript, ktorý automaticky generuje 500 jednoduchých Rustových funkcií s rôznymi typmi chýb (typy, mutable referencie, vlastnosti) a ich očakávané opravy.",
+    "Vykonávať cyklické testovanie vlastných Rustových skriptov proti učiteľskému modelu, meranie času kompilácie a generovanie reportu o zlyhaní.",
+    "Implementovať modul pre správu chýb, ktorý automaticky klasifikuje chybové hlásenia Rustu a navrhne opravy na základe histórie úspešných kompilácií.",
+    "Generovať a riešiť sériu 20 úloh s použitím Rustových makr, meranie presnosti generovaných makr v porovnaní s referenčnou implementáciou."
+  ],
+  "last_task": "Načítať a analyzovať dataset s Rustovými chybami kompilácie, extrahovať vzory a vygenerovať 100 syntetických príkladov s chybami a ich opravami.",
+  "last_proposal": "Load and analyze the Rust error dataset, then extract error patterns before generating synthetic examples."
+}

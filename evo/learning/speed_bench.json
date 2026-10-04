@@ -1,0 +1,74 @@
+{
+ "date": "2026-10-04 06:40",
+ "device": "cuda",
+ "scan": [
+  {
+   "shape": [
+    64,
+    127,
+    640
+   ],
+   "dtype": "float32",
+   "reference_ms": 14.82,
+   "fast_ms": 33.39,
+   "speedup": 0.44,
+   "max_abs_diff": 2.86102294921875e-06
+  },
+  {
+   "shape": [
+    64,
+    127,
+    640
+   ],
+   "dtype": "bfloat16",
+   "reference_ms": 14.4,
+   "fast_ms": 14.41,
+   "speedup": 1.0,
+   "max_abs_diff": 0.1875
+  }
+ ],
+ "train_step": [
+  {
+   "reference_ms": 141.9,
+   "reference_first_loss": 9.8522,
+   "fast_ms": 64.6,
+   "fast_first_loss": 9.8521,
+   "batch": 8,
+   "speedup": 2.2
+  }
+ ],
+ "gpu_free_gb": 2.28,
+ "write": {
+  "threads": 8,
+  "by_context": {
+   "127": {
+    "nova_stepper_tok_s": 214.4,
+    "nova_state_kb": 100.0,
+    "nova_old_step_tok_s": 67.2,
+    "nova_today_window_tok_s": 19.0,
+    "transformer_cache_tok_s": 163.7,
+    "transformer_state_kb": 3500.0
+   },
+   "1024": {
+    "nova_stepper_tok_s": 200.8,
+    "nova_state_kb": 100.0,
+    "nova_old_step_tok_s": 93.6,
+    "nova_today_window_tok_s": 20.6,
+    "transformer_cache_tok_s": 109.2,
+    "transformer_state_kb": 21440.0
+   },
+   "4096": {
+    "nova_stepper_tok_s": 192.3,
+    "nova_state_kb": 100.0,
+    "nova_old_step_tok_s": 74.6,
+    "nova_today_window_tok_s": 20.1,
+    "transformer_cache_tok_s": 53.3,
+    "transformer_state_kb": 82880.0
+   }
+  },
+  "read_tok_s": {
+   "nova": 2407,
+   "transformer": 4014
+  }
+ }
+}

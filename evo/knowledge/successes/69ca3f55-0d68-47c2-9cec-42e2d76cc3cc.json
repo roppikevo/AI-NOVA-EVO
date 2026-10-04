@@ -1,0 +1,68 @@
+{
+  "id": "69ca3f55-0d68-47c2-9cec-42e2d76cc3cc",
+  "type": "success",
+  "title": "Learning task: Create a Rust program in a single file that defines a struct with a lifetime parameter, assigns references to it, and asserts that the struct can be cloned only if the references are valid at runtime, printing \"PASS\" if assertions succeed.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790623798.775267,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Borrowing Lifetimes Generics Clone Learning Autonomous Batch 3",
+    "task": "Create a Rust program in a single file that defines a struct with a lifetime parameter, assigns references to it, and asserts that the struct can be cloned only if the references are valid at runtime, printing \"PASS\" if assertions succeed.",
+    "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623798532",
+    "experiment_id": "49cdeedc-07cf-43db-a34e-7b639d86dcb4",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Container<'a> {\n    value: &'a i32,\n}\n\nimpl<'a> Clone for Container<'a> {\n    fn clone(&self) -> Self {\n        Container { value: self.value }\n    }\n}\n\nfn main() {\n    let x = 10;\n    let container = Container { value: &x };\n    \n    // Clone is only valid if the reference is valid at runtime\n    let cloned = container.clone();\n    \n    // Assert that the cloned value is correct\n    assert_eq!(*cloned.value, 10);\n    \n    // Assert that the original reference is still valid\n    assert_eq!(*container.value, 10);\n    \n    println!(\"PASS\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "PASS",
+    "actual_output": "PASS\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623798532",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "PASS\n",
+      "stderr": "",
+      "duration_seconds": 0.2412,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623798532",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623798532",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.23848345900478307,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623798532",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "c262938544954d31268d0510f999ba57e5d28e2c0cf68746104e6efeac8b1c97"
+}

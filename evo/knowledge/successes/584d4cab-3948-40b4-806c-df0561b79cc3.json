@@ -1,0 +1,68 @@
+{
+  "id": "584d4cab-3948-40b4-806c-df0561b79cc3",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that wraps a value in a Box, asserts the Box holds the value by dereferencing, then moves the Box into a function expecting an owned Box, asserting the function receives the wrapped value.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621758.5562398,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 1",
+    "task": "Write a Rust program that wraps a value in a Box, asserts the Box holds the value by dereferencing, then moves the Box into a function expecting an owned Box, asserting the function receives the wrapped value.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621758408",
+    "experiment_id": "1155bfc3-984e-4819-9ead-87a1efce0d53",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "fn main() {\n    // Create a value and wrap it in a Box\n    let boxed_value = Box::new(42);\n\n    // Assert the Box holds the value by dereferencing\n    assert_eq!(*boxed_value, 42);\n\n    // Define a function that expects an owned Box\n    fn consume_box(boxed: Box<i32>) {\n        // Assert the function receives the wrapped value\n        assert_eq!(*boxed, 42);\n    }\n\n    // Move the Box into the function\n    consume_box(boxed_value);\n\n    println!(\"Ownership transfer verified successfully\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership transfer verified successfully",
+    "actual_output": "Ownership transfer verified successfully\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621758408",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership transfer verified successfully\n",
+      "stderr": "",
+      "duration_seconds": 0.1472,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621758408",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621758408",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14605746399320196,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621758408",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "28ea3bb3f6f0521ffe378c8f57340ce38b565807edbce46a7440738f89e82086"
+}

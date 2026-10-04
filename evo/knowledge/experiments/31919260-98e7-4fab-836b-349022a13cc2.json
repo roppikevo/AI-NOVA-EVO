@@ -1,0 +1,43 @@
+{
+  "id": "31919260-98e7-4fab-836b-349022a13cc2",
+  "type": "experiment",
+  "title": "NOVA-EVO generation 4 candidate META-INTEGRATION-001",
+  "status": "EXPERIMENTAL",
+  "confidence": 0.9,
+  "source": "agent_controller",
+  "created_at": 1790612479.1888819,
+  "parent_id": null,
+  "content": {
+    "candidate_id": "META-INTEGRATION-001",
+    "generation": 4,
+    "decision": {
+      "action": "INVESTIGATE",
+      "reason": "Candidate is technically valid but experimental evidence is missing.",
+      "confidence": 0.9,
+      "requires_experiment": true,
+      "mentor_used": false,
+      "metadata": {}
+    },
+    "validation": {
+      "candidate_id": "META-INTEGRATION-001",
+      "valid": true,
+      "syntax_ok": true,
+      "imports_ok": true,
+      "build_ok": true,
+      "forward_ok": true,
+      "backward_ok": true,
+      "gradient_ok": true,
+      "parameter_count": null,
+      "errors": [],
+      "warnings": [
+        "DRY-RUN: no real candidate was executed"
+      ],
+      "checks": {
+        "dry_run": true
+      }
+    },
+    "dry_run": true,
+    "timestamp": 1790612479.1888685
+  },
+  "checksum": "c04c8159b53792240f813f04b663bcfec2dc978b87d12761ebed7279a0d7dd88"
+}

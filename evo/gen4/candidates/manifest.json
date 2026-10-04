@@ -1,0 +1,299 @@
+{
+  "generation": 4,
+  "parent": "GEN3-007",
+  "seed": 20260926,
+  "requested": 48,
+  "generated": 48,
+  "valid": 31,
+  "invalid": 17,
+  "candidates": [
+    {
+      "candidate": "GEN4-001",
+      "mutation": "d_model:384->256",
+      "signature": "487c6429c7081c0c",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-002",
+      "mutation": "conv_kernel:5->7+forget_bias:1.125->0.875+fusion_architecture:standard->separate_conv_gate",
+      "signature": "af90866816074d34",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-003",
+      "mutation": "d_state:384->512+state_architecture:equal->expanded",
+      "signature": "76385c8f89051170",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-004",
+      "mutation": "num_layers:6->8",
+      "signature": "e9cf8cd13c398aab",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-005",
+      "mutation": "d_model:384->320+d_state:384->256+num_layers:6->5+state_architecture:equal->compressed",
+      "signature": "9018a8c642b9ddc3",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-006",
+      "mutation": "d_state:384->640",
+      "signature": "97da3681fa082cc6",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-007",
+      "mutation": "num_layers:6->7",
+      "signature": "37ba6c0b932512c1",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-008",
+      "mutation": "fusion_architecture:standard->separate_state_gate",
+      "signature": "3447b78bb4a60af6",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-009",
+      "mutation": "d_model:384->512+forget_bias:1.125->0.875",
+      "signature": "8999de9d10baacb4",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-010",
+      "mutation": "d_state:384->640+state_architecture:equal->compressed+local_context:single_depthwise->multi_scale",
+      "signature": "01265c9247526178",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-011",
+      "mutation": "fusion_architecture:standard->dual_gate",
+      "signature": "2126af0ccc57c0d1",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-012",
+      "mutation": "num_layers:6->5",
+      "signature": "c0f5d311ee655082",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-013",
+      "mutation": "identity",
+      "signature": "f4b8bc1eef35c3d8",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-014",
+      "mutation": "d_model:384->448+d_state:384->512+conv_kernel:5->9",
+      "signature": "ba9fa84cbaeab8da",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-015",
+      "mutation": "d_model:384->320+state_architecture:equal->expanded+local_context:single_depthwise->multi_scale",
+      "signature": "1687d34faad1ab15",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-016",
+      "mutation": "d_model:384->320+d_state:384->512+forget_bias:1.125->1.5",
+      "signature": "429205f262cae50a",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-017",
+      "mutation": "d_state:384->320+fusion_architecture:standard->dual_gate",
+      "signature": "96d06b0d196d5a2b",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-018",
+      "mutation": "num_layers:6->8+conv_kernel:5->11",
+      "signature": "f69e2a84598f65f5",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-019",
+      "mutation": "fusion_architecture:standard->separate_state_gate+local_context:single_depthwise->multi_scale",
+      "signature": "44328d95258f7007",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-020",
+      "mutation": "d_model:384->320+num_layers:6->8+conv_kernel:5->7",
+      "signature": "b464f76adc71ef2b",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-021",
+      "mutation": "conv_kernel:5->7+local_context:single_depthwise->multi_scale",
+      "signature": "afc062dbd69879e6",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-022",
+      "mutation": "local_context:single_depthwise->multi_scale",
+      "signature": "cd13b606c8cf3362",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-023",
+      "mutation": "forget_bias:1.125->1.5+local_context:single_depthwise->multi_scale",
+      "signature": "fbda225aafd21699",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-024",
+      "mutation": "d_model:384->256+num_layers:6->7+conv_kernel:5->3",
+      "signature": "f7611ecaa8dc2d49",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-025",
+      "mutation": "forget_bias:1.125->1.0+local_context:single_depthwise->multi_scale",
+      "signature": "b760be94c072d349",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-026",
+      "mutation": "conv_kernel:5->3",
+      "signature": "21e5274bbf11d1d8",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-027",
+      "mutation": "d_model:384->256+conv_kernel:5->11",
+      "signature": "3c2022c9f92e5838",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-028",
+      "mutation": "d_state:384->320+num_layers:6->7+state_architecture:equal->compressed",
+      "signature": "45e4e8f826f249ae",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-029",
+      "mutation": "d_model:384->448+d_state:384->320+state_architecture:equal->compressed",
+      "signature": "fba8b55e0d7b1e64",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-030",
+      "mutation": "d_state:384->512+fusion_architecture:standard->dual_gate",
+      "signature": "df968e9180376e76",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-031",
+      "mutation": "conv_kernel:5->7+forget_bias:1.125->1.375+local_context:single_depthwise->multi_scale",
+      "signature": "fee6d9e562db8cd1",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-032",
+      "mutation": "conv_kernel:5->3+forget_bias:1.125->1.0+fusion_architecture:standard->dual_gate",
+      "signature": "a29592241c131024",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-033",
+      "mutation": "num_layers:6->4",
+      "signature": "56139e2c927c632c",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-034",
+      "mutation": "forget_bias:1.125->1.375",
+      "signature": "c544fcba98cf3ddb",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-035",
+      "mutation": "num_layers:6->8+forget_bias:1.125->1.0",
+      "signature": "490fe76a43d097e2",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-036",
+      "mutation": "d_model:384->320",
+      "signature": "1f64b3be48e5a644",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-037",
+      "mutation": "d_model:384->256+fusion_architecture:standard->separate_conv_gate+local_context:single_depthwise->multi_scale",
+      "signature": "5cb3bc242803c585",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-038",
+      "mutation": "forget_bias:1.125->0.875+fusion_architecture:standard->separate_conv_gate",
+      "signature": "83bab3f4db202842",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-039",
+      "mutation": "fusion_architecture:standard->separate_conv_gate",
+      "signature": "e399cb96ca0b3dbe",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-040",
+      "mutation": "d_model:384->512+d_state:384->320+state_architecture:equal->compressed+local_context:single_depthwise->multi_scale",
+      "signature": "941e85c41a9a6065",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-041",
+      "mutation": "d_model:384->512",
+      "signature": "6004f5ad1a8bf13d",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-042",
+      "mutation": "d_model:384->448+d_state:384->256+num_layers:6->5+state_architecture:equal->compressed",
+      "signature": "b8e7468d73dfb029",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-043",
+      "mutation": "d_model:384->320+conv_kernel:5->3+local_context:single_depthwise->multi_scale",
+      "signature": "d32aad95f95aad86",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-044",
+      "mutation": "conv_kernel:5->9",
+      "signature": "6ebecd6e389686ea",
+      "status": "generated"
+    },
+    {
+      "candidate": "GEN4-045",
+      "mutation": "d_model:384->320+conv_kernel:5->9+local_context:single_depthwise->multi_scale",
+      "signature": "a08fc29e89968b3a",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-046",
+      "mutation": "d_model:384->320+num_layers:6->5+conv_kernel:5->3",
+      "signature": "3c74d01f62c2ddf6",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-047",
+      "mutation": "d_state:384->512",
+      "signature": "1655bcf205dc8dce",
+      "status": "invalid"
+    },
+    {
+      "candidate": "GEN4-048",
+      "mutation": "d_state:384->768+state_architecture:equal->expanded+local_context:single_depthwise->multi_scale",
+      "signature": "385c19f33bef7eb2",
+      "status": "generated"
+    }
+  ]
+}

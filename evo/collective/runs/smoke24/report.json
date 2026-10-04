@@ -1,0 +1,1020 @@
+{
+ "name": "smoke24",
+ "date": "2026-10-03 18:19",
+ "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+ "steps_per_round": 30,
+ "rounds": 2,
+ "hours": 0.24,
+ "nodes": {
+  "rounds": [
+   {
+    "round": 0,
+    "elected_by": {
+     "nova0": "nova0",
+     "sk": "nova0",
+     "cs": "nova0",
+     "pl": "nova0",
+     "en": "nova0",
+     "code": "nova0"
+    },
+    "led_by": "nova0",
+    "trained": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ],
+    "core": {
+     "yes": 2,
+     "of": 6,
+     "accepted": false,
+     "votes": {
+      "code": [
+       3.9566,
+       3.9655,
+       false
+      ],
+      "cs": [
+       3.4444,
+       3.4457,
+       false
+      ],
+      "en": [
+       3.5973,
+       3.5931,
+       true
+      ],
+      "nova0": [
+       3.4444,
+       3.4457,
+       false
+      ],
+      "pl": [
+       3.7173,
+       3.717,
+       true
+      ],
+      "sk": [
+       3.2355,
+       3.2388,
+       false
+      ]
+     }
+    },
+    "core_change": {
+     "candidate": {
+      "conv_kernel": 3
+     },
+     "yes": 2,
+     "of": 5,
+     "accepted": false,
+     "results": {
+      "code": [
+       9.2569,
+       9.2729
+      ],
+      "cs": [
+       9.2301,
+       9.2113
+      ],
+      "en": [
+       9.1749,
+       9.1994
+      ],
+      "pl": [
+       9.2029,
+       9.2059
+      ],
+      "sk": [
+       9.2459,
+       9.1874
+      ]
+     }
+    },
+    "scores": {
+     "code": 0.8,
+     "cs": 0.82,
+     "en": 0.8267,
+     "nova0": 0.8667,
+     "pl": 0.8133,
+     "sk": 0.7667
+    },
+    "next_leader": "nova0",
+    "agreement": true
+   },
+   {
+    "round": 1,
+    "elected_by": {
+     "nova0": "sk",
+     "sk": "sk",
+     "cs": "sk",
+     "pl": "sk",
+     "en": "sk",
+     "code": "sk"
+    },
+    "led_by": "nova0",
+    "trained": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ],
+    "core": {
+     "yes": 1,
+     "of": 6,
+     "accepted": false,
+     "votes": {
+      "code": [
+       3.9566,
+       3.9632,
+       false
+      ],
+      "cs": [
+       3.4444,
+       3.4464,
+       false
+      ],
+      "en": [
+       3.5973,
+       3.5931,
+       true
+      ],
+      "nova0": [
+       3.4444,
+       3.4464,
+       false
+      ],
+      "pl": [
+       3.7173,
+       3.7181,
+       false
+      ],
+      "sk": [
+       3.2355,
+       3.2386,
+       false
+      ]
+     }
+    },
+    "core_change": {
+     "candidate": {
+      "conv_kernel": 3
+     },
+     "yes": 2,
+     "of": 5,
+     "accepted": false,
+     "results": {
+      "code": [
+       9.2569,
+       9.2729
+      ],
+      "cs": [
+       9.2301,
+       9.2113
+      ],
+      "en": [
+       9.1749,
+       9.1994
+      ],
+      "pl": [
+       9.2029,
+       9.2059
+      ],
+      "sk": [
+       9.2459,
+       9.1874
+      ]
+     }
+    },
+    "scores": {
+     "code": 0.8333,
+     "cs": 0.7467,
+     "en": 0.74,
+     "nova0": 0.82,
+     "pl": 0.8067,
+     "sk": 0.86
+    },
+    "next_leader": "sk",
+    "agreement": true
+   }
+  ],
+  "messages": {
+   "nova0": 148,
+   "sk": 301,
+   "cs": 295,
+   "pl": 295,
+   "en": 300,
+   "code": 293
+  },
+  "total_messages": 1632,
+  "drill": null,
+  "final_base": [
+   "evo/releases/NOVA-24M-v1/nova_model_fp32.pt"
+  ]
+ },
+ "node_reports": {
+  "nova0": {
+   "node": "nova0",
+   "frozen": true,
+   "messages_sent": 148,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "leader": "nova0",
+     "alive": [
+      "code",
+      "cs",
+      "en",
+      "nova0",
+      "pl",
+      "sk"
+     ],
+     "trained": [
+      "code",
+      "cs",
+      "en",
+      "pl",
+      "sk"
+     ],
+     "merge": {
+      "candidate": "evo/collective/runs/smoke24/core_round0.pt",
+      "votes": {
+       "code": {
+        "yes": false,
+        "before": 3.9566,
+        "after": 3.9655,
+        "creator": -0.011
+       },
+       "cs": {
+        "yes": false,
+        "before": 3.4444,
+        "after": 3.4457,
+        "creator": -0.011
+       },
+       "en": {
+        "yes": true,
+        "before": 3.5973,
+        "after": 3.5931,
+        "creator": -0.011
+       },
+       "nova0": {
+        "yes": false,
+        "before": 3.4444,
+        "after": 3.4457,
+        "creator": -0.011
+       },
+       "pl": {
+        "yes": true,
+        "before": 3.7173,
+        "after": 3.717,
+        "creator": -0.011
+       },
+       "sk": {
+        "yes": false,
+        "before": 3.2355,
+        "after": 3.2388,
+        "creator": -0.011
+       }
+      },
+      "yes": 2,
+      "of": 6,
+      "accepted": false
+     },
+     "core_change": {
+      "candidate": {
+       "conv_kernel": 3
+      },
+      "results": {
+       "code": {
+        "parent": 9.2569,
+        "candidate": 9.2729,
+        "yes": false
+       },
+       "cs": {
+        "parent": 9.2301,
+        "candidate": 9.2113,
+        "yes": true
+       },
+       "en": {
+        "parent": 9.1749,
+        "candidate": 9.1994,
+        "yes": false
+       },
+       "pl": {
+        "parent": 9.2029,
+        "candidate": 9.2059,
+        "yes": false
+       },
+       "sk": {
+        "parent": 9.2459,
+        "candidate": 9.1874,
+        "yes": true
+       }
+      },
+      "yes": 2,
+      "of": 5,
+      "accepted": false
+     }
+    },
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "leader": "nova0",
+     "alive": [
+      "code",
+      "cs",
+      "en",
+      "nova0",
+      "pl",
+      "sk"
+     ],
+     "trained": [
+      "code",
+      "cs",
+      "en",
+      "pl",
+      "sk"
+     ],
+     "merge": {
+      "candidate": "evo/collective/runs/smoke24/core_round1.pt",
+      "votes": {
+       "code": {
+        "yes": false,
+        "before": 3.9566,
+        "after": 3.9632,
+        "creator": -0.011
+       },
+       "cs": {
+        "yes": false,
+        "before": 3.4444,
+        "after": 3.4464,
+        "creator": -0.011
+       },
+       "en": {
+        "yes": true,
+        "before": 3.5973,
+        "after": 3.5931,
+        "creator": -0.011
+       },
+       "nova0": {
+        "yes": false,
+        "before": 3.4444,
+        "after": 3.4464,
+        "creator": -0.011
+       },
+       "pl": {
+        "yes": false,
+        "before": 3.7173,
+        "after": 3.7181,
+        "creator": -0.011
+       },
+       "sk": {
+        "yes": false,
+        "before": 3.2355,
+        "after": 3.2386,
+        "creator": -0.011
+       }
+      },
+      "yes": 1,
+      "of": 6,
+      "accepted": false
+     },
+     "core_change": {
+      "candidate": {
+       "conv_kernel": 3
+      },
+      "results": {
+       "code": {
+        "parent": 9.2569,
+        "candidate": 9.2729,
+        "yes": false
+       },
+       "cs": {
+        "parent": 9.2301,
+        "candidate": 9.2113,
+        "yes": true
+       },
+       "en": {
+        "parent": 9.1749,
+        "candidate": 9.1994,
+        "yes": false
+       },
+       "pl": {
+        "parent": 9.2029,
+        "candidate": 9.2059,
+        "yes": false
+       },
+       "sk": {
+        "parent": 9.2459,
+        "candidate": 9.1874,
+        "yes": true
+       }
+      },
+      "yes": 2,
+      "of": 5,
+      "accepted": false
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "en": 0.7,
+     "cs": 0.6667,
+     "code": 0.6667,
+     "pl": 0.7667,
+     "sk": 0.8667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "en": true,
+     "pl": true,
+     "sk": true
+    }
+   },
+   "finished": true
+  },
+  "sk": {
+   "node": "sk",
+   "frozen": false,
+   "messages_sent": 301,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/collective/runs/smoke24/sk_round1.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.8667,
+     "en": 0.7333,
+     "pl": 0.7667,
+     "code": 0.8333,
+     "cs": 0.8
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "en": true,
+     "nova0": true,
+     "pl": true
+    }
+   },
+   "finished": true
+  },
+  "cs": {
+   "node": "cs",
+   "frozen": false,
+   "messages_sent": 295,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/collective/runs/smoke24/cs_round1.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "code": 0.9,
+     "nova0": 0.8,
+     "pl": 0.7667,
+     "en": 0.7333,
+     "sk": 0.8333
+    },
+    "creator": {
+     "code": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "sk": true
+    }
+   },
+   "finished": true
+  },
+  "pl": {
+   "node": "pl",
+   "frozen": false,
+   "messages_sent": 295,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/collective/runs/smoke24/pl_round1.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.8333,
+     "en": 0.8333,
+     "cs": 0.8333,
+     "code": 0.9,
+     "sk": 0.9
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "en": true,
+     "nova0": true,
+     "sk": true
+    }
+   },
+   "finished": true
+  },
+  "en": {
+   "node": "en",
+   "frozen": false,
+   "messages_sent": 300,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/collective/runs/smoke24/en_round1.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "cs": 0.8,
+     "code": 0.8667,
+     "nova0": 0.7667,
+     "pl": 0.9,
+     "sk": 0.8667
+    },
+    "creator": {
+     "code": true,
+     "cs": true,
+     "nova0": true,
+     "pl": true,
+     "sk": true
+    }
+   },
+   "finished": true
+  },
+  "code": {
+   "node": "code",
+   "frozen": false,
+   "messages_sent": 293,
+   "leader": "sk",
+   "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+   "personal": "evo/collective/runs/smoke24/code_round1.pt",
+   "dead": [],
+   "history": [
+    {
+     "round": 0,
+     "election": {
+      "leader": "nova0",
+      "scores": {
+       "code": 0.8,
+       "cs": 0.82,
+       "en": 0.8267,
+       "nova0": 0.8667,
+       "pl": 0.8133,
+       "sk": 0.7667
+      },
+      "ranking": [
+       "nova0",
+       "en",
+       "cs",
+       "pl",
+       "code",
+       "sk"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    },
+    {
+     "round": 1,
+     "election": {
+      "leader": "sk",
+      "scores": {
+       "code": 0.8333,
+       "cs": 0.7467,
+       "en": 0.74,
+       "nova0": 0.82,
+       "pl": 0.8067,
+       "sk": 0.86
+      },
+      "ranking": [
+       "sk",
+       "code",
+       "nova0",
+       "pl",
+       "cs",
+       "en"
+      ],
+      "eligible": [
+       "code",
+       "cs",
+       "en",
+       "nova0",
+       "pl",
+       "sk"
+      ]
+     }
+    }
+   ],
+   "ledger": {
+    "grades": {
+     "nova0": 0.8333,
+     "pl": 0.8333,
+     "cs": 0.6333,
+     "en": 0.7,
+     "sk": 0.8333
+    },
+    "creator": {
+     "cs": true,
+     "en": true,
+     "nova0": true,
+     "pl": true,
+     "sk": true
+    }
+   },
+   "finished": true
+  }
+ },
+ "measure": {
+  "loss": {
+   "release": 3.1478,
+   "sk": 3.1477,
+   "cs": 3.1483,
+   "pl": 3.1491,
+   "en": 3.1479,
+   "code": 3.1518,
+   "baseline_single_1_rounds": 3.1496,
+   "collective_core_after_1_rounds": 3.1489
+  },
+  "core_by_round": {
+   "core_round0": 3.1489,
+   "core_round1": 3.1484
+  },
+  "collective_answer": {
+   "members": [
+    "release",
+    "sk",
+    "cs",
+    "pl",
+    "en",
+    "code"
+   ],
+   "equal_votes": 3.1477,
+   "leader_weights": 3.1476,
+   "weights": {
+    "release": 0.184,
+    "sk": 0.168,
+    "cs": 0.164,
+    "pl": 0.171,
+    "en": 0.174,
+    "code": 0.139
+   }
+  },
+  "code": {
+   "collective": {
+    "solved": 41,
+    "tasks": 79,
+    "by_level": {
+     "1": "35/55",
+     "2": "6/20",
+     "3": "0/4"
+    },
+    "per_node": {
+     "sk": 39,
+     "cs": 38,
+     "pl": 41,
+     "en": 40,
+     "code": 40
+    }
+   },
+   "release_alone": 40
+  },
+  "creator": {
+   "recall": {
+    "release": -0.022,
+    "sk": -0.012,
+    "cs": -0.011,
+    "pl": -0.009,
+    "en": -0.011,
+    "code": -0.012,
+    "baseline_single_1_rounds": -0.002,
+    "collective_core_after_1_rounds": -0.011
+   },
+   "know_creator": [
+    "baseline_single_1_rounds",
+    "code",
+    "collective_core_after_1_rounds",
+    "cs",
+    "en",
+    "pl",
+    "release",
+    "sk"
+   ]
+  }
+ }
+}

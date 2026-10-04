@@ -1,0 +1,345 @@
+{
+  "config": {
+    "steps": 1000,
+    "batch_size": 8,
+    "seq_len": 128,
+    "lr": 0.0003,
+    "weight_decay": 0.01,
+    "grad_clip": 1.0,
+    "seeds": [
+      1001,
+      2002,
+      3003
+    ],
+    "dataset": "/opt/ai/work/nova-evo/data/gen0_unseen2",
+    "test_used": false
+  },
+  "runs": [
+    {
+      "candidate": "GEN3-007",
+      "mutation": "forget_bias_1.125",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.594212577819825,
+      "perplexity": 5400.3150736357165,
+      "elapsed_sec": 97.08694978100539,
+      "steps_per_sec": 10.300045497934114,
+      "peak_vram_gb": 0.4786252975463867
+    },
+    {
+      "candidate": "GEN3-007",
+      "mutation": "forget_bias_1.125",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.631926343917847,
+      "perplexity": 5607.870541955047,
+      "elapsed_sec": 88.61090079299174,
+      "steps_per_sec": 11.285293243278826,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-007",
+      "mutation": "forget_bias_1.125",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.554045568466186,
+      "perplexity": 5187.6992241979915,
+      "elapsed_sec": 96.54050833400106,
+      "steps_per_sec": 10.35834612078384,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-005",
+      "mutation": "forget_bias_down",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.610989498138428,
+      "perplexity": 5491.67999735128,
+      "elapsed_sec": 91.28046284599986,
+      "steps_per_sec": 10.95524681647495,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-005",
+      "mutation": "forget_bias_down",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.6457764377594,
+      "perplexity": 5686.080432157391,
+      "elapsed_sec": 87.99298865800665,
+      "steps_per_sec": 11.364541826015227,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-005",
+      "mutation": "forget_bias_down",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.570625886917114,
+      "perplexity": 5274.42995402516,
+      "elapsed_sec": 91.63147858600132,
+      "steps_per_sec": 10.913280189639671,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-008",
+      "mutation": "forget_bias_1.375",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.632046283721923,
+      "perplexity": 5608.543189186916,
+      "elapsed_sec": 90.27625671699934,
+      "steps_per_sec": 11.07710971152503,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-008",
+      "mutation": "forget_bias_1.375",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.663827314376832,
+      "perplexity": 5789.651127169667,
+      "elapsed_sec": 93.80178620399965,
+      "steps_per_sec": 10.660777800384366,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-008",
+      "mutation": "forget_bias_1.375",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 9856512,
+      "val_loss": 8.589869655609132,
+      "perplexity": 5376.912779312076,
+      "elapsed_sec": 90.69594761299959,
+      "steps_per_sec": 11.025850948346765,
+      "peak_vram_gb": 0.47606945037841797
+    },
+    {
+      "candidate": "GEN3-016",
+      "mutation": "kernel_3",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 9851904,
+      "val_loss": 8.639143531799316,
+      "perplexity": 5648.490000087084,
+      "elapsed_sec": 94.11121999401075,
+      "steps_per_sec": 10.625725604913422,
+      "peak_vram_gb": 0.47586917877197266
+    },
+    {
+      "candidate": "GEN3-016",
+      "mutation": "kernel_3",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 9851904,
+      "val_loss": 8.71022610282898,
+      "perplexity": 6064.613559311129,
+      "elapsed_sec": 89.85304874699796,
+      "steps_per_sec": 11.129282911876828,
+      "peak_vram_gb": 0.47586917877197266
+    },
+    {
+      "candidate": "GEN3-016",
+      "mutation": "kernel_3",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 9851904,
+      "val_loss": 8.684573253631592,
+      "perplexity": 5911.017454069264,
+      "elapsed_sec": 91.05345921400294,
+      "steps_per_sec": 10.98255913209953,
+      "peak_vram_gb": 0.47586917877197266
+    },
+    {
+      "candidate": "GEN3-031",
+      "mutation": "kernel_7+forget_bias_down",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 7312320,
+      "val_loss": 8.696844974517822,
+      "perplexity": 5984.002721903853,
+      "elapsed_sec": 76.25663049200375,
+      "steps_per_sec": 13.113613774278418,
+      "peak_vram_gb": 0.4195079803466797
+    },
+    {
+      "candidate": "GEN3-031",
+      "mutation": "kernel_7+forget_bias_down",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 7312320,
+      "val_loss": 8.670838190078735,
+      "perplexity": 5830.38427224406,
+      "elapsed_sec": 78.22581557200465,
+      "steps_per_sec": 12.783503664203135,
+      "peak_vram_gb": 0.4195079803466797
+    },
+    {
+      "candidate": "GEN3-031",
+      "mutation": "kernel_7+forget_bias_down",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 7312320,
+      "val_loss": 8.646011520385743,
+      "perplexity": 5687.417288008617,
+      "elapsed_sec": 75.97562487899268,
+      "steps_per_sec": 13.16211616018575,
+      "peak_vram_gb": 0.4195079803466797
+    },
+    {
+      "candidate": "GEN3-024",
+      "mutation": "forget_bias_1.125",
+      "seed": 1001,
+      "steps": 1000,
+      "params": 7305920,
+      "val_loss": 8.698636293411255,
+      "perplexity": 5994.7315855771385,
+      "elapsed_sec": 79.99902846199984,
+      "steps_per_sec": 12.500151804656074,
+      "peak_vram_gb": 0.41930294036865234
+    },
+    {
+      "candidate": "GEN3-024",
+      "mutation": "forget_bias_1.125",
+      "seed": 2002,
+      "steps": 1000,
+      "params": 7305920,
+      "val_loss": 8.735038249969483,
+      "perplexity": 6216.97199683087,
+      "elapsed_sec": 77.8170017079974,
+      "steps_per_sec": 12.850662169591507,
+      "peak_vram_gb": 0.41930294036865234
+    },
+    {
+      "candidate": "GEN3-024",
+      "mutation": "forget_bias_1.125",
+      "seed": 3003,
+      "steps": 1000,
+      "params": 7305920,
+      "val_loss": 8.640307388305665,
+      "perplexity": 5655.067859024181,
+      "elapsed_sec": 75.50218889399548,
+      "steps_per_sec": 13.24464912406702,
+      "peak_vram_gb": 0.41930294036865234
+    }
+  ],
+  "summary": {
+    "GEN3-007": {
+      "mutation": "forget_bias_1.125",
+      "params": 9856512,
+      "val_loss_mean": 8.593394830067952,
+      "val_loss_std": 0.03179995104584559,
+      "val_loss_min": 8.554045568466186,
+      "val_loss_max": 8.631926343917847,
+      "perplexity_mean": 5398.628279929585,
+      "speed_mean": 10.647894953998927,
+      "speed_std": 0.451336662990332,
+      "vram_mean_gb": 0.47692139943440753,
+      "vram_max_gb": 0.4786252975463867,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "GEN3-005": {
+      "mutation": "forget_bias_down",
+      "params": 9856512,
+      "val_loss_mean": 8.60913060760498,
+      "val_loss_std": 0.03070822830541536,
+      "val_loss_min": 8.570625886917114,
+      "val_loss_max": 8.6457764377594,
+      "perplexity_mean": 5484.063461177943,
+      "speed_mean": 11.077689610709948,
+      "speed_std": 0.20355743581135644,
+      "vram_mean_gb": 0.47606945037841797,
+      "vram_max_gb": 0.47606945037841797,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "GEN3-008": {
+      "mutation": "forget_bias_1.375",
+      "params": 9856512,
+      "val_loss_mean": 8.628581084569296,
+      "val_loss_std": 0.030292348059924493,
+      "val_loss_min": 8.589869655609132,
+      "val_loss_max": 8.663827314376832,
+      "perplexity_mean": 5591.702365222886,
+      "speed_mean": 10.921246153418721,
+      "speed_std": 0.1853639436351506,
+      "vram_mean_gb": 0.47606945037841797,
+      "vram_max_gb": 0.47606945037841797,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "GEN3-016": {
+      "mutation": "kernel_3",
+      "params": 9851904,
+      "val_loss_mean": 8.677980962753296,
+      "val_loss_std": 0.029391344534458103,
+      "val_loss_min": 8.639143531799316,
+      "val_loss_max": 8.71022610282898,
+      "perplexity_mean": 5874.707004489159,
+      "speed_mean": 10.912522549629927,
+      "speed_std": 0.21145737555052832,
+      "vram_mean_gb": 0.47586917877197266,
+      "vram_max_gb": 0.47586917877197266,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "GEN3-031": {
+      "mutation": "kernel_7+forget_bias_down",
+      "params": 7312320,
+      "val_loss_mean": 8.671231561660766,
+      "val_loss_std": 0.020754534775974384,
+      "val_loss_min": 8.646011520385743,
+      "val_loss_max": 8.696844974517822,
+      "perplexity_mean": 5833.934760718844,
+      "speed_mean": 13.019744532889101,
+      "speed_std": 0.16821698564215784,
+      "vram_mean_gb": 0.4195079803466797,
+      "vram_max_gb": 0.4195079803466797,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "GEN3-024": {
+      "mutation": "forget_bias_1.125",
+      "params": 7305920,
+      "val_loss_mean": 8.691327310562135,
+      "val_loss_std": 0.039017517096887847,
+      "val_loss_min": 8.640307388305665,
+      "val_loss_max": 8.735038249969483,
+      "perplexity_mean": 5955.590480477396,
+      "speed_mean": 12.865154366104866,
+      "speed_std": 0.30411245997970077,
+      "vram_mean_gb": 0.41930294036865234,
+      "vram_max_gb": 0.41930294036865234,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    }
+  }
+}

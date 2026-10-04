@@ -1,0 +1,37 @@
+{
+  "id": "e752cec0-2565-4b48-8d7c-6a27eafdc042",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790615103.782021,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Integration",
+    "task": "Analyze a corpus of 500 Rust crates to extract ownership patterns and generate a dataset of valid/invalid ownership transitions for model fine-tuning.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "python_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.01102591899689287,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790615103.782012
+  },
+  "checksum": "241e0293d364d007f35687031ee8d7dd1317958ccf43cbdc676662fc5fb63413"
+}

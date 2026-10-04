@@ -1,0 +1,50 @@
+{
+  "goal": "Autonomous Generator Test",
+  "status": "COMPLETED",
+  "current_phase": "DONE",
+  "completed_tasks": [
+    "Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790613029.5791638,
+  "updated": 1790613029.5934036,
+  "plan": [
+    "Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií."
+  ],
+  "last_task": "Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií.",
+    "language": "python",
+    "task_type": "python_test",
+    "filename": "main.py",
+    "content": "def add(a: int, b: int) -> int:\n    return a + b\n\nassert add(20, 22) == 42\nprint(\"NOVA_PYTHON_TASK_OK\")\n",
+    "command": [
+      "python",
+      "main.py"
+    ],
+    "expected_output": "NOVA_PYTHON_TASK_OK",
+    "reason": ""
+  },
+  "task_generated_by_mentor": false,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-generator-test-1790613029582",
+    "experiment_id": "4d133371-1ac5-4893-a733-3e5ae22a98ef",
+    "knowledge_id": "d6371daa-90ef-48f3-99b3-9400bc83b011",
+    "knowledge_path": "evo/knowledge/successes/d6371daa-90ef-48f3-99b3-9400bc83b011.json",
+    "status": "COMPLETED",
+    "stdout": "NOVA_PYTHON_TASK_OK\n",
+    "stderr": "",
+    "duration_seconds": 0.009850816000835039,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-generator-test-1790613029582"
+  },
+  "last_meta_experience": {
+    "id": "cb11fe45-78bb-49e5-969f-c1125b72a84c",
+    "task_class": "python_programming",
+    "core": "standard",
+    "success": true
+  }
+}

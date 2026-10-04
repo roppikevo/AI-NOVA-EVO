@@ -1,0 +1,34 @@
+{
+  "experiment_id": "832df78b-13c3-4255-b86f-ed77294c87fb",
+  "generation": 0,
+  "candidate_id": "LEARN-executor-selftest-1790535420526",
+  "parent_id": null,
+  "state": "COMPLETED",
+  "hypothesis": "Run a deterministic Python learning exercise.",
+  "objective": "Autonomous learning task: Run a deterministic Python learning exercise.",
+  "architecture": {},
+  "dataset": {
+    "goal": "executor-selftest"
+  },
+  "training": {},
+  "seeds": [],
+  "metrics": {
+    "exit_code": 0,
+    "duration_seconds": 0.009795448000659235,
+    "stdout_length": 21,
+    "stderr_length": 0,
+    "output_check_passed": true
+  },
+  "resources": {},
+  "validation": {},
+  "failure": {},
+  "repair": {},
+  "mentor": {
+    "source": "OxCoder"
+  },
+  "artifacts": [],
+  "created_at": 1790535420.526432,
+  "started_at": 1790535420.526624,
+  "finished_at": 1790535420.536809,
+  "checksum": "9df793ce8a0da9b9079d47b5c43090cea506b9a38e3690a002fe053941e8fd5f"
+}

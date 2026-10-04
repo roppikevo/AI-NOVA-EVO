@@ -1,0 +1,38 @@
+{
+  "id": "d9c2f3d0-2fe5-4939-9298-bbf87a5b0062",
+  "type": "success",
+  "title": "Learning task: Precvič syntax Rust.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790536993.3686526,
+  "parent_id": null,
+  "content": {
+    "goal": "Integration Rust",
+    "task": "Precvič syntax Rust.",
+    "candidate_id": "LEARN-integration-rust-1790536993230",
+    "experiment_id": "a2ddd5be-b3a8-4ab2-ad34-b674bb306eb6",
+    "result": {
+      "candidate_id": "LEARN-integration-rust-1790536993230",
+      "command": [
+        "rustc",
+        "main.rs",
+        "-o",
+        "main"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.13763813699915772,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-integration-rust-1790536993230",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "358465731c84824f2839ff14c929bf61dd917615590f48340c214fb14e7a74d3"
+}

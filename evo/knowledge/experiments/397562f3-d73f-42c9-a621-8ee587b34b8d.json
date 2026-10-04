@@ -1,0 +1,37 @@
+{
+  "id": "397562f3-d73f-42c9-a621-8ee587b34b8d",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790621909.960599,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 3",
+    "task": "Write a Rust program that defines a struct with a lifetime parameter pointing to a borrowed slice, attempts to return a new String derived from that slice, and asserts that the program compiles and runs only when the returned String is moved before the borrowed slice is dropped.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1559,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790621909.960588
+  },
+  "checksum": "56e4f108bfe325ecf2abedd494bc837c9c539545cc586cd6b3f568df8f62711b"
+}

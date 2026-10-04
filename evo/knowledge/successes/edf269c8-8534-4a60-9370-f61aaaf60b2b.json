@@ -1,0 +1,68 @@
+{
+  "id": "edf269c8-8534-4a60-9370-f61aaaf60b2b",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that creates an Rc<RefCell<i32>>, clones the Rc handle twice, mutates the inner value through both handles, and asserts that both clones observe the same updated value.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621879.1348305,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 3",
+    "task": "Write a Rust program that creates an Rc<RefCell<i32>>, clones the Rc handle twice, mutates the inner value through both handles, and asserts that both clones observe the same updated value.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621878977",
+    "experiment_id": "1b4494eb-081f-428d-9f69-9f2cf7814dfc",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::rc::Rc;\nuse std::cell::RefCell;\n\nfn main() {\n    let shared = Rc::new(RefCell::new(42));\n    let clone1 = Rc::clone(&shared);\n    let clone2 = Rc::clone(&shared);\n    \n    {\n        let mut guard1 = clone1.borrow_mut();\n        *guard1 = 100;\n    }\n    \n    {\n        let mut guard2 = clone2.borrow_mut();\n        *guard2 = 200;\n    }\n    \n    let final_value = *shared.borrow();\n    assert_eq!(final_value, 200);\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621878977",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1562,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621878977",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621878977",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.15504280899767764,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621878977",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "960f262aabd158654dcaef7b9fa7467bb3f489cbd1ba42d29a20fdcfe3014a6d"
+}

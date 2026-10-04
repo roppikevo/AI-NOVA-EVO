@@ -1,0 +1,68 @@
+{
+  "id": "336f636e-152b-448b-8a1a-42564e6d650e",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that defines a struct with two fields, borrows one field immutably to read it, borrows the same field mutably to modify it, and asserts the final value matches the expected modification.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621948.3041015,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 4",
+    "task": "Write a Rust program that defines a struct with two fields, borrows one field immutably to read it, borrows the same field mutably to modify it, and asserts the final value matches the expected modification.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+    "experiment_id": "13aa4300-b0e4-4e19-b4ac-a5dd2aa6dbf8",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Data {\n    value: i32,\n    label: String,\n}\n\nfn main() {\n    let mut data = Data {\n        value: 10,\n        label: \"test\".to_string(),\n    };\n\n    // Immutable borrow to read\n    let label_ref = &data.label;\n    let _ = label_ref; // Use the reference to ensure it's valid\n\n    // Mutable borrow to modify\n    let value_ref = &mut data.value;\n    *value_ref += 5;\n\n    // Assert final value\n    assert_eq!(data.value, 15);\n\n    println!(\"Ownership test passed\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership test passed",
+    "actual_output": "Ownership test passed\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1475,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14644283900270239,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621948155",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "b3844fd6936b76393f1b91e38c13e460d815e5982b604e2072f7ccae768e95a7"
+}

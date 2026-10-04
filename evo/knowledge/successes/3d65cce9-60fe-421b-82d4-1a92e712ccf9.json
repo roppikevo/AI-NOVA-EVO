@@ -1,0 +1,68 @@
+{
+  "id": "3d65cce9-60fe-421b-82d4-1a92e712ccf9",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that defines a struct with two fields, borrows the struct immutably to read a field, then mutably to update a field, asserting the updated value matches an expected integer.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621709.234983,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 1",
+    "task": "Write a Rust program that defines a struct with two fields, borrows the struct immutably to read a field, then mutably to update a field, asserting the updated value matches an expected integer.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621709077",
+    "experiment_id": "f3eeaa43-35a9-47d3-b72a-294b34d1658b",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Data {\n    value: i32,\n    label: String,\n}\n\nfn main() {\n    let mut data = Data {\n        value: 10,\n        label: \"initial\".to_string(),\n    };\n\n    // Immutable borrow to read a field\n    let v = data.value;\n    let l = data.label.clone();\n\n    // Mutable borrow to update a field\n    data.value = 20;\n    data.label = \"updated\".to_string();\n\n    // Assert the updated value matches the expected integer\n    assert_eq!(data.value, 20);\n\n    println!(\"Ownership test passed\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership test passed",
+    "actual_output": "Ownership test passed\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621709077",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1567,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621709077",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621709077",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "warning: unused variable: `v`\n  --> main.rs:13:9\n   |\n13 |     let v = data.value;\n   |         ^ help: if this is intentional, prefix it with an underscore: `_v`\n   |\n   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default\n\nwarning: unused variable: `l`\n  --> main.rs:14:9\n   |\n14 |     let l = data.label.clone();\n   |         ^ help: if this is intentional, prefix it with an underscore: `_l`\n\nwarning: 2 warnings emitted\n\n",
+          "duration_seconds": 0.15565379000327084,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621709077",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "d898844c5f4cbadcda9ad789d27ade2b54217e56fd69c56f95069e2911b43a74"
+}

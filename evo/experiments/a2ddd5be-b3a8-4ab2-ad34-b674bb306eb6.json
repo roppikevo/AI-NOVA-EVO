@@ -1,0 +1,34 @@
+{
+  "experiment_id": "a2ddd5be-b3a8-4ab2-ad34-b674bb306eb6",
+  "generation": 0,
+  "candidate_id": "LEARN-integration-rust-1790536993230",
+  "parent_id": null,
+  "state": "COMPLETED",
+  "hypothesis": "Precvič syntax Rust.",
+  "objective": "Autonomous learning task: Precvič syntax Rust.",
+  "architecture": {},
+  "dataset": {
+    "goal": "Integration Rust"
+  },
+  "training": {},
+  "seeds": [],
+  "metrics": {
+    "exit_code": 0,
+    "duration_seconds": 0.13763813699915772,
+    "stdout_length": 0,
+    "stderr_length": 0,
+    "output_check_passed": true
+  },
+  "resources": {},
+  "validation": {},
+  "failure": {},
+  "repair": {},
+  "mentor": {
+    "source": "OxCoder"
+  },
+  "artifacts": [],
+  "created_at": 1790536993.2301097,
+  "started_at": 1790536993.2302969,
+  "finished_at": 1790536993.3683136,
+  "checksum": "eef6d89fe4fc55cb18c45047a6c7ac05910b2ba7d4d5488e4b7af5f1669fb6a5"
+}

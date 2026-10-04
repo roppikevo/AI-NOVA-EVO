@@ -1,0 +1,185 @@
+{
+ "node": "cs",
+ "frozen": false,
+ "messages_sent": 178,
+ "leader": "code",
+ "base": "evo/collective/runs/smoke2/core_round1.pt",
+ "personal": "evo/collective/runs/smoke2/cs_round1.pt",
+ "dead": [
+  "nova0"
+ ],
+ "history": [
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.74,
+     "cs": 0.7533,
+     "en": 0.7467,
+     "nova0": 0.84,
+     "pl": 0.74,
+     "sk": 0.7467
+    },
+    "ranking": [
+     "nova0",
+     "cs",
+     "en",
+     "sk",
+     "code",
+     "pl"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "failover": {
+    "lost": "nova0",
+    "new_leader": "cs"
+   }
+  },
+  {
+   "round": 1,
+   "leader": "cs",
+   "alive": [
+    "code",
+    "cs",
+    "en",
+    "pl",
+    "sk"
+   ],
+   "trained": [
+    "code",
+    "cs",
+    "en",
+    "pl",
+    "sk"
+   ],
+   "merge": {
+    "candidate": "evo/collective/runs/smoke2/core_round1.pt",
+    "votes": {
+     "code": {
+      "yes": false,
+      "before": 3.8194,
+      "after": 3.822,
+      "creator": -0.008
+     },
+     "cs": {
+      "yes": true,
+      "before": 3.6935,
+      "after": 3.6935,
+      "creator": -0.008
+     },
+     "en": {
+      "yes": false,
+      "before": 4.062,
+      "after": 4.0625,
+      "creator": -0.008
+     },
+     "pl": {
+      "yes": true,
+      "before": 4.0441,
+      "after": 4.0435,
+      "creator": -0.008
+     },
+     "sk": {
+      "yes": true,
+      "before": 3.5194,
+      "after": 3.5191,
+      "creator": -0.008
+     }
+    },
+    "yes": 3,
+    "of": 5,
+    "accepted": true
+   },
+   "core_change": {
+    "candidate": {
+     "conv_kernel": 7
+    },
+    "results": {
+     "code": {
+      "parent": 9.2506,
+      "candidate": 9.2848,
+      "yes": false
+     },
+     "cs": {
+      "parent": 9.2235,
+      "candidate": 9.2471,
+      "yes": false
+     },
+     "en": {
+      "parent": 9.2289,
+      "candidate": 9.2425,
+      "yes": false
+     },
+     "pl": {
+      "parent": 9.2374,
+      "candidate": 9.2265,
+      "yes": true
+     },
+     "sk": {
+      "parent": 9.2163,
+      "candidate": 9.2456,
+      "yes": false
+     }
+    },
+    "yes": 1,
+    "of": 5,
+    "accepted": false
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "code",
+    "scores": {
+     "code": 0.8084,
+     "cs": 0.75,
+     "en": 0.725,
+     "pl": 0.7083,
+     "sk": 0.65
+    },
+    "ranking": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "code": 0.8667,
+   "nova0": 0.7667,
+   "sk": 0.7667,
+   "en": 0.7667,
+   "pl": 0.7
+  },
+  "creator": {
+   "code": true,
+   "en": true,
+   "nova0": true,
+   "pl": true,
+   "sk": true
+  }
+ },
+ "finished": true
+}

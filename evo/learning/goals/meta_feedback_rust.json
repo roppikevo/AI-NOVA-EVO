@@ -1,0 +1,51 @@
+{
+  "goal": "Meta Feedback Rust",
+  "status": "COMPLETED",
+  "current_phase": "DONE",
+  "completed_tasks": [
+    "Precvič syntax Rust."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790612674.5716712,
+  "updated": 1790612674.715638,
+  "plan": [
+    "Precvič syntax Rust."
+  ],
+  "last_task": "Precvič syntax Rust.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Precvič syntax Rust.",
+    "language": "rust",
+    "task_type": "rust_compile",
+    "filename": "main.rs",
+    "content": "fn main() {\n    let value: i32 = 42;\n    println!(\"{}\", value);\n}\n",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": null,
+    "reason": ""
+  },
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-meta-feedback-rust-1790612674574",
+    "experiment_id": "7ecb4b09-626e-4e45-acc2-1dbf1fd68bd8",
+    "knowledge_id": "14be0cd7-6397-4ad6-912a-fefe20be26f1",
+    "knowledge_path": "evo/knowledge/successes/14be0cd7-6397-4ad6-912a-fefe20be26f1.json",
+    "status": "COMPLETED",
+    "stdout": "",
+    "stderr": "",
+    "duration_seconds": 0.13914449799631257,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-meta-feedback-rust-1790612674574"
+  },
+  "last_meta_experience": {
+    "id": "21e544d4-13b3-4eb9-9949-ceda5f940a08",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  }
+}

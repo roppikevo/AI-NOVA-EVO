@@ -1,0 +1,37 @@
+{
+  "id": "2656076a-65f4-4c1d-a935-24b51a03b7ad",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790621709.2352135,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 1",
+    "task": "Write a Rust program that defines a struct with two fields, borrows the struct immutably to read a field, then mutably to update a field, asserting the updated value matches an expected integer.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1567,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790621709.2352068
+  },
+  "checksum": "425bbead2f329bdcf4c1d35361f51c73af5d15b67242755380d9297d264b9edd"
+}

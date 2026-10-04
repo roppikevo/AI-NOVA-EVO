@@ -1,0 +1,56 @@
+{
+  "id": "4001db8e-8ee6-44c3-8d26-d0a9ae02807f",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that defines a struct `LifetimeGuard` with a reference `&'a str` and a method that returns a new reference with a shorter lifetime, asserting that the returned reference cannot outlive the original string slice.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790616917.948804,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V3",
+    "task": "Create a Rust program that defines a struct `LifetimeGuard` with a reference `&'a str` and a method that returns a new reference with a shorter lifetime, asserting that the returned reference cannot outlive the original string slice.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616917798",
+    "experiment_id": "1e37590b-a5d6-46fc-b61a-12922ab0c4a3",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616917798",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1499,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616917798",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616917798",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14869369300140534,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616917798",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "4ad4ab5f92f443a561fb4a189a14dce8b21620bfec0e7d18d35213946d6bf77f"
+}

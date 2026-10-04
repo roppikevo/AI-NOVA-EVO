@@ -1,0 +1,12 @@
+{
+  "generation": "GEN3",
+  "parents": [
+    "GEN2-011",
+    "GEN2-004",
+    "GEN2-012",
+    "GEN2-024"
+  ],
+  "parent_count": 4,
+  "candidate_count": 45,
+  "mutation_count": 17
+}

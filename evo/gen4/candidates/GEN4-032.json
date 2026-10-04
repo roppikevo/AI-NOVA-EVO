@@ -1,0 +1,24 @@
+{
+  "candidate": "GEN4-032",
+  "generation": 4,
+  "parent": "GEN3-007",
+  "mutation": "conv_kernel:5->3+forget_bias:1.125->1.0+fusion_architecture:standard->dual_gate",
+  "signature": "a29592241c131024",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 3,
+    "forget_bias": 1.0,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "dual_gate",
+    "local_context": "single_depthwise"
+  },
+  "technical_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "status": "generated"
+}

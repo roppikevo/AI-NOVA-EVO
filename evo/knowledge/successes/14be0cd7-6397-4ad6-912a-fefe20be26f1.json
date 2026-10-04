@@ -1,0 +1,38 @@
+{
+  "id": "14be0cd7-6397-4ad6-912a-fefe20be26f1",
+  "type": "success",
+  "title": "Learning task: Precvič syntax Rust.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790612674.715203,
+  "parent_id": null,
+  "content": {
+    "goal": "Meta Feedback Rust",
+    "task": "Precvič syntax Rust.",
+    "candidate_id": "LEARN-meta-feedback-rust-1790612674574",
+    "experiment_id": "7ecb4b09-626e-4e45-acc2-1dbf1fd68bd8",
+    "result": {
+      "candidate_id": "LEARN-meta-feedback-rust-1790612674574",
+      "command": [
+        "rustc",
+        "main.rs",
+        "-o",
+        "main"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.13914449799631257,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-meta-feedback-rust-1790612674574",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "79db69c5fded5961effe9a7be47b42ce2ea5a8d92a8ab7556a92c639cbe3ae6e"
+}

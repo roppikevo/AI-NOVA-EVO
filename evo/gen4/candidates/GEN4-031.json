@@ -1,0 +1,24 @@
+{
+  "candidate": "GEN4-031",
+  "generation": 4,
+  "parent": "GEN3-007",
+  "mutation": "conv_kernel:5->7+forget_bias:1.125->1.375+local_context:single_depthwise->multi_scale",
+  "signature": "fee6d9e562db8cd1",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 7,
+    "forget_bias": 1.375,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "standard",
+    "local_context": "multi_scale"
+  },
+  "technical_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "status": "generated"
+}

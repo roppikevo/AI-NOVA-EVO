@@ -1,0 +1,320 @@
+{
+ "node": "nova0",
+ "frozen": true,
+ "messages_sent": 806,
+ "leader": "pl",
+ "base": "evo/collective/runs/coll-v2/core_round2.pt",
+ "personal": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt",
+ "dead": [
+  "sk"
+ ],
+ "history": [
+  {
+   "round": 0,
+   "leader": "nova0",
+   "alive": [
+    "code",
+    "cs",
+    "en",
+    "nova0",
+    "pl",
+    "sk"
+   ],
+   "trained": [
+    "code",
+    "cs",
+    "en",
+    "pl",
+    "sk"
+   ],
+   "merge": {
+    "candidate": "evo/collective/runs/coll-v2/core_round0.pt",
+    "votes": {
+     "code": {
+      "yes": true,
+      "before": 3.8136,
+      "after": 3.8134,
+      "creator": -0.006
+     },
+     "cs": {
+      "yes": true,
+      "before": 3.6939,
+      "after": 3.6851,
+      "creator": -0.006
+     },
+     "en": {
+      "yes": true,
+      "before": 4.0625,
+      "after": 4.0587,
+      "creator": -0.006
+     },
+     "nova0": {
+      "yes": true,
+      "before": 3.6939,
+      "after": 3.6851,
+      "creator": -0.006
+     },
+     "pl": {
+      "yes": true,
+      "before": 4.045,
+      "after": 4.0327,
+      "creator": -0.006
+     },
+     "sk": {
+      "yes": true,
+      "before": 3.5195,
+      "after": 3.5067,
+      "creator": -0.006
+     }
+    },
+    "yes": 6,
+    "of": 6,
+    "accepted": true
+   },
+   "core_change": {
+    "candidate": {
+     "forget_bias": 1.5
+    },
+    "results": {
+     "code": {
+      "parent": 5.7329,
+      "candidate": 5.7677,
+      "yes": false
+     },
+     "cs": {
+      "parent": 5.585,
+      "candidate": 5.6032,
+      "yes": false
+     },
+     "en": {
+      "parent": 5.5177,
+      "candidate": 5.5262,
+      "yes": false
+     },
+     "pl": {
+      "parent": 5.594,
+      "candidate": 5.635,
+      "yes": false
+     },
+     "sk": {
+      "parent": 5.5437,
+      "candidate": 5.5662,
+      "yes": false
+     }
+    },
+    "yes": 0,
+    "of": 5,
+    "accepted": false
+   }
+  },
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.72,
+     "cs": 0.7267,
+     "en": 0.78,
+     "nova0": 0.84,
+     "pl": 0.7533,
+     "sk": 0.7533
+    },
+    "ranking": [
+     "nova0",
+     "en",
+     "pl",
+     "sk",
+     "cs",
+     "code"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "leader": "nova0",
+   "alive": [
+    "code",
+    "cs",
+    "en",
+    "nova0",
+    "pl",
+    "sk"
+   ],
+   "trained": [
+    "code",
+    "cs",
+    "en",
+    "pl",
+    "sk"
+   ],
+   "merge": {
+    "candidate": "evo/collective/runs/coll-v2/core_round1.pt",
+    "votes": {
+     "code": {
+      "yes": false,
+      "before": 3.8134,
+      "after": 3.8212,
+      "creator": -0.006
+     },
+     "cs": {
+      "yes": true,
+      "before": 3.6851,
+      "after": 3.68,
+      "creator": -0.006
+     },
+     "en": {
+      "yes": true,
+      "before": 4.0587,
+      "after": 4.0562,
+      "creator": -0.006
+     },
+     "nova0": {
+      "yes": true,
+      "before": 3.6851,
+      "after": 3.68,
+      "creator": -0.006
+     },
+     "pl": {
+      "yes": true,
+      "before": 4.0327,
+      "after": 4.0272,
+      "creator": -0.006
+     },
+     "sk": {
+      "yes": true,
+      "before": 3.5067,
+      "after": 3.5043,
+      "creator": -0.006
+     }
+    },
+    "yes": 5,
+    "of": 6,
+    "accepted": true
+   },
+   "core_change": {
+    "candidate": {
+     "conv_kernel": 7
+    },
+    "results": {
+     "code": {
+      "parent": 5.7329,
+      "candidate": 5.7707,
+      "yes": false
+     },
+     "cs": {
+      "parent": 5.585,
+      "candidate": 5.6022,
+      "yes": false
+     },
+     "en": {
+      "parent": 5.5177,
+      "candidate": 5.5329,
+      "yes": false
+     },
+     "pl": {
+      "parent": 5.594,
+      "candidate": 5.6356,
+      "yes": false
+     },
+     "sk": {
+      "parent": 5.5437,
+      "candidate": 5.5803,
+      "yes": false
+     }
+    },
+    "yes": 0,
+    "of": 5,
+    "accepted": false
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "sk",
+    "scores": {
+     "code": 0.7467,
+     "cs": 0.72,
+     "en": 0.7067,
+     "nova0": 0.7067,
+     "pl": 0.6933,
+     "sk": 0.7533
+    },
+    "ranking": [
+     "sk",
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 2,
+   "failover": {
+    "lost": "sk",
+    "new_leader": "code"
+   }
+  },
+  {
+   "round": 2,
+   "election": {
+    "leader": "pl",
+    "scores": {
+     "code": 0.7,
+     "cs": 0.7083,
+     "en": 0.7,
+     "nova0": 0.675,
+     "pl": 0.775
+    },
+    "ranking": [
+     "pl",
+     "cs",
+     "code",
+     "en",
+     "nova0"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "en": 0.8,
+   "cs": 0.7,
+   "code": 0.6,
+   "pl": 0.8667,
+   "sk": 0.7333
+  },
+  "creator": {
+   "code": true,
+   "cs": true,
+   "en": true,
+   "pl": true,
+   "sk": true
+  }
+ },
+ "finished": true
+}

@@ -1,0 +1,88 @@
+{
+ "node": "pl",
+ "frozen": false,
+ "messages_sent": 295,
+ "leader": "sk",
+ "base": "evo/releases/NOVA-24M-v1/nova_model_fp32.pt",
+ "personal": "evo/collective/runs/smoke24/pl_round1.pt",
+ "dead": [],
+ "history": [
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.8,
+     "cs": 0.82,
+     "en": 0.8267,
+     "nova0": 0.8667,
+     "pl": 0.8133,
+     "sk": 0.7667
+    },
+    "ranking": [
+     "nova0",
+     "en",
+     "cs",
+     "pl",
+     "code",
+     "sk"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "sk",
+    "scores": {
+     "code": 0.8333,
+     "cs": 0.7467,
+     "en": 0.74,
+     "nova0": 0.82,
+     "pl": 0.8067,
+     "sk": 0.86
+    },
+    "ranking": [
+     "sk",
+     "code",
+     "nova0",
+     "pl",
+     "cs",
+     "en"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "nova0": 0.8333,
+   "en": 0.8333,
+   "cs": 0.8333,
+   "code": 0.9,
+   "sk": 0.9
+  },
+  "creator": {
+   "code": true,
+   "cs": true,
+   "en": true,
+   "nova0": true,
+   "sk": true
+  }
+ },
+ "finished": true
+}

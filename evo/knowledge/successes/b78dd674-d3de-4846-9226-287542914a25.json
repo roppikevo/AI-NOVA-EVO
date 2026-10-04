@@ -1,0 +1,56 @@
+{
+  "id": "b78dd674-d3de-4846-9226-287542914a25",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that creates a vector of ten owned integers,\nmoves the first five into a new vector, asserts that the original vector's\nlength is now five, and asserts that the new vector's length is five.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790618692.472239,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V13",
+    "task": "Write a Rust program that creates a vector of ten owned integers,\nmoves the first five into a new vector, asserts that the original vector's\nlength is now five, and asserts that the new vector's length is five.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v13-1790618692310",
+    "experiment_id": "70c2d99a-5c87-4edf-8e86-4df4ac6146ff",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v13-1790618692310",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1606,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v13-1790618692310",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v13-1790618692310",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.15939714999694843,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v13-1790618692310",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "474960ae6ce2ec19d76ced607740b3a736a980730d218f0945acbcd82d6ae608"
+}

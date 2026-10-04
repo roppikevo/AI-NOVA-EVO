@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "title": "Rules the director may never change by itself. Only the Creator changes them and seals them again.",
+ "min_gain_pct": 0.3,
+ "max_set_decline_pct": 0.3,
+ "max_code_loss": 2,
+ "creator_min": -0.7,
+ "decision_sets": [
+  "dataset",
+  "web"
+ ],
+ "vault_sets": [
+  "dataset_vault",
+  "web_vault"
+ ],
+ "vault_must_confirm": true,
+ "releases_are_never_overwritten": true,
+ "creator": "roppik",
+ "max_parameters": 60000000
+}

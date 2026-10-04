@@ -1,0 +1,66 @@
+{
+  "name": "NOVA-24M-v1",
+  "frozen": "2026-10-03 16:35:57",
+  "source_checkpoint": "evo/lines/NOVA-24M/NOVA-24M-best.pt",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 640,
+    "d_state": 640,
+    "num_layers": 8,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false
+  },
+  "core": "NOVA-24M",
+  "parameters": 34136328,
+  "scores": {
+    "time": 1791045280.0446842,
+    "date": "2026-10-03 16:34",
+    "method": 2,
+    "val": 3.2877,
+    "lang": {
+      "sk": 3.2837,
+      "cs": 3.4919,
+      "pl": 3.6718,
+      "en": 3.7674,
+      "py": 3.5775,
+      "rs": 2.5497
+    },
+    "lang_tokens": {
+      "sk": 76164,
+      "cs": 31147,
+      "pl": 44562,
+      "en": 87832,
+      "py": 56167,
+      "rs": 110528
+    },
+    "code": {
+      "solved": 40,
+      "tasks": 79,
+      "pass1": 0.5063,
+      "by_level": {
+        "1": "35/55",
+        "2": "5/20",
+        "3": "0/4"
+      },
+      "nll": 0.7346
+    },
+    "creator": -0.022,
+    "web_val": 3.3619,
+    "checkpoint": "evo/lines/NOVA-24M/NOVA-24M-best.pt"
+  },
+  "dataset": "data/text_v4",
+  "git_commit": "68e8c5b",
+  "other_candidates": [
+    {
+      "checkpoint": "evo/lines/NOVA-24M/NOVA-24M-best.pt",
+      "val": 3.2877,
+      "creator": -0.022
+    },
+    {
+      "checkpoint": "evo/lines/NOVA-24M/NOVA-24M-best-textval.pt",
+      "val": 3.3175,
+      "creator": -0.002
+    }
+  ]
+}

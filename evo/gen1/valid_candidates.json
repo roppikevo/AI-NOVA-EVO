@@ -1,0 +1,138 @@
+[
+  {
+    "candidate_id": "GEN1-001",
+    "parent": "NOVA-GEN0",
+    "mutation": "layers_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 5,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-003",
+    "parent": "NOVA-GEN0",
+    "mutation": "forget_bias_down",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.25,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-005",
+    "parent": "NOVA-GEN0",
+    "mutation": "forget_bias_up",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.75,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-006",
+    "parent": "NOVA-GEN0",
+    "mutation": "d_model_minus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 192,
+      "d_state": 192,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-007",
+    "parent": "NOVA-GEN0",
+    "mutation": "kernel_7",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 6,
+      "conv_kernel": 7,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-008",
+    "parent": "NOVA-GEN0",
+    "mutation": "layers_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 7,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-009",
+    "parent": "NOVA-GEN0",
+    "mutation": "kernel_3",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 256,
+      "d_state": 256,
+      "num_layers": 6,
+      "conv_kernel": 3,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  },
+  {
+    "candidate_id": "GEN1-010",
+    "parent": "NOVA-GEN0",
+    "mutation": "d_model_plus",
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 320,
+      "d_state": 320,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "learnable_initial_state": false,
+      "forget_bias": 1.5,
+      "max_seq_len": 512,
+      "pad_token_id": 0,
+      "dtype": "float32"
+    }
+  }
+]

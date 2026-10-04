@@ -1,0 +1,14 @@
+{
+  "id": "41888803-e6b3-448c-8e6d-a7c882da256a",
+  "type": "success",
+  "title": "PATH-TEST",
+  "status": "VALIDATED",
+  "confidence": 0.0,
+  "source": "NOVA-EVO",
+  "created_at": 1790537145.3605409,
+  "parent_id": null,
+  "content": {
+    "ok": true
+  },
+  "checksum": "ea7b262cf5f59f5b23e08631cf29cb9baab4c071da35088af2acb35c80738e09"
+}

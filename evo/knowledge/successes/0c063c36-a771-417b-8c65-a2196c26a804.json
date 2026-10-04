@@ -1,0 +1,38 @@
+{
+  "id": "0c063c36-a771-417b-8c65-a2196c26a804",
+  "type": "success",
+  "title": "Learning task: Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790613404.5488827,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Learning",
+    "task": "Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing.",
+    "candidate_id": "LEARN-autonomous-rust-learning-1790613404390",
+    "experiment_id": "be5b6cb0-a523-41d2-bb93-cfb745a91647",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-learning-1790613404390",
+      "command": [
+        "rustc",
+        "main.rs",
+        "-o",
+        "main"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.15717901699827053,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-learning-1790613404390",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "9131adc446af32e4262477155f8fca24bbe78238d5122c5e9b2bf15cee798f06"
+}

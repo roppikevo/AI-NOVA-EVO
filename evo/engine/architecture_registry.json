@@ -1,0 +1,66 @@
+{
+  "version": "0.1.0",
+  "architectures": {
+    "standard": {
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise",
+      "implementation": "nova.model_scan.NovaModel",
+      "supported": true
+    },
+
+"expanded_state": {
+  "state_architecture": "expanded",
+  "fusion_architecture": "standard",
+  "local_context": "single_depthwise",
+  "implementation": "nova.model_expanded.NovaExpandedModel",
+  "supported": true,
+  "reason": null
+},
+
+    "compressed_state": {
+      "state_architecture": "compressed",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise",
+      "implementation": null,
+      "supported": false,
+      "reason": "GEN4 state compression implementation required"
+    },
+
+    "dual_gate": {
+      "state_architecture": "equal",
+      "fusion_architecture": "dual_gate",
+      "local_context": "single_depthwise",
+      "implementation": null,
+      "supported": false,
+      "reason": "GEN4 dual-gate implementation required"
+    },
+
+    "separate_state_gate": {
+      "state_architecture": "equal",
+      "fusion_architecture": "separate_state_gate",
+      "local_context": "single_depthwise",
+      "implementation": null,
+      "supported": false,
+      "reason": "GEN4 separate state gate implementation required"
+    },
+
+    "separate_conv_gate": {
+      "state_architecture": "equal",
+      "fusion_architecture": "separate_conv_gate",
+      "local_context": "single_depthwise",
+      "implementation": null,
+      "supported": false,
+      "reason": "GEN4 separate convolution gate implementation required"
+    },
+
+    "multi_scale": {
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "multi_scale",
+      "implementation": null,
+      "supported": false,
+      "reason": "GEN4 multi-scale context implementation required"
+    }
+  }
+}

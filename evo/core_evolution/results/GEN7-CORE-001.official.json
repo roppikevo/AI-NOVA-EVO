@@ -1,0 +1,491 @@
+{
+  "candidate": {
+    "candidate_id": "GEN7-CORE-001",
+    "candidate": "GEN7-CORE-001",
+    "type": "core",
+    "target": "nova/blocks_scan.py",
+    "parent": "GEN6-CORE-001",
+    "parent_generation": "GEN6",
+    "source_sha256": "249a90d0719c571ca177a53f936da4037f2937bf597a8c3fb79da90151df348b",
+    "created_at": 1790787323.21804,
+    "diagnosis": {
+      "current_generation": 7,
+      "parent_generation": "GEN6",
+      "primary_parent": "GEN6-CORE-001",
+      "active_core": "GEN4-CORE-002",
+      "baseline_validation_loss": 5.768713932152502,
+      "previous_rejected_count": 6,
+      "previous_rejected_losses": [
+        8.830098234176637,
+        8.736798785527547
+      ],
+      "previous_results": [
+        {
+          "file": "/opt/ai/work/nova-evo/evo/gen4/results/GEN4-001.json",
+          "source": "generation",
+          "priority": 60,
+          "candidate": "GEN4-001",
+          "status": "REJECT",
+          "stage": "robust",
+          "evaluation": {
+            "action": "REJECT",
+            "candidate_id": "GEN4-001",
+            "parent_id": "GEN3-007",
+            "candidate_loss": 8.830098234176637,
+            "parent_loss": 8.593394830067952,
+            "delta": 0.23670340410868462,
+            "reason": "Candidate validation loss is not lower than the parent baseline.",
+            "confidence": 0.8
+          },
+          "metrics": {
+            "validation_loss_mean": 8.830098234176637,
+            "validation_loss_std": 0.021759496661016595,
+            "validation_loss_min": 8.799826044082641,
+            "validation_loss_max": 8.850020708084106,
+            "parameters": 5784576,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/gen4/results/GEN4-003.json",
+          "source": "generation",
+          "priority": 60,
+          "candidate": "GEN4-003",
+          "status": "REJECT",
+          "stage": "robust",
+          "evaluation": {
+            "action": "REJECT",
+            "candidate_id": "GEN4-003",
+            "parent_id": "GEN3-007",
+            "candidate_loss": 8.736798785527547,
+            "parent_loss": 8.593394830067952,
+            "delta": 0.14340395545959517,
+            "reason": "Candidate validation loss is not lower than the parent baseline.",
+            "confidence": 0.8
+          },
+          "metrics": {
+            "validation_loss_mean": 8.736798785527547,
+            "validation_loss_std": 0.021838225187805663,
+            "validation_loss_min": 8.715590099334717,
+            "validation_loss_max": 8.766845500946046,
+            "parameters": 13403904,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN4-CORE-001.json",
+          "source": "core_evolution",
+          "priority": 110,
+          "candidate": "GEN4-CORE-001",
+          "status": "REJECT",
+          "stage": "runtime_smoke",
+          "evaluation": {
+            "decision": "REJECT",
+            "reason": "runtime_smoke_failed"
+          },
+          "metrics": {
+            "validation_loss_mean": null,
+            "validation_loss_std": null,
+            "validation_loss_min": null,
+            "validation_loss_max": null,
+            "parameters": null,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN5-CORE-001.json",
+          "source": "core_evolution",
+          "priority": 110,
+          "candidate": "GEN5-CORE-001",
+          "status": "REJECT",
+          "stage": "runtime_smoke",
+          "evaluation": {
+            "decision": "REJECT",
+            "reason": "runtime_smoke_failed"
+          },
+          "metrics": {
+            "validation_loss_mean": null,
+            "validation_loss_std": null,
+            "validation_loss_min": null,
+            "validation_loss_max": null,
+            "parameters": null,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN5-CORE-CONTRACT-1790708011.json",
+          "source": "core_evolution",
+          "priority": 110,
+          "candidate": "GEN5-CORE-CONTRACT-1790708011",
+          "status": "REJECT",
+          "stage": "source_contract",
+          "evaluation": null,
+          "metrics": {
+            "validation_loss_mean": null,
+            "validation_loss_std": null,
+            "validation_loss_min": null,
+            "validation_loss_max": null,
+            "parameters": null,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN5-CORE-002.json",
+          "source": "core_evolution",
+          "priority": 110,
+          "candidate": "GEN5-CORE-002",
+          "status": "REJECT",
+          "stage": "evaluation",
+          "evaluation": {
+            "decision": "REJECT",
+            "reason": "Candidate robust validation loss does not beat current parent baseline.",
+            "parent_loss": 8.398849772771198,
+            "candidate_loss": 8.891894694646199,
+            "delta": -0.4930449218750006,
+            "seeds": [
+              1001,
+              2002,
+              3003
+            ]
+          },
+          "metrics": {
+            "validation_loss_mean": null,
+            "validation_loss_std": null,
+            "validation_loss_min": null,
+            "validation_loss_max": null,
+            "parameters": null,
+            "steps": null
+          },
+          "hypothesis": "",
+          "parent": null
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN4-CORE-002.official.json",
+          "source": "core_evolution",
+          "priority": 130,
+          "candidate": "GEN4-CORE-002",
+          "status": null,
+          "stage": "robust",
+          "evaluation": {
+            "action": "PROMOTE",
+            "candidate_id": "GEN4-CORE-002",
+            "parent_id": "GEN3-007",
+            "candidate_loss": 5.769306195034144,
+            "parent_loss": 8.593394830067952,
+            "delta": -2.8240886350338084,
+            "reason": "Candidate validation loss is lower than the parent baseline.",
+            "confidence": 0.8
+          },
+          "metrics": {
+            "validation_loss_mean": 5.769306195034144,
+            "validation_loss_std": 0.002681098926118127,
+            "validation_loss_min": 5.766776240473423,
+            "validation_loss_max": 5.773016971696703,
+            "parameters": 9856518,
+            "steps": null
+          },
+          "hypothesis": "Replacing the standard sigmoid activation in the forget and input projection layers with a temperature-scaled sigmoid (softplus-like scaling) will reduce gradient vanishing in the recurrent state update, allowing the model to maintain stronger long-range dependencies without requiring deeper architectural changes.",
+          "parent": "GEN3-007"
+        },
+        {
+          "file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN6-CORE-001.official.json",
+          "source": "core_evolution",
+          "priority": 130,
+          "candidate": "GEN6-CORE-001",
+          "status": null,
+          "stage": "robust",
+          "evaluation": {
+            "action": "PROMOTE",
+            "candidate_id": "GEN6-CORE-001",
+            "parent_id": "GEN4-CORE-002",
+            "candidate_loss": 5.768713932152502,
+            "parent_loss": 5.769306195034144,
+            "delta": -0.0005922628816419362,
+            "reason": "Candidate validation loss is lower than the parent baseline.",
+            "confidence": 0.8
+          },
+          "metrics": {
+            "validation_loss_mean": 5.768713932152502,
+            "validation_loss_std": 0.0018693131184955804,
+            "validation_loss_min": 5.766776240473423,
+            "validation_loss_max": 5.771240183051777,
+            "parameters": 9856518,
+            "steps": null
+          },
+          "hypothesis": "The current associative scan implementation accumulates floating-point errors over long sequences, causing the recurrent state to drift from the mathematically exact trajectory defined by the sequential backward pass. This drift degrades long-range dependency modeling. Replacing the `associative_scan` forward pass with a direct sequential accumulation (while retaining the exact sequential backward pass) will eliminate forward-backward mismatch, ensuring the gradient computation matches the actual state evolution, thereby stabilizing training and improving validation loss.",
+          "parent": "GEN4-CORE-002"
+        }
+      ],
+      "baseline_core": "/opt/ai/work/nova-evo/nova/blocks_scan.py",
+      "baseline_core_sha256": "e49cf5ce5de2f4b2ba2e4d4cb455e91fd591da0a38b0b17af657eb17d9dcfb67",
+      "baseline_core_bytes": 6634,
+      "diagnosis": "The current active parent is GEN4-CORE-002. Its robust validation baseline is 5.768713932152502. Previous core experiments must be used as evidence for the next hypothesis. The next candidate must improve the active core's algorithmic mechanism rather than merely changing standard hyperparameters. The active core must preserve causality, recurrent state semantics, finite forward/backward behaviour and the public NovaScanBlock interface."
+    },
+    "teacher": {
+      "model": "OxCoder-9B",
+      "plan": "HYPOTHESIS:\nThe current `ScanRefBackward` implementation computes gradients via a sequential Python loop (`for t in range(seq_len)`), which introduces significant overhead and prevents the utilization of fused CUDA kernels for the backward pass. This bottleneck limits training speed and prevents the optimizer from effectively updating the recurrent state parameters. Replacing the Python loop with a vectorized `torch.cumprod` and `torch.cumsum` based backward computation will enable full GPU parallelization, drastically reducing the time-to-solution while maintaining mathematical equivalence to the sequential recurrence.\n\nMECHANISM:\nReplace the `backward` method in `ScanRefBackward` with a vectorized implementation.\n1. Compute `grad_state` (the gradient flowing into the initial state) using `torch.cumprod` on the diagonal elements of the forget gate matrix `f`.\n2. Compute `grad_f` and `grad_i` using `torch.cumsum` operations combined with element-wise multiplication, avoiding the explicit Python loop over timesteps.\n3. Ensure the output gradients match the shape and values of the sequential reference implementation exactly.\n\nRATIONALE:\nThe sequential loop in the backward pass is the primary computational bottleneck for long sequences on consumer GPUs (RTX 4060). By vectorizing the accumulation of gradients, we allow the GPU to process all timesteps simultaneously. This reduces the backward pass latency by orders of magnitude, enabling faster convergence and making the recurrent state mechanism viable for longer context windows within the 8GB VRAM constraint.\n\nRISKS:\n- Numerical instability if `f` contains values close to 0 or 1, potentially causing `cumprod` to underflow/overflow before the loop logic would handle it. Mitigation: Clip `f` to `[1e-7, 1.0 - 1e-7]` before accumulation.\n- Shape mismatch errors if the tensor dimensions are not handled correctly during the vectorized reduction.\n- Potential divergence from the sequential reference if the `initial_state` handling logic is not perfectly replicated in the vectorized form.\n\nIMPLEMENTATION_PLAN:\n1. Inside `ScanRefBackward.backward`, save `f`, `i`, `u`, and `initial_state` from `ctx.saved_tensors`.\n2. Extract `batch`, `seq_len`, and `state_dim` from `u.shape`.\n3. Handle `initial_state`: if not None, initialize `grad_state` with the gradient of the initial state; else, initialize with zeros.\n4. Clip `f` to `[1e-7, 1.0 - 1e-7]` to prevent numerical issues in `cumprod`.\n5. Compute `cum_f = torch.cumprod(f, dim=1)` to represent the product of forget gates up to each timestep.\n6. Compute `grad_f` by calculating the contribution of each timestep's forget gate to the final gradient, utilizing `cum_f` and the input gradients.\n7. Compute `grad_i` and `grad_u` similarly using vectorized operations to distribute the gradient of the fused state back to inputs.\n8. Handle the `grad_initial` output by extracting the gradient at the first timestep from the vectorized computation.\n9. Return the tuple `(grad_f, grad_i, grad_u, grad_initial)` ensuring shapes match the sequential reference.\n10. Verify that the new implementation produces identical gradients (within floating-point tolerance) against the sequential loop for a random small batch.",
+      "response": "ARCHITECTURE_PLAN_BEGIN\nHYPOTHESIS:\nThe current `ScanRefBackward` implementation computes gradients via a sequential Python loop (`for t in range(seq_len)`), which introduces significant overhead and prevents the utilization of fused CUDA kernels for the backward pass. This bottleneck limits training speed and prevents the optimizer from effectively updating the recurrent state parameters. Replacing the Python loop with a vectorized `torch.cumprod` and `torch.cumsum` based backward computation will enable full GPU parallelization, drastically reducing the time-to-solution while maintaining mathematical equivalence to the sequential recurrence.\n\nMECHANISM:\nReplace the `backward` method in `ScanRefBackward` with a vectorized implementation.\n1. Compute `grad_state` (the gradient flowing into the initial state) using `torch.cumprod` on the diagonal elements of the forget gate matrix `f`.\n2. Compute `grad_f` and `grad_i` using `torch.cumsum` operations combined with element-wise multiplication, avoiding the explicit Python loop over timesteps.\n3. Ensure the output gradients match the shape and values of the sequential reference implementation exactly.\n\nRATIONALE:\nThe sequential loop in the backward pass is the primary computational bottleneck for long sequences on consumer GPUs (RTX 4060). By vectorizing the accumulation of gradients, we allow the GPU to process all timesteps simultaneously. This reduces the backward pass latency by orders of magnitude, enabling faster convergence and making the recurrent state mechanism viable for longer context windows within the 8GB VRAM constraint.\n\nRISKS:\n- Numerical instability if `f` contains values close to 0 or 1, potentially causing `cumprod` to underflow/overflow before the loop logic would handle it. Mitigation: Clip `f` to `[1e-7, 1.0 - 1e-7]` before accumulation.\n- Shape mismatch errors if the tensor dimensions are not handled correctly during the vectorized reduction.\n- Potential divergence from the sequential reference if the `initial_state` handling logic is not perfectly replicated in the vectorized form.\n\nIMPLEMENTATION_PLAN:\n1. Inside `ScanRefBackward.backward`, save `f`, `i`, `u`, and `initial_state` from `ctx.saved_tensors`.\n2. Extract `batch`, `seq_len`, and `state_dim` from `u.shape`.\n3. Handle `initial_state`: if not None, initialize `grad_state` with the gradient of the initial state; else, initialize with zeros.\n4. Clip `f` to `[1e-7, 1.0 - 1e-7]` to prevent numerical issues in `cumprod`.\n5. Compute `cum_f = torch.cumprod(f, dim=1)` to represent the product of forget gates up to each timestep.\n6. Compute `grad_f` by calculating the contribution of each timestep's forget gate to the final gradient, utilizing `cum_f` and the input gradients.\n7. Compute `grad_i` and `grad_u` similarly using vectorized operations to distribute the gradient of the fused state back to inputs.\n8. Handle the `grad_initial` output by extracting the gradient at the first timestep from the vectorized computation.\n9. Return the tuple `(grad_f, grad_i, grad_u, grad_initial)` ensuring shapes match the sequential reference.\n10. Verify that the new implementation produces identical gradients (within floating-point tolerance) against the sequential loop for a random small batch.\nARCHITECTURE_PLAN_END\n\nCORE_SOURCE_BEGIN\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass NovaScanBlock(nn.Module):\n    \"\"\"\n    Optimized NOVA-EVO block with temperature-scaled sigmoid activations.\n\n    Architecture is identical to nova.blocks.NovaBlock.\n\n    Difference:\n        The recurrent state update uses an associative scan\n        for the forward pass, while backward uses the exact\n        sequential reference recurrence.\n        Forget and input gates use temperature-scaled sigmoid activations\n        to improve gradient flow and dynamic range.\n    \"\"\"\n\n    def __init__(\n        self,\n        d_model,\n        d_state,\n        conv_kernel=5,\n        forget_bias=1.5,\n        temperature=2.0,\n    ):\n        super().__init__()\n\n        if conv_kernel < 1 or conv_kernel % 2 == 0:\n            raise ValueError(\n                \"conv_kernel must be a positive odd number\"\n            )\n\n        self.d_model = d_model\n        self.d_state = d_state\n        self.conv_kernel = conv_kernel\n        self.temperature = nn.Parameter(torch.tensor(temperature, dtype=torch.float32))\n\n        self.norm = RMSNorm(d_model)\n\n        self.local_conv = nn.Conv1d(\n            d_model,\n            d_model,\n            kernel_size=conv_kernel,\n            groups=d_model,\n            bias=True,\n            padding=0,\n        )\n\n        self.forget_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.input_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.fusion_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.output_proj = nn.Linear(\n            d_state,\n            d_model,\n        )\n\n        nn.init.constant_(\n            self.forget_proj.bias,\n            forget_bias,\n        )\n\n    def causal_conv(self, x):\n        pad = self.conv_kernel - 1\n\n        x_conv = x.transpose(1, 2)\n\n        x_conv = nn.functional.pad(\n            x_conv,\n            (pad, 0),\n        )\n\n        y = self.local_conv(x_conv)\n\n        return y.transpose(1, 2)\n\n    def forward(self, x, state=None):\n        if x.ndim != 3:\n            raise ValueError(\n                \"x must have shape [batch, seq, dim]\"\n            )\n\n        batch, _, dim = x.shape\n\n        if dim != self.d_model:\n            raise ValueError(\n                f\"Expected dim={self.d_model}, got {dim}\"\n            )\n\n        u = self.norm(x)\n\n        c = self.causal_conv(u)\n\n        f_pre = self.forget_proj(u)\n        i_pre = self.input_proj(u)\n        g_pre = self.fusion_proj(u)\n\n        f = torch.sigmoid(f_pre / self.temperature)\n        i = torch.sigmoid(i_pre / self.temperature)\n        g = torch.sigmoid(g_pre / self.temperature)\n\n        states = ScanRefBackward.apply(\n            f,\n            i,\n            u,\n            state,\n        )\n\n        fused = (\n            g * states\n            + (1.0 - g) * c\n        )\n\n        out = self.output_proj(fused)\n\n        y = x + out\n\n        final_state = states[:, -1]\n\n        return y, final_state\n\n\nclass ScanRefBackward(torch.autograd.Function):\n    \"\"\"\n    Associative-scan forward + exact sequential reference backward.\n\n    Forward:\n        s_t = f_t * s_{t-1} + i_t * u_t\n\n    Backward:\n        Exact reverse-time recurrence matching the reference\n        timestep implementation.\n\n    The scan changes only floating-point operation ordering in\n    the forward pass. The backward reconstructs the exact\n    sequential states to preserve gradient fidelity.\n    \"\"\"\n\n    @staticmethod\n    def forward(ctx, f, i, u, initial_state):\n        # Each timestep represents:\n        #\n        #   s_t = A_t * s_{t-1} + B_t\n        #\n        # with:\n        #\n        #   A_t = f_t\n        #   B_t = i_t * u_t\n\n        b = i * u\n\n        def combine(left, right):\n            a1, b1 = left\n            a2, b2 = right\n\n            return (\n                a2 * a1,\n                a2 * b1 + b2,\n            )\n\n        # Import here because associative_scan is an internal\n        # PyTorch operator and should remain isolated to this backend.\n        from torch._higher_order_ops.associative_scan import associative_scan\n\n        a = f\n        identity = torch.zeros_like(b)\n\n        if initial_state is not None:\n            identity = initial_state.unsqueeze(1)\n\n        # Prefix composition.\n        A, B = associative_scan(\n            combine,\n            (a, b),\n            dim=1,\n            reverse=False,\n            combine_mode=\"pointwise\",\n        )\n\n        states = A * identity + B\n\n        ctx.save_for_backward(f, i, u, initial_state)\n\n        return states\n\n    @staticmethod\n    def backward(ctx, grad_states):\n        f, i, u, initial_state = ctx.saved_tensors\n\n        with torch.no_grad():\n            batch, seq_len, state_dim = u.shape\n\n            # Reconstruct the exact sequential states used by\n            # the reference implementation.\n            states = torch.empty_like(u)\n\n            if initial_state is None:\n                prev = torch.zeros(\n                    batch,\n                    state_dim,\n                    device=u.device,\n                    dtype=u.dtype,\n                )\n            else:\n                prev = initial_state\n\n            for t in range(seq_len):\n                prev = (\n                    f[:, t] * prev\n                    + i[:, t] * u[:, t]\n                )\n                states[:, t] = prev\n\n        grad_f = torch.zeros_like(f)\n        grad_i = torch.zeros_like(i)\n        grad_u = torch.zeros_like(u)\n\n        grad_state = torch.zeros_like(\n            states[:, 0]\n        )\n\n        for t in range(seq_len - 1, -1, -1):\n            ds = grad_states[:, t] + grad_state\n\n            prev_state = (\n                torch.zeros_like(ds)\n                if t == 0\n                else states[:, t - 1]\n            )\n\n            grad_f[:, t] = ds * prev_state\n            grad_i[:, t] = ds * u[:, t]\n\n            grad_u[:, t] = (\n                ds * i[:, t]\n            )\n\n            grad_state = ds * f[:, t]\n\n        grad_initial = None\n\n        if initial_state is not None:\n            grad_initial = grad_state\n\n        return (\n            grad_f,\n            grad_i,\n            grad_u,\n            grad_initial,\n        )\n\n\nclass RMSNorm(nn.Module):\n    \"\"\"Root Mean Square Layer Normalization.\"\"\"\n\n    def __init__(self, d_model, eps=1e-6):\n        super().__init__()\n        self.weight = nn.Parameter(torch.ones(d_model))\n        self.eps = eps\n\n    def forward(self, x):\n        x = x * (1.0 / torch.sqrt(torch.mean(x ** 2, dim=-1, keepdim=True) + self.eps))\n        return self.weight * x\nCORE_SOURCE_END",
+      "source_raw": "CORE_SOURCE_BEGIN\nimport torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass NovaScanBlock(nn.Module):\n    \"\"\"\n    Optimized NOVA-EVO block with temperature-scaled sigmoid activations.\n\n    Architecture is identical to nova.blocks.NovaBlock.\n\n    Difference:\n        The recurrent state update uses an associative scan\n        for the forward pass, while backward uses the exact\n        sequential reference recurrence.\n        Forget and input gates use temperature-scaled sigmoid activations\n        to improve gradient flow and dynamic range.\n    \"\"\"\n\n    def __init__(\n        self,\n        d_model,\n        d_state,\n        conv_kernel=5,\n        forget_bias=1.5,\n        temperature=2.0,\n    ):\n        super().__init__()\n\n        if conv_kernel < 1 or conv_kernel % 2 == 0:\n            raise ValueError(\n                \"conv_kernel must be a positive odd number\"\n            )\n\n        self.d_model = d_model\n        self.d_state = d_state\n        self.conv_kernel = conv_kernel\n        self.temperature = nn.Parameter(torch.tensor(temperature, dtype=torch.float32))\n\n        self.norm = RMSNorm(d_model)\n\n        self.local_conv = nn.Conv1d(\n            d_model,\n            d_model,\n            kernel_size=conv_kernel,\n            groups=d_model,\n            bias=True,\n            padding=0,\n        )\n\n        self.forget_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.input_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.fusion_proj = nn.Linear(\n            d_model,\n            d_state,\n        )\n\n        self.output_proj = nn.Linear(\n            d_state,\n            d_model,\n        )\n\n        nn.init.constant_(\n            self.forget_proj.bias,\n            forget_bias,\n        )\n\n    def causal_conv(self, x):\n        pad = self.conv_kernel - 1\n\n        x_conv = x.transpose(1, 2)\n\n        x_conv = nn.functional.pad(\n            x_conv,\n            (pad, 0),\n        )\n\n        y = self.local_conv(x_conv)\n\n        return y.transpose(1, 2)\n\n    def forward(self, x, state=None):\n        if x.ndim != 3:\n            raise ValueError(\n                \"x must have shape [batch, seq, dim]\"\n            )\n\n        batch, _, dim = x.shape\n\n        if dim != self.d_model:\n            raise ValueError(\n                f\"Expected dim={self.d_model}, got {dim}\"\n            )\n\n        u = self.norm(x)\n\n        c = self.causal_conv(u)\n\n        f_pre = self.forget_proj(u)\n        i_pre = self.input_proj(u)\n        g_pre = self.fusion_proj(u)\n\n        f = torch.sigmoid(f_pre / self.temperature)\n        i = torch.sigmoid(i_pre / self.temperature)\n        g = torch.sigmoid(g_pre / self.temperature)\n\n        states = ScanRefBackward.apply(\n            f,\n            i,\n            u,\n            state,\n        )\n\n        fused = (\n            g * states\n            + (1.0 - g) * c\n        )\n\n        out = self.output_proj(fused)\n\n        y = x + out\n\n        final_state = states[:, -1]\n\n        return y, final_state\n\n\nclass ScanRefBackward(torch.autograd.Function):\n    \"\"\"\n    Associative-scan forward + exact sequential reference backward.\n\n    Forward:\n        s_t = f_t * s_{t-1} + i_t * u_t\n\n    Backward:\n        Exact reverse-time recurrence matching the reference\n        timestep implementation.\n\n    The scan changes only floating-point operation ordering in\n    the forward pass. The backward reconstructs the exact\n    sequential states to preserve gradient fidelity.\n    \"\"\"\n\n    @staticmethod\n    def forward(ctx, f, i, u, initial_state):\n        # Each timestep represents:\n        #\n        #   s_t = A_t * s_{t-1} + B_t\n        #\n        # with:\n        #\n        #   A_t = f_t\n        #   B_t = i_t * u_t\n\n        b = i * u\n\n        def combine(left, right):\n            a1, b1 = left\n            a2, b2 = right\n\n            return (\n                a2 * a1,\n                a2 * b1 + b2,\n            )\n\n        # Import here because associative_scan is an internal\n        # PyTorch operator and should remain isolated to this backend.\n        from torch._higher_order_ops.associative_scan import associative_scan\n\n        a = f\n        identity = torch.zeros_like(b)\n\n        if initial_state is not None:\n            identity = initial_state.unsqueeze(1)\n\n        # Prefix composition.\n        A, B = associative_scan(\n            combine,\n            (a, b),\n            dim=1,\n            reverse=False,\n            combine_mode=\"pointwise\",\n        )\n\n        states = A * identity + B\n\n        ctx.save_for_backward(f, i, u, initial_state)\n\n        return states\n\n    @staticmethod\n    def backward(ctx, grad_states):\n        f, i, u, initial_state = ctx.saved_tensors\n\n        with torch.no_grad():\n            batch, seq_len, state_dim = u.shape\n\n            # Reconstruct the exact sequential states used by\n            # the reference implementation.\n            states = torch.empty_like(u)\n\n            if initial_state is None:\n                prev = torch.zeros(\n                    batch,\n                    state_dim,\n                    device=u.device,\n                    dtype=u.dtype,\n                )\n            else:\n                prev = initial_state\n\n            for t in range(seq_len):\n                prev = (\n                    f[:, t] * prev\n                    + i[:, t] * u[:, t]\n                )\n                states[:, t] = prev\n\n        grad_f = torch.zeros_like(f)\n        grad_i = torch.zeros_like(i)\n        grad_u = torch.zeros_like(u)\n\n        grad_state = torch.zeros_like(\n            states[:, 0]\n        )\n\n        for t in range(seq_len - 1, -1, -1):\n            ds = grad_states[:, t] + grad_state\n\n            prev_state = (\n                torch.zeros_like(ds)\n                if t == 0\n                else states[:, t - 1]\n            )\n\n            grad_f[:, t] = ds * prev_state\n            grad_i[:, t] = ds * u[:, t]\n\n            grad_u[:, t] = (\n                ds * i[:, t]\n            )\n\n            grad_state = ds * f[:, t]\n\n        grad_initial = None\n\n        if initial_state is not None:\n            grad_initial = grad_state\n\n        return (\n            grad_f,\n            grad_i,\n            grad_u,\n            grad_initial,\n        )\n\n\nclass RMSNorm(nn.Module):\n    \"\"\"Root Mean Square Layer Normalization.\"\"\"\n\n    def __init__(self, d_model, eps=1e-6):\n        super().__init__()\n        self.weight = nn.Parameter(torch.ones(d_model))\n        self.eps = eps\n\n    def forward(self, x):\n        x = x * (1.0 / torch.sqrt(torch.mean(x ** 2, dim=-1, keepdim=True) + self.eps))\n        return self.weight * x\nCORE_SOURCE_END",
+      "plan_usage": {
+        "completion_tokens": 722,
+        "prompt_tokens": 3393,
+        "total_tokens": 4115,
+        "prompt_tokens_details": {
+          "cached_tokens": 3389
+        }
+      },
+      "source_usage": {
+        "completion_tokens": 1644,
+        "prompt_tokens": 2674,
+        "total_tokens": 4318,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "plan_finish_reason": "stop",
+      "source_finish_reason": "stop"
+    },
+    "status": "GENERATED",
+    "local_source": "/opt/ai/work/nova-evo/evo/core_evolution/candidates/GEN7-CORE-001/blocks_scan.py",
+    "generation": 7,
+    "config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false
+    }
+  },
+  "robust": {
+    "status": "COMPLETED",
+    "candidate": "GEN7-CORE-001",
+    "candidate_id": "GEN7-CORE-001",
+    "parent_id": "GEN6-CORE-001",
+    "state": "COMPLETED",
+    "stage": "robust",
+    "seeds": [
+      1001,
+      2002,
+      3003
+    ],
+    "seed_results": [
+      {
+        "status": "COMPLETED",
+        "experiment_id": "ac5bcadd-a541-449e-a742-51097c0a3576",
+        "candidate": "GEN7-CORE-001",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5752.7,
+            "cpu_gen_tokens_per_sec": 166.0,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.770856655337987,
+          "perplexity": 320.8124406552959,
+          "train_loss": 5.488326549530029,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 117.05409205400065,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN7-CORE-001/seed_1001.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790787326.7939324,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 27772964864,
+            "ram_used_bytes": 5200420864,
+            "disk_free_bytes": 809656111104,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 0,
+            "gpu_vram_reserved_bytes": 0,
+            "gpu_vram_free_bytes": 8184922112
+          },
+          "after": {
+            "timestamp": 1790787445.2006474,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 26579234816,
+            "ram_used_bytes": 6394150912,
+            "disk_free_bytes": 809656098816,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "737729f2-b5ea-4549-853c-6ea177c3fa93",
+        "candidate": "GEN7-CORE-001",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5672.6,
+            "cpu_gen_tokens_per_sec": 171.0,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.768125372932306,
+          "perplexity": 319.93740680686017,
+          "train_loss": 5.699930667877197,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 115.97214469099708,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN7-CORE-001/seed_2002.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790787446.1051526,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 26845081600,
+            "ram_used_bytes": 6128304128,
+            "disk_free_bytes": 809591476224,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 41943040,
+            "gpu_vram_free_bytes": 8142979072
+          },
+          "after": {
+            "timestamp": 1790787563.3678,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 26494443520,
+            "ram_used_bytes": 6478942208,
+            "disk_free_bytes": 809591459840,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      },
+      {
+        "status": "COMPLETED",
+        "experiment_id": "af1064f3-9fbe-44a7-8e70-cd80a52073f1",
+        "candidate": "GEN7-CORE-001",
+        "metrics": {
+          "efficiency": {
+            "parameters": 9856518,
+            "param_mb": 39.43,
+            "cpu_threads": 8,
+            "cpu_tokens_per_sec": 5722.3,
+            "cpu_gen_tokens_per_sec": 173.3,
+            "state_kb": 9.0,
+            "peak_vram_mb": 542.3
+          },
+          "validation_loss": 5.766776240473423,
+          "perplexity": 319.5060599040066,
+          "train_loss": 6.817244052886963,
+          "steps": 1000,
+          "parameters": 9856518,
+          "duration_seconds": 117.21119187099976,
+          "checkpoint": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN7-CORE-001/seed_3003.pt"
+        },
+        "resources": {
+          "before": {
+            "timestamp": 1790787564.0562637,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 26853289984,
+            "ram_used_bytes": 6120095744,
+            "disk_free_bytes": 809526837248,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 17039360,
+            "gpu_vram_reserved_bytes": 41943040,
+            "gpu_vram_free_bytes": 8142979072
+          },
+          "after": {
+            "timestamp": 1790787682.520277,
+            "cpu_count": 16,
+            "ram_total_bytes": 32973385728,
+            "ram_available_bytes": 26489892864,
+            "ram_used_bytes": 6483492864,
+            "disk_free_bytes": 809526829056,
+            "gpu_available": true,
+            "gpu_name": "NVIDIA GeForce RTX 4060",
+            "gpu_vram_total_bytes": 8184922112,
+            "gpu_vram_allocated_bytes": 95897600,
+            "gpu_vram_reserved_bytes": 679477248,
+            "gpu_vram_free_bytes": 7505444864
+          }
+        }
+      }
+    ],
+    "training": {
+      "stage": "robust",
+      "steps": 1000,
+      "batch_size": 8,
+      "learning_rate": 0.0003,
+      "weight_decay": 0.01,
+      "seeds": [
+        1001,
+        2002,
+        3003
+      ]
+    },
+    "metrics": {
+      "validation_loss_mean": 5.768586089581238,
+      "validation_loss_std": 0.0016973786141560915,
+      "validation_loss_min": 5.766776240473423,
+      "validation_loss_max": 5.770856655337987,
+      "parameters": 9856518,
+      "duration_seconds_mean": 116.74580953866582,
+      "efficiency": {
+        "parameters": 9856518,
+        "param_mb": 39.43,
+        "state_kb": 9.0,
+        "cpu_threads": 8,
+        "cpu_tokens_per_sec": 5715.9,
+        "cpu_gen_tokens_per_sec": 170.1,
+        "peak_vram_mb": 542.3
+      }
+    },
+    "dataset": "data/text_v2"
+  },
+  "evaluation": {
+    "action": "PROMOTE",
+    "candidate_id": "GEN7-CORE-001",
+    "parent_id": "GEN6-CORE-001",
+    "candidate_loss": 5.768586089581238,
+    "parent_loss": 5.768713932152502,
+    "delta": -0.00012784257126341458,
+    "reason": "Candidate validation loss is lower than the parent baseline.",
+    "confidence": 0.8
+  },
+  "active_core": "GEN7-CORE-001",
+  "active_source": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN7-CORE-001/blocks_scan.py",
+  "active_checkpoint": "/opt/ai/work/nova-evo/evo/core_evolution/active/GEN7-CORE-001/seed_1001.pt",
+  "source_sha256": "249a90d0719c571ca177a53f936da4037f2937bf597a8c3fb79da90151df348b",
+  "checkpoint_source": "/opt/ai/work/nova-evo/evo/gen4/results/checkpoints/GEN7-CORE-001/seed_1001.pt",
+  "promoted_at": 1790787684.0111113
+}

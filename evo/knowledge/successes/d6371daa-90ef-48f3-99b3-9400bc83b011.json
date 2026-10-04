@@ -1,0 +1,36 @@
+{
+  "id": "d6371daa-90ef-48f3-99b3-9400bc83b011",
+  "type": "success",
+  "title": "Learning task: Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790613029.5930133,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Generator Test",
+    "task": "Analyzuj Python funkcie a vytvor automatizovaný test troch rôznych implementácií.",
+    "candidate_id": "LEARN-autonomous-generator-test-1790613029582",
+    "experiment_id": "4d133371-1ac5-4893-a733-3e5ae22a98ef",
+    "result": {
+      "candidate_id": "LEARN-autonomous-generator-test-1790613029582",
+      "command": [
+        "python",
+        "main.py"
+      ],
+      "returncode": 0,
+      "stdout": "NOVA_PYTHON_TASK_OK\n",
+      "stderr": "",
+      "duration_seconds": 0.009850816000835039,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-generator-test-1790613029582",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "d7051f229ff389e562709e35a5de51917c5433ec3f88f149051e88b20ee176fc"
+}

@@ -1,0 +1,67 @@
+# Python environment
+.venv/
+
+# Python cache / bytecode
+__pycache__/
+*.py[cod]
+
+# Runtime / temporary files
+*.log
+*.tmp
+*.swp
+.DS_Store
+
+# Local editor files
+.vscode/
+.idea/
+
+# NOVA-EVO generated sandbox workspaces
+evo/engine/sandbox/*/
+
+# Large model checkpoints
+evo/final/checkpoints/
+
+# Local secrets
+.env
+*.key
+*.pem
+
+# Protected final holdout dataset
+data/gen_final_holdout/*.txt
+
+# Local backup copies
+*.bak
+*.bak-*
+.venv/
+__pycache__/
+evo/experiments/*.json
+evo/engine/sandbox/
+evo/engine/state/
+*.damaged
+*.bak-*
+evo/engine/evo_state.json
+evo/engine/evo_state.*.json
+
+# Model checkpoints and large artifacts (keep out of git)
+*.pt
+*.pth
+*.safetensors
+*.gguf
+
+# Generated corpora (rebuild with evo.corpus.build_text_v1; tokenizer + manifest stay in git)
+data/text_v*/*.txt
+data/teacher_v*/
+data/web_v*/
+
+# runtime learning memory (generated on the server)
+evo/learning/mistakes.jsonl
+evo/learning/self_correction_log.jsonl
+evo/learning/active_weights.json
+evo/learning/checkpoints/
+data/**/*.npy
+evo/learning/code_school_log.jsonl
+evo/learning/code_school_state.json
+
+# bulk web corpus (evo.corpus.bulk_web): only the manifest goes to git
+data/bulk_v*/*
+!data/bulk_v*/manifest.json

@@ -1,0 +1,256 @@
+{
+ "results": {
+  "nova-24M": {
+   "name": "nova-24M",
+   "group": "24M",
+   "arch": "nova",
+   "override": {
+    "d_model": 640,
+    "d_state": 640,
+    "num_layers": 8
+   },
+   "lr": "3e-4",
+   "steps": 18000,
+   "params": 23650568,
+   "train_hours": 1.074,
+   "steps_done": 18000,
+   "best_val_during_training": 3.4563,
+   "tokens_seen": 146304000,
+   "train_tokens_per_s": 37840,
+   "curve": [
+    "step 3000: train 5.0548 val 4.0907",
+    "step 6000: train 3.9466 val 3.7751",
+    "step 9000: train 3.7282 val 3.6207",
+    "step 12000: train 3.605 val 3.5322",
+    "step 15000: train 3.5257 val 3.4786",
+    "step 18000: train 3.4734 val 3.4563"
+   ],
+   "loss": {
+    "dataset": 3.3308,
+    "web": 3.9303
+   },
+   "code_solved": 52,
+   "code_tasks": 79,
+   "cpu": {
+    "read_tokens_per_s": 2997,
+    "write_tokens_per_s": 204.5,
+    "state_kb_after_writing": 100.0,
+    "threads": 8
+   },
+   "cpu_by_context": {
+    "1024": {
+     "read_tokens_per_s": 5285,
+     "write_tokens_per_s": 167.6,
+     "state_kb_after_writing": 100.0,
+     "threads": 8
+    },
+    "4096": {
+     "read_tokens_per_s": 5350,
+     "write_tokens_per_s": 178.9,
+     "state_kb_after_writing": 100.0,
+     "threads": 8
+    }
+   }
+  },
+  "tf-24M-a": {
+   "name": "tf-24M-a",
+   "group": "24M",
+   "arch": "transformer",
+   "override": {
+    "arch": "transformer",
+    "d_model": 512,
+    "num_layers": 5,
+    "n_heads": 8
+   },
+   "lr": "3e-4",
+   "steps": 18000,
+   "params": 24141312,
+   "train_hours": 0.505,
+   "steps_done": 18000,
+   "best_val_during_training": 3.1527,
+   "tokens_seen": 146304000,
+   "train_tokens_per_s": 80475,
+   "curve": [
+    "step 3000: train 4.9038 val 3.9153",
+    "step 6000: train 3.8146 val 3.5125",
+    "step 9000: train 3.5873 val 3.3506",
+    "step 12000: train 3.4556 val 3.2443",
+    "step 15000: train 3.3661 val 3.1823",
+    "step 18000: train 3.3058 val 3.1527"
+   ],
+   "loss": {
+    "dataset": 3.0562,
+    "web": 3.7629
+   },
+   "code_solved": 53,
+   "code_tasks": 79,
+   "cpu": {
+    "read_tokens_per_s": 4367,
+    "write_tokens_per_s": 173.6,
+    "state_kb_after_writing": 3820.0,
+    "threads": 8
+   },
+   "cpu_by_context": {
+    "1024": {
+     "read_tokens_per_s": 6863,
+     "write_tokens_per_s": 108.7,
+     "state_kb_after_writing": 21120.0,
+     "threads": 8
+    },
+    "4096": {
+     "read_tokens_per_s": 5648,
+     "write_tokens_per_s": 53.8,
+     "state_kb_after_writing": 82560.0,
+     "threads": 8
+    }
+   }
+  },
+  "tf-24M-b": {
+   "name": "tf-24M-b",
+   "group": "24M",
+   "arch": "transformer",
+   "override": {
+    "arch": "transformer",
+    "d_model": 448,
+    "num_layers": 7,
+    "n_heads": 7
+   },
+   "lr": "3e-4",
+   "steps": 18000,
+   "params": 24228288,
+   "train_hours": 0.542,
+   "steps_done": 18000,
+   "best_val_during_training": 3.1458,
+   "tokens_seen": 146304000,
+   "train_tokens_per_s": 74982,
+   "curve": [
+    "step 3000: train 4.9422 val 3.9032",
+    "step 6000: train 3.8084 val 3.5065",
+    "step 9000: train 3.5767 val 3.3422",
+    "step 12000: train 3.4447 val 3.2347",
+    "step 15000: train 3.3547 val 3.1743",
+    "step 18000: train 3.2943 val 3.1458"
+   ],
+   "loss": {
+    "dataset": 3.0513,
+    "web": 3.7452
+   },
+   "code_solved": 55,
+   "code_tasks": 79,
+   "cpu": {
+    "read_tokens_per_s": 4210,
+    "write_tokens_per_s": 148.6,
+    "state_kb_after_writing": 4679.5,
+    "threads": 8
+   },
+   "cpu_by_context": {
+    "1024": {
+     "read_tokens_per_s": 6411,
+     "write_tokens_per_s": 92.1,
+     "state_kb_after_writing": 25872.0,
+     "threads": 8
+    },
+    "4096": {
+     "read_tokens_per_s": 4824,
+     "write_tokens_per_s": 47.4,
+     "state_kb_after_writing": 101136.0,
+     "threads": 8
+    }
+   }
+  },
+  "tf-24M-lr1e-3": {
+   "name": "tf-24M-lr1e-3",
+   "group": "24M",
+   "arch": "transformer",
+   "override": {
+    "arch": "transformer",
+    "d_model": 448,
+    "num_layers": 7,
+    "n_heads": 7
+   },
+   "lr": "1e-3",
+   "steps": 18000,
+   "params": 24228288,
+   "train_hours": 0.542,
+   "steps_done": 18000,
+   "best_val_during_training": 3.0805,
+   "tokens_seen": 146304000,
+   "train_tokens_per_s": 74982,
+   "curve": [
+    "step 3000: train 4.6688 val 3.7617",
+    "step 6000: train 3.746 val 3.4557",
+    "step 9000: train 3.5338 val 3.2962",
+    "step 12000: train 3.395 val 3.1859",
+    "step 15000: train 3.2924 val 3.1095",
+    "step 18000: train 3.2211 val 3.0805"
+   ],
+   "loss": {
+    "dataset": 2.9849,
+    "web": 3.6782
+   },
+   "code_solved": 52,
+   "code_tasks": 79,
+   "cpu": {
+    "read_tokens_per_s": 4366,
+    "write_tokens_per_s": 155.8,
+    "state_kb_after_writing": 4679.5,
+    "threads": 8
+   },
+   "cpu_by_context": {
+    "1024": {
+     "read_tokens_per_s": 6358,
+     "write_tokens_per_s": 96.3,
+     "state_kb_after_writing": 25872.0,
+     "threads": 8
+    },
+    "4096": {
+     "read_tokens_per_s": 4946,
+     "write_tokens_per_s": 45.4,
+     "state_kb_after_writing": 101136.0,
+     "threads": 8
+    }
+   }
+  }
+ },
+ "date": "2026-10-04 15:37",
+ "steps": 18000,
+ "groups": [
+  "24M"
+ ],
+ "verdicts": {
+  "24M": {
+   "nova": "nova-24M",
+   "transformer": "tf-24M-lr1e-3",
+   "transformer_attempts": 3,
+   "sets": {
+    "dataset": {
+     "nova": 3.3308,
+     "transformer": 2.9849,
+     "diff": 0.3459,
+     "lo": 0.33,
+     "hi": 0.3626,
+     "n": 1600,
+     "percent": 11.59,
+     "winner": "transformer"
+    },
+    "web": {
+     "nova": 3.9303,
+     "transformer": 3.6782,
+     "diff": 0.2521,
+     "lo": 0.2435,
+     "hi": 0.261,
+     "n": 1600,
+     "percent": 6.85,
+     "winner": "transformer"
+    }
+   },
+   "code": {
+    "nova": 52,
+    "transformer": 52,
+    "tasks": 79
+   },
+   "cpu_write_speedup": 1.31,
+   "cpu_read_speedup": 0.69
+  }
+ }
+}

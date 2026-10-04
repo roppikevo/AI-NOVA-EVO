@@ -1,0 +1,52 @@
+{
+  "goal": "Autonomous Rust Learning",
+  "status": "COMPLETED",
+  "current_phase": "DONE",
+  "completed_tasks": [
+    "Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790613386.5383637,
+  "updated": 1790613404.5492983,
+  "plan": [
+    "Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing."
+  ],
+  "last_task": "Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Vytvor a otestuj Rust úlohu zameranú na ownership a borrowing.",
+    "language": "rust",
+    "task_type": "rust_compile",
+    "filename": "main.rs",
+    "content": "fn main() {\n    let text = String::from(\"nova\");\n    let moved = text;\n    println!(\"{}\", moved);\n}\n",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": null,
+    "reason": ""
+  },
+  "task_generated_by_mentor": false,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-rust-learning-1790613404390",
+    "experiment_id": "be5b6cb0-a523-41d2-bb93-cfb745a91647",
+    "knowledge_id": "0c063c36-a771-417b-8c65-a2196c26a804",
+    "knowledge_path": "evo/knowledge/successes/0c063c36-a771-417b-8c65-a2196c26a804.json",
+    "status": "COMPLETED",
+    "stdout": "",
+    "stderr": "",
+    "duration_seconds": 0.15717901699827053,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-learning-1790613404390"
+  },
+  "last_meta_experience": {
+    "id": "e4a1144d-c497-4cf0-9065-d82928bca700",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  }
+}

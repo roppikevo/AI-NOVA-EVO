@@ -1,0 +1,23 @@
+{
+  "goal": "Autonomous Rust Ownership Synthetic V6",
+  "status": "PLANNED",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Implementovať funkciu v Rust, ktorá prijme vektor referencií na štruktúry obsahujúce vlastnícke pole, a po vykonaní operácie na prvom poli vráti novú štruktúru s vlastnou kopiou tohto pola, pričom výsledok musí prejsť aserciou overujúcou, že pôvodné pole v štruktúre sa nezmenilo a nová štruktúra vlastní platnú pamäť.",
+  "created": 1790617502.5487971,
+  "updated": 1790617528.3818228,
+  "plan": [
+    "Implementovať funkciu v Rust, ktorá prijme vektor referencií na štruktúry obsahujúce vlastnícke pole, a po vykonaní operácie na prvom poli vráti novú štruktúru s vlastnou kopiou tohto pola, pričom výsledok musí prejsť aserciou overujúcou, že pôvodné pole v štruktúre sa nezmenilo a nová štruktúra vlastní platnú pamäť.",
+    "Vytvoriť syntetický testovací prípad v Rust, kde sa vygeneruje 5 štruktúr s rôznymi dĺžkami vlastných polí, následne sa vykoná iterácia cez všetky štruktúry, pričom každá štruktúra musí byť bezpečne zničená (drop) bez úniku pamäte, a výsledkom bude asercia overujúca, že celková alokovaná pamäť sa vrátila do systému po dokončení iterácie.",
+    "Napísať Rust kód, ktorý definuje štruktúru s vlastným polom a implementuje metódu na klonovanie tejto štruktúry, pričom klonovaná inštancia musí mať nezávislé vlastné pole, a test musí overiť, že zmena hodnoty v poli klonovanej inštancie ovplyvní len klonovanú inštanciu a nie pôvodnú.",
+    "Vygenerovať 10 syntetických vstupných dát v Rust, ktoré obsahujú rôzne kombinácie platných a neplatných referencií na vlastné polia, a implementovať funkciu, ktorá bezpečne identifikuje a ignoruje neplatné referencie, pričom výsledkom bude asercia overujúca, že funkcia vráti len platné referencie a nevyvolá paniku pri spracovaní neplatných referencií.",
+    "Implementovať v Rust algoritmus na transformáciu vektora vlastných polí tak, že sa z každého pola vytvorí nová štruktúra s polom o polovicnej dĺžke, pričom výsledná štruktúra musí byť overená aserciou, že celková veľkosť nových polí zodpovedá polovici pôvodnej veľkosti a že všetky nové polia sú platne alokované."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 1,
+    "errors": []
+  }
+}

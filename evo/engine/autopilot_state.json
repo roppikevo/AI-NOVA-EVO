@@ -1,0 +1,37 @@
+{
+  "stats": {
+    "self_correct": {
+      "runs": 4.668172200218361,
+      "benefit": 0.5217262585200001,
+      "hours": 0.35054433534199214
+    },
+    "evolution": {
+      "runs": 0.7655189891315124,
+      "benefit": 0.0,
+      "hours": 0.3323303587933284
+    },
+    "teachers": {
+      "runs": 0.6895738335134697,
+      "benefit": 0.07172096787481715,
+      "hours": 0.35385495288434005
+    },
+    "long_train": {
+      "runs": 2.990441165171408,
+      "benefit": 1.2059960858698284,
+      "hours": 1.06696566281213
+    }
+  },
+  "last": [
+    "long_train",
+    "self_correct",
+    "self_correct",
+    "self_correct",
+    "self_correct",
+    "evolution",
+    "self_correct",
+    "self_correct",
+    "long_train",
+    "self_correct"
+  ],
+  "seed": 117
+}

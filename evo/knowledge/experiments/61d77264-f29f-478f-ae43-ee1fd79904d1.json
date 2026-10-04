@@ -1,0 +1,37 @@
+{
+  "id": "61d77264-f29f-478f-ae43-ee1fd79904d1",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790616749.4005153,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V3",
+    "task": "Create a Rust program that defines a struct `BorrowedData` containing a reference `&i32`, implements a method to clone the reference without moving the original, and asserts that the original variable remains valid and accessible after the borrow.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1428,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790616749.4005075
+  },
+  "checksum": "35215473623dea3cfb18ea2135da70495ff5b03889054eefcda6b1b50c2e44a1"
+}

@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "active_checkpoint": "/opt/ai/work/nova-evo/evo/learning/checkpoints/task_v1_standard_step100_padaware.pt",
+  "last_trained_examples": 32,
+  "last_status": "BOOTSTRAPPED",
+  "updated_at": 1790697331.085152
+}

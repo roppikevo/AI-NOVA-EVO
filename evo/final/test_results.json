@@ -1,0 +1,76 @@
+{
+  "benchmark": "NOVA-EVO-FINAL-HOLDOUT",
+  "dataset": "/opt/ai/work/nova-evo/data/gen_final_holdout",
+  "test_used": true,
+  "test_evaluation_count": 1,
+  "test_samples": 2000,
+  "seq_len": 128,
+  "batch_size": 8,
+  "checkpoint_seed": 1001,
+  "selection_note": "GEN2-011 and GEN3-005 have identical architecture/configuration; GEN2-011 represents this architecture in the holdout test.",
+  "results": [
+    {
+      "candidate": "GEN3-007",
+      "model_type": "NOVA-EVOLVED-SCAN",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN3-007/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 9856512,
+      "test_loss": 8.538402008056641,
+      "perplexity": 5107.176610309448
+    },
+    {
+      "candidate": "GEN2-011",
+      "model_type": "NOVA-EVOLVED-SCAN",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN2-011/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 9856512,
+      "test_loss": 8.55709063911438,
+      "perplexity": 5203.520210622998
+    },
+    {
+      "candidate": "GEN2-004",
+      "model_type": "NOVA-EVOLVED-SCAN",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN2-004/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 9856512,
+      "test_loss": 8.600624877929688,
+      "perplexity": 5435.054776240772
+    },
+    {
+      "candidate": "GEN3-031",
+      "model_type": "NOVA-EVOLVED-SCAN",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN3-031/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 7312320,
+      "test_loss": 8.706214548110962,
+      "perplexity": 6040.333762601198
+    },
+    {
+      "candidate": "GEN3-024",
+      "model_type": "NOVA-EVOLVED-SCAN",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN3-024/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 7305920,
+      "test_loss": 8.70656078529358,
+      "perplexity": 6042.425512845187
+    },
+    {
+      "candidate": "GEN0-NOVA",
+      "model_type": "NOVA-GEN0-REFERENCE",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/GEN0-NOVA/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 5784576,
+      "test_loss": 8.850761743545533,
+      "perplexity": 6979.703689857576
+    },
+    {
+      "candidate": "TRANSFORMER-BASELINE",
+      "model_type": "TRANSFORMER-BASELINE",
+      "checkpoint": "/opt/ai/work/nova-evo/evo/final/checkpoints/TRANSFORMER-BASELINE/seed_1001.pt",
+      "checkpoint_seed": 1001,
+      "params": 5777920,
+      "test_loss": 9.15704447555542,
+      "perplexity": 9480.99431744547
+    }
+  ]
+}

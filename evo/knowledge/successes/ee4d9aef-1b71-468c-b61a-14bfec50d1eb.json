@@ -1,0 +1,56 @@
+{
+  "id": "ee4d9aef-1b71-468c-b61a-14bfec50d1eb",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that defines a struct `BoxOwner` with a single `Box<i32>` field, implements a method to move ownership into the struct, and asserts that the original variable is no longer usable after the move.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790615784.9940572,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V3",
+    "task": "Create a Rust program that defines a struct `BoxOwner` with a single `Box<i32>` field, implements a method to move ownership into the struct, and asserts that the original variable is no longer usable after the move.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790615784844",
+    "experiment_id": "ee80c240-10fe-4b0c-9b6f-5af0c299b96c",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790615784844",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "nova\n",
+      "stderr": "",
+      "duration_seconds": 0.1482,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790615784844",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790615784844",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.1470955800032243,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790615784844",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "fa1d637cf32d9c945bd1023c65f9f9ec88c0226187b8d9d6b051341e65133f9d"
+}

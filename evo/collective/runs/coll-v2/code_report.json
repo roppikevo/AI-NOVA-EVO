@@ -1,0 +1,209 @@
+{
+ "node": "code",
+ "frozen": false,
+ "messages_sent": 1705,
+ "leader": "pl",
+ "base": "evo/collective/runs/coll-v2/core_round2.pt",
+ "personal": "evo/collective/runs/coll-v2/code_round2.pt",
+ "dead": [
+  "sk"
+ ],
+ "history": [
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.72,
+     "cs": 0.7267,
+     "en": 0.78,
+     "nova0": 0.84,
+     "pl": 0.7533,
+     "sk": 0.7533
+    },
+    "ranking": [
+     "nova0",
+     "en",
+     "pl",
+     "sk",
+     "cs",
+     "code"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "sk",
+    "scores": {
+     "code": 0.7467,
+     "cs": 0.72,
+     "en": 0.7067,
+     "nova0": 0.7067,
+     "pl": 0.6933,
+     "sk": 0.7533
+    },
+    "ranking": [
+     "sk",
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 2,
+   "failover": {
+    "lost": "sk",
+    "new_leader": "code"
+   }
+  },
+  {
+   "round": 2,
+   "leader": "code",
+   "alive": [
+    "code",
+    "cs",
+    "en",
+    "nova0",
+    "pl"
+   ],
+   "trained": [
+    "code",
+    "cs",
+    "en",
+    "pl"
+   ],
+   "merge": {
+    "candidate": "evo/collective/runs/coll-v2/core_round2.pt",
+    "votes": {
+     "code": {
+      "yes": true,
+      "before": 3.8212,
+      "after": 3.8207,
+      "creator": -0.005
+     },
+     "cs": {
+      "yes": false,
+      "before": 3.68,
+      "after": 3.6832,
+      "creator": -0.005
+     },
+     "en": {
+      "yes": true,
+      "before": 4.0562,
+      "after": 4.0544,
+      "creator": -0.005
+     },
+     "nova0": {
+      "yes": false,
+      "before": 3.68,
+      "after": 3.6832,
+      "creator": -0.005
+     },
+     "pl": {
+      "yes": true,
+      "before": 4.0272,
+      "after": 4.0264,
+      "creator": -0.005
+     }
+    },
+    "yes": 3,
+    "of": 5,
+    "accepted": true
+   },
+   "core_change": {
+    "candidate": {
+     "conv_kernel": 3
+    },
+    "results": {
+     "code": {
+      "parent": 5.7329,
+      "candidate": 5.6671,
+      "yes": true
+     },
+     "cs": {
+      "parent": 5.585,
+      "candidate": 5.5383,
+      "yes": true
+     },
+     "en": {
+      "parent": 5.5177,
+      "candidate": 5.4678,
+      "yes": true
+     },
+     "pl": {
+      "parent": 5.594,
+      "candidate": 5.5629,
+      "yes": true
+     }
+    },
+    "yes": 4,
+    "of": 4,
+    "accepted": true
+   }
+  },
+  {
+   "round": 2,
+   "election": {
+    "leader": "pl",
+    "scores": {
+     "code": 0.7,
+     "cs": 0.7083,
+     "en": 0.7,
+     "nova0": 0.675,
+     "pl": 0.775
+    },
+    "ranking": [
+     "pl",
+     "cs",
+     "code",
+     "en",
+     "nova0"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "nova0": 0.7667,
+   "pl": 0.7,
+   "sk": 0.7,
+   "en": 0.6333,
+   "cs": 0.7333
+  },
+  "creator": {
+   "cs": true,
+   "en": true,
+   "nova0": true,
+   "pl": true,
+   "sk": true
+  }
+ },
+ "finished": true
+}

@@ -1,0 +1,56 @@
+{
+  "id": "65aeb138-7893-4f3a-9c8f-3de569a9ea62",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that defines a struct `BorrowedData` containing a reference `&i32`, implements a method to clone the reference without moving the original, and asserts that the original variable remains valid and accessible after the borrow.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790616749.4002936,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Synthetic V3",
+    "task": "Create a Rust program that defines a struct `BorrowedData` containing a reference `&i32`, implements a method to clone the reference without moving the original, and asserts that the original variable remains valid and accessible after the borrow.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616749256",
+    "experiment_id": "9fc68b74-cbeb-43ab-a853-556ccb89ea7a",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616749256",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1428,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616749256",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-synthetic-v3-1790616749256",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14166365998971742,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-synthetic-v3-1790616749256",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "9f9d125b7bedf6b16d31af7fb7a284afc72bf1967ea48e44492c8a7879433bfa"
+}

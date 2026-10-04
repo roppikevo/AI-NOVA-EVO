@@ -1,0 +1,64 @@
+{
+  "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 2",
+  "status": "READY",
+  "current_phase": "LEARN",
+  "completed_tasks": [
+    "Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Write a Rust program that constructs a vector of 10 owned String values, moves half into a Box, borrows the remaining half immutably, and asserts that the sum of lengths of all owned and boxed strings equals the initial total length.",
+  "created": 1790621410.0077856,
+  "updated": 1790621515.0364852,
+  "plan": [
+    "Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls.",
+    "Write a Rust program that constructs a vector of 10 owned String values, moves half into a Box, borrows the remaining half immutably, and asserts that the sum of lengths of all owned and boxed strings equals the initial total length.",
+    "Implement a Rust function that takes a mutable reference to a struct containing an Rc, clones the Rc, modifies the inner data through the mutable reference, and asserts that the inner data reflects the modification while the cloned Rc still points to the updated data.",
+    "Develop a Rust program that creates a struct with a field of type Box<dyn Trait>, moves a concrete implementation into it, calls a method on the trait object, and asserts that the method returned the correct computed value.",
+    "Build a Rust program that defines a struct with a lifetime parameter, creates two references with different scopes, moves the struct into a function that takes a mutable reference, and asserts that the function modified the struct's internal state without violating borrow checker rules."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 3,
+    "errors": []
+  },
+  "last_task": "Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Create a Rust program that generates 5 synthetic structs with varying lifetimes, clones them into an Rc, moves them into an Arc, and asserts that the final reference counts match the expected values after explicit Drop calls.",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "content": "use std::rc::Rc;\nuse std::sync::Arc;\n\nstruct Data {\n    value: i32,\n}\n\nimpl Data {\n    fn new(v: i32) -> Self {\n        Data { value: v }\n    }\n}\n\nfn main() {\n    // Create 5 synthetic structs with varying lifetimes (simulated via stack allocation)\n    let a = Data::new(1);\n    let b = Data::new(2);\n    let c = Data::new(3);\n    let d = Data::new(4);\n    let e = Data::new(5);\n\n    // Clone into Rc\n    let rc_a = Rc::new(a);\n    let rc_b = Rc::new(b);\n    let rc_c = Rc::new(c);\n    let rc_d = Rc::new(d);\n    let rc_e = Rc::new(e);\n\n    // Move into Arc\n    let arc_a = Arc::new(Rc::clone(&rc_a));\n    let arc_b = Arc::new(Rc::clone(&rc_b));\n    let arc_c = Arc::new(Rc::clone(&rc_c));\n    let arc_d = Arc::new(Rc::clone(&rc_d));\n    let arc_e = Arc::new(Rc::clone(&rc_e));\n\n    // Explicit Drop calls on original Rc clones\n    drop(rc_a);\n    drop(rc_b);\n    drop(rc_c);\n    drop(rc_d);\n    drop(rc_e);\n\n    // Assert reference counts match expected values after drops\n    // Each Arc holds one Rc, so after dropping the original Rc clones,\n    // the reference count for each should be 1 (held by the Arc itself).\n    assert_eq!(Arc::strong_count(&arc_a), 1);\n    assert_eq!(Arc::strong_count(&arc_b), 1);\n    assert_eq!(Arc::strong_count(&arc_c), 1);\n    assert_eq!(Arc::strong_count(&arc_d), 1);\n    assert_eq!(Arc::strong_count(&arc_e), 1);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "reason": ""
+  },
+  "task_generated_by_mentor": true,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+    "experiment_id": "22f0faff-2aab-4b86-9cc4-be93dd6bc2f8",
+    "knowledge_id": "c605f710-2d3f-4d33-b0ae-b7d753f9cc4f",
+    "knowledge_path": "evo/knowledge/successes/c605f710-2d3f-4d33-b0ae-b7d753f9cc4f.json",
+    "status": "COMPLETED",
+    "stdout": "success\n",
+    "stderr": "",
+    "duration_seconds": 0.2614,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621514773",
+    "compile_success": true,
+    "compile_returncode": 0,
+    "execution_performed": true
+  },
+  "last_meta_experience": {
+    "id": "9a6caa86-2084-499c-9ed9-5e16e38d9f02",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  }
+}

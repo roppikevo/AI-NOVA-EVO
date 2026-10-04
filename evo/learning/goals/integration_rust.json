@@ -1,0 +1,45 @@
+{
+  "goal": "Integration Rust",
+  "status": "COMPLETED",
+  "current_phase": "DONE",
+  "completed_tasks": [
+    "Precvič syntax Rust."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790536993.2293935,
+  "updated": 1790536993.3688557,
+  "plan": [
+    "Precvič syntax Rust."
+  ],
+  "last_task": "Precvič syntax Rust.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Precvič syntax Rust.",
+    "language": "rust",
+    "task_type": "rust_compile",
+    "filename": "main.rs",
+    "content": "fn main() {\n    let value: i32 = 42;\n    println!(\"{}\", value);\n}\n",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": null,
+    "reason": ""
+  },
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-integration-rust-1790536993230",
+    "experiment_id": "a2ddd5be-b3a8-4ab2-ad34-b674bb306eb6",
+    "knowledge_id": "d9c2f3d0-2fe5-4939-9298-bbf87a5b0062",
+    "knowledge_path": "evo/knowledge/successs/d9c2f3d0-2fe5-4939-9298-bbf87a5b0062.json",
+    "status": "COMPLETED",
+    "stdout": "",
+    "stderr": "",
+    "duration_seconds": 0.13763813699915772,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-integration-rust-1790536993230"
+  }
+}

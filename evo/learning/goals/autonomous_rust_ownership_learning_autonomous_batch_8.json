@@ -1,0 +1,75 @@
+{
+  "goal": "Autonomous Rust Ownership Learning Autonomous Batch 8",
+  "status": "TASK_FAILED",
+  "current_phase": "REPAIR",
+  "completed_tasks": [
+    "Rust program that creates a struct with a single owned String field, moves the field into a function, asserts the original struct is now invalid, then creates a new instance to prove the move was successful.",
+    "Rust program that defines a struct with two borrowed references to a single String, asserts that cloning the struct copies the data pointer, then asserts that moving the struct into a function leaves the original data intact.",
+    "Rust program that uses Box<T> to store a vector of integers, asserts that the vector length is correct after pushing elements, then asserts that moving the Box into a function does not leak memory."
+  ],
+  "failed_tasks": [
+    {
+      "task": "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+      "experiment_id": "d43f9a1e-945a-4b13-89e1-7dd100ab86dd",
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+      "stderr": "\nthread 'main' (53967) panicked at main.rs:8:5:\nassertion `left == right` failed\n  left: 3\n right: 2\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "stdout": ""
+    }
+  ],
+  "knowledge": [],
+  "next_task": "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+  "created": 1790622401.0902479,
+  "updated": 1790622498.8078864,
+  "plan": [
+    "Rust program that creates a struct with a single owned String field, moves the field into a function, asserts the original struct is now invalid, then creates a new instance to prove the move was successful.",
+    "Rust program that defines a struct with two borrowed references to a single String, asserts that cloning the struct copies the data pointer, then asserts that moving the struct into a function leaves the original data intact.",
+    "Rust program that uses Box<T> to store a vector of integers, asserts that the vector length is correct after pushing elements, then asserts that moving the Box into a function does not leak memory.",
+    "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+    "Rust program that uses Arc<T> to share a mutable reference to a vector between two threads, asserts that the vector is modified correctly after the threads finish, then asserts that the Arc count is zero after dropping both handles."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 2,
+    "errors": []
+  },
+  "last_task": "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Rust program that uses Rc<T> to share a single integer between two handles, asserts that incrementing the count via Rc::increment works, then asserts that dropping one handle does not drop the data immediately.",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "content": "use std::rc::Rc;\n\nfn main() {\n    let data = Rc::new(42);\n    let handle1 = Rc::clone(&data);\n    let handle2 = Rc::clone(&data);\n\n    assert_eq!(Rc::strong_count(&handle1), 2);\n\n    let _ = Rc::try_unwrap(handle1).is_err();\n\n    drop(handle2);\n\n    assert_eq!(Rc::strong_count(&data), 1);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "reason": ""
+  },
+  "task_generated_by_mentor": true,
+  "last_execution": {
+    "success": false,
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+    "experiment_id": "d43f9a1e-945a-4b13-89e1-7dd100ab86dd",
+    "knowledge_id": "d63eb828-cc90-4c2e-9ce0-815b7ef1bf95",
+    "knowledge_path": "evo/knowledge/failures/d63eb828-cc90-4c2e-9ce0-815b7ef1bf95.json",
+    "status": "FAILED",
+    "stdout": "",
+    "stderr": "\nthread 'main' (53967) panicked at main.rs:8:5:\nassertion `left == right` failed\n  left: 3\n right: 2\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "duration_seconds": 0.1541,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790622498652",
+    "compile_success": true,
+    "compile_returncode": 0,
+    "execution_performed": true
+  },
+  "last_meta_experience": {
+    "id": "6030b29d-afc2-4904-9f25-85657966a115",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": false
+  },
+  "last_error": "\nthread 'main' (53967) panicked at main.rs:8:5:\nassertion `left == right` failed\n  left: 3\n right: 2\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+}

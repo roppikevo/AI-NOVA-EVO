@@ -1,0 +1,42 @@
+[
+  {
+    "candidate": {
+      "candidate_id": "GEN1-002",
+      "parent": "NOVA-GEN0",
+      "mutation": "state_minus",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 256,
+        "d_state": 192,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    "error": "NOVA-0 currently requires d_model == d_state"
+  },
+  {
+    "candidate": {
+      "candidate_id": "GEN1-004",
+      "parent": "NOVA-GEN0",
+      "mutation": "state_plus",
+      "config": {
+        "vocab_size": 16384,
+        "d_model": 256,
+        "d_state": 320,
+        "num_layers": 6,
+        "conv_kernel": 5,
+        "learnable_initial_state": false,
+        "forget_bias": 1.5,
+        "max_seq_len": 512,
+        "pad_token_id": 0,
+        "dtype": "float32"
+      }
+    },
+    "error": "NOVA-0 currently requires d_model == d_state"
+  }
+]

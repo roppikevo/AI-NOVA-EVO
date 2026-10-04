@@ -1,0 +1,9 @@
+{
+  "status": "REJECT",
+  "decision": "REJECT",
+  "stage": "source_contract",
+  "candidate": "GEN8-CORE-CONTRACT-1790788162",
+  "errors": [
+    "Parent parameter 'temperature' was silently removed from the child core."
+  ]
+}

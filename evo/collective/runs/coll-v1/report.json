@@ -1,0 +1,389 @@
+{
+ "name": "coll-v1",
+ "base": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt",
+ "date": "2026-10-02 16:47",
+ "steps_per_clone": 6000,
+ "nodes": [
+  "sk",
+  "cs",
+  "pl",
+  "en",
+  "code"
+ ],
+ "stages": {
+  "A_training": {
+   "sk": {
+    "steps": 6000,
+    "val_start": 3.446,
+    "best_val": 3.4573,
+    "hours": 0.213
+   },
+   "cs": {
+    "steps": 6000,
+    "val_start": 3.446,
+    "best_val": 3.4588,
+    "hours": 0.219
+   },
+   "pl": {
+    "steps": 6000,
+    "val_start": 3.446,
+    "best_val": 3.4558,
+    "hours": 0.215
+   },
+   "en": {
+    "steps": 6000,
+    "val_start": 3.446,
+    "best_val": 3.4424,
+    "hours": 0.213
+   },
+   "code": {
+    "steps": 6000,
+    "val_start": 3.446,
+    "best_val": 3.4579,
+    "hours": 0.215
+   },
+   "baseline": {
+    "steps": 30000,
+    "val_start": 3.446,
+    "best_val": 3.4472,
+    "hours": 1.093
+   }
+  },
+  "E_code": {
+   "collective_5_nodes_1_try_each": {
+    "solved": 42,
+    "tasks": 79,
+    "by_level": {
+     "1": "36/55",
+     "2": "6/20",
+     "3": "0/4"
+    },
+    "per_node": {
+     "sk": 35,
+     "cs": 33,
+     "pl": 35,
+     "en": 35,
+     "code": 41
+    },
+    "only_one_node": 5
+   },
+   "single_base_1_try": {
+    "solved": 34,
+    "tasks": 79,
+    "by_level": {
+     "1": "30/55",
+     "2": "4/20",
+     "3": "0/4"
+    }
+   },
+   "single_baseline_5_tries": {
+    "solved": 39,
+    "tasks": 79,
+    "by_level": {
+     "1": "33/55",
+     "2": "6/20",
+     "3": "0/4"
+    }
+   }
+  },
+  "C_election": {
+   "leader": "en",
+   "scores": {
+    "sk": 0.6295,
+    "cs": 0.6325,
+    "pl": 0.667,
+    "en": 0.667,
+    "code": 0.6454
+   },
+   "ranking": [
+    "en",
+    "pl",
+    "code",
+    "cs",
+    "sk"
+   ],
+   "matrix": {
+    "sk": {
+     "sk": 0.75,
+     "cs": 0.7167,
+     "pl": 0.6167,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "cs": {
+     "sk": 0.7333,
+     "cs": 0.75,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8167
+    },
+    "pl": {
+     "sk": 0.75,
+     "cs": 0.7833,
+     "pl": 0.5833,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "en": {
+     "sk": 0.7833,
+     "cs": 0.7667,
+     "pl": 0.6167,
+     "en": 0.6167,
+     "code": 0.8
+    },
+    "code": {
+     "sk": 0.75,
+     "cs": 0.7667,
+     "pl": 0.6167,
+     "en": 0.6167,
+     "code": 0.8
+    }
+   }
+  },
+  "D_answer": {
+   "base_alone": 3.3018,
+   "baseline_single_same_tokens": 3.3012,
+   "each_node_alone": {
+    "sk": 3.3122,
+    "cs": 3.3117,
+    "pl": 3.313,
+    "en": 3.2974,
+    "code": 3.3132
+   },
+   "collective_equal_votes": 3.2775,
+   "collective_leader_weights": 3.2759,
+   "collective_leader_weights_per_language": 3.2719,
+   "leader_weights": {
+    "sk": 0.16,
+    "cs": 0.12,
+    "pl": 0.228,
+    "en": 0.368,
+    "code": 0.124
+   },
+   "per_language": {
+    "base": {
+     "sk": 3.5671,
+     "cs": 3.9454,
+     "pl": 3.971,
+     "en": 4.0513,
+     "py": 2.604,
+     "rs": 2.5649
+    },
+    "baseline": {
+     "sk": 3.5489,
+     "cs": 3.9232,
+     "pl": 3.9545,
+     "en": 4.0357,
+     "py": 2.6176,
+     "rs": 2.5921
+    },
+    "sk": {
+     "sk": 3.5551,
+     "cs": 3.9766,
+     "pl": 3.9928,
+     "en": 4.0718,
+     "py": 2.6052,
+     "rs": 2.5847
+    },
+    "cs": {
+     "sk": 3.5868,
+     "cs": 3.9039,
+     "pl": 3.9959,
+     "en": 4.0676,
+     "py": 2.6166,
+     "rs": 2.5714
+    },
+    "pl": {
+     "sk": 3.5789,
+     "cs": 3.9552,
+     "pl": 3.9381,
+     "en": 4.0737,
+     "py": 2.613,
+     "rs": 2.5766
+    },
+    "en": {
+     "sk": 3.5642,
+     "cs": 3.9517,
+     "pl": 3.98,
+     "en": 4.0132,
+     "py": 2.6054,
+     "rs": 2.5733
+    },
+    "code": {
+     "sk": 3.5718,
+     "cs": 3.9471,
+     "pl": 3.9759,
+     "en": 4.0527,
+     "py": 2.6231,
+     "rs": 2.5894
+    }
+   },
+   "specialists_averaged_into_one_model": 3.2877
+  },
+  "F_learning": {
+   "rounds": [
+    {
+     "round": 0,
+     "votes": {
+      "sk": true,
+      "cs": true,
+      "pl": true,
+      "en": true,
+      "code": true
+     },
+     "accepted": true,
+     "loss_before": 3.7294,
+     "loss_after": 3.7209
+    },
+    {
+     "round": 1,
+     "votes": {
+      "sk": true,
+      "cs": true,
+      "pl": true,
+      "en": true,
+      "code": false
+     },
+     "accepted": true,
+     "loss_before": 3.7209,
+     "loss_after": 3.72
+    },
+    {
+     "round": 2,
+     "votes": {
+      "sk": true,
+      "cs": true,
+      "pl": true,
+      "en": false,
+      "code": false
+     },
+     "accepted": true,
+     "loss_before": 3.72,
+     "loss_after": 3.7225
+    }
+   ],
+   "steps_per_node_per_round": 2000,
+   "merged_model": 3.2915,
+   "baseline_single_same_tokens": 3.3012,
+   "per_language": {
+    "sk": 3.552,
+    "cs": 3.9286,
+    "pl": 3.9596,
+    "en": 4.0385,
+    "py": 2.606,
+    "rs": 2.5592
+   },
+   "weights": "evo/collective/runs/coll-v1/shared_round2.pt"
+  },
+  "G_reelection": {
+   "leader": "code",
+   "scores": {
+    "sk": 0.7389,
+    "cs": 0.7361,
+    "pl": 0.7667,
+    "en": 0.7528,
+    "code": 0.7778,
+    "merged": 0.7444,
+    "baseline": 0.7528
+   },
+   "ranking": [
+    "code",
+    "pl",
+    "baseline",
+    "en",
+    "merged",
+    "sk",
+    "cs"
+   ],
+   "matrix": {
+    "sk": {
+     "sk": 0.8167,
+     "cs": 0.8167,
+     "pl": 0.6833,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "cs": {
+     "sk": 0.8,
+     "cs": 0.8333,
+     "pl": 0.7,
+     "en": 0.7,
+     "code": 0.65,
+     "merged": 0.7833,
+     "baseline": 0.7833
+    },
+    "pl": {
+     "sk": 0.8333,
+     "cs": 0.85,
+     "pl": 0.7333,
+     "en": 0.75,
+     "code": 0.6667,
+     "merged": 0.75,
+     "baseline": 0.75
+    },
+    "en": {
+     "sk": 0.8333,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.7667,
+     "code": 0.6333,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "code": {
+     "sk": 0.8167,
+     "cs": 0.85,
+     "pl": 0.7,
+     "en": 0.7667,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "merged": {
+     "sk": 0.7833,
+     "cs": 0.8333,
+     "pl": 0.6833,
+     "en": 0.75,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "baseline": {
+     "sk": 0.8,
+     "cs": 0.8167,
+     "pl": 0.7167,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.7833
+    }
+   }
+  },
+  "creator_final": {
+   "recall": {
+    "code": -0.017,
+    "cs": -0.006,
+    "en": -0.008,
+    "pl": -0.005,
+    "sk": -0.028,
+    "baseline": -0.012,
+    "merged_specialists": -0.007,
+    "collective_core": -0.007,
+    "release": -0.009
+   },
+   "know_creator": [
+    "baseline",
+    "code",
+    "collective_core",
+    "cs",
+    "en",
+    "merged_specialists",
+    "pl",
+    "release",
+    "sk"
+   ]
+  }
+ }
+}

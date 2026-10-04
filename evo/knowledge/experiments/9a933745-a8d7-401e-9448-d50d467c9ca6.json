@@ -1,0 +1,37 @@
+{
+  "id": "9a933745-a8d7-401e-9448-d50d467c9ca6",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790621719.1273825,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 1",
+    "task": "Write a Rust program that creates a reference to a string literal, attempts to move the reference into a function expecting an owned String, asserts the compilation would fail if run, then implements a function taking a reference and asserts the function call succeeds.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1564,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790621719.1273754
+  },
+  "checksum": "25eb38d5fcdcc7bc000e9115a1c36061240ecd2c3041e42e7a3b01a644c89075"
+}

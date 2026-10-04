@@ -1,0 +1,36 @@
+{
+  "id": "1f3d2f26-01d7-4fe2-9098-c1093200f1c5",
+  "type": "success",
+  "title": "Learning task: Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790613176.533101,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Generator Real",
+    "task": "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií.",
+    "candidate_id": "LEARN-autonomous-generator-real-1790613176522",
+    "experiment_id": "3a7ca786-18a4-4b2d-b1de-a1a08942ce1e",
+    "result": {
+      "candidate_id": "LEARN-autonomous-generator-real-1790613176522",
+      "command": [
+        "python",
+        "main.py"
+      ],
+      "returncode": 0,
+      "stdout": "NOVA_PYTHON_TASK_OK\n",
+      "stderr": "",
+      "duration_seconds": 0.009557336001307704,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-generator-real-1790613176522",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "b688b6379353b60d7c8c34cc206099d85e1199e2159c9632ae53a32f277d80f9"
+}

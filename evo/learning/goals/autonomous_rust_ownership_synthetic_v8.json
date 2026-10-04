@@ -1,0 +1,23 @@
+{
+  "goal": "Autonomous Rust Ownership Synthetic V8",
+  "status": "PLANNED",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Implementovať funkciu v Rust, ktorá prijme vektor 10 syntetických štruktúr `Box<T>` a vráti novú štruktúru obsahujúce len tie, ktoré majú referenčný počet 1, pričom výsledok musí byť overený aserciou, že dĺžka vektora je presne 5.",
+  "created": 1790617792.6875927,
+  "updated": 1790617811.4434245,
+  "plan": [
+    "Implementovať funkciu v Rust, ktorá prijme vektor 10 syntetických štruktúr `Box<T>` a vráti novú štruktúru obsahujúce len tie, ktoré majú referenčný počet 1, pričom výsledok musí byť overený aserciou, že dĺžka vektora je presne 5.",
+    "Vytvoriť program v Python, ktorý generuje 10 syntetických grafov s cyklickými závislosťami, a následne overí, že algoritmus na detekciu cyklov vracia práve 3 grafy obsahujúce cyklus, pričom výsledok je overený aserciou.",
+    "Napísať Rust kód, ktorý definuje 10 malých štruktúr s `Rc<RefCell<T>>` a vykoná sériu operácií na nich, pričom výsledkom je overenie aserciou, že žiadna referencia nie je dangling a všetky mutácie boli úspešné.",
+    "Vytvoriť Python skript, ktorý vytvorí 10 syntetických stromov a overí, že funkcia na hĺbkovú kontrolu stromu správne identifikuje 4 stromy s neplatnou hĺbkou, pričom výsledok je overený aserciou.",
+    "Implementovať v Rust funkciu, ktorá prijme 10 syntetických vektorov `Vec<i32>` a vráti vektor obsahujúci len tie, ktoré sú sorted, pričom výsledok je overený aserciou, že dĺžka vektora je presne 6."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 1,
+    "errors": []
+  }
+}

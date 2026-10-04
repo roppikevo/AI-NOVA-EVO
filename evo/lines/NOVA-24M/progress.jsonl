@@ -1,0 +1,64 @@
+{"step": 0, "val_loss": 9.834, "start": true, "tag": "NOVA-24M", "time": 1790980460.6516578}
+{"step": 5000, "train_loss": 4.8096, "val_loss": 3.9762, "best_val": 3.9762, "lr": 0.0002999, "hours": 0.291, "improved": true, "time": 1790981501.7434452}
+{"step": 10000, "train_loss": 3.828, "val_loss": 3.7032, "best_val": 3.7032, "lr": 0.0002994, "hours": 0.582, "improved": true, "time": 1790982550.1793294}
+{"step": 15000, "train_loss": 3.6552, "val_loss": 3.5953, "best_val": 3.5953, "lr": 0.0002985, "hours": 0.877, "improved": true, "time": 1790983612.6297874}
+{"step": 20000, "train_loss": 3.5602, "val_loss": 3.5195, "best_val": 3.5195, "lr": 0.0002973, "hours": 1.172, "improved": true, "time": 1790984674.5370412}
+{"step": 25000, "train_loss": 3.4962, "val_loss": 3.4794, "best_val": 3.4794, "lr": 0.0002957, "hours": 1.465, "improved": true, "time": 1790985730.8430157}
+{"step": 30000, "train_loss": 3.4498, "val_loss": 3.4527, "best_val": 3.4527, "lr": 0.0002938, "hours": 1.759, "improved": true, "time": 1790986787.1604168}
+{"step": 35000, "train_loss": 3.4109, "val_loss": 3.4204, "best_val": 3.4204, "lr": 0.0002915, "hours": 2.052, "improved": true, "time": 1790987843.5762107}
+{"step": 40000, "train_loss": 3.3799, "val_loss": 3.3988, "best_val": 3.3988, "lr": 0.0002888, "hours": 2.346, "improved": true, "time": 1790988899.7834098}
+{"step": 45000, "train_loss": 3.351, "val_loss": 3.3868, "best_val": 3.3868, "lr": 0.0002858, "hours": 2.639, "improved": true, "time": 1790989956.229745}
+{"step": 50000, "train_loss": 3.3325, "val_loss": 3.3763, "best_val": 3.3763, "lr": 0.0002825, "hours": 2.932, "improved": true, "time": 1790991012.7298844}
+{"step": 55000, "train_loss": 3.307, "val_loss": 3.3703, "best_val": 3.3703, "lr": 0.0002788, "hours": 3.226, "improved": true, "time": 1790992069.1491585}
+{"step": 60000, "train_loss": 3.2942, "val_loss": 3.3595, "best_val": 3.3595, "lr": 0.0002749, "hours": 3.519, "improved": true, "time": 1790993125.381343}
+{"step": 65000, "train_loss": 3.2797, "val_loss": 3.3521, "best_val": 3.3521, "lr": 0.0002706, "hours": 3.813, "improved": true, "time": 1790994182.0677304}
+{"step": 70000, "train_loss": 3.2635, "val_loss": 3.3379, "best_val": 3.3379, "lr": 0.000266, "hours": 4.106, "improved": true, "time": 1790995238.0682704}
+{"step": 75000, "train_loss": 3.2501, "val_loss": 3.3456, "best_val": 3.3379, "lr": 0.0002612, "hours": 4.398, "improved": false, "time": 1790996287.0119178}
+{"step": 80000, "train_loss": 3.2388, "val_loss": 3.335, "best_val": 3.335, "lr": 0.0002561, "hours": 4.691, "improved": true, "time": 1790997343.7479541}
+{"step": 85000, "train_loss": 3.2267, "val_loss": 3.3263, "best_val": 3.3263, "lr": 0.0002507, "hours": 4.985, "improved": true, "time": 1790998400.140075}
+{"step": 90000, "train_loss": 3.2175, "val_loss": 3.328, "best_val": 3.3263, "lr": 0.0002452, "hours": 5.276, "improved": false, "time": 1790999448.491337}
+{"step": 90384, "val_loss": 3.3295, "start": true, "tag": "NOVA-24M", "time": 1790999562.0248818}
+{"step": 95000, "train_loss": 3.2111, "val_loss": 3.3218, "best_val": 3.3218, "lr": 0.0002393, "hours": 0.271, "improved": true, "time": 1791000531.8204892}
+{"step": 100000, "train_loss": 3.1967, "val_loss": 3.3175, "best_val": 3.3175, "lr": 0.0002333, "hours": 0.564, "improved": true, "time": 1791001588.146295}
+{"step": 105000, "train_loss": 3.1917, "val_loss": 3.3223, "best_val": 3.3175, "lr": 0.0002271, "hours": 0.855, "improved": false, "time": 1791002636.7728655}
+{"step": 110000, "train_loss": 3.183, "val_loss": 3.3205, "best_val": 3.3175, "lr": 0.0002207, "hours": 1.147, "improved": false, "time": 1791003685.357318}
+{"step": 115000, "train_loss": 3.1748, "val_loss": 3.318, "best_val": 3.3175, "lr": 0.0002142, "hours": 1.438, "improved": false, "time": 1791004733.93992}
+{"step": 120000, "train_loss": 3.1595, "val_loss": 3.3175, "best_val": 3.3175, "lr": 0.0002075, "hours": 1.729, "improved": false, "time": 1791005782.7180278}
+{"step": 125000, "train_loss": 3.1557, "val_loss": 3.3242, "best_val": 3.3175, "lr": 0.0002007, "hours": 2.021, "improved": false, "time": 1791006831.181641}
+{"step": 130000, "train_loss": 3.142, "val_loss": 3.3269, "best_val": 3.3175, "lr": 0.0001939, "hours": 2.312, "improved": false, "time": 1791007880.0176399}
+{"step": 135000, "train_loss": 3.1329, "val_loss": 3.322, "best_val": 3.3175, "lr": 0.0001869, "hours": 2.603, "improved": false, "time": 1791008928.8017826}
+{"step": 140000, "train_loss": 3.1318, "val_loss": 3.3345, "best_val": 3.3175, "lr": 0.0001799, "hours": 2.895, "improved": false, "time": 1791009977.8001924}
+{"step": 145000, "train_loss": 3.1237, "val_loss": 3.3281, "best_val": 3.3175, "lr": 0.0001728, "hours": 3.186, "improved": false, "time": 1791011026.5781534}
+{"step": 150000, "train_loss": 3.1141, "val_loss": 3.3361, "best_val": 3.3175, "lr": 0.0001657, "hours": 3.477, "improved": false, "time": 1791012075.2513533}
+{"step": 155000, "train_loss": 3.1054, "val_loss": 3.3347, "best_val": 3.3175, "lr": 0.0001586, "hours": 3.769, "improved": false, "time": 1791013124.1712437}
+{"step": 160000, "train_loss": 3.1036, "val_loss": 3.3456, "best_val": 3.3175, "lr": 0.0001515, "hours": 4.06, "improved": false, "time": 1791014172.674323}
+{"step": 165000, "train_loss": 3.0957, "val_loss": 3.3437, "best_val": 3.3175, "lr": 0.0001445, "hours": 4.351, "improved": false, "time": 1791015221.785929}
+{"step": 170000, "train_loss": 3.0917, "val_loss": 3.3369, "best_val": 3.3175, "lr": 0.0001375, "hours": 4.643, "improved": false, "time": 1791016270.3003113}
+{"step": 175000, "train_loss": 3.0807, "val_loss": 3.3372, "best_val": 3.3175, "lr": 0.0001306, "hours": 4.934, "improved": false, "time": 1791017320.432088}
+{"step": 175000, "val_loss": 3.3372, "start": true, "tag": "NOVA-24M", "time": 1791018443.5172489}
+{"step": 180000, "train_loss": 3.2764, "val_loss": 3.342, "best_val": 3.3979, "lr": 0.0001238, "hours": 0.359, "improved": true, "time": 1791019716.627192, "web_val": 3.4538}
+{"step": 185000, "train_loss": 3.2753, "val_loss": 3.3467, "best_val": 3.3961, "lr": 0.0001171, "hours": 0.654, "improved": true, "time": 1791020778.8040514, "web_val": 3.4455}
+{"step": 190000, "train_loss": 3.2645, "val_loss": 3.3555, "best_val": 3.3961, "lr": 0.0001106, "hours": 0.947, "improved": false, "time": 1791021832.5251215, "web_val": 3.4381}
+{"step": 195000, "train_loss": 3.2556, "val_loss": 3.3404, "best_val": 3.3859, "lr": 0.0001042, "hours": 1.244, "improved": true, "time": 1791022900.528518, "web_val": 3.4314}
+{"step": 200000, "train_loss": 3.2509, "val_loss": 3.3413, "best_val": 3.3835, "lr": 9.79e-05, "hours": 1.539, "improved": true, "time": 1791023961.7604172, "web_val": 3.4256}
+{"step": 205000, "train_loss": 3.2439, "val_loss": 3.3359, "best_val": 3.378, "lr": 9.19e-05, "hours": 1.833, "improved": true, "time": 1791025022.9646525, "web_val": 3.4202}
+{"step": 210000, "train_loss": 3.2391, "val_loss": 3.3268, "best_val": 3.3705, "lr": 8.6e-05, "hours": 2.131, "improved": true, "time": 1791026093.4437106, "web_val": 3.4142}
+{"step": 215000, "train_loss": 3.2318, "val_loss": 3.3282, "best_val": 3.3689, "lr": 8.04e-05, "hours": 2.428, "improved": true, "time": 1791027163.7075455, "web_val": 3.4097}
+{"step": 220000, "train_loss": 3.2295, "val_loss": 3.3291, "best_val": 3.3671, "lr": 7.49e-05, "hours": 2.723, "improved": true, "time": 1791028224.697229, "web_val": 3.405}
+{"step": 225000, "train_loss": 3.2264, "val_loss": 3.324, "best_val": 3.3624, "lr": 6.98e-05, "hours": 3.018, "improved": true, "time": 1791029286.1592958, "web_val": 3.4009}
+{"step": 230000, "train_loss": 3.2194, "val_loss": 3.3196, "best_val": 3.3581, "lr": 6.49e-05, "hours": 3.314, "improved": true, "time": 1791030353.1045575, "web_val": 3.3967}
+{"step": 235000, "train_loss": 3.2179, "val_loss": 3.3115, "best_val": 3.3521, "lr": 6.03e-05, "hours": 3.61, "improved": true, "time": 1791031419.0407867, "web_val": 3.3928}
+{"step": 240000, "train_loss": 3.2138, "val_loss": 3.3051, "best_val": 3.3476, "lr": 5.6e-05, "hours": 3.904, "improved": true, "time": 1791032478.443914, "web_val": 3.3901}
+{"step": 245000, "train_loss": 3.2111, "val_loss": 3.3165, "best_val": 3.3476, "lr": 5.19e-05, "hours": 4.196, "improved": false, "time": 1791033529.9253693, "web_val": 3.3864}
+{"step": 250000, "train_loss": 3.2068, "val_loss": 3.3068, "best_val": 3.3453, "lr": 4.82e-05, "hours": 4.492, "improved": true, "time": 1791034595.5731351, "web_val": 3.3838}
+{"step": 255000, "train_loss": 3.2038, "val_loss": 3.3053, "best_val": 3.3431, "lr": 4.48e-05, "hours": 4.789, "improved": true, "time": 1791035663.0833921, "web_val": 3.3808}
+{"step": 260000, "train_loss": 3.1987, "val_loss": 3.3052, "best_val": 3.3409, "lr": 4.17e-05, "hours": 5.083, "improved": true, "time": 1791036722.9470112, "web_val": 3.3766}
+{"step": 263733, "val_loss": 3.2979, "start": true, "tag": "NOVA-24M", "time": 1791037540.1644251}
+{"step": 265000, "train_loss": 3.2085, "val_loss": 3.2953, "best_val": 3.3344, "lr": 3.9e-05, "hours": 0.079, "improved": true, "time": 1791037819.3841875, "web_val": 3.3736}
+{"step": 270000, "train_loss": 3.2105, "val_loss": 3.2945, "best_val": 3.3323, "lr": 3.67e-05, "hours": 0.373, "improved": true, "time": 1791038879.5632226, "web_val": 3.3701}
+{"step": 275000, "train_loss": 3.207, "val_loss": 3.2928, "best_val": 3.3306, "lr": 3.46e-05, "hours": 0.668, "improved": true, "time": 1791039938.9367638, "web_val": 3.3685}
+{"step": 280000, "train_loss": 3.2091, "val_loss": 3.2939, "best_val": 3.3306, "lr": 3.3e-05, "hours": 0.96, "improved": false, "time": 1791040990.4905431, "web_val": 3.3672}
+{"step": 285000, "train_loss": 3.2032, "val_loss": 3.2916, "best_val": 3.3285, "lr": 3.17e-05, "hours": 1.255, "improved": true, "time": 1791042053.1519625, "web_val": 3.3655}
+{"step": 290000, "train_loss": 3.2001, "val_loss": 3.2897, "best_val": 3.3267, "lr": 3.07e-05, "hours": 1.552, "improved": true, "time": 1791043121.242327, "web_val": 3.3636}
+{"step": 295000, "train_loss": 3.2009, "val_loss": 3.287, "best_val": 3.325, "lr": 3.02e-05, "hours": 1.848, "improved": true, "time": 1791044188.1796062, "web_val": 3.3629}
+{"step": 300000, "train_loss": 3.198, "val_loss": 3.2877, "best_val": 3.3248, "lr": 3e-05, "hours": 2.142, "improved": true, "time": 1791045247.9973984, "web_val": 3.3619}

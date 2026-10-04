@@ -1,0 +1,218 @@
+{
+ "node": "en",
+ "frozen": false,
+ "messages_sent": 4862,
+ "leader": "py",
+ "base": "evo/collective/runs/scale-base.pt",
+ "personal": "evo/collective/runs/scale-10/en_round3.pt",
+ "dead": [],
+ "history": [
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.8233,
+     "cs": 0.7667,
+     "data": 0.7933,
+     "en": 0.8167,
+     "nova0": 0.8633,
+     "pl": 0.82,
+     "py": 0.8033,
+     "rs": 0.81,
+     "sk": 0.7733,
+     "teach": 0.7967,
+     "web": 0.8033
+    },
+    "ranking": [
+     "nova0",
+     "code",
+     "pl",
+     "en",
+     "rs",
+     "py",
+     "web",
+     "teach",
+     "data",
+     "sk",
+     "cs"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "data",
+     "en",
+     "nova0",
+     "pl",
+     "py",
+     "rs",
+     "sk",
+     "teach",
+     "web"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "web",
+    "scores": {
+     "code": 0.7967,
+     "cs": 0.81,
+     "data": 0.81,
+     "en": 0.7833,
+     "nova0": 0.7667,
+     "pl": 0.8133,
+     "py": 0.81,
+     "rs": 0.8033,
+     "sk": 0.7833,
+     "teach": 0.77,
+     "web": 0.8267
+    },
+    "ranking": [
+     "web",
+     "pl",
+     "cs",
+     "data",
+     "py",
+     "rs",
+     "code",
+     "en",
+     "sk",
+     "teach",
+     "nova0"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "data",
+     "en",
+     "nova0",
+     "pl",
+     "py",
+     "rs",
+     "sk",
+     "teach",
+     "web"
+    ]
+   }
+  },
+  {
+   "round": 2,
+   "election": {
+    "leader": "py",
+    "scores": {
+     "code": 0.8133,
+     "cs": 0.79,
+     "data": 0.7467,
+     "en": 0.7567,
+     "nova0": 0.78,
+     "pl": 0.8233,
+     "py": 0.8333,
+     "rs": 0.7867,
+     "sk": 0.77,
+     "teach": 0.8267,
+     "web": 0.8
+    },
+    "ranking": [
+     "py",
+     "teach",
+     "pl",
+     "code",
+     "web",
+     "cs",
+     "rs",
+     "nova0",
+     "sk",
+     "en",
+     "data"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "data",
+     "en",
+     "nova0",
+     "pl",
+     "py",
+     "rs",
+     "sk",
+     "teach",
+     "web"
+    ]
+   }
+  },
+  {
+   "round": 3,
+   "election": {
+    "leader": "py",
+    "scores": {
+     "code": 0.8033,
+     "cs": 0.8233,
+     "data": 0.7667,
+     "en": 0.7733,
+     "nova0": 0.8267,
+     "pl": 0.8133,
+     "py": 0.8367,
+     "rs": 0.8367,
+     "sk": 0.82,
+     "teach": 0.81,
+     "web": 0.8133
+    },
+    "ranking": [
+     "py",
+     "rs",
+     "nova0",
+     "cs",
+     "sk",
+     "pl",
+     "web",
+     "teach",
+     "code",
+     "en",
+     "data"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "data",
+     "en",
+     "nova0",
+     "pl",
+     "py",
+     "rs",
+     "sk",
+     "teach",
+     "web"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "code": 0.7,
+   "cs": 0.7667,
+   "data": 0.8333,
+   "nova0": 0.8333,
+   "py": 0.9333,
+   "rs": 0.8,
+   "web": 0.8,
+   "sk": 0.9333,
+   "pl": 0.7667,
+   "teach": 0.7
+  },
+  "creator": {
+   "code": true,
+   "cs": true,
+   "data": true,
+   "nova0": true,
+   "pl": true,
+   "py": true,
+   "rs": true,
+   "sk": true,
+   "teach": true,
+   "web": true
+  }
+ },
+ "finished": true
+}

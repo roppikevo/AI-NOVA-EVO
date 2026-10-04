@@ -1,0 +1,56 @@
+{
+  "id": "276b827e-ff9b-4bf7-86fd-78e8eff51a32",
+  "type": "success",
+  "title": "Learning task: Implement a local Rust benchmark suite containing 200 synthetic memory safety scenarios to measure the agent's ability to detect ownership violations.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790615240.6181896,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Integration",
+    "task": "Implement a local Rust benchmark suite containing 200 synthetic memory safety scenarios to measure the agent's ability to detect ownership violations.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-integration-1790615240464",
+    "experiment_id": "a862ccff-b3d9-4e94-9ba6-2dbc16c74ea6",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-integration-1790615240464",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership test passed.\n",
+      "stderr": "",
+      "duration_seconds": 0.1532,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-integration-1790615240464",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-integration-1790615240464",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.15204562000872102,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-integration-1790615240464",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "33bcfcd10af92bed4d33ab2318170610feb713e536e7b80f9068e135591563cb"
+}

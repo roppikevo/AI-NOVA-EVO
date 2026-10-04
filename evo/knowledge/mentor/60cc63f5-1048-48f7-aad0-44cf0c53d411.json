@@ -1,0 +1,22 @@
+{
+  "id": "60cc63f5-1048-48f7-aad0-44cf0c53d411",
+  "type": "mentor",
+  "title": "Teacher lesson: rust / Ownership a borrowing",
+  "status": "EXPERIMENTAL",
+  "confidence": 0.8,
+  "source": "oxcoder_teacher",
+  "created_at": 1790699262.2499354,
+  "parent_id": null,
+  "content": {
+    "goal": "Nauč sa Rust",
+    "topic": "Ownership a borrowing",
+    "domain": "rust",
+    "prompt": "Teach NOVA-EVO the requested topic.\n\nLEARNING GOAL:\nNauč sa Rust\n\nTOPIC:\nOwnership a borrowing\n\nDOMAIN:\nrust",
+    "teacher_response": "PROPOSAL:\n** Outline the structure of the teaching material. It should be a conceptual guide + code examples.\n    *   **\n\nHYPOTHESIS:\n** The material will effectively teach the concept if it emphasizes the three rules of ownership and demonstrates the compiler enforcing them.\n    *   **\n\nRATIONALE:\n** Why this approach? Rust's safety guarantees rely on compile-time checks. Teaching via examples of errors (and how they compile) is crucial.\n    *   **\n\nCHANGES:\n- ** Since this is new training data, \"changes\" refers to the content being added to the knowledge base. I need to describe what content is being generated.\n- *   **\n\nRISKS:\n- ** Misunderstanding lifetimes, confusion between stack and heap, assuming GC exists.\n- *   **\n\nEXPERIMENTS:\n- ** Suggesting exercises for NOVA-EVO to validate understanding (e.g., \"Can you write a function that takes a mutable reference?\").\n- 4.  **Refining the Content (Self-Correction/Constraint Check):**\n- *   *Constraint:* \"Do not invent experimental results.\" -> I must not say \"We tested this and it worked.\" Instead, say \"Suggest experiments to verify.\"\n- *   *Constraint:* \"Teacher is advisory only.\" -> I am providing the material, not executing it.\n- *   *Constraint:* \"Structured response.\" -> Must use the specific headers.\n- *   *Tone:* Technical, precise, engineering level.\n- *   *Language:* The prompt asks to \"Teach NOVA-EVO the requested topic\" with \"LEARNING GOAL: Nauč sa Rust\" (Learn Rust). The context implies the output is for NOVA-EVO. I should write in English (standard for technical docs) unless specified otherwise, but the learning goal is in Serbian/Croatian/Bosnian (\"Nauč sa Rust\"). However, the system instructions are in English. Usually, technical content is in English. I will write the",
+    "model": "OxCoder-9B",
+    "verified": false,
+    "verification_status": "UNVERIFIED",
+    "teacher_elapsed_seconds": 38.03707405101159
+  },
+  "checksum": "71f91c60f4a7ed3d2a816ab350c1d936fdee57005f5e21d301b90f083053e95c"
+}

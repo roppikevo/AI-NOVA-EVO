@@ -1,0 +1,37 @@
+{
+  "id": "e3ad0f2c-fd10-4600-85cb-5eecc961e341",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790622482.9796417,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 8",
+    "task": "Rust program that uses Box<T> to store a vector of integers, asserts that the vector length is correct after pushing elements, then asserts that moving the Box into a function does not leak memory.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1575,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790622482.9796343
+  },
+  "checksum": "c86ee4d4810aa8eda82aceb7d389554095be56e2583bbd0ef5061cddbd1a1b88"
+}

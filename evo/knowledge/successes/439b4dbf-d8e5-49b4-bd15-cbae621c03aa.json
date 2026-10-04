@@ -1,0 +1,68 @@
+{
+  "id": "439b4dbf-d8e5-49b4-bd15-cbae621c03aa",
+  "type": "success",
+  "title": "Learning task: Write a Rust program that creates a vector of 10 owned integers, moves the first element into a new variable, asserts the original vector length is now 9, and prints the moved value.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621939.035247,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 4",
+    "task": "Write a Rust program that creates a vector of 10 owned integers, moves the first element into a new variable, asserts the original vector length is now 9, and prints the moved value.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621938875",
+    "experiment_id": "f94f96ae-c887-4b68-be2a-f08ab5613a70",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "fn main() {\n    let mut vec: Vec<i32> = (0..10).collect();\n    \n    let first = vec.remove(0);\n    \n    assert_eq!(vec.len(), 9);\n    \n    println!(\"Moved value: {}\", first);\n    println!(\"Ownership test passed\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership test passed",
+    "actual_output": "Moved value: 0\nOwnership test passed\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621938875",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Moved value: 0\nOwnership test passed\n",
+      "stderr": "",
+      "duration_seconds": 0.1591,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621938875",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-learning-auton-1790621938875",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.15783534999354742,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-learning-auton-1790621938875",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "1f16a7f90cd9044b49d2ce6e21db35733b38f8cd859c6c59aece5c5774a6d679"
+}

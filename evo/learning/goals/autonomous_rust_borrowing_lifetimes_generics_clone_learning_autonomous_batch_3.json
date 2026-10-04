@@ -1,0 +1,67 @@
+{
+  "goal": "Autonomous Rust Borrowing Lifetimes Generics Clone Learning Autonomous Batch 3",
+  "status": "READY",
+  "current_phase": "LEARN",
+  "completed_tasks": [
+    "Create a Rust program in a single file that defines a struct with a lifetime parameter, assigns references to it, and asserts that the struct can be cloned only if the references are valid at runtime, printing \"PASS\" if assertions succeed.",
+    "Write a Rust program in a single file that uses Box<T> to store a value with a specific lifetime, attempts to move the Box into a function, and asserts that the original variable is no longer accessible, printing \"PASS\" if the move semantics are correctly enforced.",
+    "Develop a Rust program in a single file that implements a simple reference-counted wrapper using Rc<T>, increments the count on clone, and asserts that the count matches the expected value after multiple clones, printing \"PASS\" if the count is correct.",
+    "Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Build a Rust program in a single file that uses Drop to clean up a resource when a function returns, asserts that the resource is properly deallocated by checking a global counter, and prints \"PASS\" if the counter reflects the expected cleanup.",
+  "created": 1790623713.1027613,
+  "updated": 1790623845.3472888,
+  "plan": [
+    "Create a Rust program in a single file that defines a struct with a lifetime parameter, assigns references to it, and asserts that the struct can be cloned only if the references are valid at runtime, printing \"PASS\" if assertions succeed.",
+    "Write a Rust program in a single file that uses Box<T> to store a value with a specific lifetime, attempts to move the Box into a function, and asserts that the original variable is no longer accessible, printing \"PASS\" if the move semantics are correctly enforced.",
+    "Develop a Rust program in a single file that implements a simple reference-counted wrapper using Rc<T>, increments the count on clone, and asserts that the count matches the expected value after multiple clones, printing \"PASS\" if the count is correct.",
+    "Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed.",
+    "Build a Rust program in a single file that uses Drop to clean up a resource when a function returns, asserts that the resource is properly deallocated by checking a global counter, and prints \"PASS\" if the counter reflects the expected cleanup."
+  ],
+  "plan_validation": {
+    "status": "PASSED",
+    "attempt": 2,
+    "errors": []
+  },
+  "last_task": "Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed.",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "content": "struct Data {\n    value: i32,\n}\n\nfn main() {\n    let mut data = Data { value: 10 };\n\n    // Immutable borrow\n    let ref_imm = &data.value;\n    assert_eq!(*ref_imm, 10);\n\n    // Mutable borrow (must happen after immutable borrow ends)\n    {\n        let ref_mut = &mut data.value;\n        *ref_mut = 20;\n    } // Mutable borrow ends here\n\n    // Re-borrow immutably after mutable borrow ends\n    let ref_imm2 = &data.value;\n    assert_eq!(*ref_imm2, 20);\n\n    // Attempting to use the original immutable borrow ref_imm here would cause a compile error,\n    // but since we are in a new scope and ref_imm is no longer valid, we can safely proceed.\n    // The original ref_imm is dropped at the end of its scope.\n\n    println!(\"PASS\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "PASS",
+    "reason": ""
+  },
+  "task_generated_by_mentor": true,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+    "experiment_id": "1ad59509-2dbd-4fb5-a176-8bf3696e3ad7",
+    "knowledge_id": "1f83b6ca-3c59-403c-b732-1c99ced5e6bc",
+    "knowledge_path": "evo/knowledge/successes/1f83b6ca-3c59-403c-b732-1c99ced5e6bc.json",
+    "status": "COMPLETED",
+    "stdout": "PASS\n",
+    "stderr": "",
+    "duration_seconds": 0.146,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+    "compile_success": true,
+    "compile_returncode": 0,
+    "execution_performed": true
+  },
+  "last_meta_experience": {
+    "id": "55a48b2b-d87a-416a-b5db-36a7deb42295",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "success": true
+  }
+}

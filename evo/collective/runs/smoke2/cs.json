@@ -1,0 +1,44 @@
+{
+ "id": "cs",
+ "port": 8113,
+ "peers": {
+  "nova0": "http://127.0.0.1:8111",
+  "sk": "http://127.0.0.1:8112",
+  "cs": "http://127.0.0.1:8113",
+  "pl": "http://127.0.0.1:8114",
+  "en": "http://127.0.0.1:8115",
+  "code": "http://127.0.0.1:8116"
+ },
+ "key": "d2cfa52a74ee569e35708eeaf6707bd3",
+ "run_dir": "evo/collective/runs/smoke2",
+ "weights": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt",
+ "base": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt",
+ "dataset": "data/text_v4",
+ "tokenizer": "data/text_v4/tokenizer.json",
+ "focus": "cs",
+ "frozen": false,
+ "first_leader": "nova0",
+ "rounds": 2,
+ "steps": 30,
+ "core_steps": 30,
+ "seed": 2,
+ "threads": 2,
+ "challenges": 30,
+ "core_candidates": [
+  {
+   "forget_bias": 1.5
+  },
+  {
+   "conv_kernel": 7
+  },
+  {
+   "conv_kernel": 3
+  }
+ ],
+ "core_margin": 0.01,
+ "poll": 3.0,
+ "leader_fails": 4,
+ "exam_timeout": 1800,
+ "round_timeout": 18000,
+ "linger": 900
+}

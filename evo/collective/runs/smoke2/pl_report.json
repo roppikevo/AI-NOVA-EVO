@@ -1,0 +1,94 @@
+{
+ "node": "pl",
+ "frozen": false,
+ "messages_sent": 196,
+ "leader": "code",
+ "base": "evo/collective/runs/smoke2/core_round1.pt",
+ "personal": "evo/collective/runs/smoke2/pl_round1.pt",
+ "dead": [
+  "nova0"
+ ],
+ "history": [
+  {
+   "round": 0,
+   "election": {
+    "leader": "nova0",
+    "scores": {
+     "code": 0.74,
+     "cs": 0.7533,
+     "en": 0.7467,
+     "nova0": 0.84,
+     "pl": 0.74,
+     "sk": 0.7467
+    },
+    "ranking": [
+     "nova0",
+     "cs",
+     "en",
+     "sk",
+     "code",
+     "pl"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "nova0",
+     "pl",
+     "sk"
+    ]
+   }
+  },
+  {
+   "round": 1,
+   "failover": {
+    "lost": "nova0",
+    "new_leader": "cs"
+   }
+  },
+  {
+   "round": 1,
+   "election": {
+    "leader": "code",
+    "scores": {
+     "code": 0.8084,
+     "cs": 0.75,
+     "en": 0.725,
+     "pl": 0.7083,
+     "sk": 0.65
+    },
+    "ranking": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ],
+    "eligible": [
+     "code",
+     "cs",
+     "en",
+     "pl",
+     "sk"
+    ]
+   }
+  }
+ ],
+ "ledger": {
+  "grades": {
+   "nova0": 0.8667,
+   "code": 0.8,
+   "en": 0.7333,
+   "cs": 0.8333,
+   "sk": 0.6667
+  },
+  "creator": {
+   "code": true,
+   "cs": true,
+   "en": true,
+   "nova0": true,
+   "sk": true
+  }
+ },
+ "finished": true
+}

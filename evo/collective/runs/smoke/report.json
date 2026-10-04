@@ -1,0 +1,339 @@
+{
+ "name": "smoke",
+ "base": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt",
+ "date": "2026-10-02 16:31",
+ "steps_per_clone": 30,
+ "nodes": [
+  "sk",
+  "cs",
+  "pl",
+  "en",
+  "code"
+ ],
+ "stages": {
+  "A_training": {
+   "sk": {
+    "steps": 30,
+    "val_start": 3.446,
+    "best_val": 3.4465,
+    "hours": 0.003
+   },
+   "cs": {
+    "steps": 30,
+    "val_start": 3.446,
+    "best_val": 3.4475,
+    "hours": 0.002
+   },
+   "pl": {
+    "steps": 30,
+    "val_start": 3.446,
+    "best_val": 3.4495,
+    "hours": 0.002
+   },
+   "en": {
+    "steps": 30,
+    "val_start": 3.446,
+    "best_val": 3.4461,
+    "hours": 0.002
+   },
+   "code": {
+    "steps": 30,
+    "val_start": 3.446,
+    "best_val": 3.4499,
+    "hours": 0.003
+   },
+   "baseline": {
+    "steps": 150,
+    "val_start": 3.446,
+    "best_val": 3.4629,
+    "hours": 0.007
+   }
+  },
+  "E_code": {
+   "collective_5_nodes_1_try_each": {
+    "solved": 37,
+    "tasks": 79,
+    "by_level": {
+     "1": "32/55",
+     "2": "5/20",
+     "3": "0/4"
+    },
+    "per_node": {
+     "sk": 35,
+     "cs": 34,
+     "pl": 35,
+     "en": 35,
+     "code": 36
+    },
+    "only_one_node": 2
+   },
+   "single_base_1_try": {
+    "solved": 34,
+    "tasks": 79,
+    "by_level": {
+     "1": "30/55",
+     "2": "4/20",
+     "3": "0/4"
+    }
+   },
+   "single_baseline_5_tries": {
+    "solved": 45,
+    "tasks": 79,
+    "by_level": {
+     "1": "39/55",
+     "2": "6/20",
+     "3": "0/4"
+    }
+   }
+  },
+  "C_election": {
+   "leader": "en",
+   "scores": {
+    "sk": 0.6389,
+    "cs": 0.6357,
+    "pl": 0.6608,
+    "en": 0.667,
+    "code": 0.6327
+   },
+   "ranking": [
+    "en",
+    "pl",
+    "sk",
+    "cs",
+    "code"
+   ],
+   "matrix": {
+    "sk": {
+     "sk": 0.75,
+     "cs": 0.75,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "cs": {
+     "sk": 0.75,
+     "cs": 0.7833,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "pl": {
+     "sk": 0.75,
+     "cs": 0.75,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "en": {
+     "sk": 0.75,
+     "cs": 0.7833,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8
+    },
+    "code": {
+     "sk": 0.75,
+     "cs": 0.75,
+     "pl": 0.6333,
+     "en": 0.6333,
+     "code": 0.8167
+    }
+   }
+  },
+  "D_answer": {
+   "base_alone": 3.3018,
+   "baseline_single_same_tokens": 3.3187,
+   "each_node_alone": {
+    "sk": 3.302,
+    "cs": 3.3035,
+    "pl": 3.3049,
+    "en": 3.3014,
+    "code": 3.3054
+   },
+   "collective_equal_votes": 3.3025,
+   "collective_leader_weights": 3.3023,
+   "collective_leader_weights_per_language": 3.3022,
+   "leader_weights": {
+    "sk": 0.215,
+    "cs": 0.206,
+    "pl": 0.18,
+    "en": 0.223,
+    "code": 0.176
+   },
+   "per_language": {
+    "base": {
+     "sk": 3.5671,
+     "cs": 3.9454,
+     "pl": 3.971,
+     "en": 4.0513,
+     "py": 2.604,
+     "rs": 2.5649
+    },
+    "baseline": {
+     "sk": 3.5847,
+     "cs": 3.962,
+     "pl": 3.9771,
+     "en": 4.0638,
+     "py": 2.6247,
+     "rs": 2.5847
+    },
+    "sk": {
+     "sk": 3.5673,
+     "cs": 3.9469,
+     "pl": 3.9727,
+     "en": 4.0499,
+     "py": 2.6057,
+     "rs": 2.5653
+    },
+    "cs": {
+     "sk": 3.5689,
+     "cs": 3.9439,
+     "pl": 3.9731,
+     "en": 4.051,
+     "py": 2.6077,
+     "rs": 2.5682
+    },
+    "pl": {
+     "sk": 3.5682,
+     "cs": 3.947,
+     "pl": 3.9694,
+     "en": 4.0507,
+     "py": 2.6127,
+     "rs": 2.5717
+    },
+    "en": {
+     "sk": 3.5691,
+     "cs": 3.9458,
+     "pl": 3.9733,
+     "en": 4.0509,
+     "py": 2.6029,
+     "rs": 2.5624
+    },
+    "code": {
+     "sk": 3.5686,
+     "cs": 3.9484,
+     "pl": 3.9721,
+     "en": 4.0522,
+     "py": 2.6102,
+     "rs": 2.572
+    }
+   },
+   "specialists_averaged_into_one_model": 3.3027
+  },
+  "F_learning": {
+   "rounds": [
+    {
+     "round": 0,
+     "votes": {
+      "sk": true,
+      "cs": false,
+      "pl": true,
+      "en": false,
+      "code": false
+     },
+     "accepted": false,
+     "loss_before": 3.7294,
+     "loss_after": 3.7303
+    }
+   ],
+   "steps_per_node_per_round": 30,
+   "merged_model": 3.3018,
+   "baseline_single_same_tokens": 3.3187,
+   "per_language": {
+    "sk": 3.5671,
+    "cs": 3.9454,
+    "pl": 3.971,
+    "en": 4.0513,
+    "py": 2.604,
+    "rs": 2.5649
+   },
+   "weights": "evo/releases/NOVA-10M-v1/nova_model_fp32.pt"
+  },
+  "G_reelection": {
+   "leader": "code",
+   "scores": {
+    "sk": 0.7417,
+    "cs": 0.7389,
+    "pl": 0.7611,
+    "en": 0.7556,
+    "code": 0.7611,
+    "merged": 0.7444,
+    "baseline": 0.75
+   },
+   "ranking": [
+    "code",
+    "pl",
+    "en",
+    "baseline",
+    "merged",
+    "sk",
+    "cs"
+   ],
+   "matrix": {
+    "sk": {
+     "sk": 0.7833,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "cs": {
+     "sk": 0.8,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "pl": {
+     "sk": 0.8,
+     "cs": 0.8333,
+     "pl": 0.7,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "en": {
+     "sk": 0.8167,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.75,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "code": {
+     "sk": 0.7833,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "merged": {
+     "sk": 0.8,
+     "cs": 0.8167,
+     "pl": 0.7,
+     "en": 0.7333,
+     "code": 0.6667,
+     "merged": 0.7833,
+     "baseline": 0.75
+    },
+    "baseline": {
+     "sk": 0.7833,
+     "cs": 0.8333,
+     "pl": 0.7,
+     "en": 0.75,
+     "code": 0.6667,
+     "merged": 0.7667,
+     "baseline": 0.75
+    }
+   }
+  }
+ }
+}

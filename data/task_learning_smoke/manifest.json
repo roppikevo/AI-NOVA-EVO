@@ -1,0 +1,17 @@
+{
+  "seq_len": 128,
+  "vocab_size": 16384,
+  "source": "KnowledgeStore / learning_executor",
+  "validated_examples": 9,
+  "samples": {
+    "train": 43,
+    "val": 15,
+    "test": 0
+  },
+  "split_policy": {
+    "train": 0.7,
+    "val": 0.15,
+    "test": 0.15
+  },
+  "final_holdout_used": false
+}

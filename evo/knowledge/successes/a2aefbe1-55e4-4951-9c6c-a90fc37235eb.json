@@ -1,0 +1,46 @@
+{
+  "id": "a2aefbe1-55e4-4951-9c6c-a90fc37235eb",
+  "type": "success",
+  "title": "Learning task: Run a deterministic Python learning exercise.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790620700.1388206,
+  "parent_id": null,
+  "content": {
+    "goal": "executor-selftest",
+    "task": "Run a deterministic Python learning exercise.",
+    "candidate_id": "LEARN-executor-selftest-1790620700128",
+    "experiment_id": "913d106c-fd74-4bb7-8976-c9f1eb70f2f7",
+    "language": "python",
+    "task_type": "python_generated",
+    "filename": "main.py",
+    "source_code": "value = 21 * 2\nassert value == 42\nprint(\"LEARNING_EXECUTOR_OK\")\n",
+    "command": [
+      "python",
+      "main.py"
+    ],
+    "expected_output": "LEARNING_EXECUTOR_OK",
+    "actual_output": "LEARNING_EXECUTOR_OK\n",
+    "result": {
+      "candidate_id": "LEARN-executor-selftest-1790620700128",
+      "command": [
+        "python",
+        "main.py"
+      ],
+      "returncode": 0,
+      "stdout": "LEARNING_EXECUTOR_OK\n",
+      "stderr": "",
+      "duration_seconds": 0.009681966999778524,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-executor-selftest-1790620700128",
+      "metadata": {
+        "timeout_seconds": 1800
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "6505dba0c6a18b893ed96de998c0f9ae182596b1defa32e2782296d28b10d1f6"
+}

@@ -1,0 +1,18 @@
+{
+  "goal": "Autonomous Rust Ownership Synthetic V2",
+  "status": "PLANNED",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": "Generate a synthetic dataset of 50 Rust structs with varying lifetimes and ownership patterns, then write a parser that extracts ownership rules into a JSON schema, asserting that 100% of generated structs are correctly classified as either stack-allocated or heap-allocated.",
+  "created": 1790615478.911837,
+  "updated": 1790615492.3799903,
+  "plan": [
+    "Generate a synthetic dataset of 50 Rust structs with varying lifetimes and ownership patterns, then write a parser that extracts ownership rules into a JSON schema, asserting that 100% of generated structs are correctly classified as either stack-allocated or heap-allocated.",
+    "Implement a local code generator that creates 20 Rust functions with specific borrowing violations (e.g., use after drop, mutable aliasing), then execute a local compiler check to count compilation errors and assert that the error count matches the number of injected violations within a tolerance of 0.",
+    "Create a synthetic benchmark suite of 10 Rust programs where each program intentionally leaks memory or holds a reference too long, then run a local memory profiler to measure peak heap usage and assert that the measured leak size exceeds a defined threshold for each case.",
+    "Synthesize 15 edge-case scenarios involving generic type parameters and trait bounds in Rust, then write a type-checking validator that parses the code and asserts that the inferred variance and covariance match the expected theoretical bounds for each scenario.",
+    "Generate a sequence of 10 Rust modules that progressively introduce complex ownership chains, then execute a local static analyzer to extract a dependency graph and assert that the graph accurately reflects the borrow checker's inferred lifetime constraints without false positives."
+  ]
+}

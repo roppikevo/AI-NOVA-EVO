@@ -1,0 +1,57 @@
+NOVA-EVO GEN 3 LOCKED
+
+Generation: 3
+Status: LOCKED
+
+Parent generation:
+GEN 2 Pareto front
+
+Candidate pool:
+45 unique candidates
+45/45 technical validation passed
+0 duplicate configurations
+
+Screening:
+300 steps
+seed: 1001
+dataset: gen0_unseen2
+test set: NOT USED
+
+Robust validation:
+6 selected candidates
+3 seeds: 1001, 2002, 3003
+1000 steps per seed
+18 total training runs
+dataset: gen0_unseen2
+test set: NOT USED
+
+Pareto front:
+GEN3-007
+GEN3-005
+GEN3-031
+GEN3-024
+
+Pareto objectives:
+val_loss: minimize
+params: minimize
+step_time: minimize
+vram: minimize
+
+Selection rule:
+Pareto dominance only.
+No test-set information was used for candidate selection.
+
+Held-out test:
+NOT USED IN GEN 3 SELECTION
+A NEW CLEAN HELD-OUT DATASET MUST BE CREATED FOR FINAL EVALUATION.
+
+Reference generations:
+GEN 0 LOCKED
+GEN 1 evaluated
+GEN 2 LOCKED
+GEN 3 LOCKED
+
+Next phase:
+Create a brand-new final held-out dataset and evaluate
+the locked candidates without using that dataset for further
+candidate selection.

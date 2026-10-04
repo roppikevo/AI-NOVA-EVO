@@ -1,0 +1,83 @@
+{
+  "name": "text_v2",
+  "created": "2026-09-30 16:27:19",
+  "seq_len": 128,
+  "vocab_size": 16384,
+  "tokenizer": "tokenizer.json (byte-level BPE)",
+  "special_tokens": "0 <pad> 1 <unk> 2 <bos> 3 <eos> 4 <sk> 5 <cs> 6 <pl> 7 <en> 8 <py> 9 <rs>",
+  "document_format": "<lang> text <eos>, packed without padding",
+  "split_rule": "sha256(text) bucket: 90 train / 5 val / 5 test",
+  "sources": {
+    "wiki-sk": {
+      "documents": 1585,
+      "bytes": 10000201,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-cs": {
+      "documents": 962,
+      "bytes": 10016082,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-pl": {
+      "documents": 1196,
+      "bytes": 10002891,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "wiki-en": {
+      "documents": 379,
+      "bytes": 10025753,
+      "license": "CC BY-SA 4.0",
+      "origin": "wikipedia"
+    },
+    "python": {
+      "documents": 658,
+      "bytes": 9951556,
+      "license": "PSF License",
+      "origin": "python-stdlib"
+    },
+    "rust": {
+      "documents": 681,
+      "bytes": 10009128,
+      "license": "MIT OR Apache-2.0",
+      "origin": "rust-src"
+    },
+    "identity": {
+      "documents": 2000,
+      "bytes": 257611,
+      "license": "own (Creator)",
+      "origin": "identity"
+    }
+  },
+  "splits": {
+    "train": {
+      "documents": 6695,
+      "sequences": 120809,
+      "tokens": 15463552,
+      "sha256": "072f99274237d6e1bab43f92e6f92fdf5e1c7c2d970b01868e801cb1504a0bca"
+    },
+    "val": {
+      "documents": 383,
+      "sequences": 7730,
+      "tokens": 989440,
+      "sha256": "8af58166dd1c3f76753e4df9032d412780852d9976aa796b5f1de1472dadef32"
+    },
+    "test": {
+      "documents": 383,
+      "sequences": 7072,
+      "tokens": 905216,
+      "sha256": "3a25f1b040243239501e3f7bb9587ebf214c934811137a9ced14abbc2299e0ab"
+    }
+  },
+  "bytes_per_token": {
+    "wiki-sk": 3.525,
+    "wiki-cs": 3.525,
+    "wiki-pl": 3.381,
+    "wiki-en": 3.505,
+    "python": 3.419,
+    "rust": 3.18,
+    "identity": 4.578
+  }
+}

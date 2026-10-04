@@ -1,0 +1,37 @@
+{
+  "id": "912115a3-c615-4d1c-956e-ce132c7836e1",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790621862.2424643,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 3",
+    "task": "Write a Rust program that creates a struct with a single owned String field, moves the struct into a function, returns the field by value, and asserts that the original struct is dropped immediately after the move.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1606,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790621862.2424586
+  },
+  "checksum": "8e52308da50f4223cd20f04cf97e220d85ed3a858aba899e404d126e9b329fc6"
+}

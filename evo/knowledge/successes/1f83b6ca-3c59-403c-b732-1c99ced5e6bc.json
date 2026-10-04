@@ -1,0 +1,68 @@
+{
+  "id": "1f83b6ca-3c59-403c-b732-1c99ced5e6bc",
+  "type": "success",
+  "title": "Learning task: Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790623845.3467488,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Borrowing Lifetimes Generics Clone Learning Autonomous Batch 3",
+    "task": "Construct a Rust program in a single file that defines a struct with a mutable field, borrows the field immutably, then mutably, and asserts that the mutable borrow does not overlap with the immutable borrow, printing \"PASS\" if the borrows are correctly managed.",
+    "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+    "experiment_id": "1ad59509-2dbd-4fb5-a176-8bf3696e3ad7",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Data {\n    value: i32,\n}\n\nfn main() {\n    let mut data = Data { value: 10 };\n\n    // Immutable borrow\n    let ref_imm = &data.value;\n    assert_eq!(*ref_imm, 10);\n\n    // Mutable borrow (must happen after immutable borrow ends)\n    {\n        let ref_mut = &mut data.value;\n        *ref_mut = 20;\n    } // Mutable borrow ends here\n\n    // Re-borrow immutably after mutable borrow ends\n    let ref_imm2 = &data.value;\n    assert_eq!(*ref_imm2, 20);\n\n    // Attempting to use the original immutable borrow ref_imm here would cause a compile error,\n    // but since we are in a new scope and ref_imm is no longer valid, we can safely proceed.\n    // The original ref_imm is dropped at the end of its scope.\n\n    println!(\"PASS\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "PASS",
+    "actual_output": "PASS\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "PASS\n",
+      "stderr": "",
+      "duration_seconds": 0.146,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.14480070500576403,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-borrowing-lifetimes-gene-1790623845195",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "24be38e10158c66330072670259679964f65e2b3f3f5b4342c70b26a6c902c1b"
+}

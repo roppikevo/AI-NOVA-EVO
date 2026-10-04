@@ -1,0 +1,93 @@
+{
+  "version": "0.1.0",
+  "name": "NOVA-EVO-GEN4-SEARCH-SPACE",
+
+"base_architecture": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "standard",
+    "local_context": "single_depthwise"
+  },
+  "mutation_dimensions": {
+    "d_model": {
+      "enabled": true,
+      "values": [256, 320, 384, 448, 512]
+    },
+
+    "d_state": {
+      "enabled": true,
+      "values": [256, 320, 384, 448, 512, 640, 768]
+    },
+
+    "num_layers": {
+      "enabled": true,
+      "values": [4, 5, 6, 7, 8]
+    },
+
+    "conv_kernel": {
+      "enabled": true,
+      "values": [3, 5, 7, 9, 11]
+    },
+
+    "forget_bias": {
+      "enabled": true,
+      "values": [0.875, 1.0, 1.125, 1.25, 1.375, 1.5]
+    },
+
+    "state_architecture": {
+      "enabled": true,
+      "values": [
+        "equal",
+        "expanded",
+        "compressed"
+      ]
+    },
+
+    "fusion_architecture": {
+      "enabled": true,
+      "values": [
+        "standard",
+        "dual_gate",
+        "separate_state_gate",
+        "separate_conv_gate"
+      ]
+    },
+
+    "local_context": {
+      "enabled": true,
+      "values": [
+        "single_depthwise",
+        "multi_scale"
+      ]
+    }
+  },
+
+  "constraints": {
+    "kernel_must_be_odd": true,
+    "d_model_min": 128,
+    "d_model_max": 768,
+    "d_state_min": 128,
+    "d_state_max": 1024,
+    "layers_min": 3,
+    "layers_max": 12,
+    "preserve_causal_behavior": true,
+    "preserve_residual_path": true,
+    "preserve_state_space_core": true,
+    "preserve_locked_generations": true
+  },
+
+  "generation_policy": {
+    "max_candidates_per_generation": 48,
+    "max_mutations_per_candidate": 3,
+    "allow_random_exploration": true,
+    "allow_mutation_combinations": true,
+    "avoid_duplicate_architectures": true,
+    "preserve_parent_candidate": true
+  }
+}

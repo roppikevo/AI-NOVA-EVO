@@ -1,0 +1,24 @@
+{
+  "candidate": "GEN4-011",
+  "generation": 4,
+  "parent": "GEN3-007",
+  "mutation": "fusion_architecture:standard->dual_gate",
+  "signature": "2126af0ccc57c0d1",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 384,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "state_architecture": "equal",
+    "fusion_architecture": "dual_gate",
+    "local_context": "single_depthwise"
+  },
+  "technical_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "status": "generated"
+}

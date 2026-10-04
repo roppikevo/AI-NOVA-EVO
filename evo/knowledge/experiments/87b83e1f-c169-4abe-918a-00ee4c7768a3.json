@@ -1,0 +1,42 @@
+{
+  "id": "87b83e1f-c169-4abe-918a-00ee4c7768a3",
+  "type": "experiment",
+  "title": "NOVA-EVO generation 4 candidate GEN4-001",
+  "status": "EXPERIMENTAL",
+  "confidence": 0.99,
+  "source": "agent_controller",
+  "created_at": 1790526020.6591954,
+  "parent_id": null,
+  "content": {
+    "candidate_id": "GEN4-001",
+    "generation": 4,
+    "decision": {
+      "action": "RETRY",
+      "reason": "Robust evaluation requires at least three seeds.",
+      "confidence": 0.99,
+      "requires_experiment": false,
+      "mentor_used": false,
+      "metadata": {
+        "candidate": "GEN4-001",
+        "parent": "GEN3-007",
+        "evaluation": {
+          "action": "RETRY",
+          "candidate_id": "GEN4-001",
+          "parent_id": "GEN3-007",
+          "candidate_loss": null,
+          "parent_loss": null,
+          "delta": null,
+          "reason": "Robust evaluation requires at least three seeds.",
+          "confidence": 0.99
+        }
+      }
+    },
+    "validation": {
+      "valid": true,
+      "errors": []
+    },
+    "dry_run": false,
+    "timestamp": 1790526020.6591754
+  },
+  "checksum": "263be14f031853d9cce3dcc2b1c89216a9863465764c8fd2d4c944d34759d0cc"
+}

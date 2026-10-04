@@ -1,0 +1,37 @@
+{
+  "id": "ad304e6e-6fb8-4c1b-9abe-db12de3058c0",
+  "type": "experiment",
+  "title": "Meta-learning experience: rust_programming / standard",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "meta_learning",
+  "created_at": 1790622440.0376241,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Learning Autonomous Batch 8",
+    "task": "Rust program that creates a struct with a single owned String field, moves the field into a function, asserts the original struct is now invalid, then creates a new instance to prove the move was successful.",
+    "task_class": "rust_programming",
+    "core": "standard",
+    "core_config": {
+      "vocab_size": 16384,
+      "d_model": 384,
+      "d_state": 384,
+      "num_layers": 6,
+      "conv_kernel": 5,
+      "forget_bias": 1.125,
+      "learnable_initial_state": false,
+      "state_architecture": "equal",
+      "fusion_architecture": "standard",
+      "local_context": "single_depthwise"
+    },
+    "strategy": "rust_generated",
+    "success": true,
+    "metrics": {
+      "duration_seconds": 0.1605,
+      "exit_code": null
+    },
+    "source": "learning_engine",
+    "timestamp": 1790622440.0376174
+  },
+  "checksum": "9bf9b07e6d0efc16716cb5c3469292dd89b42299f2c70a94f4518d05e9fb3035"
+}

@@ -1,0 +1,68 @@
+{
+  "id": "aa937efe-282b-4938-80c3-60dcb8ab92a6",
+  "type": "success",
+  "title": "Learning task: Create a Rust program using Box<i32> ownership.\nMove a Box containing 42 into a struct, assert that the struct owns 42,\nand print a success marker.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790620778.3502135,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Storage Test",
+    "task": "Create a Rust program using Box<i32> ownership.\nMove a Box containing 42 into a struct, assert that the struct owns 42,\nand print a success marker.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-storage-test-1790620778203",
+    "experiment_id": "eb5edc0e-514e-4203-8d5b-ed5dc8075a83",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "struct Container {\n    value: Box<i32>,\n}\n\nfn main() {\n    let boxed_value = Box::new(42);\n    let container = Container { value: boxed_value };\n    \n    // Assert that the struct owns the Box containing 42\n    assert_eq!(*container.value, 42);\n    \n    // Drop the container to prove ownership transfer worked (no double free)\n    drop(container);\n    \n    println!(\"Ownership verified: 42\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "Ownership verified: 42",
+    "actual_output": "Ownership verified: 42\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-storage-test-1790620778203",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "Ownership verified: 42\n",
+      "stderr": "",
+      "duration_seconds": 0.1456,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-storage-test-1790620778203",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-storage-test-1790620778203",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.1443964460049756,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-storage-test-1790620778203",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "7950408fd14c62e53a23a73d2cbda0904a6c9fe046f713ac08663c22978bc970"
+}

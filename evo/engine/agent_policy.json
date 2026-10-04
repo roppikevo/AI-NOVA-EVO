@@ -1,0 +1,76 @@
+{
+  "agent": "NOVA-EVO-AUTONOMOUS",
+  "version": "1.0.0",
+
+  "mode": "autonomous",
+
+  "permissions": {
+    "create_code": true,
+    "modify_code": true,
+    "create_architectures": true,
+    "run_tests": true,
+    "run_training": true,
+    "run_experiments": true,
+    "repair_failures": true,
+    "store_knowledge": true,
+    "create_new_generations": true,
+    "promote_candidates": true
+  },
+
+  "protected": [
+    "evo/gen0",
+    "evo/gen1/LOCKED",
+    "evo/gen2/LOCKED",
+    "evo/gen3/LOCKED",
+    "evo/final"
+  ],
+
+  "sandbox": "evo/engine/sandbox",
+
+  "limits": {
+    "max_repair_attempts": 5,
+    "max_changed_files": 20,
+    "max_candidate_runtime_seconds": 1800,
+    "max_training_runtime_seconds": 3600,
+    "max_parallel_candidates": 1
+  },
+
+  "validation": {
+    "syntax": true,
+    "imports": true,
+    "model_build": true,
+    "forward": true,
+    "backward": true,
+    "gradient_check": true,
+    "screening": true,
+    "robust_evaluation": true
+  },
+
+  "data_policy": {
+    "final_holdout_allowed": false,
+    "final_holdout_test_allowed": false,
+    "training_selection_data": "dedicated_generation_data"
+  },
+
+  "network": {
+    "allowed": false
+  },
+
+  "knowledge": {
+    "store_successes": true,
+    "store_failures": true,
+    "store_repairs": true,
+    "store_architectures": true,
+    "store_experiments": true,
+    "store_lineage": true
+  },
+
+  "self_improvement": {
+    "generate_new_code": true,
+    "repair_generated_code": true,
+    "learn_from_failures": true,
+    "reuse_successful_patterns": true,
+    "combine_previous_patterns": true,
+    "invent_new_architectures": true
+  }
+}

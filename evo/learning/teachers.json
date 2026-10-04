@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "router": "http://127.0.0.1:8081",
+  "note": "Router keeps one model in memory (--models-max 1). Requesting a different teacher unloads the current one. Teachers are advisory: everything they produce is EXPERIMENTAL until verified.",
+  "teachers": {
+    "Qwen3.8-27B": {
+      "enabled": true,
+      "role": "primary language teacher",
+      "domains": [
+        "language",
+        "reasoning",
+        "code",
+        "mentor"
+      ],
+      "languages": [
+        "sk",
+        "cs",
+        "pl",
+        "en",
+        "py",
+        "rs"
+      ],
+      "priority": 1,
+      "size_gb": 16.8,
+      "speed": "slow",
+      "notes": "Strongest model on the server; partial GPU offload (24 layers), rest in RAM."
+    },
+    "Devstral-Small-2-24B": {
+      "enabled": true,
+      "role": "code teacher",
+      "domains": [
+        "code",
+        "mentor"
+      ],
+      "languages": [
+        "py",
+        "rs",
+        "en"
+      ],
+      "priority": 1,
+      "size_gb": 14.3,
+      "speed": "slow"
+    },
+    "Qwen3-14B": {
+      "enabled": true,
+      "role": "multilingual teacher (mid)",
+      "domains": [
+        "language",
+        "reasoning",
+        "code"
+      ],
+      "languages": [
+        "sk",
+        "cs",
+        "pl",
+        "en",
+        "py",
+        "rs"
+      ],
+      "priority": 2,
+      "size_gb": 9.0,
+      "speed": "medium"
+    },
+    "OxCoder-9B": {
+      "enabled": true,
+      "role": "fast code teacher + fallback core-evolution mentor",
+      "domains": [
+        "code",
+        "mentor"
+      ],
+      "languages": [
+        "py",
+        "rs",
+        "en"
+      ],
+      "priority": 2,
+      "size_gb": 5.6,
+      "speed": "fast"
+    },
+    "Qwen3.5-9B": {
+      "enabled": true,
+      "role": "fast multilingual teacher",
+      "domains": [
+        "language",
+        "code"
+      ],
+      "languages": [
+        "sk",
+        "cs",
+        "pl",
+        "en",
+        "py"
+      ],
+      "priority": 3,
+      "size_gb": 5.6,
+      "speed": "fast"
+    },
+    "Qwen3.6-35B-A3B": {
+      "enabled": true,
+      "role": "multilingual + code teacher (mixture of experts: 35 B parameters, about 3 B active per token)",
+      "domains": [
+        "language",
+        "reasoning",
+        "code"
+      ],
+      "languages": [
+        "sk",
+        "cs",
+        "pl",
+        "en",
+        "py",
+        "rs"
+      ],
+      "priority": 2,
+      "size_gb": 22.1,
+      "speed": "fast",
+      "notes": "Unsloth Q4_K_M, Apache-2.0. Stays off until it passes evo.learning.teacher_check (python -m evo.learning.teacher_check --name Qwen3.6-35B-A3B --enable). Runs on the CPU (n-gpu-layers 0), so it can teach while NOVA trains on the GPU.",
+      "measured": {
+        "passed": true,
+        "ok": 6,
+        "questions": 6,
+        "tok_s": 12.63,
+        "reasoning": true,
+        "date": "2026-10-03 17:09"
+      }
+    },
+    "NaNovel-9B": {
+      "enabled": false,
+      "role": "creative writing (fiction) - disabled until the Creator decides",
+      "domains": [
+        "creative"
+      ],
+      "languages": [
+        "sk",
+        "en"
+      ],
+      "priority": 9,
+      "size_gb": 5.6,
+      "speed": "fast"
+    }
+  },
+  "content_policy": {
+    "content_filter": "none",
+    "decided_by": "Creator",
+    "decided_at": "2026-09-30",
+    "rule": "NOVA is trained without content/topic filtering and must not learn refusals (abliterated-like behaviour). Teacher refusals and moralizing meta-talk are removed from training data. Only quality gates apply (length, language, repetition, code validity).",
+    "note": "Creator authority (STOP / override via AuthorityManager) is system control, not content filtering, and stays in force."
+  },
+  "mentor_order": [
+    "Devstral-Small-2-24B",
+    "Qwen3.8-27B",
+    "OxCoder-9B"
+  ],
+  "mentor_note": "Core-evolution mentor: first model that returns a usable core source wins; slower models get longer timeouts."
+}

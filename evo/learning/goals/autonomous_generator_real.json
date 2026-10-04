@@ -1,0 +1,50 @@
+{
+  "goal": "Autonomous Generator Real",
+  "status": "COMPLETED",
+  "current_phase": "DONE",
+  "completed_tasks": [
+    "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií."
+  ],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790613176.5197623,
+  "updated": 1790613176.5334914,
+  "plan": [
+    "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií."
+  ],
+  "last_task": "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií.",
+  "last_compiled_task": {
+    "success": true,
+    "task": "Analyzuj Python AST a vytvor automatizovaný benchmark troch spôsobov detekcie funkcií.",
+    "language": "python",
+    "task_type": "python_test",
+    "filename": "main.py",
+    "content": "def add(a: int, b: int) -> int:\n    return a + b\n\nassert add(20, 22) == 42\nprint(\"NOVA_PYTHON_TASK_OK\")\n",
+    "command": [
+      "python",
+      "main.py"
+    ],
+    "expected_output": "NOVA_PYTHON_TASK_OK",
+    "reason": ""
+  },
+  "task_generated_by_mentor": false,
+  "last_execution": {
+    "success": true,
+    "candidate_id": "LEARN-autonomous-generator-real-1790613176522",
+    "experiment_id": "3a7ca786-18a4-4b2d-b1de-a1a08942ce1e",
+    "knowledge_id": "1f3d2f26-01d7-4fe2-9098-c1093200f1c5",
+    "knowledge_path": "evo/knowledge/successes/1f3d2f26-01d7-4fe2-9098-c1093200f1c5.json",
+    "status": "COMPLETED",
+    "stdout": "NOVA_PYTHON_TASK_OK\n",
+    "stderr": "",
+    "duration_seconds": 0.009557336001307704,
+    "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-generator-real-1790613176522"
+  },
+  "last_meta_experience": {
+    "id": "60780aeb-a278-4f65-9bf8-fb5cedc914db",
+    "task_class": "python_programming",
+    "core": "standard",
+    "success": true
+  }
+}

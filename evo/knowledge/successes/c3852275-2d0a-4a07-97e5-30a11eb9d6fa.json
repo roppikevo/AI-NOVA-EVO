@@ -1,0 +1,68 @@
+{
+  "id": "c3852275-2d0a-4a07-97e5-30a11eb9d6fa",
+  "type": "success",
+  "title": "Learning task: Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+  "status": "VALIDATED",
+  "confidence": 1.0,
+  "source": "learning_executor",
+  "created_at": 1790621410.00506,
+  "parent_id": null,
+  "content": {
+    "goal": "Autonomous Rust Ownership Corpus Autonomous Batch 1",
+    "task": "Create a Rust program that stores a value in an Arc<Mutex<T>>, spawns a thread that locks the mutex to modify the value, and asserts that the main thread can read the modified value after joining the thread.",
+    "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+    "experiment_id": "89f58482-6d5d-45e4-9286-66785ec98261",
+    "language": "rust",
+    "task_type": "rust_generated",
+    "filename": "main.rs",
+    "source_code": "use std::sync::{Arc, Mutex};\nuse std::thread;\n\nfn main() {\n    let counter = Arc::new(Mutex::new(0));\n    let counter_clone = Arc::clone(&counter);\n\n    let handle = thread::spawn(move || {\n        let mut num = counter_clone.lock().unwrap();\n        *num = 42;\n    });\n\n    handle.join().unwrap();\n\n    let final_value = counter.lock().unwrap();\n    assert_eq!(*final_value, 42);\n\n    println!(\"success\");\n}",
+    "command": [
+      "rustc",
+      "main.rs",
+      "-o",
+      "main"
+    ],
+    "expected_output": "success",
+    "actual_output": "success\n",
+    "result": {
+      "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+      "command": [
+        "./main"
+      ],
+      "returncode": 0,
+      "stdout": "success\n",
+      "stderr": "",
+      "duration_seconds": 0.1953,
+      "status": "success",
+      "timed_out": false,
+      "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+      "metadata": {
+        "timeout_seconds": 1800,
+        "phase": "execution",
+        "compile_result": {
+          "candidate_id": "LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+          "command": [
+            "rustc",
+            "main.rs",
+            "-o",
+            "main"
+          ],
+          "returncode": 0,
+          "stdout": "",
+          "stderr": "",
+          "duration_seconds": 0.19394203800766263,
+          "status": "success",
+          "timed_out": false,
+          "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/LEARN-autonomous-rust-ownership-corpus-autonom-1790621409808",
+          "metadata": {
+            "timeout_seconds": 1800
+          },
+          "success": true
+        }
+      },
+      "success": true
+    },
+    "output_check_passed": true
+  },
+  "checksum": "ead10e83686d03cf2d63cbd52ea2e6a2cc8a03305e7f38f681e0976245ae642e"
+}

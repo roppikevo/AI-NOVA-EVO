@@ -1,0 +1,12 @@
+{
+  "goal": "Slovensky jazyk",
+  "status": "PLAN_ERROR",
+  "current_phase": "PLAN",
+  "completed_tasks": [],
+  "failed_tasks": [],
+  "knowledge": [],
+  "next_task": null,
+  "created": 1790531987.0326574,
+  "updated": 1790532024.6595778,
+  "error": "Mentor nevrátil použiteľné TASK položky."
+}

@@ -1,0 +1,765 @@
+{
+  "batches": [
+    {
+      "time": "2026-10-01 17:15",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 91619,
+          "dropped": 256,
+          "mchars": 220.0,
+          "sequences": 585818,
+          "tokens": 74984704,
+          "file": "sk-000.npy",
+          "chars_per_token": 2.93,
+          "minutes": 5.0
+        },
+        {
+          "source": "cs",
+          "docs": 56888,
+          "dropped": 54,
+          "mchars": 150.0,
+          "sequences": 400331,
+          "tokens": 51242368,
+          "file": "cs-000.npy",
+          "chars_per_token": 2.93,
+          "minutes": 4.5
+        },
+        {
+          "source": "pl",
+          "docs": 47878,
+          "dropped": 98,
+          "mchars": 150.0,
+          "sequences": 390292,
+          "tokens": 49957376,
+          "file": "pl-000.npy",
+          "chars_per_token": 3.0,
+          "minutes": 9.8
+        },
+        {
+          "source": "en",
+          "docs": 58639,
+          "dropped": 27,
+          "mchars": 250.0,
+          "sequences": 549628,
+          "tokens": 70352384,
+          "file": "en-000.npy",
+          "chars_per_token": 3.55,
+          "minutes": 20.3
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 03:56",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 15867,
+          "dropped": 40,
+          "mchars": 40.0,
+          "sequences": 106457,
+          "tokens": 13626496,
+          "file": "sk-001.npy",
+          "chars_per_token": 2.94,
+          "minutes": 0.7
+        },
+        {
+          "source": "cs",
+          "docs": 9576,
+          "dropped": 6,
+          "mchars": 25.0,
+          "sequences": 67009,
+          "tokens": 8577152,
+          "file": "cs-001.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9238,
+          "dropped": 16,
+          "mchars": 25.0,
+          "sequences": 64058,
+          "tokens": 8199424,
+          "file": "pl-001.npy",
+          "chars_per_token": 3.05,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 9231,
+          "dropped": 1,
+          "mchars": 40.0,
+          "sequences": 87710,
+          "tokens": 11226880,
+          "file": "en-001.npy",
+          "chars_per_token": 3.56,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 04:23",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 14251,
+          "dropped": 42,
+          "mchars": 40.0,
+          "sequences": 106670,
+          "tokens": 13653760,
+          "file": "sk-002.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.7
+        },
+        {
+          "source": "cs",
+          "docs": 9399,
+          "dropped": 4,
+          "mchars": 25.0,
+          "sequences": 67051,
+          "tokens": 8582528,
+          "file": "cs-002.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9502,
+          "dropped": 11,
+          "mchars": 25.0,
+          "sequences": 64391,
+          "tokens": 8242048,
+          "file": "pl-002.npy",
+          "chars_per_token": 3.03,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 9436,
+          "dropped": 4,
+          "mchars": 40.0,
+          "sequences": 88163,
+          "tokens": 11284864,
+          "file": "en-002.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.7
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 04:49",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 15249,
+          "dropped": 56,
+          "mchars": 40.0,
+          "sequences": 106566,
+          "tokens": 13640448,
+          "file": "sk-003.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 9788,
+          "dropped": 6,
+          "mchars": 25.0,
+          "sequences": 67082,
+          "tokens": 8586496,
+          "file": "cs-003.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9610,
+          "dropped": 16,
+          "mchars": 25.0,
+          "sequences": 64361,
+          "tokens": 8238208,
+          "file": "pl-003.npy",
+          "chars_per_token": 3.04,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 9709,
+          "dropped": 8,
+          "mchars": 40.0,
+          "sequences": 87822,
+          "tokens": 11241216,
+          "file": "en-003.npy",
+          "chars_per_token": 3.56,
+          "minutes": 0.5
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 05:16",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 17546,
+          "dropped": 52,
+          "mchars": 40.0,
+          "sequences": 105858,
+          "tokens": 13549824,
+          "file": "sk-004.npy",
+          "chars_per_token": 2.95,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 10147,
+          "dropped": 9,
+          "mchars": 25.0,
+          "sequences": 67118,
+          "tokens": 8591104,
+          "file": "cs-004.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9545,
+          "dropped": 13,
+          "mchars": 25.0,
+          "sequences": 64451,
+          "tokens": 8249728,
+          "file": "pl-004.npy",
+          "chars_per_token": 3.03,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 9160,
+          "dropped": 5,
+          "mchars": 40.0,
+          "sequences": 87968,
+          "tokens": 11259904,
+          "file": "en-004.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 05:42",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 16397,
+          "dropped": 50,
+          "mchars": 40.0,
+          "sequences": 106692,
+          "tokens": 13656576,
+          "file": "sk-005.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 10300,
+          "dropped": 9,
+          "mchars": 25.0,
+          "sequences": 67031,
+          "tokens": 8579968,
+          "file": "cs-005.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9688,
+          "dropped": 9,
+          "mchars": 25.0,
+          "sequences": 64145,
+          "tokens": 8210560,
+          "file": "pl-005.npy",
+          "chars_per_token": 3.05,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 10099,
+          "dropped": 5,
+          "mchars": 40.0,
+          "sequences": 88094,
+          "tokens": 11276032,
+          "file": "en-005.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 06:09",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 16086,
+          "dropped": 34,
+          "mchars": 40.0,
+          "sequences": 106876,
+          "tokens": 13680128,
+          "file": "sk-006.npy",
+          "chars_per_token": 2.92,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 10350,
+          "dropped": 10,
+          "mchars": 25.0,
+          "sequences": 67055,
+          "tokens": 8583040,
+          "file": "cs-006.npy",
+          "chars_per_token": 2.91,
+          "minutes": 0.4
+        },
+        {
+          "source": "pl",
+          "docs": 9779,
+          "dropped": 19,
+          "mchars": 25.0,
+          "sequences": 64208,
+          "tokens": 8218624,
+          "file": "pl-006.npy",
+          "chars_per_token": 3.04,
+          "minutes": 0.4
+        },
+        {
+          "source": "en",
+          "docs": 8848,
+          "dropped": 6,
+          "mchars": 40.0,
+          "sequences": 87678,
+          "tokens": 11222784,
+          "file": "en-006.npy",
+          "chars_per_token": 3.57,
+          "minutes": 0.5
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 07:07",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 17060,
+          "dropped": 43,
+          "mchars": 40.0,
+          "sequences": 106500,
+          "tokens": 13632000,
+          "file": "sk-007.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.7
+        },
+        {
+          "source": "cs",
+          "docs": 10291,
+          "dropped": 10,
+          "mchars": 25.0,
+          "sequences": 66970,
+          "tokens": 8572160,
+          "file": "cs-007.npy",
+          "chars_per_token": 2.92,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9819,
+          "dropped": 9,
+          "mchars": 25.0,
+          "sequences": 64231,
+          "tokens": 8221568,
+          "file": "pl-007.npy",
+          "chars_per_token": 3.04,
+          "minutes": 0.4
+        },
+        {
+          "source": "en",
+          "docs": 10071,
+          "dropped": 9,
+          "mchars": 40.0,
+          "sequences": 88146,
+          "tokens": 11282688,
+          "file": "en-007.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 08:51",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 16206,
+          "dropped": 48,
+          "mchars": 40.0,
+          "sequences": 106941,
+          "tokens": 13688448,
+          "file": "sk-008.npy",
+          "chars_per_token": 2.92,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 9996,
+          "dropped": 16,
+          "mchars": 25.0,
+          "sequences": 66864,
+          "tokens": 8558592,
+          "file": "cs-008.npy",
+          "chars_per_token": 2.92,
+          "minutes": 0.5
+        },
+        {
+          "source": "pl",
+          "docs": 9671,
+          "dropped": 15,
+          "mchars": 25.0,
+          "sequences": 64038,
+          "tokens": 8196864,
+          "file": "pl-008.npy",
+          "chars_per_token": 3.05,
+          "minutes": 0.5
+        },
+        {
+          "source": "en",
+          "docs": 9409,
+          "dropped": 12,
+          "mchars": 40.0,
+          "sequences": 87611,
+          "tokens": 11214208,
+          "file": "en-008.npy",
+          "chars_per_token": 3.57,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 09:18",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 13664,
+          "dropped": 47,
+          "mchars": 40.0,
+          "sequences": 106773,
+          "tokens": 13666944,
+          "file": "sk-009.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.6
+        },
+        {
+          "source": "cs",
+          "docs": 10057,
+          "dropped": 9,
+          "mchars": 25.0,
+          "sequences": 66687,
+          "tokens": 8535936,
+          "file": "cs-009.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.4
+        },
+        {
+          "source": "pl",
+          "docs": 9700,
+          "dropped": 11,
+          "mchars": 25.0,
+          "sequences": 63955,
+          "tokens": 8186240,
+          "file": "pl-009.npy",
+          "chars_per_token": 3.05,
+          "minutes": 0.4
+        },
+        {
+          "source": "en",
+          "docs": 9279,
+          "dropped": 7,
+          "mchars": 40.0,
+          "sequences": 88025,
+          "tokens": 11267200,
+          "file": "en-009.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 14:11",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 15097,
+          "dropped": 49,
+          "mchars": 40.0,
+          "sequences": 106537,
+          "tokens": 13636736,
+          "file": "sk-010.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.7
+        },
+        {
+          "source": "cs",
+          "docs": 9913,
+          "dropped": 12,
+          "mchars": 25.0,
+          "sequences": 66733,
+          "tokens": 8541824,
+          "file": "cs-010.npy",
+          "chars_per_token": 2.93,
+          "minutes": 0.4
+        },
+        {
+          "source": "pl",
+          "docs": 9709,
+          "dropped": 13,
+          "mchars": 25.0,
+          "sequences": 63621,
+          "tokens": 8143488,
+          "file": "pl-010.npy",
+          "chars_per_token": 3.07,
+          "minutes": 0.4
+        },
+        {
+          "source": "en",
+          "docs": 9840,
+          "dropped": 12,
+          "mchars": 40.0,
+          "sequences": 87944,
+          "tokens": 11256832,
+          "file": "en-010.npy",
+          "chars_per_token": 3.55,
+          "minutes": 0.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-02 22:46",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 120528,
+          "dropped": 321,
+          "mchars": 300.0,
+          "sequences": 799593,
+          "tokens": 102347904,
+          "file": "sk-011.npy",
+          "chars_per_token": 2.93,
+          "minutes": 3.6
+        },
+        {
+          "source": "cs",
+          "docs": 73075,
+          "dropped": 99,
+          "mchars": 200.0,
+          "sequences": 538221,
+          "tokens": 68892288,
+          "file": "cs-011.npy",
+          "chars_per_token": 2.9,
+          "minutes": 2.6
+        },
+        {
+          "source": "pl",
+          "docs": 75619,
+          "dropped": 94,
+          "mchars": 200.0,
+          "sequences": 508540,
+          "tokens": 65093120,
+          "file": "pl-011.npy",
+          "chars_per_token": 3.07,
+          "minutes": 2.4
+        },
+        {
+          "source": "en",
+          "docs": 71428,
+          "dropped": 64,
+          "mchars": 300.0,
+          "sequences": 659129,
+          "tokens": 84368512,
+          "file": "en-011.npy",
+          "chars_per_token": 3.56,
+          "minutes": 3.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-03 04:04",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 121097,
+          "dropped": 362,
+          "mchars": 300.0,
+          "sequences": 799824,
+          "tokens": 102377472,
+          "file": "sk-012.npy",
+          "chars_per_token": 2.93,
+          "minutes": 3.6
+        },
+        {
+          "source": "cs",
+          "docs": 77348,
+          "dropped": 91,
+          "mchars": 200.0,
+          "sequences": 535405,
+          "tokens": 68531840,
+          "file": "cs-012.npy",
+          "chars_per_token": 2.92,
+          "minutes": 2.5
+        },
+        {
+          "source": "pl",
+          "docs": 74105,
+          "dropped": 112,
+          "mchars": 200.0,
+          "sequences": 507421,
+          "tokens": 64949888,
+          "file": "pl-012.npy",
+          "chars_per_token": 3.08,
+          "minutes": 2.4
+        },
+        {
+          "source": "en",
+          "docs": 71865,
+          "dropped": 74,
+          "mchars": 300.0,
+          "sequences": 659535,
+          "tokens": 84420480,
+          "file": "en-012.npy",
+          "chars_per_token": 3.55,
+          "minutes": 3.6
+        }
+      ]
+    },
+    {
+      "time": "2026-10-03 09:18",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 121149,
+          "dropped": 370,
+          "mchars": 300.0,
+          "sequences": 800219,
+          "tokens": 102428032,
+          "file": "sk-012.npy",
+          "chars_per_token": 2.93,
+          "minutes": 3.9
+        },
+        {
+          "source": "cs",
+          "docs": 75859,
+          "dropped": 78,
+          "mchars": 200.0,
+          "sequences": 534216,
+          "tokens": 68379648,
+          "file": "cs-012.npy",
+          "chars_per_token": 2.92,
+          "minutes": 2.7
+        },
+        {
+          "source": "pl",
+          "docs": 71505,
+          "dropped": 102,
+          "mchars": 200.0,
+          "sequences": 506877,
+          "tokens": 64880256,
+          "file": "pl-012.npy",
+          "chars_per_token": 3.08,
+          "minutes": 2.5
+        },
+        {
+          "source": "en",
+          "docs": 70400,
+          "dropped": 194,
+          "mchars": 300.0,
+          "sequences": 659693,
+          "tokens": 84440704,
+          "file": "en-012.npy",
+          "chars_per_token": 3.55,
+          "minutes": 3.7
+        }
+      ]
+    },
+    {
+      "time": "2026-10-03 14:47",
+      "reports": [
+        {
+          "source": "sk",
+          "docs": 120428,
+          "dropped": 352,
+          "mchars": 300.0,
+          "sequences": 800461,
+          "tokens": 102459008,
+          "file": "sk-013.npy",
+          "chars_per_token": 2.93,
+          "minutes": 13.3
+        },
+        {
+          "source": "cs",
+          "docs": 81141,
+          "dropped": 109,
+          "mchars": 200.0,
+          "sequences": 536093,
+          "tokens": 68619904,
+          "file": "cs-013.npy",
+          "chars_per_token": 2.91,
+          "minutes": 2.6
+        },
+        {
+          "source": "pl",
+          "docs": 73365,
+          "dropped": 102,
+          "mchars": 200.0,
+          "sequences": 505728,
+          "tokens": 64733184,
+          "file": "pl-013.npy",
+          "chars_per_token": 3.09,
+          "minutes": 2.5
+        },
+        {
+          "source": "en",
+          "docs": 70323,
+          "dropped": 207,
+          "mchars": 300.0,
+          "sequences": 660203,
+          "tokens": 84505984,
+          "file": "en-013.npy",
+          "chars_per_token": 3.55,
+          "minutes": 3.6
+        }
+      ]
+    }
+  ],
+  "tokenizer_dataset": "data/text_v4",
+  "seq_len": 128,
+  "sources": {
+    "sk": {
+      "repo": "HuggingFaceFW/fineweb-2",
+      "files": "data/slk_Latn/train/*.parquet",
+      "license": "ODC-By 1.0 (FineWeb-2, Common Crawl ToU)"
+    },
+    "cs": {
+      "repo": "HuggingFaceFW/fineweb-2",
+      "files": "data/ces_Latn/train/*.parquet",
+      "license": "ODC-By 1.0 (FineWeb-2, Common Crawl ToU)"
+    },
+    "pl": {
+      "repo": "HuggingFaceFW/fineweb-2",
+      "files": "data/pol_Latn/train/*.parquet",
+      "license": "ODC-By 1.0 (FineWeb-2, Common Crawl ToU)"
+    },
+    "en": {
+      "repo": "HuggingFaceFW/fineweb-edu",
+      "files": "sample/10BT/*.parquet",
+      "license": "ODC-By 1.0 (FineWeb-Edu, Common Crawl ToU)"
+    }
+  },
+  "filters": "200-20000 chars, letters>=60%, unique lines>=70%, language_score>=0.7 (FineWeb-2), edu int_score>=3 (FineWeb-Edu), near-dup fingerprint",
+  "disk_gb": 6.5
+}

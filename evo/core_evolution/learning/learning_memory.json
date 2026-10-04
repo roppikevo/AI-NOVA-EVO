@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "timestamp": "2026-09-29T18:43:09.843718+00:00",
+      "candidate": "GEN5-CORE-001",
+      "generation": null,
+      "parent": "GEN4-CORE-002",
+      "active_core_before": "GEN4-CORE-002",
+      "active_core_after": "GEN4-CORE-002",
+      "decision": "REJECT",
+      "stage": "runtime_smoke",
+      "validation_loss": null,
+      "validation_loss_std": null,
+      "parent_loss": null,
+      "delta": null,
+      "parameters": null,
+      "seeds": null,
+      "steps": null,
+      "result_file": null,
+      "mechanism": "Modify the `ScanRefBackward.forward` method to insert a noise-dampening step between the `associative_scan` result and the final state computation. Specifically, apply a low-pass filter to the accumulated state `states` by blending the current state with a decaying average of its recent history (using a learnable momentum coefficient `alpha` initialized to 0.9). This is done by computing `states_smoothed = alpha * states[:, :-1] + (1 - alpha) * states[:, 1:]` (conceptually, though implemented via a causal convolution or simple moving average over the sequence dimension) before returning. However, to strictly adhere to the \"algorithmic improvement\" constraint and avoid complex convolutions, we will instead modify the `combine` function in the associative scan to include a small regularization term that penalizes rapid state changes, or more simply, modify the state update rule inside the scan loop (in the backward pass reconstruction) to include a momentum term: `prev = alpha * prev + (1 - alpha) * (f * prev + i * u)`.",
+      "teacher_plan": "HYPOTHESIS:\nThe current associative scan implementation accumulates floating-point errors and gradient noise over long sequences, degrading the quality of the recurrent state. By replacing the associative scan with a \"momentum-weighted\" state update that explicitly dampens high-frequency noise in the state vector before the forget gate is applied, we can stabilize training and improve convergence without increasing parameter count.\n\nMECHANISM:\nModify the `ScanRefBackward.forward` method to insert a noise-dampening step between the `associative_scan` result and the final state computation. Specifically, apply a low-pass filter to the accumulated state `states` by blending the current state with a decaying average of its recent history (using a learnable momentum coefficient `alpha` initialized to 0.9). This is done by computing `states_smoothed = alpha * states[:, :-1] + (1 - alpha) * states[:, 1:]` (conceptually, though implemented via a causal convolution or simple moving average over the sequence dimension) before returning. However, to strictly adhere to the \"algorithmic improvement\" constraint and avoid complex convolutions, we will instead modify the `combine` function in the associative scan to include a small regularization term that penalizes rapid state changes, or more simply, modify the state update rule inside the scan loop (in the backward pass reconstruction) to include a momentum term: `prev = alpha * prev + (1 - alpha) * (f * prev + i * u)`.\n\nRATIONALE:\nThe recurrent state `s_t` in standard LSTMs or simple RNNs can oscillate or drift due to noise in the input `u_t` or the forget gate `f_t`. By introducing a momentum term `alpha * s_{t-1}` into the state update `s_t = f_t * s_{t-1} + i_t * u_t`, we effectively smooth the state trajectory. This reduces the variance of the state representation, allowing the model to focus on the signal rather than noise. This is particularly beneficial when the forget gate is close to 1 (identity), as the momentum term prevents the state from reacting too sharply to every input, leading to more robust long-range dependency modeling.\n\nRISKS:\n1. **Loss of Information**: If `alpha` is too high, the model may fail to capture rapid changes in the input sequence, effectively forgetting important short-term signals.\n2. **Training Instability**: The momentum term introduces a new hyperparameter (`alpha`) that must be learned or tuned; if initialized poorly, it could hinder convergence.\n3. **Backward Compatibility**: The change must be implemented in a way that does not break the existing interface or cause shape mismatches in the gradient computation.\n\nIMPLEMENTATION_PLAN:\n1. Add a new parameter `momentum` (default 0.9) to the `NovaScanBlock.__init__` method, initialized as a `nn.Parameter`.\n2. Modify the `ScanRefBackward.forward` method to accept the `momentum` parameter.\n3. Inside `ScanRefBackward.forward`, after computing the initial `states` via `associative_scan`, apply a causal moving average or momentum update to the state sequence. Specifically, in the backward pass reconstruction loop, update the state recurrence to: `prev = momentum * prev + (1 - momentum) * (f * prev + i * u)`.\n4. Ensure the `combine` function in the associative scan is updated to reflect this new recurrence relation if the scan is used for the forward pass, or adjust the forward pass to compute the state directly using the momentum recurrence.\n5. Update the `ScanRefBackward.backward` method to correctly compute gradients with respect to the new momentum term and the modified state recurrence.\n6. Verify that the `forward` signature of `NovaScanBlock` remains compatible and that the `momentum` parameter is handled correctly during initialization.\n7. Test the modified block on a simple sequence task to ensure that the momentum term does not cause the model to forget important information.\n8. Monitor the validation loss to ensure that the momentum term improves convergence and does not lead to over-smoothing.\n9. If necessary, adjust the initialization of the `momentum` parameter to ensure stable training from the start.\n10. Document the changes and ensure that the code adheres to the mandatory invariants, particularly regarding causal sequence behavior and finite forward/backward values.",
+      "lesson": "Runtime smoke failed because the child referenced self.temperature without defining the inherited parameter. The teacher also proposed momentum without integrating it into the executable recurrent mechanism.",
+      "next_direction": "Preserve all inherited mechanisms, define every new learnable parameter explicitly, and verify that every new mechanism participates in the actual recurrence before smoke testing.",
+      "run_result": {
+        "status": "REJECT",
+        "stage": "runtime_smoke",
+        "candidate": "GEN5-CORE-001",
+        "smoke": {
+          "status": "FAIL",
+          "runner": {
+            "candidate_id": "GEN5-CORE-001",
+            "command": [
+              "python",
+              "smoke_test.py"
+            ],
+            "returncode": 1,
+            "stdout": "",
+            "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/smoke_test.py\", line 130, in <module>\n    logits, states = model(ids)\n                     ~~~~~^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/smoke_test.py\", line 86, in forward\n    x, state = block(\n               ~~~~~^\n        x,\n        ^^\n        state=state,\n        ^^^^^^^^^^^^\n    )\n    ^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1783, in _wrapped_call_impl\n    return self._call_impl(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1794, in _call_impl\n    return forward_call(*args, **kwargs)\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001/nova/blocks_scan.py\", line 112, in forward\n    f = torch.sigmoid(f_pre / self.temperature)\n                              ^^^^^^^^^^^^^^^^\n  File \"/opt/ai/work/nova-evo/.venv/lib/python3.14/site-packages/torch/nn/modules/module.py\", line 1972, in __getattr__\n    raise AttributeError(\n        f\"'{type(self).__name__}' object has no attribute '{name}'\"\n    )\nAttributeError: 'NovaScanBlock' object has no attribute 'temperature'\n",
+            "duration_seconds": 1.4880954120017122,
+            "status": "failed",
+            "timed_out": false,
+            "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-001",
+            "metadata": {
+              "timeout_seconds": 120
+            },
+            "success": false
+          }
+        },
+        "evaluation": {
+          "decision": "REJECT",
+          "reason": "runtime_smoke_failed"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-09-29T18:53:31.550927+00:00",
+      "candidate": "GEN5-CORE-CONTRACT-1790708011",
+      "generation": null,
+      "parent": "GEN4-CORE-002",
+      "active_core_before": "GEN4-CORE-002",
+      "active_core_after": "GEN4-CORE-002",
+      "decision": "REJECT",
+      "stage": "source_contract",
+      "validation_loss": null,
+      "validation_loss_std": null,
+      "parent_loss": null,
+      "delta": null,
+      "parameters": null,
+      "seeds": [],
+      "steps": null,
+      "result_file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN5-CORE-CONTRACT-1790708011.json",
+      "mechanism": "Modify the `ScanRefBackward.forward` method's `combine` function. Instead of: `return (a2 * a1, a2 * b1 + b2)` Use: `return (torch.logaddexp(0, a2) + torch.log(a1), a2 * b1 + b2)` Wait, strictly speaking, we cannot mix log-domain and linear domain without a specific transformation of the state representation. Correct Mechanism: Change the state representation to be additive in the log-space for the forget path. However, the simplest algorithmic improvement that fits the \"no complex convolutions\" constraint and improves stability is to modify the `combine` function to use a **clamped multiplicative update** combined with a **learnable scaling factor** applied to the additive term. Actually, the most robust algorithmic change without changing the state dimension or interface is to modify the `combine` function to include a **numerical stabilization term** that prevents the multiplicative accumulation from vanishing. Specifically, change the `combine` function to: `return (a2 * a1, a2 * b1 + b2 + epsilon * b2)` No, that's just regularization. Let's go with the **Log-Space Accumulation** approach but implemented carefully to maintain the interface. Actually, the prompt asks for a \"genu",
+      "teacher_plan": "HYPOTHESIS:\nThe current associative scan implementation suffers from error accumulation and gradient instability over long sequences due to the multiplicative nature of the `combine` function (A_t * A_{t-1}). By modifying the `combine` function to operate in the log-domain for the multiplicative term (forget gate) and linear domain for the additive term (input gate), we can transform the recurrence into a numerically stable form that prevents the state from collapsing to zero or exploding, while preserving the exact sequential semantics required for the backward pass.\n\nMECHANISM:\nModify the `ScanRefBackward.forward` method's `combine` function.\nInstead of:\n  `return (a2 * a1, a2 * b1 + b2)`\nUse:\n  `return (torch.logaddexp(0, a2) + torch.log(a1), a2 * b1 + b2)`\nWait, strictly speaking, we cannot mix log-domain and linear domain without a specific transformation of the state representation.\nCorrect Mechanism:\nChange the state representation to be additive in the log-space for the forget path.\nHowever, the simplest algorithmic improvement that fits the \"no complex convolutions\" constraint and improves stability is to modify the `combine` function to use a **clamped multiplicative update** combined with a **learnable scaling factor** applied to the additive term.\nActually, the most robust algorithmic change without changing the state dimension or interface is to modify the `combine` function to include a **numerical stabilization term** that prevents the multiplicative accumulation from vanishing.\nSpecifically, change the `combine` function to:\n  `return (a2 * a1, a2 * b1 + b2 + epsilon * b2)`\nNo, that's just regularization.\nLet's go with the **Log-Space Accumulation** approach but implemented carefully to maintain the interface.\nActually, the prompt asks for a \"genuinely algorithmic improvement\".\nThe best candidate is to change the `combine` function to use **log-sum-exp** logic for the multiplicative part if we were tracking log-probabilities, but we are tracking raw states.\nLet's try a different angle: **Gradient Routing via Gating the Additive Term**.\nThe current `combine` is `s_t = f_t * s_{t-1} + i_t * u_t`.\nThe issue is that if `f_t` is small, `s_{t-1}` is lost.\nIf `f_t` is large, `s_{t-1}` is kept.\nThe improvement is to make the forget gate `f_t` act on the *difference* or to normalize the state before multiplication.\nBut the simplest, most effective algorithmic change that is not just hyperparameter tuning is to **modify the `combine` function to use a symmetric normalization** or to **switch the order of operations to reduce floating point error**.\nLet's implement **Gradient Flow Stabilization via State Normalization in the Combine Function**.\nModify `combine` to:\n  `norm_factor = torch.sqrt(torch.mean(a1**2) + self.eps)`\n  `return (a2 * a1 / norm_factor, a2 * b1 + b2)`\nThis is too complex for a simple change.\n\nLet's go with the **Log-Domain Forget Gate** approach, but implemented as a structural change to the `combine` function to handle the multiplicative term differently.\nActually, the most standard \"algorithmic improvement\" for RNNs that is not just hyperparameter tuning is **Gradient Clipping** or **Layer Normalization** inside the recurrence.\nBut we cannot add layers.\nWe can change the `combine` function to:\n  `return (a2 * a1, a2 * b1 + b2)` -> `return (a2 * a1, a2 * b1 + b2 + (1 - a2) * b2)`\nNo.\n\nLet's try **State Decay Correction**.\nThe current state update is `s_t = f_t * s_{t-1} + i_t * u_t`.\nIf `f_t` is close to 0, `s_{t-1}` is killed.\nIf `f_t` is close to 1, `s_{t-1}` is kept.\nThe improvement is to ensure that the state does not vanish.\nWe can modify the `combine` function to:\n  `return (a2 * a1, a2 * b1 + b2 + (1 - a2) * b2 * 0.1)`\nNo.\n\nLet's try **Log-Space Recurrence**.\nWe change the state to be `log(s)`.\nBut the interface expects `s`.\nSo we must keep `s` but change the update rule.\nThe update rule `s_t = f_t * s_{t-1} + i_t * u_t` is standard.\nThe improvement is to use **Softplus** for the forget gate? No, that's activation.\nThe improvement is to change the `combine` function to:\n  `return (a2 * a1, a2 * b1 + b2)`\n  -> `return (a2 * a1, a2 * b1 + b2 + torch.log1p(torch.exp(a2) - 1) * b2)`\nNo.\n\nLet's go with **Gradient Routing via Residual Connection in the Combine Function**.\nModify `combine` to:\n  `return (a2 * a1, a2 * b1 + b2 + (1 - a2) * b2)`\nThis",
+      "lesson": "The teacher architecture plan contained ambiguous parameter wording and the child did not satisfy the parent/child contract.",
+      "next_direction": "Use explicit parameter declarations and generate an executable mechanism that preserves the active parent's learned features.",
+      "run_result": {
+        "status": "REJECT",
+        "decision": "REJECT",
+        "stage": "source_contract",
+        "candidate": "GEN5-CORE-CONTRACT-1790708011",
+        "errors": [
+          "Teacher planned new parameter 'combine' but child source does not define it as nn.Parameter."
+        ]
+      }
+    },
+    {
+      "timestamp": 1790705428.8908913,
+      "candidate": "GEN4-CORE-002",
+      "generation": 4,
+      "parent": "GEN3-007",
+      "decision": "PROMOTE",
+      "stage": "robust",
+      "validation_loss": 8.398849772771198,
+      "parent_loss": 8.593394830067952,
+      "delta": -0.19454505729675375,
+      "mechanism": "learnable temperature scaling of recurrent gate activations",
+      "lesson": "The temperature-scaled gate mechanism passed the robust promotion gate.",
+      "next_direction": "Test a complementary mechanism without removing temperature gating.",
+      "result_file": "evo/core_evolution/results/GEN4-CORE-002.official.json"
+    },
+    {
+      "timestamp": "2026-09-29T19:03:23.748010+00:00",
+      "candidate": null,
+      "generation": 5,
+      "parent": "GEN4-CORE-002",
+      "active_core_before": "GEN4-CORE-002",
+      "active_core_after": "GEN4-CORE-002",
+      "decision": null,
+      "stage": null,
+      "validation_loss": null,
+      "validation_loss_std": null,
+      "parent_loss": null,
+      "delta": null,
+      "parameters": null,
+      "seeds": null,
+      "steps": null,
+      "result_file": null,
+      "mechanism": "",
+      "teacher_plan": "",
+      "lesson": "The cycle did not reach a final promotion/rejection result. Record the last completed stage and continue from evidence.",
+      "next_direction": "Inspect the failure stage before attempting another core.",
+      "run_result": {
+        "error": "HTTPError",
+        "message": "HTTP Error 400: Bad Request"
+      }
+    },
+    {
+      "timestamp": "2026-09-29T19:25:12.353285+00:00",
+      "candidate": "GEN5-CORE-002",
+      "generation": 5,
+      "parent": "GEN4-CORE-002",
+      "active_core_before": "GEN4-CORE-002",
+      "active_core_after": "GEN4-CORE-002",
+      "decision": "REJECT",
+      "stage": "evaluation",
+      "validation_loss": null,
+      "validation_loss_std": null,
+      "parent_loss": null,
+      "delta": null,
+      "parameters": null,
+      "seeds": [],
+      "steps": null,
+      "result_file": "/opt/ai/work/nova-evo/evo/core_evolution/results/GEN5-CORE-002.json",
+      "mechanism": "",
+      "teacher_plan": "",
+      "lesson": "The proposed core did not earn promotion. Preserve the observed failure mode and do not repeat the same change blindly. The cycle stopped or last reported evidence at stage 'evaluation'.",
+      "next_direction": "Diagnose why the mechanism failed, then formulate a different or corrected hypothesis.",
+      "run_result": {
+        "status": "REJECT",
+        "decision": "REJECT",
+        "stage": "evaluation",
+        "candidate": "GEN5-CORE-002",
+        "recovery": true,
+        "smoke": {
+          "status": "PASS",
+          "runner": {
+            "candidate_id": "GEN5-CORE-002",
+            "command": [
+              "python",
+              "smoke_test.py"
+            ],
+            "returncode": 0,
+            "stdout": "{\"status\": \"PASS\", \"device\": \"cuda\", \"parameters\": 9856518, \"gradient_tensors\": 75, \"invalid_gradients\": 0, \"causal_prefix_max_diff\": 0.0, \"logits_shape\": [2, 16, 16384]}\n",
+            "stderr": "",
+            "duration_seconds": 2.798383854998974,
+            "status": "success",
+            "timed_out": false,
+            "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-002",
+            "metadata": {
+              "timeout_seconds": 120
+            },
+            "success": true
+          },
+          "metrics": {
+            "status": "PASS",
+            "device": "cuda",
+            "parameters": 9856518,
+            "gradient_tensors": 75,
+            "invalid_gradients": 0,
+            "causal_prefix_max_diff": 0.0,
+            "logits_shape": [
+              2,
+              16,
+              16384
+            ]
+          }
+        },
+        "training": {
+          "status": "TRAINING_FAILED",
+          "runner": {
+            "candidate_id": "GEN5-CORE-002",
+            "command": [
+              "python",
+              "train_candidate.py"
+            ],
+            "returncode": 1,
+            "stdout": "",
+            "stderr": "Traceback (most recent call last):\n  File \"/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-002/train_candidate.py\", line 200, in <module>\n    result = runner.run_robust(**kwargs)\n  File \"/opt/ai/work/nova-evo/evo/engine/training_runner.py\", line 324, in run_robust\n    result = self.run_screening(\n        candidate=candidate,\n    ...<5 lines>...\n        stage=\"robust\",\n    )\n  File \"/opt/ai/work/nova-evo/evo/engine/training_runner.py\", line 96, in run_screening\n    config = candidate[\"config\"]\n             ~~~~~~~~~^^^^^^^^^^\nKeyError: 'config'\n",
+            "duration_seconds": 1.0897081540024374,
+            "status": "failed",
+            "timed_out": false,
+            "workspace": "/opt/ai/work/nova-evo/evo/engine/sandbox/GEN5-CORE-002",
+            "metadata": {
+              "timeout_seconds": 7200
+            },
+            "success": false
+          }
+        },
+        "evaluation": {
+          "decision": "REJECT",
+          "reason": "training_failed"
+        }
+      }
+    }
+  ],
+  "last_updated": "2026-09-29T19:25:12.353306+00:00"
+}
