@@ -1,13 +1,55 @@
-NOVA CORE vs TRANSFORMER (2026-10-04 15:37): from scratch, 18000 steps = 146 M tokens each, same data, same seed
-(loss: lower = better; the transformer has three attempts per size, the NOVA core one)
+NOVA CORE vs TRANSFORMER (2026-10-05 13:12): from scratch, 18000 steps = 146 M tokens each, same data, same seed
+(loss: lower = better; the best attempt of each architecture is compared, the number of attempts is given below)
   nova-24M         23.65 M  lr 3e-4  loss dataset 3.3308  web 3.9303  code 52/79  CPU read 2997 tok/s, write 204.5 tok/s, state 100.0 kB  train 37840 tok/s  {'d_model': 640, 'd_state': 640, 'num_layers': 8}
   tf-24M-a         24.14 M  lr 3e-4  loss dataset 3.0562  web 3.7629  code 53/79  CPU read 4367 tok/s, write 173.6 tok/s, state 3820.0 kB  train 80475 tok/s  {'arch': 'transformer', 'd_model': 512, 'num_layers': 5, 'n_heads': 8}
   tf-24M-b         24.23 M  lr 3e-4  loss dataset 3.0513  web 3.7452  code 55/79  CPU read 4210 tok/s, write 148.6 tok/s, state 4679.5 kB  train 74982 tok/s  {'arch': 'transformer', 'd_model': 448, 'num_layers': 7, 'n_heads': 7}
   tf-24M-lr1e-3    24.23 M  lr 1e-3  loss dataset 2.9849  web 3.6782  code 52/79  CPU read 4366 tok/s, write 155.8 tok/s, state 4679.5 kB  train 74982 tok/s  {'arch': 'transformer', 'd_model': 448, 'num_layers': 7, 'n_heads': 7}
---- 24M: nova-24M vs best transformer tf-24M-lr1e-3 (of 3 attempts)
-  dataset: NOVA 3.3308 vs transformer 2.9849: +0.3459 (+11.59 %) [+0.3300, +0.3626] -> TRANSFORMER
-  web: NOVA 3.9303 vs transformer 3.6782: +0.2521 (+6.85 %) [+0.2435, +0.2610] -> TRANSFORMER
-  code exam: NOVA 52 vs transformer 52 of 79
-  CPU after a 127-token prompt: NOVA writes 1.31x and reads 0.69x as fast as the transformer
-  CPU after 1024 tokens: NOVA writes 167.6 tok/s with 100.0 kB of state, transformer 96.3 tok/s with 25872.0 kB
-  CPU after 4096 tokens: NOVA writes 178.9 tok/s with 100.0 kB of state, transformer 45.4 tok/s with 101136.0 kB
+  nova-24M-lr1e-3  23.65 M  lr 1e-3  loss dataset 3.2204  web 3.8091  code 41/79  CPU read 2912 tok/s, write 197.4 tok/s, state 100.0 kB  train 37805 tok/s  {'d_model': 640, 'd_state': 640, 'num_layers': 8}
+  nova-24M-lr2e-3  23.65 M  lr 2e-3  loss dataset 3.2029  web 3.7808  code 45/79  CPU read 2967 tok/s, write 194.6 tok/s, state 100.0 kB  train 37770 tok/s  {'d_model': 640, 'd_state': 640, 'num_layers': 8}
+  tf-24M-lr2e-3    24.23 M  lr 2e-3  loss dataset 2.9834  web 3.6867  code 59/79  CPU read 4325 tok/s, write 157.9 tok/s, state 4679.5 kB  train 74982 tok/s  {'arch': 'transformer', 'd_model': 448, 'num_layers': 7, 'n_heads': 7}
+  n8-lru-24M       23.83 M  lr 1e-3  loss dataset 3.1371  web 3.7290  code 36/79  CPU read 3633 tok/s, write 129.7 tok/s, state 49.0 kB  train 38521 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LLLLLLL', 'mlp_hidden': 1280}
+  n8-slot-24M      23.92 M  lr 1e-3  loss dataset 3.0962  web 3.7193 (as running text 3.7683)  code 51/79  CPU read 3292 tok/s, write 121.0 tok/s, state 49.0 kB  train 61021 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LSLSLSL', 'mlp_hidden': 1344, 'slots': 16}
+  n8-win-24M       24.18 M  lr 1e-3  loss dataset 3.0392  web 3.6883 (as running text 3.7508)  code 52/79  CPU read 3297 tok/s, write 118.8 tok/s, state 252.0 kB  train 66623 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LLWLLWL', 'mlp_hidden': 1280, 'window': 32}
+  n8-hash-24M      24.16 M  lr 1e-3  loss dataset 3.0980  web 3.7158 (as running text 4.2552)  code 53/79  CPU read 3298 tok/s, write 102.8 tok/s, state 196.0 kB  train 34238 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LHLHLHL', 'mlp_hidden': 1344, 'hash_slots': 128}
+  n8-mlp-24M       23.86 M  lr 1e-3  loss dataset 3.1244  web 3.7082 (as running text 3.6306)  code 45/79  CPU read 3352 tok/s, write 130.0 tok/s, state 61.2 kB  train 60930 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NNNNNNN', 'mlp_hidden': 1152}
+  n8-win-24M-carry8 24.18 M  lr 1e-3  loss dataset 3.1054  web 3.7496 (as running text 3.6208)  code 57/79  CPU read 3215 tok/s, write 118.5 tok/s, state 252.0 kB  train 62236 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LLWLLWL', 'mlp_hidden': 1280, 'window': 32}
+  n8-hash-24M-carry8 24.16 M  lr 1e-3  loss dataset 3.1435  web 3.7743 (as running text 3.6160)  code 53/79  CPU read 3109 tok/s, write 119.4 tok/s, state 196.0 kB  train 30952 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'LHLHLHL', 'mlp_hidden': 1344, 'hash_slots': 128}
+  n8-nwin-24M      24.15 M  lr 1e-3  loss dataset 3.0283  web 3.6735 (as running text 3.5949)  code 55/79  CPU read 3521 tok/s, write 154.8 tok/s, state 260.8 kB  train 62427 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NNWNNWN', 'mlp_hidden': 1184, 'window': 32}
+  n8-nslot-24M     24.17 M  lr 1e-3  loss dataset 3.0445  web 3.6804 (as running text 3.5973)  code 54/79  CPU read 3491 tok/s, write 161.6 tok/s, state 56.0 kB  train 53899 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NSNSNSN', 'mlp_hidden': 1296, 'slots': 16}
+  n8-nsw-24M       24.21 M  lr 1e-3  loss dataset 3.0155  web 3.6675 (as running text 3.5878)  code 52/79  CPU read 3471 tok/s, write 151.8 tok/s, state 257.2 kB  train 63302 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NSWNSWN', 'mlp_hidden': 1264, 'slots': 16, 'window': 32}
+  n8-nwin16-24M    24.15 M  lr 1e-3  loss dataset 3.1034  web 3.6985 (as running text 3.6231)  code 50/79  CPU read 3529 tok/s, write 153.8 tok/s, state 148.8 kB  train 65128 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NNWNNWN', 'mlp_hidden': 1184, 'window': 16}
+  n8-nwin3-24M     24.14 M  lr 1e-3  loss dataset 3.0308  web 3.6780 (as running text 3.5994)  code 49/79  CPU read 3829 tok/s, write 147.8 tok/s, state 360.5 kB  train 67508 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NWNWNWN', 'mlp_hidden': 1184, 'window': 32}
+  n8-nslot-24M-carry8mix 24.17 M  lr 1e-3  loss dataset 3.0528  web 3.6994 (as running text 3.5808)  code 55/79  CPU read 3571 tok/s, write 163.5 tok/s, state 56.0 kB  train 54845 tok/s  {'arch': 'nova8', 'd_model': 448, 'heads': 8, 'pattern': 'NSNSNSN', 'mlp_hidden': 1296, 'slots': 16}
+--- 24M: best NOVA nova-24M-lr2e-3 (of 3 attempts) vs best transformer tf-24M-lr2e-3 (of 4 attempts)
+  dataset: NOVA 3.2029 vs transformer 2.9834: +0.2195 (+7.36 %) [+0.2021, +0.2371] -> TRANSFORMER
+  web: NOVA 3.7808 vs transformer 3.6867: +0.0942 (+2.56 %) [+0.0857, +0.1034] -> TRANSFORMER
+  code exam: NOVA 45 vs transformer 59 of 79
+  CPU after a 127-token prompt: NOVA writes 1.23x and reads 0.69x as fast as the transformer
+  CPU after 1024 tokens: NOVA writes 172.6 tok/s with 100.0 kB of state, transformer 99.4 tok/s with 25872.0 kB
+  CPU after 4096 tokens: NOVA writes 178.7 tok/s with 100.0 kB of state, transformer 45.5 tok/s with 101136.0 kB
+  candidate n8-nsw-24M: dataset 3.0155 (+1.08 % vs transformer: worse, -5.85 % vs generation 7: better); web 3.6675 (-0.52 % vs transformer: better, -3.00 % vs generation 7: better)
+      code 52/79, training 63302 tok/s (compiled), CPU write 151.8 tok/s, after 4096 tokens 138.4 tok/s with 257.2 kB of state
+  candidate n8-nwin-24M: dataset 3.0283 (+1.50 % vs transformer: worse, -5.45 % vs generation 7: better); web 3.6735 (-0.36 % vs transformer: better, -2.84 % vs generation 7: better)
+      code 55/79, training 62427 tok/s (compiled), CPU write 154.8 tok/s, after 4096 tokens 142.8 tok/s with 260.8 kB of state
+  candidate n8-nwin3-24M: dataset 3.0308 (+1.59 % vs transformer: worse, -5.37 % vs generation 7: better); web 3.6780 (-0.24 % vs transformer: better, -2.72 % vs generation 7: better)
+      code 49/79, training 67508 tok/s (compiled), CPU write 147.8 tok/s, after 4096 tokens 132.8 tok/s with 360.5 kB of state
+  candidate n8-win-24M: dataset 3.0392 (+1.87 % vs transformer: worse, -5.11 % vs generation 7: better); web 3.6883 (+0.04 % vs transformer: no clear difference, -2.45 % vs generation 7: better)
+      code 52/79, training 66623 tok/s (compiled), CPU write 118.8 tok/s, after 4096 tokens 102.2 tok/s with 252.0 kB of state
+  candidate n8-nslot-24M: dataset 3.0445 (+2.05 % vs transformer: worse, -4.94 % vs generation 7: better); web 3.6804 (-0.17 % vs transformer: no clear difference, -2.66 % vs generation 7: better)
+      code 54/79, training 53899 tok/s (compiled), CPU write 161.6 tok/s, after 4096 tokens 137.6 tok/s with 56.0 kB of state
+  candidate n8-nslot-24M-carry8mix: dataset 3.0528 (+2.33 % vs transformer: worse, -4.69 % vs generation 7: better); web 3.6994 (+0.35 % vs transformer: worse, -2.15 % vs generation 7: better)
+      code 55/79, training 54845 tok/s (compiled), CPU write 163.5 tok/s, after 4096 tokens 130.9 tok/s with 56.0 kB of state
+  candidate n8-slot-24M: dataset 3.0962 (+3.78 % vs transformer: worse, -3.33 % vs generation 7: better); web 3.7193 (+0.88 % vs transformer: worse, -1.63 % vs generation 7: better)
+      code 51/79, training 61021 tok/s (compiled), CPU write 121.0 tok/s, after 4096 tokens 106.0 tok/s with 49.0 kB of state
+  candidate n8-hash-24M: dataset 3.0980 (+3.84 % vs transformer: worse, -3.27 % vs generation 7: better); web 3.7158 (+0.79 % vs transformer: worse, -1.72 % vs generation 7: better)
+      code 53/79, training 34238 tok/s (compiled), CPU write 102.8 tok/s, after 4096 tokens 93.0 tok/s with 196.0 kB of state
+  candidate n8-nwin16-24M: dataset 3.1034 (+4.03 % vs transformer: worse, -3.10 % vs generation 7: better); web 3.6985 (+0.32 % vs transformer: worse, -2.18 % vs generation 7: better)
+      code 50/79, training 65128 tok/s (compiled), CPU write 153.8 tok/s, after 4096 tokens 131.5 tok/s with 148.8 kB of state
+  candidate n8-win-24M-carry8: dataset 3.1054 (+4.09 % vs transformer: worse, -3.04 % vs generation 7: better); web 3.7496 (+1.71 % vs transformer: worse, -0.83 % vs generation 7: better)
+      code 57/79, training 62236 tok/s (compiled), CPU write 118.5 tok/s, after 4096 tokens 100.6 tok/s with 252.0 kB of state
+  candidate n8-mlp-24M: dataset 3.1244 (+4.73 % vs transformer: worse, -2.45 % vs generation 7: better); web 3.7082 (+0.59 % vs transformer: worse, -1.92 % vs generation 7: better)
+      code 45/79, training 60930 tok/s (compiled), CPU write 130.0 tok/s, after 4096 tokens 115.3 tok/s with 61.2 kB of state
+  candidate n8-lru-24M: dataset 3.1371 (+5.16 % vs transformer: worse, -2.05 % vs generation 7: better); web 3.7290 (+1.15 % vs transformer: worse, -1.37 % vs generation 7: better)
+      code 36/79, training 38521 tok/s, CPU write 129.7 tok/s, after 4096 tokens 108.7 tok/s with 49.0 kB of state
+  candidate n8-hash-24M-carry8: dataset 3.1435 (+5.37 % vs transformer: worse, -1.85 % vs generation 7: better); web 3.7743 (+2.38 % vs transformer: worse, -0.17 % vs generation 7: better)
+      code 53/79, training 30952 tok/s (compiled), CPU write 119.4 tok/s, after 4096 tokens 101.4 tok/s with 196.0 kB of state

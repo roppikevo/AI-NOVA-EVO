@@ -86,8 +86,22 @@ RECIPES: dict[str, dict[str, Any]] = {
     "average-of-5": {"soup": 5, "steps": 3000, "flags": {"--lr": "1e-4", "--bulk-frac": "0.7", "--code-frac": "0.05"}},
 }
 
-# Next generations (bigger cores), tried in this order when the champion stops improving.
+# Next generations (bigger or newer cores), tried in this order when the champion stops improving.
+# evo/director/ladder.json replaces this list: that is how a core that won a tournament is handed to the director
+# (strategy, not constitution - the judge still decides whether the new generation takes the title).
 LADDER = [{"line": "NOVA-53M", "override": {"d_model": 896, "d_state": 896, "num_layers": 12}, "steps": 300000}]
+
+
+def load_ladder() -> list[dict]:
+    f = DIR / "ladder.json"
+    try:
+        rows = json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
+    except (OSError, ValueError):
+        rows = None
+    if isinstance(rows, list) and all(isinstance(r, dict) and r.get("line") and isinstance(r.get("override"), dict) and r.get("steps")
+                                      for r in rows):
+        return rows
+    return LADDER
 
 
 # ------------------------------------------------------------------ state
@@ -291,12 +305,27 @@ class World:
 
     # --- machine
     def gpu_used_mb(self) -> int:
+        """Megabytes of the graphics card held by OTHER processes. The director's own judging leaves a cache
+        on the card; counting it made the director wait for itself (first night on the server)."""
         try:
-            out = subprocess.run(["nvidia-smi", "--query-gpu=memory.used", "--format=csv,noheader,nounits"],
-                                 capture_output=True, text=True, timeout=30).stdout
-            return int(out.strip().splitlines()[0])
+            q = lambda what, kind: subprocess.run(["nvidia-smi", f"--query-{kind}={what}", "--format=csv,noheader,nounits"],  # noqa: E731
+                                                  capture_output=True, text=True, timeout=30).stdout
+            return others_mb(int(q("memory.used", "gpu").strip().splitlines()[0]), q("pid,used_memory", "compute-apps"), os.getpid())
         except Exception:
             return 0
+
+    def release_gpu(self) -> None:
+        """Give back what our own judging cached on the card."""
+        try:
+            import gc
+
+            import torch
+
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
 
     def free_ram_gb(self) -> float:
         try:
@@ -409,7 +438,7 @@ class World:
             log_event({"event": "release_failed", "name": name, "rc": rc, "tail": tail[-400:]})
             return None
         rel = out.parent
-        small = [str(rel / f) for f in ("MODEL.json", "SHA256SUMS", "tokenizer.json", "blocks_scan.py", "model_scan.py", "config.py")]
+        small = [str(rel / f) for f in ("MODEL.json", "SHA256SUMS", "tokenizer.json", "blocks_scan.py", "model_scan.py", "config.py", "core8.py")]
         if (rel / "nova_model.pt").stat().st_size < 95e6:        # GitHub refuses files of 100 MB and more
             small.append(str(rel / "nova_model.pt"))
         env = {**os.environ, "GIT_TERMINAL_PROMPT": "0"}
@@ -647,7 +676,7 @@ def probation_step(state: dict, world: World) -> str:
 
 def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] | None = None) -> dict | None:
     """Train the next (bigger) generation for one segment; when it is finished, let the judge decide."""
-    ladder = LADDER if ladder is None else ladder
+    ladder = load_ladder() if ladder is None else ladder
     g = state.get("grow")
     if g is None:
         nxt = next((s for s in ladder if s["line"] not in state["grown"]), None)
@@ -662,7 +691,10 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
         world.start_side(side)
     rc, tail = world.run([PY, "-m", "evo.engine.train_line", "--name", g["line"], "--config-override", json.dumps(g["override"]),
                           "--total-steps", str(g["steps"]), "--max-hours", str(hours), "--bulk-frac", "0.95", "--code-frac", "0.03",
-                          "--val-extra-dir", str(world.web_dir)], timeout_h=hours + 1.0)
+                          "--val-extra-dir", str(world.web_dir)] + (["--lr", str(g["lr"])] if g.get("lr") else [])
+                         + (["--compile"] if g.get("compile") else []) + (["--carry", str(g["carry"])] if g.get("carry") else [])
+                         + (["--carry-share", str(g["carry_share"])] if g.get("carry") and g.get("carry_share") else []),
+                         timeout_h=hours + 1.0)
     g["segments"] += 1
     st_file = Path("evo/lines") / g["line"] / "state.json"
     line = json.loads(st_file.read_text()) if st_file.exists() else {}
@@ -732,7 +764,11 @@ def report(state: dict, now: float | None = None) -> str:
     ge = s.get("genome")
     if ge:
         L.append(f"Stavba: {ge['layers']} vrstiev, šírka {ge['width']}, pohľad na {ge['kernel']} susedných slov, "
-                 f"{ge['parameters'] / 1e6:.1f} M parametrov")
+                 f"{ge['parameters'] / 1e6:.1f} M parametrov" + (f", jadro generácie 8 ({ge['pattern']})" if ge.get("pattern") else ""))
+    if state.get("grow"):
+        g = state["grow"]
+        L.append(f"Trénuje sa nová generácia od nuly: {g['line']} ({g.get('steps_done', 0)} z {g['steps']} krokov"
+                 + (f", najlepšia strata {g['best_val']}" if g.get("best_val") else "") + "); po dokončení rozhodne sudca.")
     if state.get("reverted"):
         L.append(f"Vrátené späť po skúšobnej lehote: {', '.join(state['reverted'])}")
     if state.get("probation"):
@@ -785,7 +821,20 @@ def recover(state: dict) -> None:
         f.unlink(missing_ok=True)
 
 
+def others_mb(total_mb: int, apps: str, own_pid: int) -> int:
+    """Card memory in use minus what the process `own_pid` holds (`apps`: lines 'pid, MiB' from nvidia-smi)."""
+    own = 0
+    for line in apps.splitlines():
+        parts = [x.strip() for x in line.split(",")]
+        if len(parts) >= 2 and parts[0].isdigit() and parts[1].isdigit() and int(parts[0]) == own_pid:
+            own += int(parts[1])
+    return max(0, total_mb - own)
+
+
 def gpu_is_free(world: World) -> bool:
+    release = getattr(world, "release_gpu", None)
+    if release:
+        release()
     if world.gpu_used_mb() <= GPU_BUSY_MB:
         return True
     world.unload_teachers()          # a teacher model on the GPU is ours to move; anything else is not
@@ -822,7 +871,26 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--max-cycles", type=int, default=0)
     ap.add_argument("--challenge", default="", help="comma list of checkpoints the judge compares with the champion before the loop starts")
     ap.add_argument("--intervention", default="", help="note that somebody had to step in (resets the days-without-help counter)")
+    ap.add_argument("--start-generation", default="",
+                    help="begin training this line of the ladder from scratch now instead of waiting for the plateau "
+                         "(recorded as an intervention; the director must not be running)")
     args = ap.parse_args(argv)
+    if args.start_generation:
+        st = load_state()
+        row = next((r for r in load_ladder() if r["line"] == args.start_generation), None)
+        if st is None or row is None or row["line"] in st["grown"]:
+            print("no state yet" if st is None else f"line {args.start_generation} is not in the ladder or was already tried")
+            return 2
+        if st.get("grow"):
+            print(f"a generation is already being trained: {st['grow']['line']}")
+            return 2
+        st["grow"] = {**row, "since": time.time(), "segments": 0}
+        note = f"generation {row['line']} started by hand: {json.dumps(row['override'])}"
+        st["interventions"].append({"time": time.time(), "date": time.strftime("%Y-%m-%d %H:%M"), "note": note})
+        save_state(st)
+        log_event({"event": "grow_start", "line": row["line"], "override": row["override"], "by": "intervention"})
+        print(note)
+        return 0
     if args.intervention:
         st = load_state()
         if st is None:

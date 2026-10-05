@@ -400,3 +400,36 @@ def test_judge_refuses_a_model_that_outgrew_the_limit():
     assert not v["accept"] and any("too big" in r for r in v["reasons"])
     chall["params"] = 59_000_000
     assert j.decide(champ, chall)["accept"]
+
+
+def test_the_director_does_not_wait_for_its_own_memory_on_the_card():
+    apps = "552746, 1740\n4242, 300\n"
+    assert d.others_mb(1758, apps, 552746) == 18          # only our own cache: the card is free
+    assert d.others_mb(5000, apps, 552746) == 3260        # somebody else trains: wait
+    assert d.others_mb(1758, "", 552746) == 1758 and d.others_mb(100, "1, 900", 1) == 0
+
+
+def test_a_tournament_winner_is_handed_over_through_the_ladder_file(home, capsys):
+    st, w = fresh(), FakeWorld(verdicts=[True])
+    d.save_state(st)
+    row = {"line": "NOVA8-24M", "override": {"arch": "nova8", "d_model": 448, "pattern": "LLLLLLL"}, "steps": 300000, "lr": 0.001,
+           "carry": 8, "carry_share": 0.35}
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text(json.dumps([row]))
+    assert d.load_ladder() == [row]
+    assert d.main(["--start-generation", "NOVA-53M"]) == 2                    # not in the ladder any more
+    assert d.main(["--start-generation", "NOVA8-24M"]) == 0
+    st = d.load_state()
+    assert st["grow"]["line"] == "NOVA8-24M" and "started by hand" in st["interventions"][-1]["note"]
+    assert d.main(["--start-generation", "NOVA8-24M"]) == 2                    # already being trained
+    line = home / "evo/lines/NOVA8-24M"
+    line.mkdir(parents=True)
+    (line / "state.json").write_text(json.dumps({"steps_done": 300000, "best_val": 3.0, "finished": True, "best_checkpoint": "x.pt"}))
+    st["champion"]["scores"] = w.scores("")
+    assert d.cycle(st, w) == "grow"                                            # goes on even though nothing was rejected
+    cmd = w.cmds[-1]
+    assert cmd[cmd.index("--lr") + 1] == "0.001" and json.loads(cmd[cmd.index("--config-override") + 1])["arch"] == "nova8"
+    assert cmd[cmd.index("--carry") + 1] == "8" and cmd[cmd.index("--carry-share") + 1] == "0.35"
+    assert st["champion"]["name"] == "NOVA8-24M-v1" and st["grown"] == ["NOVA8-24M"]
+    (home / "evo/director/ladder.json").write_text("not json")
+    assert d.load_ladder() == d.LADDER                                         # a broken file falls back to the built-in list

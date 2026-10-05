@@ -61,7 +61,8 @@ def write_release(out: Path, ckpt: dict, source: str, row: dict, tokenizer: Path
     torch.save({**meta, "model_state_dict": {k: v.float() if v.is_floating_point() else v for k, v in sd.items()}},
                out / "nova_model_fp32.pt")
     shutil.copy2(tokenizer, out / "tokenizer.json")
-    for src in ("nova/blocks_scan.py", "nova/model_scan.py", "nova/config.py"):
+    gen8 = (ckpt.get("config") or {}).get("arch") == "nova8"
+    for src in (("nova/core8.py",) if gen8 else ("nova/blocks_scan.py", "nova/model_scan.py", "nova/config.py")):
         if Path(src).exists():
             shutil.copy2(src, out / Path(src).name)
     info = {"name": out.name, "frozen": time.strftime("%Y-%m-%d %H:%M:%S"), "source_checkpoint": source,

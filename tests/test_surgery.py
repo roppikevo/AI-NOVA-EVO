@@ -71,3 +71,27 @@ def test_apply_respects_limits_and_records_what_was_done():
     assert surgery.apply(nine, {"op": "kernel", "delta": 2}) is None
     g = surgery.genome(ck)
     assert g == {"layers": 3, "width": 48, "kernel": 5, "parameters": sum(p.numel() for p in build_model(CFG).parameters())}
+
+
+def test_generation_8_gets_one_more_block_without_changing_its_output():
+    from evo.engine.architecture_factory import build_model
+
+    cfg = {"arch": "nova8", "vocab_size": 120, "d_model": 32, "pattern": "LSW", "mlp_hidden": 48, "heads": 4, "window": 6}
+    torch.manual_seed(3)
+    m = build_model(cfg).eval()
+    with torch.no_grad():
+        for blk in m.blocks:
+            blk.fc_out.weight.mul_(20)
+            blk.mixer.out.weight.mul_(20)
+    ck = {"config": cfg, "model_state_dict": m.state_dict()}
+    assert surgery.genome(ck)["layers"] == 3 and surgery.genome(ck)["pattern"] == "LSW"
+    x = torch.randint(5, 120, (2, 20))
+    for op, pattern in (({"op": "add_layer"}, "LSWW"), ({"op": "add_layer", "kind": "S", "position": 1}, "LSSW")):
+        new = surgery.apply(ck, op)
+        assert new["config"]["pattern"] == pattern and new["config"]["num_layers"] == 4
+        bigger = build_model(new["config"]).eval()
+        bigger.load_state_dict(new["model_state_dict"])
+        with torch.no_grad():
+            assert torch.allclose(bigger(x)[0], m(x)[0], atol=1e-5)
+    assert surgery.apply(ck, {"op": "kernel", "delta": 2}) is None
+    assert surgery.apply(ck, {"op": "add_layer"}, max_parameters=10) is None

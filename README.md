@@ -2,7 +2,7 @@
 
 **A small recurrent language-model core that writes at constant speed and constant memory on a CPU, trained from scratch on one consumer GPU — inside a system built to improve the core by itself, under rules it cannot change.**
 
-NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: a transformer of the same size still predicts text better (point 5).
+NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: our generation-7 core lost clearly to a transformer of the same size. The generation-8 core that came out of a tournament of candidates has closed most of that gap – level on web text, 2 % behind on the dataset – but it is not ahead (point 5).
 
 > **Who this is for:** people who work on small, efficient, non-transformer sequence cores; on-device and CPU inference; architecture search; self-improving training loops; federated or collective training of small models.
 
@@ -24,7 +24,7 @@ Measured on a Ryzen 7 5700 (8 threads), 24 M-parameter models, batch 1, same mac
 
 The stepper is exact: on the 79-task code exam it produced the same 79 function bodies as a full re-read of the context.
 
-What is *not* in our favour: reading a prompt in one batched pass is faster with the transformer (4 014 vs 2 407 tok/s). This table measures speed only. In quality the same-size transformer is ahead – see point 5.
+What is *not* in our favour: reading a prompt in one batched pass is faster with the transformer (4 014 vs 2 407 tok/s). This table measures speed only, for the generation-7 core of the releases so far. Quality against a transformer, and the generation-8 core, are in point 5.
 
 ### 2. It trains from scratch on a single 8 GB consumer GPU
 
@@ -64,41 +64,76 @@ What this does **not** show yet: the single-model control got worse under that t
 
 More clones did not help: a follow-up run with ten clones and half the training per clone (`scale-10`, four rounds, started from the collective core above) ended slightly *worse* than it started (dataset loss 3.105 → 3.113, +0.26 %; web +0.10 %; code exam 43 → 42), and the nodes rejected the merged core in all four rounds.
 
-### 5. Against a transformer of the same size: the transformer predicts text better, the NOVA core writes cheaper
+### 5. Against a transformer of the same size: generation 7 lost clearly; generation 8 is level on web text and 2 % behind on the dataset, with 56 kB of state
 
-A standard decoder-only transformer (rotary positions, key/value cache) was trained next to the NOVA core from scratch: same tokenizer, data, seed and token budget (18 000 steps, 146 M tokens), about 24 M parameters each. The transformer got three attempts (two shapes, and the better one again with a higher learning rate), NOVA one (`python -m evo.engine.compare_arch`, `evo/learning/arch_compare/`).
+A standard decoder-only transformer (rotary positions, key/value cache) was trained next to the NOVA core from scratch: same tokenizer, data, seed and token budget (18 000 steps, 146 M tokens), about 24 M parameters each (`python -m evo.engine.compare_arch`, `evo/learning/arch_compare/`). Both sides got three learning rates.
 
 | Model | Learning rate | Loss, dataset | Loss, web | Code exam | Training speed (RTX 4060) |
 |---|---|---|---|---|---|
-| NOVA core, width 640, 8 layers | 3e-4 | 3.331 | 3.930 | 52 / 79 | 37 800 tok/s |
+| NOVA generation 7, width 640, 8 layers | 3e-4 | 3.331 | 3.930 | 52 / 79 | 37 800 tok/s |
+| | 1e-3 | 3.220 | 3.809 | 41 / 79 | |
+| | 2e-3 | 3.203 | 3.781 | 45 / 79 | |
 | Transformer, width 512, 5 layers | 3e-4 | 3.056 | 3.763 | 53 / 79 | 80 500 tok/s |
 | Transformer, width 448, 7 layers | 3e-4 | 3.051 | 3.745 | 55 / 79 | 75 000 tok/s |
-| Transformer, width 448, 7 layers | 1e-3 | **2.985** | **3.678** | 52 / 79 | 75 000 tok/s |
+| | 1e-3 | 2.985 | **3.678** | 52 / 79 | |
+| | 2e-3 | **2.983** | 3.687 | 59 / 79 | |
 
-**This went against us.** At the same learning rate the NOVA core's loss is 9 % higher on the dataset and 5 % higher on web text; against the transformer's best run it is 12 % and 7 % higher (95 % bootstrap intervals for that pair: far from zero), and the transformer trains twice as fast on the GPU. The code exam shows no real difference. NOVA was trained with one learning rate only; a run at the transformer's best rate has not been made yet.
+**This went against us.** Best run against best run, the generation-7 core's loss is 7.4 % higher on the dataset (95 % bootstrap interval of the difference: 0.20 to 0.24) and 2.6–2.8 % higher on web text, and the transformer trains twice as fast. During one night the self-improvement loop then tried nine changes to that core (more web text, teachers, one more layer, a wider and a narrower local view, a collective); the judge rejected all nine. Generation 7 was at its ceiling.
 
-What the NOVA core keeps is the cost of writing on a CPU, measured on these same trained models (8 threads):
+**Generation 8** was therefore built as a tournament: one block design, several memory mixers whose state has a fixed size, every candidate trained the same way (about 24 M parameters, 18 000 steps, learning rate 1e-3, one run each).
 
-| Text already read | NOVA core | Transformer (best run) | NOVA state | Transformer cache |
+| Candidate | What its seven blocks hold | Loss, dataset | Loss, web | Web read as running text | Code exam | Training speed | State |
+|---|---|---|---|---|---|---|---|
+| lru | a gated linear recurrent unit | 3.137 | 3.729 | – | 36 / 79 | 38 500 tok/s | 49 kB |
+| mlp | the generation-7 memory | 3.124 | 3.708 | 3.631 | 45 / 79 | 60 900 tok/s | 61 kB |
+| slot | recurrent unit + slot memory | 3.096 | 3.719 | 3.768 | 51 / 79 | 61 000 tok/s | 49 kB |
+| hash | recurrent unit + hash-table memory | 3.098 | 3.716 | 4.255 | 53 / 79 | 34 200 tok/s | 196 kB |
+| win | recurrent unit + attention over the last 32 tokens | 3.039 | 3.688 | 3.751 | 52 / 79 | 66 600 tok/s | 252 kB |
+| nwin16 | generation-7 memory + attention over the last 16 tokens | 3.103 | 3.699 | 3.623 | 50 / 79 | 65 100 tok/s | 149 kB |
+| nwin3 | generation-7 memory + three window blocks | 3.031 | 3.678 | 3.599 | 49 / 79 | 67 500 tok/s | 361 kB |
+| nwin | generation-7 memory + attention over the last 32 tokens | 3.028 | 3.674 | 3.595 | 55 / 79 | 62 400 tok/s | 261 kB |
+| nsw | generation-7 memory + slots + window | **3.016** | **3.668** | **3.588** | 52 / 79 | 63 300 tok/s | 257 kB |
+| **nslot** | **generation-7 memory + slot memory, no window** | 3.045 | 3.680 | 3.597 | 54 / 79 | 53 900 tok/s | **56 kB** |
+
+Every block also has a gated non-linear layer, which generation 7 did not have. All candidates except lru were trained with the compiled forward pass (`torch.compile`, same arithmetic).
+
+What the tournament says:
+
+- **The winner is `nslot`**: purely recurrent, no attention over past tokens at all, 56 kB of state – half of generation 7. Against the best transformer run its loss is 2.0 % higher on the dataset; on web text there is no clear difference (3.680 against 3.678 and 3.687). Against the best generation-7 run it is 4.9 % and 2.7 % lower.
+- A small window of the last 32 tokens buys a little more (`nsw`: 1.1 % behind the transformer on the dataset, 0.3 % ahead on web text) for a state of 257 kB that still does not grow. `nslot` is within 1 % of it, so the purely recurrent core was chosen; `nsw` stays as the second line.
+- The old generation-7 memory beat the new recurrent unit once both had the non-linear layer, and it is the only memory here that reads **running text** better without being trained for it: with the state carried from row to row, `nslot` goes from 3.680 to 3.597 (−2.3 %). Candidates built on the recurrent unit got worse when their state was carried.
+- Training candidates on running text with whole batches of consecutive rows repaired that but cost 1.5–2.2 % on single rows. With mixed batches (a third of every batch is running text) `nslot` lost 0.4 % on single rows and gained 0.5 % on running text – a trade inside the noise of single runs.
+
+What is **not** in our favour, or not known yet:
+
+- One run per candidate and one learning rate, against three for the transformer and generation 7. The spread between runs is not measured; the code exam alone swings between 36 and 59 with no pattern.
+- The transformer still trains faster (75 000 tok/s without compiling; compiling gave a transformer block another 1.24× in a block-level test).
+- Writing on a CPU, `nslot` reaches 162 tok/s at 127 tokens and 138 tok/s after 4 096 tokens (8 threads) – constant state, but slower than generation 7 with its fused stepper (204 and 179) and about level with the transformer on short texts (156).
+- A transformer can also use context beyond one row, at a price. Re-reading a sliding window of the last 127 tokens for every token improved its web loss by 2.9 % (3.822 → 3.710 on another sample of the held-out text, `python -m evo.engine.long_context`); given two rows in one pass – twice its training length – it got 2.9 % worse. The 101 MB in the table below is a transformer that keeps everything it has read; one that keeps only the last 127 tokens needs about 4.7 MB.
+- These are 18 000-step runs. The long run that decides is in progress: `NOVA8-24M` (`nslot`, 300 000 steps) is trained by the loop and will be judged against the current champion; if accepted it appears in `evo/releases/`.
+
+The cost of writing on a CPU for the two models of the first table (8 threads):
+
+| Text already read | NOVA generation 7 | Transformer (best run) | NOVA state | Transformer cache |
 |---|---|---|---|---|
 | 127 tokens | **204 tok/s** | 156 tok/s | **100 kB** | 4.7 MB |
 | 1 024 tokens | **168 tok/s** | 96 tok/s | **100 kB** | 26 MB |
 | 4 096 tokens | **179 tok/s** | 45 tok/s | **100 kB** | 101 MB |
 
-Reading a prompt in one pass is faster with the transformer (4 366 vs 2 997 tok/s).
+Reading a prompt in one pass is faster with the transformer (4 366 tok/s; generation 7: 2 997, `nslot`: about 3 500).
 
-So today the NOVA core is not the better language model at this size; it is the cheaper writer. Closing the quality gap without giving up the constant state is the first job of the self-improvement loop below.
+So today: at 24 M parameters and a short training run the generation-8 core is as good as a same-size transformer on web text and close on the dataset, with a state of 56 kB. It is not better, and the long run has still to confirm it.
 
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 213 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 263 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
 ## How the core works
 
-Each block keeps a state vector `s` and looks at a short window of recent inputs:
+**Generation 7** (the releases so far). Each block keeps a state vector `s` and looks at a short window of recent inputs:
 
 ```
 u      = norm(x)
@@ -108,13 +143,31 @@ c      = causal depthwise convolution over the last k inputs local context
 y      = x + W_o ( g * s_t + (1 - g) * c )
 ```
 
-No attention, no cache that grows with the text. During training the recurrence is evaluated for the whole sequence at once (`nova/blocks_scan.py`); during writing `nova/stepper.py` advances one token at a time with the same result.
+No attention, no cache that grows with the text. During training the recurrence is evaluated for the whole sequence at once (`nova/blocks_scan.py`); during writing `nova/stepper.py` advances one token at a time with the same result. This structure was found by an evolutionary search: candidate cores are generated, checked against a source contract, smoke-tested, trained briefly and kept only when they beat their parent.
 
-The structure itself was found by an evolutionary search: candidate cores are generated, checked against a source contract, smoke-tested, trained briefly and kept only when they beat their parent. The current core is generation 7.
+**Generation 8** (`nova/core8.py`, in its long training now). A block is a memory mixer followed by a gated non-linear layer:
+
+```
+x = x + mixer(norm(x))
+n = norm(x)
+x = x + W_o ( gelu(W_a n) * (W_b n) )
+```
+
+The winning core `nslot` alternates two mixers, N S N S N S N, at width 448 (24.2 M parameters):
+
+```
+N   the generation-7 memory above: running average blended with the local convolution
+S   a table of 16 slots x 112 numbers
+    write:  share = softmax(address(u)) * sigmoid(gate(u))
+            table = (1 - share) * table + share * value(u)       every token, into the slots its content points to
+    read:   y = W_o ( softmax(query(u) . table) table )          by comparing a query with what the slots hold
+```
+
+Its whole state – one vector and four past inputs per N block, one table per S block – is 56 kB and has the same size after any length of text. The recurrences are computed in closed form over the whole sequence during training; one token at a time gives the same numbers (tested). Other mixers in the file (a gated linear recurrent unit, a hash-table memory, a matrix memory, attention over a fixed window of recent tokens) were candidates in the tournament of point 5.
 
 ## The self-improvement loop
 
-The part this project is really about. It is implemented and tested and is being switched on now; **its results are not in yet and will be reported here as they come, including failures.**
+The part this project is really about. It is implemented, tested and running. **First results:** the judge accepted one challenger, the collective core of point 4, released as NOVA-24M-v2 (+0.6 % on held-out text). In the following night the director tried nine more changes to the generation-7 core by itself and the judge rejected every one (each came out 0.1 % to 1.4 % worse, or failed). The step to generation 8 was a tournament set up by hand, not a proposal of the loop; the loop now trains the winner and will judge it like any other challenger. Failures will keep being reported here.
 
 - **Director** (`evo/engine/director.py`): picks a recipe, trains a challenger from the current champion, has it judged, releases it if accepted, throws it away if not. Recipes that produced champions are tried more often and get variations of themselves.
 - **Changes of its own structure, in place** (`nova/surgery.py`): one more layer, a wider or narrower local view. The edited model starts as an exact copy of the champion, so a structural trial takes minutes instead of a full retraining.
@@ -125,7 +178,7 @@ The part this project is really about. It is implemented and tested and is being
 
 ## Goals
 
-1. Close the quality gap to a same-size transformer (today 9–12 % higher loss) while keeping the constant state.
+1. Close the remaining gap to a same-size transformer while keeping the constant state (generation 7: 7.4 % higher loss on the dataset and 2.6–2.8 % on web text; generation 8 in short runs: 2.0 % and level), and confirm it in a long training run.
 2. The loop runs for a week without human intervention and releases at least one improvement on its own.
 3. Structure changes proposed from the system's own results beat the previous generation in a long confirmation run.
 4. The system grows the model by itself when learning stalls.
@@ -143,7 +196,7 @@ The 24 M model writes fluent text in four languages and simple functions. It is 
 [en] The capital of Wetland has become a major contributor to the economy, and the people of the present day ...
 ```
 
-Things we tried that did not work, with the numbers kept in the repository: moving parameters from the vocabulary table into more layers; a 256-token training context; a stand-alone code school; continued single-model training with the collective's recipe; a ten-clone collective; a first vectorised gradient for the recurrence (no gain at the real batch size); short from-scratch tests as a predictor of final quality.
+Things we tried that did not work, with the numbers kept in the repository: moving parameters from the vocabulary table into more layers; a 256-token training context; a stand-alone code school; continued single-model training with the collective's recipe; a ten-clone collective; a first vectorised gradient for the recurrence (no gain at the real batch size); short from-scratch tests as a predictor of final quality; nine changes the director tried on the generation-7 core in its first night; a gated linear recurrent unit in place of the old memory; a hash-table memory (no better than the slots, half the training speed, four times the state); training on whole batches of running text (single rows got 1.5–2.2 % worse).
 
 ## Quick start
 
@@ -161,7 +214,7 @@ The installer puts every library into a private `.venv/`, verifies the checksums
 source .venv/bin/activate                # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed              # tokens per second on your CPU
-python -m pytest -q                      # 213 tests
+python -m pytest -q                      # 263 tests
 python -m evo.engine.speed_bench --cpu-only          # against a transformer of the same size
 ```
 

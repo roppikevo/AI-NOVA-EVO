@@ -60,6 +60,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--code-frac", type=float, default=0.05)
     ap.add_argument("--extra-dirs", default="data/teacher_v1,data/web_v1")
     ap.add_argument("--val-extra-dir", default="", help="held-out web validation (parts never used for training)")
+    ap.add_argument("--compile", action="store_true", help="compile the training forward pass (faster for the generation-8 core)")
+    ap.add_argument("--carry", type=int, default=0,
+                    help="read the web corpus as running text: this many consecutive rows per stream with the state carried over")
+    ap.add_argument("--carry-share", type=float, default=0.0,
+                    help="with --carry: this share of every batch is running text, the rest is read with a fresh state")
     args = ap.parse_args(argv)
 
     from evo.corpus.bulk_web import load_bulk
@@ -107,7 +112,8 @@ def main(argv: list[str] | None = None) -> int:
                         batch_size=args.batch_size, lr=args.lr, warmup=args.warmup, eval_every=args.eval_every,
                         save_every=args.save_every, patience=10 ** 6, max_hours=args.max_hours, resume=resume,
                         bulk=bulk, bulk_frac=args.bulk_frac, code=code, code_frac=args.code_frac,
-                        extra_val=extra_val, progress=out / "progress.jsonl", stop_file=lt.STOP_FILE)
+                        extra_val=extra_val, progress=out / "progress.jsonl", stop_file=lt.STOP_FILE,
+                        compile_model=args.compile, carry=args.carry, carry_share=args.carry_share)
     finished = rep["steps_done"] >= args.total_steps
     st = {"name": args.name, "config": config, "params": params, "total_steps": args.total_steps,
           "steps_done": rep["steps_done"], "best_val": rep["best_val"], "finished": finished,

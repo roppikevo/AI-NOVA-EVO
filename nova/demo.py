@@ -78,6 +78,16 @@ def speed(model, tok, new_tokens: int = 200, threads: int | None = None) -> dict
         torch.set_num_threads(threads)
     ids = [tok.lang_id("en")] + tok.encode("The river runs through the old town and")
     with torch.no_grad():
+        if getattr(model, "carries_state", False):          # generation 8: the plain call continues from its state
+            from nova.core8 import state_bytes
+
+            out, states = model(torch.tensor([ids]))
+            start = time.perf_counter()
+            for _ in range(new_tokens):
+                out, states = model(out[:, -1].argmax(dim=-1, keepdim=True), states)
+            seconds = time.perf_counter() - start
+            return {"tokens_per_second": round(new_tokens / seconds, 1), "state_bytes": int(state_bytes(states)),
+                    "threads": torch.get_num_threads()}
         if not supports(model):
             return {"tokens_per_second": None, "state_bytes": None}
         st = Stepper(model)

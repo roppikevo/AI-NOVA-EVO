@@ -113,3 +113,106 @@ def test_verdict_names_the_winner_per_size_and_text_is_complete():
     t = ca.text({"date": "2026-10-05", "steps": 18000, "results": results, "verdicts": v})
     assert "NOVA CORE vs TRANSFORMER" in t and "FAILED" in t and "-> NOVA" in t and "-> TRANSFORMER" in t
     assert "CPU after 1024 tokens" in t
+
+
+def test_extra_learning_rates_for_both_sides_and_the_best_nova_attempt_is_compared():
+    rng = np.random.default_rng(1)
+    hard = rng.normal(0, 0.4, size=400)
+    seq, results = {}, {}
+
+    def add(name, arch, loss, lr, override):
+        for s in ("dataset", "web"):
+            seq[f"{s}/{name}"] = (loss + hard + rng.normal(0, 0.02, size=400)).astype(np.float32)
+        results[name] = {"name": name, "group": "24M", "arch": arch, "override": override, "lr": lr, "params": 24_000_000,
+                         "loss": {s: round(float(seq[f"{s}/{name}"].mean()), 4) for s in ("dataset", "web")},
+                         "code_solved": 50, "code_tasks": 79, "train_tokens_per_s": 50000,
+                         "cpu": {"read_tokens_per_s": 3000, "write_tokens_per_s": 200.0, "state_kb_after_writing": 100.0}}
+
+    add("nova-24M", "nova", 3.33, "3e-4", ca.NOVA["24M"])
+    add("tf-24M-a", "transformer", 3.06, "3e-4", {"arch": "transformer", "d_model": 512})
+    add("tf-24M-b", "transformer", 3.05, "3e-4", {"arch": "transformer", "d_model": 448})
+    add("tf-24M-lr1e-3", "transformer", 2.98, "1e-3", {"arch": "transformer", "d_model": 448})
+    plan = ca.extra_round(results, ["24M"], ["3e-4", "1e-3", "2e-3"], ["2e-3"])
+    assert [(v["name"], v["lr"]) for v in plan] == [("nova-24M-lr1e-3", "1e-3"), ("nova-24M-lr2e-3", "2e-3"), ("tf-24M-lr2e-3", "2e-3")]
+    assert plan[0]["override"] == ca.NOVA["24M"] and plan[2]["override"]["d_model"] == 448      # the better shape at the common rate
+    add("nova-24M-lr1e-3", "nova", 3.20, "1e-3", ca.NOVA["24M"])
+    v = ca.verdicts(results, seq, ["24M"])["24M"]
+    assert v["nova"] == "nova-24M-lr1e-3" and v["nova_attempts"] == 2 and v["transformer_attempts"] == 3
+    t = ca.text({"date": "2026-10-04", "steps": 18000, "results": results, "verdicts": {"24M": v}})
+    assert "best NOVA nova-24M-lr1e-3 (of 2 attempts) vs best transformer tf-24M-lr1e-3 (of 3 attempts)" in t
+
+
+def test_generation_8_candidates_plan_sizes_and_speed_measurement():
+    plan = ca.candidate_round(["24M"], ["mlp", "lru", "nothing"], "1e-3")
+    assert [v["name"] for v in plan] == ["n8-mlp-24M", "n8-lru-24M"] and plan[0]["arch"] == "nova8"
+    assert ca.candidate_round(["24M"], ["lru"], "2e-3")[0]["name"] == "n8-lru-24M-lr2e-3"
+    target = n_params(ca.NOVA["24M"])
+    for name, shape in ca.CANDIDATES["24M"].items():
+        assert abs(n_params(shape) / target - 1) < 0.03, name
+    m = build_model({**BASE, "arch": "nova8", "d_model": 32, "pattern": "LSW", "mlp_hidden": 48, "heads": 2, "window": 8}).eval()
+    short = ca.cpu_speed(m, BASE["vocab_size"], prompt_len=20, gen=4, threads=1, repeats=1)
+    long = ca.cpu_speed(m, BASE["vocab_size"], prompt_len=300, gen=4, threads=1, repeats=1)
+    assert short["write_tokens_per_s"] > 0 and short["state_kb_after_writing"] == long["state_kb_after_writing"] > 0
+
+
+def test_candidates_are_compared_with_the_transformer_and_with_generation_7():
+    rng = np.random.default_rng(2)
+    hard = rng.normal(0, 0.4, size=400)
+    seq, results = {}, {}
+    for name, arch, loss in [("nova-24M", "nova", 3.33), ("tf-24M-b", "transformer", 3.05), ("n8-lru-24M", "nova8", 3.02),
+                             ("n8-mlp-24M", "nova8", 3.20)]:
+        for s in ("dataset", "web"):
+            seq[f"{s}/{name}"] = (loss + hard + rng.normal(0, 0.02, size=400)).astype(np.float32)
+        results[name] = {"name": name, "group": "24M", "arch": arch, "override": {}, "lr": "1e-3", "params": 24_000_000,
+                         "loss": {s: round(float(seq[f"{s}/{name}"].mean()), 4) for s in ("dataset", "web")},
+                         "code_solved": 50, "code_tasks": 79, "train_tokens_per_s": 60000,
+                         "cpu": {"read_tokens_per_s": 3000, "write_tokens_per_s": 200.0, "state_kb_after_writing": 100.0},
+                         "cpu_by_context": {"4096": {"write_tokens_per_s": 180.0, "state_kb_after_writing": 100.0}}}
+    v = ca.verdicts(results, seq, ["24M"])["24M"]
+    assert list(v["candidates"]) == ["n8-lru-24M", "n8-mlp-24M"]                      # best first
+    assert v["candidates"]["n8-lru-24M"]["vs_transformer"]["dataset"]["result"] == "better"
+    assert v["candidates"]["n8-mlp-24M"]["vs_transformer"]["dataset"]["result"] == "worse"
+    assert v["candidates"]["n8-mlp-24M"]["vs_gen7"]["web"]["result"] == "better"
+    t = ca.text({"date": "2026-10-05", "steps": 18000, "results": results, "verdicts": {"24M": v}})
+    assert "candidate n8-lru-24M" in t and "vs generation 7: better" in t and "after 4096 tokens 180.0 tok/s with 100.0 kB" in t
+
+
+def test_candidates_can_train_compiled(tmp_path, monkeypatch):
+    v = ca.candidate_round(["24M"], ["slot"], "1e-3", compiled=True)[0]
+    assert v["compile"] is True and "compile" not in ca.candidate_round(["24M"], ["slot"], "1e-3")[0]
+    monkeypatch.setattr(ca, "OUT", tmp_path)
+    seen = {}
+
+    def runner(cmd, **kw):
+        seen["cmd"] = cmd
+        (tmp_path / f"{v['name']}.pt").write_bytes(b"x")
+        report = {"params": 1, "hours": 0.5, "steps_done": 10, "best_val": 3.0, "tokens_seen": 1000}
+        return type("P", (), {"returncode": 0, "stdout": "=== LONG TRAIN REPORT ===\n" + json.dumps(report), "stderr": ""})()
+
+    ca.train(v, 10, 1.0, runner=runner)
+    assert "--compile" in seen["cmd"]
+
+
+def test_candidates_on_running_text_and_the_carried_loss():
+    v = ca.candidate_round(["24M"], ["slot"], "1e-3", carry=8)[0]
+    assert v["name"] == "n8-slot-24M-carry8" and v["carry"] == 8
+    m = ca.candidate_round(["24M"], ["slot"], "1e-3", carry=8, share=0.35)[0]
+    assert m["name"] == "n8-slot-24M-carry8mix" and m["carry"] == 8 and m["carry_share"] == 0.35
+    rows = np.random.default_rng(0).integers(12, BASE["vocab_size"], size=(64, 16)).astype(np.int32)
+    n8 = build_model({**BASE, "arch": "nova8", "d_model": 32, "pattern": "LS", "mlp_hidden": 48, "heads": 2}).eval()
+    gen7 = build_model({**BASE, "d_model": 32, "d_state": 32, "num_layers": 2}).eval()
+    assert ca.carried_loss(n8, rows, "cpu") > 0 and ca.carried_loss(gen7, rows, "cpu") > 0 and not n8.training
+    assert ca.carried_loss(small(), rows, "cpu") is None
+
+
+def test_the_best_candidates_are_picked_for_the_run_on_running_text():
+    def row(name, d, w, **kw):
+        return {"name": name, "group": "24M", "arch": "nova8", "loss": {"dataset": d, "web": w}, **kw}
+
+    results = {r["name"]: r for r in [row("n8-lru-24M", 3.20, 3.75), row("n8-win-24M", 3.02, 3.70), row("n8-hash-24M", 3.10, 3.69),
+                                      row("n8-win-24M-carry8", 2.90, 3.60, carry=8), row("n8-mlp-24M", 3.30, 3.90)]}
+    results["n8-slot-24M"] = {"name": "n8-slot-24M", "group": "24M", "arch": "nova8", "error": "x"}
+    results["tf-24M-b"] = {"name": "tf-24M-b", "group": "24M", "arch": "transformer", "loss": {"dataset": 2.9, "web": 3.6}}
+    assert ca.best_candidates(results, ["24M"], 2) == ["win", "hash"]
+    plan = ca.candidate_round(["24M"], ca.best_candidates(results, ["24M"], 2), "1e-3", True, 8)
+    assert [v["name"] for v in plan] == ["n8-win-24M-carry8", "n8-hash-24M-carry8"] and plan[0]["compile"] and plan[0]["carry"] == 8

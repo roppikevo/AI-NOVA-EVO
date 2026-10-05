@@ -31,8 +31,16 @@ def parameters(ckpt: dict) -> int:
     return n
 
 
+def is_gen8(config: dict) -> bool:
+    return config.get("arch") == "nova8"
+
+
 def genome(ckpt: dict) -> dict[str, Any]:
     c = ckpt["config"]
+    if is_gen8(c):
+        pattern = str(c.get("pattern") or "L" * int(c.get("num_layers", 6)))
+        return {"layers": len(pattern), "width": int(c["d_model"]), "kernel": int(c.get("lru_kernel", 4)),
+                "pattern": pattern, "parameters": parameters(ckpt)}
     return {"layers": int(c["num_layers"]), "width": int(c["d_model"]), "kernel": int(c["conv_kernel"]),
             "parameters": parameters(ckpt)}
 
@@ -50,11 +58,21 @@ def _note(ckpt: dict, what: str) -> dict:
     return out
 
 
-def add_layer(ckpt: dict, position: int | None = None, seed: int = 0) -> dict:
+def add_layer(ckpt: dict, position: int | None = None, seed: int = 0, kind: str | None = None) -> dict:
     """One more block at `position` (default: on top). The edited model gives the same output as before."""
     config = dict(ckpt["config"])
-    n = int(config["num_layers"])
-    position = n if position is None else max(0, min(n, int(position)))
+    gen8 = is_gen8(config)
+    if gen8:                                                     # generation 8: the pattern of mixers grows by one
+        pattern = str(config.get("pattern") or "L" * int(config.get("num_layers", 6)))
+        n = len(pattern)
+        position = n if position is None else max(0, min(n, int(position)))
+        kind = kind or pattern[-1]
+        config["pattern"] = pattern[:position] + kind + pattern[position:]
+        silent = ("mixer.out.", "fc_out.")                       # both residual branches of the new block start at zero
+    else:
+        n = int(config["num_layers"])
+        position = n if position is None else max(0, min(n, int(position)))
+        silent = ("output_proj.",)
     config["num_layers"] = n + 1
     torch.manual_seed(seed)
     new = _fresh(config)
@@ -64,7 +82,7 @@ def add_layer(ckpt: dict, position: int | None = None, seed: int = 0) -> dict:
             _, idx, rest = key.split(".", 2)
             i = int(idx)
             if i == position:
-                if rest.startswith("output_proj."):
+                if rest.startswith(silent):
                     new[key] = torch.zeros_like(new[key])        # the new block adds nothing at first
                 continue
             src = f"blocks.{i if i < position else i - 1}.{rest}"
@@ -101,8 +119,10 @@ def apply(ckpt: dict, op: dict, max_parameters: int | None = None, seed: int = 0
     """Apply one operation ({"op": "add_layer"} or {"op": "kernel", "delta": +2}); None if it is not possible."""
     kind = op.get("op")
     if kind == "add_layer":
-        new = add_layer(ckpt, op.get("position"), seed)
+        new = add_layer(ckpt, op.get("position"), seed, op.get("kind"))
     elif kind == "kernel":
+        if is_gen8(ckpt["config"]):
+            return None                                          # not defined for generation 8 yet
         k = int(op["k"]) if "k" in op else int(ckpt["config"]["conv_kernel"]) + int(op.get("delta", 2))
         if k < 1 or k > 9 or k == int(ckpt["config"]["conv_kernel"]):
             return None

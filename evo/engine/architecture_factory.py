@@ -80,6 +80,11 @@ def build_model(config: dict):
         from nova.transformer_lm import build_transformer
 
         return build_transformer(config)
+    if config.get("arch") == "nova8":
+        # generation 8 of the NOVA core: recurrent blocks with a fixed-size state (see nova/core8.py)
+        from nova.core8 import build_nova8
+
+        return build_nova8(config)
     info = get_architecture_info(config)
 
     if not info.get("supported", False):

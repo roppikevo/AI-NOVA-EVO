@@ -119,8 +119,13 @@ class Writer:
     def __init__(self, model: torch.nn.Module, ids: list[int], device: str = "cpu", window: int = 128) -> None:
         self.model, self.device, self.window = model, device, window
         self.fast = supports(model) and not os.environ.get("NOVA_SLOW_GEN")
+        # generation 8 carries its whole state through the plain model call
+        self.carry = bool(getattr(model, "carries_state", False)) and not os.environ.get("NOVA_SLOW_GEN")
         with torch.no_grad():
-            if self.fast:
+            if self.carry:
+                out, self.states = model(torch.tensor([ids], device=device))
+                self.logits = out[0, -1]
+            elif self.fast:
                 self.st = Stepper(model)
                 self.logits = self.st.prime(torch.tensor([ids], device=device))[0]
             else:
@@ -134,7 +139,10 @@ class Writer:
     @torch.no_grad()
     def push(self, token: int) -> torch.Tensor:
         """Append a token; returns the logits for the one after it."""
-        if self.fast:
+        if self.carry:
+            out, self.states = self.model(torch.tensor([[token]], device=self.device), self.states)
+            self.logits = out[0, -1]
+        elif self.fast:
             self.logits = self.st.step(torch.tensor([token], device=self.device))[0]
         else:
             self.x = torch.cat([self.x, torch.tensor([[token]], device=self.device)], dim=1)[:, -self.window:]

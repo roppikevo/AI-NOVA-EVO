@@ -75,3 +75,30 @@ def test_main_runs_on_a_release(tmp_path, monkeypatch, capsys):
     assert "NOVA-T-v1" in out and "[en] The river" in out
     monkeypatch.setattr(demo, "RELEASES", tmp_path / "nothing")
     assert demo.main([]) == 2
+
+
+def test_a_generation_8_release_loads_writes_and_reports_its_state(tmp_path, monkeypatch):
+    from evo.engine import release
+    from evo.engine.architecture_factory import build_model
+
+    cfg = {"vocab_size": 300, "arch": "nova8", "d_model": 32, "pattern": "NSN", "mlp_hidden": 48, "heads": 2, "slots": 4}
+    tok = NovaTokenizer.train(["Bratislava je mesto na Dunaji.", "The river runs through the town."] * 20, vocab_size=300)
+    tok.save(tmp_path / "tokenizer.json")
+    torch.manual_seed(0)
+    model = build_model(cfg)
+    out = tmp_path / "NOVA8-T-v1"
+    release.write_release(out, {"config": cfg, "candidate": "NOVA8-T", "model_state_dict": model.state_dict()}, "x.pt",
+                          {"val": 5.0}, tmp_path / "tokenizer.json", {})
+    assert (out / "core8.py").exists() and not (out / "blocks_scan.py").exists()
+    monkeypatch.setenv("NOVA_SAFE_LOAD", "1")
+    loaded, tok2, _ = demo.load(out)
+    assert not demo.verify(out)["bad"] and getattr(loaded, "carries_state", False)
+    from nova.generate import generate
+
+    assert isinstance(generate(loaded, tok2, "The river", "en", max_new_tokens=5, temperature=0.0), str)
+    s = demo.speed(loaded, tok2, new_tokens=40, threads=1)
+    again = demo.speed(loaded, tok2, new_tokens=120, threads=1)
+    assert s["tokens_per_second"] > 0 and s["state_bytes"] == again["state_bytes"] > 0      # the state does not grow
+    from evo.engine import publish
+
+    assert "NOVA8-T-v1" in publish.index_text(tmp_path)
