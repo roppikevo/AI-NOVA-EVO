@@ -1,0 +1,61 @@
+{
+ "tf-24M-lr2e-3": {
+  "row": 3.6662,
+  "two_rows": 3.814,
+  "two_rows_vs_row_percent": 4.03,
+  "window": 3.556,
+  "window_vs_row_percent": -3.0
+ },
+ "nova-24M-lr2e-3": {
+  "row": 3.7457,
+  "two_rows": 3.6865,
+  "two_rows_vs_row_percent": -1.58,
+  "window": 3.6887,
+  "window_vs_row_percent": -1.52,
+  "carried": 3.6866,
+  "carried_vs_row_percent": -1.58
+ },
+ "n8-nslot-24M": {
+  "row": 3.6628,
+  "two_rows": 3.5841,
+  "two_rows_vs_row_percent": -2.15,
+  "window": 3.5901,
+  "window_vs_row_percent": -1.99,
+  "carried": 3.6459,
+  "carried_vs_row_percent": -0.46
+ },
+ "n8-nslot-24M-carry8mix": {
+  "row": 3.673,
+  "two_rows": 3.5776,
+  "two_rows_vs_row_percent": -2.6,
+  "window": 3.5858,
+  "window_vs_row_percent": -2.37,
+  "carried": 3.5675,
+  "carried_vs_row_percent": -2.87
+ },
+ "n8-nsw-24M": {
+  "row": 3.6453,
+  "two_rows": 3.5635,
+  "two_rows_vs_row_percent": -2.24,
+  "window": 3.5692,
+  "window_vs_row_percent": -2.09,
+  "carried": 3.6889,
+  "carried_vs_row_percent": 1.2
+ },
+ "n8-mlp-24M": {
+  "row": 3.6806,
+  "two_rows": 3.62,
+  "two_rows_vs_row_percent": -1.65,
+  "window": 3.6215,
+  "window_vs_row_percent": -1.61,
+  "carried": 3.6196,
+  "carried_vs_row_percent": -1.66
+ },
+ "tf-24M-lr1e-3": {
+  "row": 3.6432,
+  "two_rows": 4.1571,
+  "two_rows_vs_row_percent": 14.11,
+  "window": 3.5395,
+  "window_vs_row_percent": -2.85
+ }
+}

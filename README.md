@@ -101,16 +101,31 @@ What the tournament says:
 
 - **The winner is `nslot`**: purely recurrent, no attention over past tokens at all, 56 kB of state – half of generation 7. Against the best transformer run its loss is 2.0 % higher on the dataset; on web text there is no clear difference (3.680 against 3.678 and 3.687). Against the best generation-7 run it is 4.9 % and 2.7 % lower.
 - A small window of the last 32 tokens buys a little more (`nsw`: 1.1 % behind the transformer on the dataset, 0.3 % ahead on web text) for a state of 257 kB that still does not grow. `nslot` is within 1 % of it, so the purely recurrent core was chosen; `nsw` stays as the second line.
-- The old generation-7 memory beat the new recurrent unit once both had the non-linear layer, and it is the only memory here that reads **running text** better without being trained for it: with the state carried from row to row, `nslot` goes from 3.680 to 3.597 (−2.3 %). Candidates built on the recurrent unit got worse when their state was carried.
-- Training candidates on running text with whole batches of consecutive rows repaired that but cost 1.5–2.2 % on single rows. With mixed batches (a third of every batch is running text) `nslot` lost 0.4 % on single rows and gained 0.5 % on running text – a trade inside the noise of single runs.
+- The old generation-7 memory beat the new recurrent unit once both had the non-linear layer, and candidates built on it read **running text** better without being trained for it: with the state carried from row to row, `nslot` goes from 3.680 to 3.597 (−2.3 %; most of that gain sits in the first tokens of each row). Candidates built on the recurrent unit got worse when their state was carried.
+- Training on running text pays when the batches are mixed (a third of every batch is running text with the state carried, the rest starts cold): see the next table. Whole batches of consecutive rows cost 1.5–2.2 % on single rows and were dropped.
+
+**Running text.** The same tokens predicted with different amounts of context (480 rows of held-out web text, positions inside the rows; `python -m evo.engine.long_context --rows 120 --every 8`):
+
+| Model | Each row alone | Re-reading the last 127 tokens for every token | Two rows in one pass | State carried through the whole text |
+|---|---|---|---|---|
+| Transformer, learning rate 1e-3 | 3.643 | **3.540** | 4.157 | – |
+| Transformer, learning rate 2e-3 | 3.666 | 3.556 | 3.814 | – |
+| NOVA generation 7 | 3.746 | 3.689 | 3.687 | 3.687 |
+| `nslot` | 3.663 | 3.590 | 3.584 | 3.646 |
+| `nslot` trained with mixed batches | 3.673 | 3.586 | 3.578 | **3.568** |
+| `nsw` | 3.645 | 3.569 | 3.564 | 3.689 |
+
+- With its 56 kB state carried through the text, `nslot` trained with mixed batches reaches 3.568: 2.1–2.7 % better than the transformer reading each row alone, and better than `nslot` re-reading its own last 127 tokens. The price is 0.3 % on single rows.
+- The transformer is still ahead when it may re-read the last 127 tokens for every token it predicts (3.540–3.556, 0.3–0.8 % better than the carried state). That costs a full pass over 127 tokens per token; a cache of the last 127 keys and values (about 4.7 MB) would be the cheap form and was not measured. Given more than its training length in one pass, the transformer breaks (+4 % and +14 %).
+- Without that training `nslot` gains only 0.5 % from the carried state inside a row, and `nsw` loses 1.2 %.
 
 What is **not** in our favour, or not known yet:
 
 - One run per candidate and one learning rate, against three for the transformer and generation 7. The spread between runs is not measured; the code exam alone swings between 36 and 59 with no pattern.
 - The transformer still trains faster (75 000 tok/s without compiling; compiling gave a transformer block another 1.24× in a block-level test).
 - Writing on a CPU, `nslot` reaches 162 tok/s at 127 tokens and 138 tok/s after 4 096 tokens (8 threads) – constant state, but slower than generation 7 with its fused stepper (204 and 179) and about level with the transformer on short texts (156).
-- A transformer can also use context beyond one row, at a price. Re-reading a sliding window of the last 127 tokens for every token improved its web loss by 2.9 % (3.822 → 3.710 on another sample of the held-out text, `python -m evo.engine.long_context`); given two rows in one pass – twice its training length – it got 2.9 % worse. The 101 MB in the table below is a transformer that keeps everything it has read; one that keeps only the last 127 tokens needs about 4.7 MB.
-- These are 18 000-step runs. The long run that decides is in progress: `NOVA8-24M` (`nslot`, 300 000 steps) is trained by the loop and will be judged against the current champion; if accepted it appears in `evo/releases/`.
+- On running text a transformer that re-reads a sliding window is still slightly ahead (table above). The 101 MB in the table below is a transformer that keeps everything it has read; one that keeps only the last 127 tokens needs about 4.7 MB.
+- These are 18 000-step runs. The long run that decides is in progress: `NOVA8-24M` (`nslot`, 300 000 steps, mixed batches of running text) is trained by the loop and will be judged against the current champion; if accepted it appears in `evo/releases/`.
 
 The cost of writing on a CPU for the two models of the first table (8 threads):
 
@@ -163,7 +178,9 @@ S   a table of 16 slots x 112 numbers
     read:   y = W_o ( softmax(query(u) . table) table )          by comparing a query with what the slots hold
 ```
 
-Its whole state – one vector and four past inputs per N block, one table per S block – is 56 kB and has the same size after any length of text. The recurrences are computed in closed form over the whole sequence during training; one token at a time gives the same numbers (tested). Other mixers in the file (a gated linear recurrent unit, a hash-table memory, a matrix memory, attention over a fixed window of recent tokens) were candidates in the tournament of point 5.
+Its whole state – one vector and four past inputs per N block, one table per S block – is 56 kB and has the same size after any length of text. The recurrences are computed in closed form over the whole sequence during training; one token at a time gives the same numbers (tested). What the slots do in the trained short-run core (`python -m evo.engine.slot_probe`, held-out web text): with the three slot blocks switched off the loss rises by 4.0 %; reading every slot equally costs 3.7 %, so their worth is the choice by content, not one more average. The write gate is open for only 6–12 % of the tokens, a token writes into three or four slots, and a slot keeps what it holds for a median of 50–100 tokens. About half of the 16 slots are in real use and a query spreads over about ten of them – room for improvement that has not been used yet.
+
+Other mixers in the file (a gated linear recurrent unit, a hash-table memory, a matrix memory, attention over a fixed window of recent tokens) were candidates in the tournament of point 5.
 
 ## The self-improvement loop
 
