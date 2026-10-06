@@ -1,21 +1,21 @@
 {
  "champion": {
-  "name": "NOVA8-24M-v1",
-  "checkpoint": "evo/releases/NOVA8-24M-v1/nova_model_fp32.pt",
-  "since": 1791253385.9279559,
+  "name": "NOVA8-24M-v2",
+  "checkpoint": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+  "since": 1791257501.5547462,
   "scores": {
-   "dataset": 2.9009,
-   "dataset_vault": 3.1513,
-   "web": 3.2204,
-   "web_vault": 3.1189,
+   "dataset": 2.8537,
+   "dataset_vault": 3.1032,
+   "web": 3.2073,
+   "web_vault": 3.1052,
    "web_by_language": {
-    "sk": 2.8972,
-    "cs": 3.2427,
-    "pl": 3.1718,
-    "en": 3.5697
+    "sk": 2.8835,
+    "cs": 3.2303,
+    "pl": 3.159,
+    "en": 3.5563
    },
    "code": 53,
-   "creator": -0.014,
+   "creator": -0.001,
    "params": 24167975,
    "genome": {
     "layers": 7,
@@ -27,68 +27,74 @@
   }
  },
  "started": 1791138088.0559714,
- "attempts": 10,
- "accepted": 2,
- "rejected_in_a_row": 0,
+ "attempts": 34,
+ "accepted": 3,
+ "rejected_in_a_row": 2,
  "recipes": {
   "gentle": {
-   "runs": 0.5204110829884875,
+   "runs": 0.9900478585494793,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web": {
-   "runs": 0.5595818096650402,
+   "runs": 1.0645675898381497,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "weak-language": {
-   "runs": 0.6017008706075702,
+   "runs": 1.1446963331593007,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "teachers": {
-   "runs": 0.6469901834490002,
+   "runs": 1.2308562722143017,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code": {
-   "runs": 0.6956883693000001,
+   "runs": 1.3235013679723673,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "one-more-layer": {
-   "runs": 0.7480520100000001,
+   "runs": 1.4231197505079218,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "wider-view": {
-   "runs": 0.8043570000000001,
+   "runs": 0.1409417342129182,
    "gain": 0.0,
    "fails": 0,
-   "rest_until": 0.0
+   "rest_until": 1791361706.7502866
   },
   "narrower-view": {
-   "runs": 0.8649000000000001,
+   "runs": 0.1515502518418475,
    "gain": 0.0,
    "fails": 0,
-   "rest_until": 0.0
+   "rest_until": 1791361706.951302
   },
   "collective": {
-   "runs": 0.93,
+   "runs": 0.6833683430334849,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5": {
-   "runs": 0.0,
+   "runs": 1.982232361030254,
+   "gain": 0.18464344414856898,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "average-of-5~web0.77": {
+   "runs": 0.8195430231137806,
    "gain": 0.0,
-   "fails": 1,
+   "fails": 0,
    "rest_until": 0.0
   }
  },
@@ -792,12 +798,1512 @@
    "hours": 0.01,
    "weak": "en",
    "tail": "ing PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\ninit from evo/releases/NOVA8-24M-v1/nova_model_fp32.pt\nextra teacher/web sequences: 1714\nbulk corpus: 12691132 sequences\ncode-school practice sequences: 171 (share 0.05)\ndata: train (123170, 128), val (7741, 128) (4s)\nstart: step 0/3000, val 3.0061, device cuda, bf16 True\n"
+  },
+  {
+   "attempt": 11,
+   "recipe": "average-of-5",
+   "champion": "NOVA8-24M-v1",
+   "date": "2026-10-06 02:24",
+   "start": "evo/releases/NOVA8-24M-v1/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.7",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.04,
+   "weak": "en",
+   "verdict": {
+    "accept": true,
+    "reasons": [],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.98,
+     "diff": -0.0301,
+     "lo": -0.0312,
+     "hi": -0.029,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.98
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 2,
+     "lost": 2
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.9009,
+     2.8537,
+     -1.62
+    ],
+    "dataset_vault": [
+     3.1513,
+     3.1032,
+     -1.52
+    ],
+    "web": [
+     3.2204,
+     3.2073,
+     -0.41
+    ],
+    "web_vault": [
+     3.1189,
+     3.1052,
+     -0.44
+    ]
+   },
+   "released": "NOVA8-24M-v2",
+   "new_recipe": "average-of-5~web0.77"
+  },
+  {
+   "attempt": 12,
+   "recipe": "average-of-5~web0.77",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 03:32",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.77",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "ing PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\ninit from evo/releases/NOVA8-24M-v2/nova_model_fp32.pt\nextra teacher/web sequences: 1717\nbulk corpus: 12691132 sequences\ncode-school practice sequences: 171 (share 0.05)\ndata: train (123173, 128), val (7741, 128) (3s)\nstart: step 0/3000, val 2.9609, device cuda, bf16 True\n"
+  },
+  {
+   "attempt": 13,
+   "recipe": "average-of-5~web0.77",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 03:32",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.77",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.16,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.17 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.17,
+     "diff": -0.005,
+     "lo": -0.0054,
+     "hi": -0.0046,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.17
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8471,
+     -0.23
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.0961,
+     -0.23
+    ],
+    "web": [
+     3.2073,
+     3.2039,
+     -0.1
+    ],
+    "web_vault": [
+     3.1052,
+     3.1019,
+     -0.11
+    ]
+   }
+  },
+  {
+   "attempt": 14,
+   "recipe": "average-of-5",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 04:42",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.7",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.17,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.18 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.18,
+     "diff": -0.0056,
+     "lo": -0.006,
+     "hi": -0.0051,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.21
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8436,
+     -0.36
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.0916,
+     -0.37
+    ],
+    "web": [
+     3.2073,
+     3.2063,
+     -0.03
+    ],
+    "web_vault": [
+     3.1052,
+     3.1036,
+     -0.05
+    ]
+   }
+  },
+  {
+   "attempt": 15,
+   "recipe": "gentle",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 05:53",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "2e-5",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.36,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.10 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.35 %",
+     "the vault does not confirm it (-0.11 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.1,
+     "diff": 0.003,
+     "lo": 0.0026,
+     "hi": 0.0034,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.11
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.004
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8638,
+     0.35
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1134,
+     0.33
+    ],
+    "web": [
+     3.2073,
+     3.2032,
+     -0.13
+    ],
+    "web_vault": [
+     3.1052,
+     3.1019,
+     -0.11
+    ]
+   }
+  },
+  {
+   "attempt": 16,
+   "recipe": "fresh-web",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 06:15",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 5000,
+   "flags": {
+    "--lr": "5e-5",
+    "--bulk-frac": "0.97",
+    "--code-frac": "0.02"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.48,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.19 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.60 %",
+     "the vault does not confirm it (-0.22 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.19,
+     "diff": 0.0059,
+     "lo": 0.0052,
+     "hi": 0.0066,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.22
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 1,
+     "lost": 2
+    },
+    "creator": -0.012
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8709,
+     0.6
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1215,
+     0.59
+    ],
+    "web": [
+     3.2073,
+     3.2019,
+     -0.17
+    ],
+    "web_vault": [
+     3.1052,
+     3.1007,
+     -0.14
+    ]
+   }
+  },
+  {
+   "attempt": 17,
+   "recipe": "weak-language",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 06:44",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.9",
+    "--code-frac": "0.03",
+    "--boost-lang": "WEAK",
+    "--boost-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.4,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.07 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.06 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.07,
+     "diff": 0.0022,
+     "lo": 0.0018,
+     "hi": 0.0027,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.06
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8605,
+     0.24
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1089,
+     0.18
+    ],
+    "web": [
+     3.2073,
+     3.205,
+     -0.07
+    ],
+    "web_vault": [
+     3.1052,
+     3.1034,
+     -0.06
+    ]
+   }
+  },
+  {
+   "attempt": 18,
+   "recipe": "teachers",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 07:09",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.6",
+    "--code-frac": "0.03",
+    "--focus": "teacher",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.29,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.86 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 1.32 %",
+     "web got worse by 0.44 %",
+     "the vault does not confirm it (-0.73 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.86,
+     "diff": 0.0259,
+     "lo": 0.0247,
+     "hi": 0.0272,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.73
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 1,
+     "lost": 1
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8914,
+     1.32
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.134,
+     0.99
+    ],
+    "web": [
+     3.2073,
+     3.2215,
+     0.44
+    ],
+    "web_vault": [
+     3.1052,
+     3.1197,
+     0.47
+    ]
+   }
+  },
+  {
+   "attempt": 19,
+   "recipe": "code",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 07:26",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.8",
+    "--code-frac": "0.25"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.4,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.04 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.03 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.04,
+     "diff": 0.0011,
+     "lo": 0.0008,
+     "hi": 0.0014,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.03
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.857,
+     0.11
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1058,
+     0.08
+    ],
+    "web": [
+     3.2073,
+     3.2062,
+     -0.03
+    ],
+    "web_vault": [
+     3.1052,
+     3.1043,
+     -0.03
+    ]
+   }
+  },
+  {
+   "attempt": 20,
+   "recipe": "one-more-layer",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 07:51",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "5e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "add_layer"
+   },
+   "rc": 0,
+   "hours": 0.61,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.14 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.49 %",
+     "the vault does not confirm it (-0.15 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.14,
+     "diff": 0.0042,
+     "lo": 0.0035,
+     "hi": 0.0048,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.15
+    },
+    "code": {
+     "before": 53,
+     "after": 54,
+     "gained": 1,
+     "lost": 0
+    },
+    "creator": -0.005
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8678,
+     0.49
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1174,
+     0.45
+    ],
+    "web": [
+     3.2073,
+     3.2016,
+     -0.18
+    ],
+    "web_vault": [
+     3.1052,
+     3.1006,
+     -0.15
+    ]
+   }
+  },
+  {
+   "attempt": 21,
+   "recipe": "wider-view",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 08:28",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": 2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
+  },
+  {
+   "attempt": 22,
+   "recipe": "wider-view",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 08:28",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": 2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
+  },
+  {
+   "attempt": 23,
+   "recipe": "narrower-view",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 08:28",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 5000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": -2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
+  },
+  {
+   "attempt": 24,
+   "recipe": "narrower-view",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 08:28",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 5000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": -2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
+  },
+  {
+   "attempt": 25,
+   "recipe": "collective",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 08:28",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": null,
+   "clones": 5,
+   "note": "",
+   "rc": 0,
+   "hours": 2.29,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.29 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.29,
+     "diff": -0.0089,
+     "lo": -0.0096,
+     "hi": -0.0082,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.35
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 1,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8349,
+     -0.66
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.0811,
+     -0.71
+    ],
+    "web": [
+     3.2073,
+     3.2083,
+     0.03
+    ],
+    "web_vault": [
+     3.1052,
+     3.1054,
+     0.01
+    ]
+   }
+  },
+  {
+   "attempt": 26,
+   "recipe": "average-of-5",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 10:46",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.7",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.13,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.18 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.18,
+     "diff": -0.0055,
+     "lo": -0.0059,
+     "hi": -0.005,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.21
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8437,
+     -0.35
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.0914,
+     -0.38
+    ],
+    "web": [
+     3.2073,
+     3.2062,
+     -0.03
+    ],
+    "web_vault": [
+     3.1052,
+     3.1039,
+     -0.04
+    ]
+   }
+  },
+  {
+   "attempt": 27,
+   "recipe": "average-of-5~web0.77",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 11:54",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.77",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.11,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.16 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.16,
+     "diff": -0.0047,
+     "lo": -0.0051,
+     "hi": -0.0043,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.17
+    },
+    "code": {
+     "before": 53,
+     "after": 54,
+     "gained": 1,
+     "lost": 0
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8474,
+     -0.22
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.0959,
+     -0.24
+    ],
+    "web": [
+     3.2073,
+     3.2042,
+     -0.1
+    ],
+    "web_vault": [
+     3.1052,
+     3.1019,
+     -0.11
+    ]
+   }
+  },
+  {
+   "attempt": 28,
+   "recipe": "gentle",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 13:01",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "2e-5",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.3,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.09 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.32 %",
+     "the vault does not confirm it (-0.10 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.09,
+     "diff": 0.0026,
+     "lo": 0.0022,
+     "hi": 0.003,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.1
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.003
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8629,
+     0.32
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1128,
+     0.31
+    ],
+    "web": [
+     3.2073,
+     3.2032,
+     -0.13
+    ],
+    "web_vault": [
+     3.1052,
+     3.1016,
+     -0.12
+    ]
+   }
+  },
+  {
+   "attempt": 29,
+   "recipe": "fresh-web",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 13:19",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 5000,
+   "flags": {
+    "--lr": "5e-5",
+    "--bulk-frac": "0.97",
+    "--code-frac": "0.02"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.38,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.23 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.65 %",
+     "the vault does not confirm it (-0.22 %)",
+     "code exam fell from 53 to 50"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.23,
+     "diff": 0.0069,
+     "lo": 0.0062,
+     "hi": 0.0076,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.22
+    },
+    "code": {
+     "before": 53,
+     "after": 50,
+     "gained": 0,
+     "lost": 3
+    },
+    "creator": -0.018
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8723,
+     0.65
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1217,
+     0.6
+    ],
+    "web": [
+     3.2073,
+     3.2026,
+     -0.15
+    ],
+    "web_vault": [
+     3.1052,
+     3.1006,
+     -0.15
+    ]
+   }
+  },
+  {
+   "attempt": 30,
+   "recipe": "weak-language",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 13:43",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.9",
+    "--code-frac": "0.03",
+    "--boost-lang": "WEAK",
+    "--boost-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.29,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.06 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.05 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.06,
+     "diff": 0.0018,
+     "lo": 0.0013,
+     "hi": 0.0022,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.05
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.002
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8593,
+     0.2
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1079,
+     0.15
+    ],
+    "web": [
+     3.2073,
+     3.2052,
+     -0.06
+    ],
+    "web_vault": [
+     3.1052,
+     3.1035,
+     -0.05
+    ]
+   }
+  },
+  {
+   "attempt": 31,
+   "recipe": "teachers",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 14:01",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.6",
+    "--code-frac": "0.03",
+    "--focus": "teacher",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.22,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.87 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 1.33 %",
+     "web got worse by 0.46 %",
+     "the vault does not confirm it (-0.74 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.87,
+     "diff": 0.0263,
+     "lo": 0.0251,
+     "hi": 0.0275,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.74
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 1,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8918,
+     1.33
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1346,
+     1.01
+    ],
+    "web": [
+     3.2073,
+     3.2219,
+     0.46
+    ],
+    "web_vault": [
+     3.1052,
+     3.1197,
+     0.47
+    ]
+   }
+  },
+  {
+   "attempt": 32,
+   "recipe": "code",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 14:15",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "3e-5",
+    "--bulk-frac": "0.8",
+    "--code-frac": "0.25"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.31,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.05 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.03 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.05,
+     "diff": 0.0014,
+     "lo": 0.0011,
+     "hi": 0.0018,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.03
+    },
+    "code": {
+     "before": 53,
+     "after": 53,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8575,
+     0.13
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1063,
+     0.1
+    ],
+    "web": [
+     3.2073,
+     3.2064,
+     -0.03
+    ],
+    "web_vault": [
+     3.1052,
+     3.1043,
+     -0.03
+    ]
+   }
+  },
+  {
+   "attempt": 33,
+   "recipe": "one-more-layer",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 14:34",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "5e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "add_layer"
+   },
+   "rc": 0,
+   "hours": 0.47,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.16 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.51 %",
+     "the vault does not confirm it (-0.15 %)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.16,
+     "diff": 0.0047,
+     "lo": 0.004,
+     "hi": 0.0054,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.15
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.003
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8683,
+     0.51
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.1181,
+     0.48
+    ],
+    "web": [
+     3.2073,
+     3.2021,
+     -0.16
+    ],
+    "web_vault": [
+     3.1052,
+     3.0998,
+     -0.17
+    ]
+   }
+  },
+  {
+   "attempt": 34,
+   "recipe": "average-of-5",
+   "champion": "NOVA8-24M-v2",
+   "date": "2026-10-06 15:03",
+   "start": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.7",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 0,
+   "hours": 1.14,
+   "weak": "en",
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain +0.19 % on the decision sets is below 0.3 % or not certain"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.19,
+     "diff": -0.0058,
+     "lo": -0.0063,
+     "hi": -0.0054,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.23
+    },
+    "code": {
+     "before": 53,
+     "after": 52,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.8537,
+     2.8433,
+     -0.37
+    ],
+    "dataset_vault": [
+     3.1032,
+     3.091,
+     -0.39
+    ],
+    "web": [
+     3.2073,
+     3.2061,
+     -0.04
+    ],
+    "web_vault": [
+     3.1052,
+     3.1034,
+     -0.06
+    ]
+   }
   }
  ],
  "releases": [
   "NOVA-24M-v1",
   "NOVA-24M-v2",
-  "NOVA8-24M-v1"
+  "NOVA8-24M-v1",
+  "NOVA8-24M-v2"
  ],
  "grow": null,
  "grown": [
@@ -805,10 +2311,10 @@
  ],
  "current": {
   "what": "attempt",
-  "recipe": "average-of-5",
-  "since": 1791253456.2100754
+  "recipe": "collective",
+  "since": 1791303173.3200672
  },
- "seed": 7029,
+ "seed": 7072,
  "interventions": [
   {
    "time": 1791208662.8603675,
@@ -816,5 +2322,17 @@
    "note": "generation NOVA8-24M started by hand: {\"arch\": \"nova8\", \"d_model\": 448, \"heads\": 8, \"pattern\": \"NSNSNSN\", \"mlp_hidden\": 1296, \"slots\": 16}"
   }
  ],
- "own_recipes": {}
+ "own_recipes": {
+  "average-of-5~web0.77": {
+   "soup": 5,
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.77",
+    "--code-frac": "0.05"
+   },
+   "parent": "average-of-5"
+  }
+ },
+ "probation": null
 }

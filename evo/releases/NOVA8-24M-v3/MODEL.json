@@ -1,0 +1,66 @@
+{
+  "name": "NOVA8-24M-v3",
+  "frozen": "2026-10-06 18:32:29",
+  "source_checkpoint": "evo/collective/runs/director-35/core_round1.pt",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 448,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "arch": "nova8",
+    "heads": 8,
+    "pattern": "NSNSNSN",
+    "mlp_hidden": 1296,
+    "slots": 16
+  },
+  "core": "GEN7-CORE-001",
+  "parameters": 31508007,
+  "scores": {
+    "time": 1791311527.3127518,
+    "date": "2026-10-06 18:32",
+    "method": 2,
+    "val": 2.9435,
+    "lang": {
+      "sk": 3.0626,
+      "cs": 3.2398,
+      "pl": 3.3715,
+      "en": 3.5141,
+      "py": 2.9646,
+      "rs": 2.1412
+    },
+    "lang_tokens": {
+      "sk": 76164,
+      "cs": 31147,
+      "pl": 44562,
+      "en": 87832,
+      "py": 56167,
+      "rs": 110528
+    },
+    "code": {
+      "solved": 52,
+      "tasks": 79,
+      "pass1": 0.6582,
+      "by_level": {
+        "1": "44/55",
+        "2": "8/20",
+        "3": "0/4"
+      },
+      "nll": 0.6869
+    },
+    "creator": -0.001,
+    "web_val": 3.1567,
+    "checkpoint": "evo/collective/runs/director-35/core_round1.pt"
+  },
+  "dataset": "data/text_v4",
+  "git_commit": "647ba37",
+  "other_candidates": [
+    {
+      "checkpoint": "evo/collective/runs/director-35/core_round1.pt",
+      "val": 2.9435,
+      "creator": -0.001
+    }
+  ]
+}
