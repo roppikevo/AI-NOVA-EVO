@@ -1,85 +1,86 @@
 {
  "champion": {
-  "name": "NOVA-24M-v2",
-  "checkpoint": "evo/releases/NOVA-24M-v2/nova_model_fp32.pt",
-  "since": 1791138644.9536886,
+  "name": "NOVA8-24M-v1",
+  "checkpoint": "evo/releases/NOVA8-24M-v1/nova_model_fp32.pt",
+  "since": 1791253385.9279559,
   "scores": {
-   "dataset": 3.1049,
-   "dataset_vault": 3.317,
-   "web": 3.4149,
-   "web_vault": 3.3168,
+   "dataset": 2.9009,
+   "dataset_vault": 3.1513,
+   "web": 3.2204,
+   "web_vault": 3.1189,
    "web_by_language": {
-    "sk": 3.0931,
-    "cs": 3.4462,
-    "pl": 3.3553,
-    "en": 3.7648
+    "sk": 2.8972,
+    "cs": 3.2427,
+    "pl": 3.1718,
+    "en": 3.5697
    },
-   "code": 43,
-   "creator": -0.0,
-   "params": 23650568,
+   "code": 53,
+   "creator": -0.014,
+   "params": 24167975,
    "genome": {
-    "layers": 8,
-    "width": 640,
-    "kernel": 5,
-    "parameters": 23650568
+    "layers": 7,
+    "width": 448,
+    "kernel": 4,
+    "pattern": "NSNSNSN",
+    "parameters": 24167975
    }
   }
  },
  "started": 1791138088.0559714,
- "attempts": 9,
- "accepted": 1,
- "rejected_in_a_row": 9,
+ "attempts": 10,
+ "accepted": 2,
+ "rejected_in_a_row": 0,
  "recipes": {
   "gentle": {
-   "runs": 0.5595818096650402,
+   "runs": 0.5204110829884875,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web": {
-   "runs": 0.6017008706075702,
+   "runs": 0.5595818096650402,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "weak-language": {
-   "runs": 0.6469901834490002,
+   "runs": 0.6017008706075702,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "teachers": {
-   "runs": 0.6956883693000001,
+   "runs": 0.6469901834490002,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code": {
-   "runs": 0.7480520100000001,
+   "runs": 0.6956883693000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "one-more-layer": {
-   "runs": 0.8043570000000001,
+   "runs": 0.7480520100000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "wider-view": {
-   "runs": 0.8649000000000001,
+   "runs": 0.8043570000000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "narrower-view": {
-   "runs": 0.93,
+   "runs": 0.8649000000000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "collective": {
-   "runs": 1.0,
+   "runs": 0.93,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
@@ -87,7 +88,7 @@
   "average-of-5": {
    "runs": 0.0,
    "gain": 0.0,
-   "fails": 0,
+   "fails": 1,
    "rest_until": 0.0
   }
  },
@@ -773,41 +774,41 @@
    "rc": 0,
    "hours": 2.2,
    "weak": "en"
+  },
+  {
+   "attempt": 10,
+   "recipe": "average-of-5",
+   "champion": "NOVA8-24M-v1",
+   "date": "2026-10-06 02:23",
+   "start": "evo/releases/NOVA8-24M-v1/nova_model_fp32.pt",
+   "steps": 3000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.7",
+    "--code-frac": "0.05"
+   },
+   "clones": 5,
+   "rc": 1,
+   "hours": 0.01,
+   "weak": "en",
+   "tail": "ing PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\ninit from evo/releases/NOVA8-24M-v1/nova_model_fp32.pt\nextra teacher/web sequences: 1714\nbulk corpus: 12691132 sequences\ncode-school practice sequences: 171 (share 0.05)\ndata: train (123170, 128), val (7741, 128) (4s)\nstart: step 0/3000, val 3.0061, device cuda, bf16 True\n"
   }
  ],
  "releases": [
   "NOVA-24M-v1",
-  "NOVA-24M-v2"
+  "NOVA-24M-v2",
+  "NOVA8-24M-v1"
  ],
- "grow": {
-  "line": "NOVA8-24M",
-  "override": {
-   "arch": "nova8",
-   "d_model": 448,
-   "heads": 8,
-   "pattern": "NSNSNSN",
-   "mlp_hidden": 1296,
-   "slots": 16
-  },
-  "steps": 300000,
-  "lr": 0.001,
-  "compile": true,
-  "carry": 8,
-  "carry_share": 0.35,
-  "since": 1791208662.8603575,
-  "segments": 4,
-  "steps_done": 296361,
-  "best_val": 3.0878,
-  "last_rc": 0,
-  "fails": 0
- },
- "grown": [],
+ "grow": null,
+ "grown": [
+  "NOVA8-24M"
+ ],
  "current": {
-  "what": "grow",
-  "line": "NOVA8-24M",
-  "since": 1791252185.4852986
+  "what": "attempt",
+  "recipe": "average-of-5",
+  "since": 1791253456.2100754
  },
- "seed": 7025,
+ "seed": 7029,
  "interventions": [
   {
    "time": 1791208662.8603675,
