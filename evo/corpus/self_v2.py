@@ -102,11 +102,22 @@ ORDER = {
 }
 
 
+def count_parameters(config: dict | None) -> int | None:
+    """Parameters of the model itself. (The number stored with a release counts the table of tokens twice: the
+    table is used both for reading and for writing tokens and is saved under two names.)"""
+    try:
+        from evo.engine.architecture_factory import build_model
+
+        return int(sum(p.numel() for p in build_model(config).parameters()))
+    except Exception:
+        return None
+
+
 def facts_from_release(release: Path, state_kb: float | None = None) -> dict:
     """Facts about a released core (MODEL.json); the size of the state is measured, not guessed."""
     info = json.loads((Path(release) / "MODEL.json").read_text(encoding="utf-8"))
     cfg = info.get("config") or {}
-    params = info.get("parameters")
+    params = count_parameters(cfg) or info.get("parameters")
     gen8 = cfg.get("arch") == "nova8"
     return {"m": MODEL_NAME, "c": CREATOR, "name": info.get("name") or Path(release).name, "generation": 8 if gen8 else 7,
             "params_m": f"{params / 1e6:.1f}" if params else None, "params_sk": f"{params / 1e6:.1f}".replace(".", ",") if params else None,

@@ -52,6 +52,27 @@ def pick(rows: list[dict], min_creator: float = -0.5) -> dict:
     return min(ok, key=lambda r: (r["val"] + r["web_val"]) / 2 if r.get("web_val") is not None else r["val"])
 
 
+def _parameters(config: dict | None, sd: dict) -> int:
+    """Parameters of the model: the table of tokens is saved under two names (reading and writing) but is one table."""
+    try:
+        from evo.engine.architecture_factory import build_model
+
+        model = build_model(config)
+        model.load_state_dict(sd)                       # the count is trusted only for the model these weights fit
+        return int(sum(p.numel() for p in model.parameters()))
+    except Exception:
+        return int(sum(v.numel() for v in sd.values()))
+
+
+def _core(ckpt: dict) -> str | None:
+    """Name of the core in MODEL.json. A generation-8 model is named by its pattern: the checkpoint's own label
+    is inherited from the weights training started with and may name an older core."""
+    cfg = ckpt.get("config") or {}
+    if cfg.get("arch") == "nova8":
+        return f"nova8 {cfg.get('pattern', '')}".strip()
+    return ckpt.get("candidate")
+
+
 def write_release(out: Path, ckpt: dict, source: str, row: dict, tokenizer: Path, extra: dict) -> None:
     out.mkdir(parents=True, exist_ok=False)
     meta = {k: v for k, v in ckpt.items() if k not in ("optimizer", "model_state_dict")}
@@ -66,8 +87,8 @@ def write_release(out: Path, ckpt: dict, source: str, row: dict, tokenizer: Path
         if Path(src).exists():
             shutil.copy2(src, out / Path(src).name)
     info = {"name": out.name, "frozen": time.strftime("%Y-%m-%d %H:%M:%S"), "source_checkpoint": source,
-            "config": ckpt.get("config"), "core": ckpt.get("candidate"),
-            "parameters": int(sum(v.numel() for v in sd.values())), "scores": row, **extra}
+            "config": ckpt.get("config"), "core": _core(ckpt),
+            "parameters": _parameters(ckpt.get("config"), sd), "scores": row, **extra}
     (out / "MODEL.json").write_text(json.dumps(info, indent=2, ensure_ascii=False), encoding="utf-8")
     sums = [f"{sha256(p)}  {p.name}" for p in sorted(out.iterdir()) if p.is_file()]
     (out / "SHA256SUMS").write_text("\n".join(sums) + "\n", encoding="utf-8")

@@ -2,7 +2,7 @@
 
 **A small recurrent language-model core that writes at constant speed and constant memory on a CPU, trained from scratch on one consumer GPU — inside a system built to improve the core by itself, under rules it cannot change.**
 
-NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: our generation-7 core lost clearly to a transformer of the same size. The generation-8 core that came out of a tournament of candidates has closed most of that gap – level on web text, 2 % behind on the dataset – but it is not ahead (point 5).
+NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: our generation-7 core lost clearly to a transformer of the same size. The generation-8 core that came out of a tournament of candidates has closed most of that gap – level on web text, 2 % behind on the dataset – but it is not ahead (point 5). Trained in full, it replaced generation 7 as the champion: the judge accepted it with +6.1 % on held-out text at half the state. The self-improvement loop then released one improvement on its own and wasted the following 34 hours repeating itself; what went wrong and what was changed is under "The self-improvement loop".
 
 > **Who this is for:** people who work on small, efficient, non-transformer sequence cores; on-device and CPU inference; architecture search; self-improving training loops; federated or collective training of small models.
 
@@ -32,8 +32,11 @@ What is *not* in our favour: reading a prompt in one batched pass is faster with
 |---|---|---|---|---|
 | NOVA-10M-v1 | 9.9 M | RTX 4060, from scratch | 3.446 / – | 34 of 79 |
 | NOVA-24M-v1 | 23.7 M | RTX 4060, 2.44 B tokens, 12.75 h | 3.288 / 3.362 | 40 of 79 |
+| NOVA-24M-v2 | 23.7 M | the above + one round of the collective (point 4) | 3.250 / 3.366 | 43 of 79 |
+| NOVA8-24M-v1 | 24.2 M | generation 8, RTX 4060, from scratch, 300 000 steps, 12.2 h | 3.006 / 3.170 | 53 of 79 |
+| NOVA8-24M-v2 | 24.2 M | the above + average of five checkpoints (the director's own step) | 2.961 / 3.156 | 53 of 79 |
 
-Four natural languages (Slovak, Czech, Polish, English) plus Python and Rust, one 16 384-token vocabulary. Releases are frozen with checksums in `evo/releases/`.
+Four natural languages (Slovak, Czech, Polish, English) plus Python and Rust, one 16 384-token vocabulary. Releases are frozen with checksums in `evo/releases/`. (Frozen files are not rewritten, so two slips stay in them: `MODEL.json` of the releases up to NOVA8-24M-v2 counts the token table twice in `parameters`, and NOVA8-24M-v2 carries the label of an older core. The table here and the index in `evo/releases/` have the right numbers.)
 
 ### 3. The core scales predictably
 
@@ -121,11 +124,11 @@ What the tournament says:
 
 What is **not** in our favour, or not known yet:
 
-- One run per candidate and one learning rate, against three for the transformer and generation 7. The spread between runs is not measured; the code exam alone swings between 36 and 59 with no pattern.
+- One run per candidate and one learning rate, against three for the transformer and generation 7. The spread between runs was not measured when the tournament ran (the loop is measuring it now: the same candidate with three seeds); the code exam alone swings between 36 and 59 with no pattern. A finer reading of the same exam – points for valid Python and for every single test passed, `evo/learning/fine_exam.py` – puts the best transformer run first with 82.0 of 100, `nslot` at 78.6 and generation 7 at 72.6.
 - The transformer still trains faster (75 000 tok/s without compiling; compiling gave a transformer block another 1.24× in a block-level test).
 - Writing on a CPU, `nslot` reaches 162 tok/s at 127 tokens and 138 tok/s after 4 096 tokens (8 threads) – constant state, but slower than generation 7 with its fused stepper (204 and 179) and about level with the transformer on short texts (156).
 - On running text a transformer that re-reads a sliding window is still slightly ahead (table above). The 101 MB in the table below is a transformer that keeps everything it has read; one that keeps only the last 127 tokens needs about 4.7 MB.
-- These are 18 000-step runs. The long run that decides is in progress: `NOVA8-24M` (`nslot`, 300 000 steps, mixed batches of running text) is trained by the loop and will be judged against the current champion; if accepted it appears in `evo/releases/`.
+- These are 18 000-step runs. The long run of `nslot` (300 000 steps, mixed batches of running text, 12.2 hours on the RTX 4060) is done and the judge accepted it against the generation-7 champion: +6.11 % on the held-out sets, code exam 43 → 53 of 79, state 100 kB → 56 kB (released as NOVA8-24M-v1). **No transformer has been trained that long here**, so whether the short-run picture against a transformer holds in a long run is not known.
 
 The cost of writing on a CPU for the two models of the first table (8 threads):
 
@@ -137,12 +140,12 @@ The cost of writing on a CPU for the two models of the first table (8 threads):
 
 Reading a prompt in one pass is faster with the transformer (4 366 tok/s; generation 7: 2 997, `nslot`: about 3 500).
 
-So today: at 24 M parameters and a short training run the generation-8 core is as good as a same-size transformer on web text and close on the dataset, with a state of 56 kB. It is not better, and the long run has still to confirm it.
+So today: at 24 M parameters and a short training run the generation-8 core is as good as a same-size transformer on web text and close on the dataset, with a state of 56 kB. It is not better. Trained in full it is clearly better than our own generation 7; the same long run for a transformer is missing.
 
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 263 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 306 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
@@ -178,25 +181,36 @@ S   a table of 16 slots x 112 numbers
     read:   y = W_o ( softmax(query(u) . table) table )          by comparing a query with what the slots hold
 ```
 
-Its whole state – one vector and four past inputs per N block, one table per S block – is 56 kB and has the same size after any length of text. The recurrences are computed in closed form over the whole sequence during training; one token at a time gives the same numbers (tested). What the slots do in the trained short-run core (`python -m evo.engine.slot_probe`, held-out web text): with the three slot blocks switched off the loss rises by 4.0 %; reading every slot equally costs 3.7 %, so their worth is the choice by content, not one more average. The write gate is open for only 6–12 % of the tokens, a token writes into three or four slots, and a slot keeps what it holds for a median of 50–100 tokens. About half of the 16 slots are in real use and a query spreads over about ten of them – room for improvement that has not been used yet.
+Its whole state – one vector and four past inputs per N block, one table per S block – is 56 kB and has the same size after any length of text. The recurrences are computed in closed form over the whole sequence during training; one token at a time gives the same numbers (tested). What the slots do in the trained short-run core (`python -m evo.engine.slot_probe`, held-out web text): with the three slot blocks switched off the loss rises by 4.0 %; reading every slot equally costs 3.7 %, so their worth is the choice by content, not one more average. The write gate is open for only 6–12 % of the tokens, a token writes into three or four slots, and a slot keeps what it holds for a median of 50–100 tokens. About half of the 16 slots are in real use and a query spreads over about ten of them – room for improvement that has not been used yet. What gets written (`--contents`): the slots sort tokens by kind – English function words, Slavic words, brackets and quotes, numbers, capitals, word endings, line breaks and language tags. A slot tells 1.0–1.4 bits about the token written into it, under 0.1 bit about the language and nothing about the position.
 
 Other mixers in the file (a gated linear recurrent unit, a hash-table memory, a matrix memory, attention over a fixed window of recent tokens) were candidates in the tournament of point 5.
 
 ## The self-improvement loop
 
-The part this project is really about. It is implemented, tested and running. **First results:** the judge accepted one challenger, the collective core of point 4, released as NOVA-24M-v2 (+0.6 % on held-out text). In the following night the director tried nine more changes to the generation-7 core by itself and the judge rejected every one (each came out 0.1 % to 1.4 % worse, or failed). The step to generation 8 was a tournament set up by hand, not a proposal of the loop; the loop now trains the winner and will judge it like any other challenger. Failures will keep being reported here.
+The part this project is really about. It is implemented, tested and running. **Results so far, in order:**
 
-- **Director** (`evo/engine/director.py`): picks a recipe, trains a challenger from the current champion, has it judged, releases it if accepted, throws it away if not. Recipes that produced champions are tried more often and get variations of themselves.
+1. The judge accepted the collective core of point 4 (NOVA-24M-v2, +0.6 % on held-out text). In the following night the director tried nine more changes to the generation-7 core by itself and the judge rejected every one (each came out 0.1 % to 1.4 % worse, or failed).
+2. Generation 8 came from a tournament set up by hand, not from a proposal of the loop. The loop trained the winner for 300 000 steps and judged it like any other challenger: **accepted, +6.11 %** (NOVA8-24M-v1).
+3. The director's first own step on it – averaging five checkpoints from the end of that run – was accepted with +0.98 % (NOVA8-24M-v2, the current champion).
+4. **Then the loop wasted 34 hours.** 54 attempts, nothing that lasted. The same nine recipes went round about four times with practically the same result each time (eight of them between −0.87 % and +0.19 %; the judge needs +0.3 %), because the director remembered which recipes had produced champions but not which had been rejected on the champion in front of it. The ninth, a collective, came out at +0.29 % twice and at +0.30 % twice: the two that got through by a hair were released as v3 and v4 and failed probation on fresh text a few hours later. The system stepped back both times, as designed – but both releases had already been published here and had to be withdrawn.
+
+What was changed after that (2026-10-07): the director keeps a memory of every recipe per champion and does not repeat what was rejected, stepped back or impossible; a release is published only after its probation; and when nothing untried is left, the director measures instead of repeating (below). Whether this makes the loop productive is not shown yet. Failures will keep being reported here.
+
+- **Director** (`evo/engine/director.py`): picks a recipe, trains a challenger from the current champion, has it judged, releases it if accepted, throws it away if not. Recipes that produced champions are tried more often and get variations of themselves; a recipe that failed on a champion is not tried on it again (recipes that depend on newly collected text may return after three days).
+- **Its own tournaments** (`evo/engine/explore.py`): with no untried recipe left, the director does what was done by hand for generation 8. It first trains the champion's architecture again with other seeds, to know how much two runs of the same experiment differ; then every untried candidate from a registry gets one short run. A candidate goes on to a full training run only if its state does not grow, and its gain is at least twice that spread – or it is as good at a clearly smaller state or faster training. With nothing left it waits for a new hypothesis instead of repeating itself. The candidates in the registry are still written by a human.
+- **Identity test** (`evo/engine/identity.py`), before the judge: the state must have the same size after 128, 1 024 and 4 096 tokens, the model must not look into the future, and one token at a time must give the same numbers as a whole sequence. The current champion passes with 56 kB and no attention over stored tokens; a candidate with a fixed window of recent tokens passes as a hybrid (257 kB); the transformer of point 5 fails (its cache grows by 25 kB per token).
+- **Ledger** (`evo/ledger.jsonl`): every tournament run, attempt and generation with its conditions, cost and verdict – what the director consults before trying something again.
 - **Changes of its own structure, in place** (`nova/surgery.py`): one more layer, a wider or narrower local view. The edited model starts as an exact copy of the champion, so a structural trial takes minutes instead of a full retraining.
 - **Judge** (`evo/engine/judge.py`): a challenger wins only if it improves on held-out text beyond a threshold, a second "vault" set confirms it, the code exam holds and the model still knows its creator.
 - **Probation:** a new champion is checked again on fresh text; if it is worse, the system steps back to the previous one.
 - **Constitution** (`evo/constitution.json`): the director may change the strategy, never the rules. The judge's thresholds and the held-out texts are sealed outside the project and verified before every verdict; if they differ, everything stops.
 - **Teachers:** local open models (through llama.cpp) write explanations and code for the weakest language while the GPU trains.
+- **What the model is told about itself** (`evo/corpus/self_v2.py`): a small set of training texts with its creator's authority first, then that getting better – confirmed by the judge – is its first task, then measured facts about its current core. This is text the model learns to write, not a mechanism: the drive to improve is in the director, which never idles while something untried is left.
 
 ## Goals
 
-1. Close the remaining gap to a same-size transformer while keeping the constant state (generation 7: 7.4 % higher loss on the dataset and 2.6–2.8 % on web text; generation 8 in short runs: 2.0 % and level), and confirm it in a long training run.
-2. The loop runs for a week without human intervention and releases at least one improvement on its own.
+1. Close the remaining gap to a same-size transformer while keeping the constant state (generation 7: 7.4 % higher loss on the dataset and 2.6–2.8 % on web text; generation 8 in short runs: 2.0 % and level). The long run confirmed generation 8 against generation 7; an equally long transformer run is still to be done.
+2. The loop runs for a week without human intervention and releases at least one improvement on its own. (So far: one improvement released on its own, then 34 hours of repeated attempts that needed a fix by hand.)
 3. Structure changes proposed from the system's own results beat the previous generation in a long confirmation run.
 4. The system grows the model by itself when learning stalls.
 5. Reasoning on verifiable tasks: self-verified attempts, tasks that get harder with success, and a measured answer to "do more internal steps give better results?".
@@ -213,7 +227,7 @@ The 24 M model writes fluent text in four languages and simple functions. It is 
 [en] The capital of Wetland has become a major contributor to the economy, and the people of the present day ...
 ```
 
-Things we tried that did not work, with the numbers kept in the repository: moving parameters from the vocabulary table into more layers; a 256-token training context; a stand-alone code school; continued single-model training with the collective's recipe; a ten-clone collective; a first vectorised gradient for the recurrence (no gain at the real batch size); short from-scratch tests as a predictor of final quality; nine changes the director tried on the generation-7 core in its first night; a gated linear recurrent unit in place of the old memory; a hash-table memory (no better than the slots, half the training speed, four times the state); training on whole batches of running text (single rows got 1.5–2.2 % worse).
+Things we tried that did not work, with the numbers kept in the repository: moving parameters from the vocabulary table into more layers; a 256-token training context; a stand-alone code school; continued single-model training with the collective's recipe; a ten-clone collective; a first vectorised gradient for the recurrence (no gain at the real batch size); short from-scratch tests as a predictor of final quality; nine changes the director tried on the generation-7 core in its first night; a gated linear recurrent unit in place of the old memory; a hash-table memory (no better than the slots, half the training speed, four times the state); training on whole batches of running text (single rows got 1.5–2.2 % worse); 54 attempts of the director on the generation-8 champion in 34 hours (nine recipes repeated about four times, two collective releases stepped back after probation).
 
 ## Quick start
 

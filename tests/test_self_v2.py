@@ -9,8 +9,10 @@ from evo.corpus.sources import teacher_jsonl
 def _release(tmp_path):
     rel = tmp_path / "NOVA8-24M-v1"
     rel.mkdir()
-    (rel / "MODEL.json").write_text(json.dumps({"name": "NOVA8-24M-v1", "parameters": 24167975,
-                                                "config": {"arch": "nova8", "pattern": "NSNSNSN", "slots": 16}}))
+    # "parameters" as an older release stored it: the table of tokens counted twice (31.5 M instead of 24.2 M)
+    (rel / "MODEL.json").write_text(json.dumps({"name": "NOVA8-24M-v1", "parameters": 31508007,
+                                                "config": {"vocab_size": 16384, "arch": "nova8", "d_model": 448, "heads": 8, "pattern": "NSNSNSN",
+                                                           "mlp_hidden": 1296, "slots": 16}}))
     return rel
 
 

@@ -137,3 +137,19 @@ def test_release_is_complete_and_never_overwritten(tmp_path):
     assert "nova_model.pt" in sums and "tokenizer.json" in sums
     with pytest.raises(FileExistsError):
         release.write_release(out, ck, "src.pt", {"val": 3.4}, tokp, {})
+
+
+def test_release_names_a_generation8_core_by_its_pattern_and_counts_the_token_table_once(tmp_path):
+    from evo.engine import release
+    from evo.engine.architecture_factory import build_model
+
+    cfg = {"arch": "nova8", "vocab_size": 64, "d_model": 16, "pattern": "NS", "heads": 2, "mlp_hidden": 32, "slots": 4, "max_seq_len": 16}
+    model = build_model(cfg)
+    ck = {"config": cfg, "candidate": "GEN7-CORE-001", "model_state_dict": model.state_dict()}
+    tokp = tmp_path / "tokenizer.json"
+    tokp.write_text("{}")
+    out = tmp_path / "rel" / "NOVA8-test"
+    release.write_release(out, ck, "src.pt", {"val": 3.0}, tokp, {})
+    info = json.loads((out / "MODEL.json").read_text())
+    assert info["core"] == "nova8 NS"
+    assert info["parameters"] == sum(p.numel() for p in model.parameters()) < sum(v.numel() for v in model.state_dict().values())
