@@ -125,11 +125,34 @@ def code_practice_sequences(dataset: Path, seq_len: int = 128) -> np.ndarray:
     return np.array(rows, dtype=np.int32) if rows else np.zeros((0, seq_len), dtype=np.int32)
 
 
+def load_teacher(path: str | Path | None) -> torch.nn.Module | None:
+    """The model in a checkpoint or release file, to be used as a teacher (None for an empty path)."""
+    if not path:
+        return None
+    from evo.engine.architecture_factory import build_model
+
+    ck = torch.load(path, map_location="cpu", weights_only=False)
+    m = build_model(ck["config"])
+    m.load_state_dict({k: v.float() if v.is_floating_point() else v for k, v in ck["model_state_dict"].items()})
+    return m.eval()
+
+
 def lr_at(step: int, total: int, base: float, warmup: int, floor: float = 0.1) -> float:
     if step < warmup:
         return base * (step + 1) / warmup
     progress = min(1.0, (step - warmup) / max(1, total - warmup))
     return base * (floor + (1 - floor) * 0.5 * (1 + math.cos(math.pi * progress)))
+
+
+def teacher_loss(teacher: torch.nn.Module, inputs: torch.Tensor, student_logits: torch.Tensor, topk: int = 64) -> torch.Tensor:
+    """Cross-entropy of the student against the teacher's distribution over the teacher's `topk` likeliest next
+    tokens (renormalised), mean over positions. The teacher reads the same rows with a fresh state, without gradient."""
+    with torch.no_grad():
+        t = _logits(teacher(inputs)).float()
+        top, idx = t.topk(min(topk, t.size(-1)), dim=-1)
+        p = F.softmax(top, dim=-1)
+    logp = F.log_softmax(student_logits.float(), dim=-1).gather(-1, idx)
+    return -(p * logp).sum(-1).mean()
 
 
 def _logits(out: Any) -> torch.Tensor:
@@ -220,6 +243,10 @@ def long_train(
     focus: np.ndarray | None = None,
     focus_frac: float = 0.0,
     extra_val: np.ndarray | None = None,
+    teacher: torch.nn.Module | None = None,
+    teacher_weight: float = 0.5,
+    teacher_until: int = 0,
+    teacher_topk: int = 64,
     progress: Path = PROGRESS,
     stop_file: Path = STOP_FILE,
     log: Callable[[str], None] = print,
@@ -230,6 +257,15 @@ def long_train(
     rng = np.random.default_rng(seed)
     model.to(device).train()
     opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    # a teacher: an earlier, smaller core whose knowledge the new one starts from. On rows read with a fresh state
+    # the student also learns the teacher's next-token distribution (its `teacher_topk` likeliest tokens); the
+    # weight falls linearly to zero at step `teacher_until`, so the student is free to pass its teacher afterwards
+    if teacher is not None and teacher_until > 0 and teacher_weight > 0:
+        teacher.to(device).eval()
+        for prm in teacher.parameters():
+            prm.requires_grad_(False)
+    else:
+        teacher = None
     # the training forward pass may run compiled (many small operations fused into few kernels: the
     # generation-8 core trains almost twice as fast); measuring and saving always use the plain model
     forward = model
@@ -358,6 +394,7 @@ def long_train(
                 out = model(*args_in)
                 out_stream = model(sb, stream["states"]) if sb is not None else None
             logits = _logits(out)
+            fresh = False
             if sb is not None:
                 loss = (F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1), reduction="sum")
                         + F.cross_entropy(out_stream[0][:, :-1].reshape(-1, logits.size(-1)).float(), sb[:, 1:].reshape(-1), reduction="sum")
@@ -366,17 +403,22 @@ def long_train(
                 if stream["k"] >= carry:
                     stream = None
             else:
+                fresh = stream is None                       # read with a fresh state: the teacher can read the same rows
                 if stream is not None:
                     logits = logits[:, :-1]
                     stream["states"], stream["k"] = detach_states(out[1]), stream["k"] + 1
                     if stream["k"] >= carry:
                         stream = None
                 loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1))
+            t_weight = teacher_weight * (1.0 - step / teacher_until) if teacher is not None and step < teacher_until else 0.0
+            plain = float(loss.detach())                         # the loss on the text alone is what the log shows
+            if t_weight > 0 and (sb is not None or fresh):
+                loss = loss + t_weight * teacher_loss(teacher, b[:, :-1], logits, teacher_topk)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         opt.step()
-        running += float(loss)
+        running += plain
         running_n += 1
 
         done = step + 1
@@ -459,6 +501,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--carry-share", type=float, default=0.0,
                     help="with --carry: this share of every batch is running text, the rest the usual mix read with a fresh "
                          "state (0 = whole batches of running text alternating with whole batches of the rest)")
+    ap.add_argument("--teacher", default="", help="checkpoint of an earlier core to learn from as well (see teacher_loss)")
+    ap.add_argument("--teacher-weight", type=float, default=0.5)
+    ap.add_argument("--teacher-until", type=int, default=0, help="the teacher's weight falls to zero at this step (0 = no teacher)")
     ap.add_argument("--config-override", default="",
                     help='experiment: JSON merged into the core config, e.g. {"d_embed": 128, "num_layers": 12}')
     ap.add_argument("--no-activate", action="store_true",
@@ -583,7 +628,8 @@ def main(argv: list[str] | None = None) -> int:
                         bulk=bulk, bulk_frac=args.bulk_frac, code=code, code_frac=args.code_frac,
                         warm_optimizer=warm_opt, boost=boost, boost_frac=args.boost_frac, seed=args.seed,
                         focus=focus, focus_frac=args.focus_frac if focus is not None else 0.0,
-                        compile_model=args.compile, carry=args.carry, carry_share=args.carry_share)
+                        compile_model=args.compile, carry=args.carry, carry_share=args.carry_share,
+                        teacher=load_teacher(args.teacher), teacher_weight=args.teacher_weight, teacher_until=args.teacher_until)
     report["bulk_sequences"] = 0 if bulk is None else int(len(bulk))
     report["params"] = int(sum(p.numel() for p in model.parameters()))
     report["config"] = config

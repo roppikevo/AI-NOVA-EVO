@@ -6,9 +6,11 @@ The director's own tournaments: when learning stalls, it does what was done by h
     2. candidate   the next architecture from the registry that the ledger has no record of gets one short run,
                    the same way as every candidate before it
     3. verdict     identity first (a state that grows is out), then quality (the gain must be well above the
-                   noise), then cost (equal quality with a clearly smaller state or faster training also wins;
-                   a much larger state has to earn itself with a larger gain)
+                   noise; a much larger state has to earn itself with a larger gain), then the code exam as a
+                   check (clearly below what the champion's architecture reaches between seeds is out)
     4. a winner becomes the next generation in the ladder: trained in full, judged by the constitution
+    5. equal quality at a clearly smaller state or faster training is noted as the cheaper build and NOT trained
+       in full on that alone: the judge accepts only a gain in quality, so the twelve hours could not end in a release
 
 Hypotheses (the registry of candidates) still come from outside. With no untried candidate left the director
 is "waiting for a new hypothesis": alive, measuring nothing in vain.
@@ -63,6 +65,34 @@ def noise_pct(rows: list[dict], candidate: str, group: str) -> float | None:
     return round(100 * (sum((x - mean) ** 2 for x in q) / len(q)) ** 0.5 / mean, 3)
 
 
+def _code_solved(entry: dict) -> float | None:
+    try:
+        return float(str((entry.get("metrics") or {}).get("code")).split("/")[0])
+    except ValueError:
+        return None
+
+
+def noise_stats(rows: list[dict], candidate: str, group: str) -> dict[str, Any]:
+    """Mean and spread between the seeds of the champion's architecture, for the losses and for the code exam."""
+    runs = base_runs(rows, candidate, group)
+    out: dict[str, Any] = {"runs": len(runs)}
+    series = {"dataset": [(r.get("metrics") or {}).get("dataset") for r in runs], "web": [(r.get("metrics") or {}).get("web") for r in runs],
+              "code_solved": [_code_solved(r) for r in runs], "code_score": [(r.get("metrics") or {}).get("code_score") for r in runs]}
+    for name, vals in series.items():
+        vals = [v for v in vals if v is not None]
+        if len(vals) >= 2:
+            m = sum(vals) / len(vals)
+            out[name] = {"mean": round(m, 4), "std": round((sum((v - m) ** 2 for v in vals) / len(vals)) ** 0.5, 4), "min": min(vals), "max": max(vals), "n": len(vals)}
+    return out
+
+
+def code_floor(rows: list[dict], candidate: str, group: str) -> float | None:
+    """The fine code score a candidate must not fall below: the worst seed of the champion's architecture minus the
+    whole spread between its seeds. None until two of its runs carry the fine score."""
+    s = noise_stats(rows, candidate, group).get("code_score")
+    return round(s["min"] - (s["max"] - s["min"]), 2) if s else None
+
+
 def next_action(rows: list[dict], candidate: str, group: str, registry: dict[str, dict]) -> dict | None:
     """What the director should measure next: {"what": "noise", "seed"} or {"what": "candidate", "name"}; None = nothing left."""
     done = {r.get("name") for r in rows if r.get("kind") == "tournament"}
@@ -77,8 +107,8 @@ def next_action(rows: list[dict], candidate: str, group: str, registry: dict[str
     return None
 
 
-def verdict(entry: dict, base: dict, noise: float | None) -> dict[str, Any]:
-    """Is the candidate worth a full generation? Identity, then quality, then cost."""
+def verdict(entry: dict, base: dict, noise: float | None, code_floor: float | None = None) -> dict[str, Any]:
+    """Is the candidate worth a full generation? Identity, then quality, then the code exam as a check; cost is noted."""
     noise = DEFAULT_NOISE_PCT if noise is None else noise
     out: dict[str, Any] = {"win": False, "noise_percent": noise}
     if entry.get("verdict") != "measured" or quality(entry) is None:
@@ -93,11 +123,20 @@ def verdict(entry: dict, base: dict, noise: float | None) -> dict[str, Any]:
     if state >= BIG_STATE:
         need = max(need, BIG_STATE_GAIN_PCT)
     out.update({"gain_percent": round(gain, 2), "needed_percent": round(need, 2), "state_ratio": round(state, 2), "speed_ratio": round(speed, 2)})
+    code = (entry.get("metrics") or {}).get("code_score")
+    code_worse = code_floor is not None and code is not None and code < code_floor
+    if code_floor is not None and code is not None:
+        out.update({"code_score": code, "code_floor": code_floor})
+    if gain >= need and code_worse:
+        return {**out, "reason": f"quality {gain:+.2f} % (needed {need:.2f} %), but the code exam is clearly worse: {code} against a floor of {code_floor} "
+                                 f"between the seeds of the champion's architecture"}
     if gain >= need:
         return {**out, "win": True, "reason": f"quality {gain:+.2f} % (needed {need:.2f} %, noise {noise:.2f} %), state x{state:.2f}"}
-    if gain > -noise and state <= 1.0 and (state <= SMALL_STATE or speed >= FASTER):
-        return {**out, "win": True, "reason": f"same quality ({gain:+.2f} %, noise {noise:.2f} %) at lower cost: state x{state:.2f}, training x{speed:.2f}"}
-    return {**out, "reason": f"quality {gain:+.2f} % is below the needed {need:.2f} % (noise {noise:.2f} %); state x{state:.2f}, training x{speed:.2f}"}
+    if gain > -noise and state <= 1.0 and (state <= SMALL_STATE or speed >= FASTER) and not code_worse:
+        return {**out, "cheaper": True, "reason": f"same quality ({gain:+.2f} %, noise {noise:.2f} %) at lower cost: state x{state:.2f}, training x{speed:.2f} - "
+                                                  f"noted as the cheaper build; no full training on that alone (the judge accepts only a gain in quality)"}
+    return {**out, "reason": f"quality {gain:+.2f} % is below the needed {need:.2f} % (noise {noise:.2f} %); state x{state:.2f}, training x{speed:.2f}"
+                             + (f"; code exam clearly worse ({code} against a floor of {code_floor})" if code_worse else "")}
 
 
 def generation_row(candidate: str, group: str, registry: dict[str, dict], recipe: dict | None = None) -> dict:

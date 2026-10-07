@@ -1,0 +1,66 @@
+{
+  "name": "NOVA8-24M-v5",
+  "frozen": "2026-10-07 19:40:57",
+  "source_checkpoint": "evo/director/challengers/attempt-66.pt",
+  "config": {
+    "vocab_size": 16384,
+    "d_model": 448,
+    "d_state": 384,
+    "num_layers": 6,
+    "conv_kernel": 5,
+    "forget_bias": 1.125,
+    "learnable_initial_state": false,
+    "arch": "nova8",
+    "heads": 8,
+    "pattern": "NSNSNSN",
+    "mlp_hidden": 1296,
+    "slots": 16
+  },
+  "core": "nova8 NSNSNSN",
+  "parameters": 24167975,
+  "scores": {
+    "time": 1791402035.3025,
+    "date": "2026-10-07 19:40",
+    "method": 2,
+    "val": 2.9454,
+    "lang": {
+      "sk": 3.0509,
+      "cs": 3.2348,
+      "pl": 3.366,
+      "en": 3.5167,
+      "py": 2.9866,
+      "rs": 2.1468
+    },
+    "lang_tokens": {
+      "sk": 76164,
+      "cs": 31147,
+      "pl": 44562,
+      "en": 87832,
+      "py": 56167,
+      "rs": 110528
+    },
+    "code": {
+      "solved": 54,
+      "tasks": 79,
+      "pass1": 0.6835,
+      "by_level": {
+        "1": "45/55",
+        "2": "9/20",
+        "3": "0/4"
+      },
+      "nll": 0.6925
+    },
+    "creator": -0.0,
+    "web_val": 3.1553,
+    "checkpoint": "evo/director/challengers/attempt-66.pt"
+  },
+  "dataset": "data/text_v4",
+  "git_commit": "21e96c2",
+  "other_candidates": [
+    {
+      "checkpoint": "evo/director/challengers/attempt-66.pt",
+      "val": 2.9454,
+      "creator": -0.0
+    }
+  ]
+}

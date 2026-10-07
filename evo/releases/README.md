@@ -9,6 +9,7 @@ Every release is frozen: the files never change and `SHA256SUMS` lists their che
 | [NOVA-24M-v2](NOVA-24M-v2/) | 23.7 M | 2026-10-04 | 3.2498 | 3.3658 | 43 / 79 | 68 MB |
 | [NOVA8-24M-v1](NOVA8-24M-v1/) | 24.2 M | 2026-10-06 | 3.0061 | 3.1696 | 53 / 79 | 63 MB |
 | [NOVA8-24M-v2](NOVA8-24M-v2/) | 24.2 M | 2026-10-06 | 2.9609 | 3.1562 | 53 / 79 | 63 MB |
+| [NOVA8-24M-v5](NOVA8-24M-v5/) | 24.2 M | 2026-10-07 | 2.9454 | 3.1553 | 54 / 79 | 63 MB |
 
 Accepted by the judge but stepped back after probation (worse on fresh text), not kept here: NOVA8-24M-v3, NOVA8-24M-v4.
 

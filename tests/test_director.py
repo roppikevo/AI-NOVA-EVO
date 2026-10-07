@@ -503,13 +503,14 @@ def test_when_learning_stalls_the_director_measures_noise_then_candidates_and_a_
 
     (home / "evo/director").mkdir(parents=True, exist_ok=True)
     (home / "evo/director/ladder.json").write_text("[]")
-    (home / "evo/director/hypotheses.json").write_text(json.dumps({"24M": ["nslot-kv", "nslot8", "no-such-candidate"]}))
-    assert d.hypotheses("24M")[:2] == ["nslot-kv", "nslot8"]
+    (home / "evo/director/hypotheses.json").write_text(json.dumps({"24M": ["nslot-kv", "nslot8", "nslot-sharp", "no-such-candidate"]}))
+    assert d.hypotheses("24M")[:3] == ["nslot-kv", "nslot8", "nslot-sharp"]
     ledger.record(_ledger_row("n8-nslot-24M", 3.0445, 3.6804))
     results = {"n8-nslot-24M-s2001": _ledger_row("n8-nslot-24M-s2001", 3.0527, 3.6850),
                "n8-nslot-24M-s3001": _ledger_row("n8-nslot-24M-s3001", 3.0391, 3.6770),
                "n8-nslot-kv-24M": _ledger_row("n8-nslot-kv-24M", 3.0440, 3.6790),                    # inside the noise
-               "n8-nslot8-24M": _ledger_row("n8-nslot8-24M", 3.0450, 3.6800, state_kb=45.0)}         # same quality, smaller state
+               "n8-nslot8-24M": _ledger_row("n8-nslot8-24M", 3.0450, 3.6800, state_kb=45.0),         # same quality, smaller state
+               "n8-nslot-sharp-24M": _ledger_row("n8-nslot-sharp-24M", 3.0200, 3.6600)}                # clearly better
     st, w = fresh(), ExploringWorld(results)
     _gen8_champion(st)
     st["rejected_in_a_row"] = d.EXPLORE_AFTER
@@ -521,14 +522,17 @@ def test_when_learning_stalls_the_director_measures_noise_then_candidates_and_a_
     assert d.cycle(st, w) == "explore:n8-nslot-kv-24M"
     assert json.loads((home / "evo/director/ladder.json").read_text()) == []                         # not better than the noise
     assert d.cycle(st, w) == "explore:n8-nslot8-24M"
+    assert json.loads((home / "evo/director/ladder.json").read_text()) == []       # cheaper at the same quality: noted, no twelve hours on that alone
+    assert d.cycle(st, w) == "explore:n8-nslot-sharp-24M"
     ladder = json.loads((home / "evo/director/ladder.json").read_text())
-    assert [r["line"] for r in ladder] == ["NOVA8-24M-nslot8"] and ladder[0]["candidate"] == "nslot8"
-    assert ladder[0]["carry"] == 8 and ladder[0]["steps"] == 300000 and ladder[0]["override"]["slots"] == 8      # the champion's own recipe
+    assert [r["line"] for r in ladder] == ["NOVA8-24M-nslot-sharp"] and ladder[0]["candidate"] == "nslot-sharp"
+    assert ladder[0]["carry"] == 8 and ladder[0]["steps"] == 300000 and ladder[0]["override"]["slot_sharp"] is True      # the champion's own recipe
     events = [json.loads(l) for l in d.LOG.read_text().splitlines() if '"explore"' in l]
-    assert events[-1]["verdict"]["win"] and "lower cost" in events[-1]["verdict"]["reason"] and events[-2]["verdict"]["win"] is False
-    assert 0.1 < events[-2]["verdict"]["noise_percent"] < 0.3
-    assert d.cycle(st, w) == "grow" and st["grow"]["line"] == "NOVA8-24M-nslot8"                     # the winner starts at once
-    assert "Stav riaditeľa: trénuje novú generáciu" in d.report(st) and "vlastných meraní: 4" in d.report(st)
+    assert events[-1]["verdict"]["win"] and events[-1]["verdict"]["reason"].startswith("quality") and events[-1]["next_generation"] == "NOVA8-24M-nslot-sharp"
+    assert events[-2]["verdict"]["cheaper"] and not events[-2]["verdict"]["win"] and events[-3]["verdict"]["win"] is False
+    assert 0.1 < events[-2]["verdict"]["noise_percent"] < 0.3 and events[-1]["noise"]["runs"] == 3 and events[-1]["noise"]["dataset"]["n"] == 3
+    assert d.cycle(st, w) == "grow" and st["grow"]["line"] == "NOVA8-24M-nslot-sharp"                # the winner starts at once
+    assert "Stav riaditeľa: trénuje novú generáciu" in d.report(st) and "vlastných meraní: 5" in d.report(st)
 
 
 def test_with_nothing_left_to_try_the_director_waits_for_a_new_hypothesis(home, monkeypatch):
@@ -544,13 +548,22 @@ def test_with_nothing_left_to_try_the_director_waits_for_a_new_hypothesis(home, 
     st, w = fresh(), FakeWorld()
     _gen8_champion(st)
     st["rejected_in_a_row"] = d.PLATEAU
-    assert d.cycle(st, w).startswith("attempt:")                       # one attempt a day (new texts keep coming) ...
+    done = []
+    for _ in range(60):                                                # what was never judged on this champion goes at once ...
+        r = d.cycle(st, w)
+        if not r.startswith("attempt:"):
+            break
+        done.append(r)
+    assert len(done) >= 5 and len(set(done)) == len(done)              # ... every recipe once, nothing twice
     before = len(w.cmds)
     assert d.cycle(st, w) == "waiting_for_hypothesis" and d.cycle(st, w) == "waiting_for_hypothesis"
-    assert len(w.cmds) == before and st["phase"] == "waiting for a new hypothesis"                  # ... and nothing in between
+    assert len(w.cmds) == before and st["phase"] == "waiting for a new hypothesis"                  # then nothing is trained in vain
     assert "čaká na novú hypotézu" in d.report(st)
     st["last_wait_attempt"] -= d.WAIT_RETRY_H * 3600 + 1
-    assert d.cycle(st, w).startswith("attempt:")
+    for t in d.tried_on(st).values():                                  # recipes that live on new texts return after three days
+        t["time"] -= d.FRESH_RETRY_H * 3600 + 1
+    again = d.cycle(st, w)
+    assert again.startswith("attempt:") and d.all_recipes(st)[again.split(":", 1)[1]].get("fresh")
 
 
 def test_a_failed_measurement_is_not_repeated_and_progress_is_reported_as_a_vector(home, monkeypatch):
@@ -726,3 +739,70 @@ def test_a_recipe_that_made_two_champions_in_a_row_worse_is_left_out_for_the_nex
     assert "average-of-5" in left and "code" in left and "gentle" in left and "continue" in left
     assert "teachers" in d.available(st, now=now + d.FRESH_RETRY_H * 3600 + 10)      # lives on new texts: may come back later
     assert "wider-view" not in d.available(st, now=now + d.FRESH_RETRY_H * 3600 + 10)
+
+
+def test_with_no_recipe_left_the_director_tests_its_own_lessons_one_setting_at_a_time(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.engine import ledger
+
+    class World(FakeWorld):                                            # a world where less web text is what helps
+        def judge(self, champion, challenger):
+            v = super().judge(champion, challenger)
+            cmd = self.cmds[-1]
+            web = float(cmd[cmd.index("--bulk-frac") + 1]) if "--bulk-frac" in cmd else 0.9
+            v["decision"]["gain_percent"] = round(0.5 * (0.8 - web), 3)
+            return v
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", [])
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    for name in ("n8-nslot-24M", "n8-nslot-24M-s2001", "n8-nslot-24M-s3001"):
+        ledger.record(_ledger_row(name, 3.04, 3.68))
+    st, w = fresh(), World()
+    _gen8_champion(st)
+    st["rejected_in_a_row"] = d.PLATEAU
+    names = []
+    for _ in range(60):
+        r = d.cycle(st, w)
+        if not r.startswith("attempt:"):
+            break
+        names.append(r.split(":", 1)[1])
+    assert r == "waiting_for_hypothesis" and len(set(names)) == len(names)
+    tests = [n for n in names if st.get("own_recipes", {}).get(n, {}).get("lesson")]
+    assert 1 <= len(tests) <= d.LESSON_TESTS and st["lesson_tests"][st["champion"]["name"]] == len(tests)
+    assert names.index(tests[0]) > names.index("gentle")              # only after the known recipes were judged on this champion
+    events = [json.loads(l) for l in d.LOG.read_text().splitlines()]
+    lesson = [e for e in events if e["event"] == "lesson"]
+    assert [e["name"] for e in lesson] == tests and all(e["from"] != e["to"] and "confidence" in e["reason"] for e in lesson)
+    first = lesson[0]
+    base, new = d.RECIPES[first["base"]], st["own_recipes"][first["name"]]
+    assert sum(new["flags"][k] != base["flags"][k] for k in base["flags"]) + (new["steps"] != base["steps"]) == 1       # one knob, nothing else
+    assert any(e["setting"] == "web" and e["to"] < e["from"] for e in lesson)                # it found the way the world leans
+    d.write_report(st)
+    txt = d.REPORT.read_text()
+    assert "Poučenia z vlastných pokusov" in txt and (home / "evo/director/lessons.json").exists()
+    before = len(w.cmds)
+    assert d.cycle(st, w) == "waiting_for_hypothesis" and len(w.cmds) == before
+
+
+def test_a_generation_asked_for_starts_at_once_and_learns_from_the_champion_as_a_teacher(home):
+    st, w = fresh(), FakeWorld()
+    _gen8_champion(st)
+    teacher = home / "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt"
+    teacher.parent.mkdir(parents=True, exist_ok=True)
+    teacher.write_bytes(b"weights")
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    row = {"line": "NOVA8-45M", "override": {"arch": "nova8", "d_model": 640, "heads": 8, "pattern": "NSNSNSN", "mlp_hidden": 1856, "slots": 16},
+           "steps": 300000, "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35, "batch_size": 48, "teacher": str(teacher), "now": True}
+    (home / "evo/director/ladder.json").write_text(json.dumps([row]))
+    assert st["rejected_in_a_row"] < d.PLATEAU and d.cycle(st, w) == "grow" and st["grow"]["line"] == "NOVA8-45M"       # no waiting for a plateau
+    cmd = w.cmds[-1]
+    assert cmd[cmd.index("--teacher") + 1] == str(teacher) and cmd[cmd.index("--teacher-until") + 1] == "90000"       # the first 30 % of the run
+    assert cmd[cmd.index("--batch-size") + 1] == "48" and "--compile" in cmd and cmd[cmd.index("--carry-share") + 1] == "0.35"
+    (home / "evo/director/ladder.json").write_text(json.dumps([{**row, "line": "NOVA8-45M-b", "teacher": "no/such/file.pt"}]))
+    st2, w2 = fresh(), FakeWorld()
+    _gen8_champion(st2)
+    assert d.cycle(st2, w2) == "grow" and "--teacher" not in w2.cmds[-1]                                               # a missing teacher is left out
+    trained = {"steps": 300000, "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35, "batch_size": 48}
+    later = d.train_command(d.RECIPES["gentle"], "x.pt", Path("out.pt"), 1, "en", trained=trained)
+    assert later[-2:] == ["--batch-size", "48"]                                                                       # its later attempts keep the batch that fits

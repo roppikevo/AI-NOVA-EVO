@@ -65,6 +65,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="read the web corpus as running text: this many consecutive rows per stream with the state carried over")
     ap.add_argument("--carry-share", type=float, default=0.0,
                     help="with --carry: this share of every batch is running text, the rest is read with a fresh state")
+    ap.add_argument("--teacher", default="", help="checkpoint of an earlier core the new one also learns from at the start")
+    ap.add_argument("--teacher-weight", type=float, default=0.5)
+    ap.add_argument("--teacher-until", type=int, default=0, help="the teacher's weight falls to zero at this step (0 = no teacher)")
     args = ap.parse_args(argv)
 
     from evo.corpus.bulk_web import load_bulk
@@ -113,7 +116,9 @@ def main(argv: list[str] | None = None) -> int:
                         save_every=args.save_every, patience=10 ** 6, max_hours=args.max_hours, resume=resume,
                         bulk=bulk, bulk_frac=args.bulk_frac, code=code, code_frac=args.code_frac,
                         extra_val=extra_val, progress=out / "progress.jsonl", stop_file=lt.STOP_FILE,
-                        compile_model=args.compile, carry=args.carry, carry_share=args.carry_share)
+                        compile_model=args.compile, carry=args.carry, carry_share=args.carry_share,
+                        teacher=lt.load_teacher(args.teacher) if (resume["step"] if resume else 0) < args.teacher_until else None,
+                        teacher_weight=args.teacher_weight, teacher_until=args.teacher_until)
     finished = rep["steps_done"] >= args.total_steps
     st = {"name": args.name, "config": config, "params": params, "total_steps": args.total_steps,
           "steps_done": rep["steps_done"], "best_val": rep["best_val"], "finished": finished,
