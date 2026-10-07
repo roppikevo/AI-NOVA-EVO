@@ -121,10 +121,17 @@ class Writer:
         self.fast = supports(model) and not os.environ.get("NOVA_SLOW_GEN")
         # generation 8 carries its whole state through the plain model call
         self.carry = bool(getattr(model, "carries_state", False)) and not os.environ.get("NOVA_SLOW_GEN")
+        self.fused = None
         with torch.no_grad():
             if self.carry:
-                out, self.states = model(torch.tensor([ids], device=device))
-                self.logits = out[0, -1]
+                from nova import stepper8
+
+                if stepper8.supports(model) and not os.environ.get("NOVA_PLAIN_STEP"):     # same numbers, fewer operations
+                    self.fused = stepper8.Stepper8(model)
+                    self.logits = self.fused.prime(torch.tensor([ids], device=device))[0]
+                else:
+                    out, self.states = model(torch.tensor([ids], device=device))
+                    self.logits = out[0, -1]
             elif self.fast:
                 self.st = Stepper(model)
                 self.logits = self.st.prime(torch.tensor([ids], device=device))[0]
@@ -139,7 +146,9 @@ class Writer:
     @torch.no_grad()
     def push(self, token: int) -> torch.Tensor:
         """Append a token; returns the logits for the one after it."""
-        if self.carry:
+        if self.fused is not None:
+            self.logits = self.fused.step(torch.tensor([token], device=self.device))[0]
+        elif self.carry:
             out, self.states = self.model(torch.tensor([[token]], device=self.device), self.states)
             self.logits = out[0, -1]
         elif self.fast:

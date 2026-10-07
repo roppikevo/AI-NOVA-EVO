@@ -292,14 +292,33 @@ class MemMixer(nn.Module):
 class SlotMixer(nn.Module):
     """A small table of memory slots. Every token writes its value into the slots its own content points to
     (a soft address), and reads by comparing a query with what the slots hold - recall by content from a
-    memory of fixed size. A slot keeps what it has until something is written over it."""
+    memory of fixed size. A slot keeps what it has until something is written over it.
 
-    def __init__(self, d_model: int, slots: int = 16, heads: int = 4, slot_dim: int = 0) -> None:
+    Two options, both at the same size of the table:
+      key_dim > 0   a slot is split into a key (what the query is compared with) and a value (what is read out);
+                    by default the whole slot is both
+      sharp         every reading head learns how sharply it chooses among the slots (starts as without it)"""
+
+    def __init__(self, d_model: int, slots: int = 16, heads: int = 4, slot_dim: int = 0, key_dim: int = 0, sharp: bool = False) -> None:
         super().__init__()
         self.slots, self.heads, self.ds = slots, heads, slot_dim or d_model // 4
+        if not 0 <= key_dim < self.ds:
+            raise ValueError(f"key_dim {key_dim} must be smaller than the slot ({self.ds})")
+        self.split = key_dim > 0
+        self.dk, self.dv = (key_dim, self.ds - key_dim) if self.split else (self.ds, self.ds)
         self.write = nn.Linear(d_model, self.ds + slots + 1)          # value, address, write gate
-        self.query = nn.Linear(d_model, heads * self.ds, bias=False)
-        self.out = nn.Linear(heads * self.ds, d_model, bias=False)
+        self.query = nn.Linear(d_model, heads * self.dk, bias=False)
+        self.out = nn.Linear(heads * self.dv, d_model, bias=False)
+        self.sharp = nn.Parameter(torch.zeros(heads)) if sharp else None
+
+    def read(self, q: torch.Tensor, table: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
+        """What the queries [.., heads, dk] read from the table [.., slots, ds], and how they spread over the slots."""
+        keys, values = (table[..., :self.dk], table[..., self.dk:]) if self.split else (table, table)
+        match = q @ keys.transpose(-1, -2) / math.sqrt(self.dk)                                             # [.., heads, slots]
+        if self.sharp is not None:
+            match = match * torch.exp(self.sharp.float()).unsqueeze(-1)
+        attention = torch.softmax(match, dim=-1)
+        return attention @ values, attention
 
     def step(self, u: torch.Tensor, table: torch.Tensor):
         u = u[:, 0]
@@ -307,25 +326,23 @@ class SlotMixer(nn.Module):
         share = (torch.softmax(w[:, self.ds:self.ds + self.slots], dim=-1) * torch.sigmoid(w[:, -1:])).unsqueeze(-1)   # [batch, slots, 1]
         keep = 1.0 - share.clamp(max=1.0 - math.exp(-MAX_DECAY))
         table = keep * table.float() + share * w[:, None, :self.ds]
-        q = self.query(u).float().view(-1, self.heads, self.ds)
-        read = torch.softmax(q @ table.transpose(1, 2) / math.sqrt(self.ds), dim=-1) @ table              # [batch, heads, ds]
-        return self.out(read.reshape(-1, 1, self.heads * self.ds).to(u.dtype)), table
+        read, _ = self.read(self.query(u).float().view(-1, self.heads, self.dk), table)                     # [batch, heads, dv]
+        return self.out(read.reshape(-1, 1, self.heads * self.dv).to(u.dtype)), table
 
     def forward(self, u: torch.Tensor, state=None):
         b, t, _ = u.shape
         if t == 1 and state is not None and not self.training:
             return self.step(u, state)
         w = self.write(u)
-        q = self.query(u).view(b, t, self.heads, self.ds)
+        q = self.query(u).view(b, t, self.heads, self.dk)
         with torch.autocast(device_type=u.device.type, enabled=False):
             w = w.float()
             value = w[..., :self.ds]
             share = torch.softmax(w[..., self.ds:self.ds + self.slots], dim=-1) * torch.sigmoid(w[..., -1:])   # [b, t, slots]
             log_keep = torch.log1p(-share.clamp(max=1.0 - math.exp(-MAX_DECAY))).unsqueeze(-1)                  # [b, t, slots, 1]
             table = lru_scan(log_keep, share.unsqueeze(-1) * value.unsqueeze(-2), None if state is None else state.float())
-            match = torch.einsum("bthd,btsd->bths", q.float(), table) / math.sqrt(self.ds)                      # [b, t, heads, slots]
-            read = torch.einsum("bths,btsd->bthd", torch.softmax(match, dim=-1), table)
-        return self.out(read.reshape(b, t, self.heads * self.ds).to(u.dtype)), table[:, -1].detach() if not self.training else table[:, -1]
+            read, _ = self.read(q.float(), table)                                                               # [b, t, heads, dv]
+        return self.out(read.reshape(b, t, self.heads * self.dv).to(u.dtype)), table[:, -1].detach() if not self.training else table[:, -1]
 
 
 class HashMixer(nn.Module):
@@ -418,7 +435,7 @@ class WinMixer(nn.Module):
 
 class Block8(nn.Module):
     def __init__(self, d_model: int, kind: str, mlp_hidden: int, heads: int, window: int, lru_expand: float, lru_kernel: int,
-                 mem_positions: bool = True, slots: int = 16, hash_slots: int = 128) -> None:
+                 mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, slot_key: int = 0, slot_sharp: bool = False) -> None:
         super().__init__()
         self.kind = kind
         self.norm1 = RMSNorm(d_model)
@@ -429,7 +446,7 @@ class Block8(nn.Module):
         elif kind == "M":
             self.mixer = MemMixer(d_model, heads=heads, positions=mem_positions)
         elif kind == "S":
-            self.mixer = SlotMixer(d_model, slots=slots, heads=max(1, heads // 2))
+            self.mixer = SlotMixer(d_model, slots=slots, heads=max(1, heads // 2), key_dim=slot_key, sharp=slot_sharp)
         elif kind == "H":
             self.mixer = HashMixer(d_model, slots=hash_slots, heads=max(1, heads // 2))
         elif kind == "W":
@@ -452,11 +469,13 @@ class Nova8Model(nn.Module):
     carries_state = True      # model(token, states) continues exactly; the state does not grow with the text
 
     def __init__(self, vocab_size: int, d_model: int, pattern: str, mlp_hidden: int, heads: int = 8, window: int = 32,
-                 lru_expand: float = 1.0, lru_kernel: int = 4, mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, pad_token_id: int = 0) -> None:
+                 lru_expand: float = 1.0, lru_kernel: int = 4, mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, pad_token_id: int = 0,
+                 slot_key: int = 0, slot_sharp: bool = False) -> None:
         super().__init__()
         self.pattern = pattern
         self.embedding = nn.Embedding(vocab_size, d_model, padding_idx=pad_token_id)
-        self.blocks = nn.ModuleList([Block8(d_model, kind, mlp_hidden, heads, window, lru_expand, lru_kernel, mem_positions, slots, hash_slots) for kind in pattern])
+        self.blocks = nn.ModuleList([Block8(d_model, kind, mlp_hidden, heads, window, lru_expand, lru_kernel, mem_positions, slots, hash_slots,
+                                            slot_key, slot_sharp) for kind in pattern])
         self.final_norm = RMSNorm(d_model)
         self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
         self.lm_head.weight = self.embedding.weight
@@ -509,4 +528,5 @@ def build_nova8(config: dict) -> Nova8Model:
     return Nova8Model(vocab_size=int(config["vocab_size"]), d_model=d, pattern=pattern,
                       mlp_hidden=int(config.get("mlp_hidden") or 3 * d), heads=int(config.get("heads") or max(1, d // 64)),
                       window=int(config.get("window", 32)), lru_expand=float(config.get("lru_expand", 1.0)),
-                      lru_kernel=int(config.get("lru_kernel", 4)), mem_positions=bool(config.get("mem_positions", True)), slots=int(config.get("slots", 16)), hash_slots=int(config.get("hash_slots", 128)))
+                      lru_kernel=int(config.get("lru_kernel", 4)), mem_positions=bool(config.get("mem_positions", True)), slots=int(config.get("slots", 16)), hash_slots=int(config.get("hash_slots", 128)),
+                      slot_key=int(config.get("slot_key", 0)), slot_sharp=bool(config.get("slot_sharp", False)))

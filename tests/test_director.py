@@ -1,6 +1,7 @@
 """The director's loop and the judge's rule (no training, no GPU: the outside world is faked)."""
 
 import json
+import time
 from pathlib import Path
 
 import numpy as np
@@ -57,6 +58,7 @@ class FakeWorld:
         self.verdicts, self.rc = list(verdicts), rc
         self.cmds, self.sides, self.released, self.judged = [], [], [], []
         self.gpu, self.ram, self.web_dir = 400, 26.0, Path("data/bulk_val_v1")
+        self.identities = {}
 
     def run(self, cmd, timeout_h, nice=0):
         self.cmds.append(cmd)
@@ -104,6 +106,9 @@ class FakeWorld:
                 "reasons": [] if v else ["gain +0.05 % is below 0.3 %"], "sets": {"dataset": {"before": 3.15, "after": 3.1, "percent": -1.5}},
                 "decision": {"gain_percent": 1.2 if v else 0.05, "lo": -0.05, "hi": -0.03, "sets": ["dataset", "web"]},
                 "vault": {"gain_percent": 0.9}, "code": {"before": 40, "after": 41, "gained": 2, "lost": 1}, "creator": -0.01}
+
+    def identity(self, checkpoint):
+        return self.identities.get(checkpoint, {"pass": True, "class": "NOVA", "state_kb": 56.0, "growth_bytes_per_token": 0.0})
 
     def release_name(self, name, params=None):
         return d.free_release_name(name, exists=lambda n: False, params=params)
@@ -433,3 +438,291 @@ def test_a_tournament_winner_is_handed_over_through_the_ladder_file(home, capsys
     assert st["champion"]["name"] == "NOVA8-24M-v1" and st["grown"] == ["NOVA8-24M"]
     (home / "evo/director/ladder.json").write_text("not json")
     assert d.load_ladder() == d.LADDER                                         # a broken file falls back to the built-in list
+
+
+def test_a_generation_whose_state_grows_is_rejected_before_the_judge_and_everything_judged_lands_in_the_ledger(home):
+    from evo.engine import ledger
+
+    st, w = fresh(), FakeWorld(verdicts=[True])
+    d.save_state(st)
+    row = {"line": "GROWS-24M", "override": {"arch": "transformer", "d_model": 448}, "steps": 1000}
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text(json.dumps([row]))
+    assert d.main(["--start-generation", "GROWS-24M"]) == 0
+    st = d.load_state()
+    line = home / "evo/lines/GROWS-24M"
+    line.mkdir(parents=True)
+    (line / "state.json").write_text(json.dumps({"steps_done": 1000, "best_val": 2.9, "finished": True, "best_checkpoint": "grows.pt"}))
+    w.identities["grows.pt"] = {"pass": False, "class": "NOT-NOVA", "state_kb": 4000.0, "growth_bytes_per_token": 25088.0}
+    st["champion"]["scores"] = w.scores("")
+    assert d.cycle(st, w) == "grow"
+    assert w.judged == [] and w.released == []                       # the judge was never asked
+    assert st["champion"]["name"] != "GROWS-24M-v1" and st["grown"] == ["GROWS-24M"]
+    rows = ledger.load()
+    assert rows and rows[-1]["kind"] == "generation" and rows[-1]["verdict"] == "rejected" and rows[-1]["identity"] == "NOT-NOVA"
+    assert "identity test failed" in rows[-1]["reason"]
+
+
+# ------------------------------------------------------------------ the director's own tournaments
+
+def _ledger_row(name, dataset, web, state_kb=56.0, speed=54000, identity="NOVA", override=None):
+    return {"key": f"tournament:{name}:1001", "kind": "tournament", "name": name, "verdict": "measured", "identity": identity,
+            "config": override, "train": {"steps": 18000}, "metrics": {"dataset": dataset, "web": web},
+            "cost": {"state_kb": state_kb, "train_tok_s": speed}}
+
+
+class ExploringWorld(FakeWorld):
+    """A world whose short runs produce the results it was given ({run name: ledger row})."""
+
+    def __init__(self, results, **kw):
+        super().__init__(**kw)
+        self.results = results
+
+    def run(self, cmd, timeout_h, nice=0):
+        from evo.engine import ledger
+
+        if "evo.engine.compare_arch" in cmd:
+            name = cmd[cmd.index("--candidates") + 1]
+            seed = cmd[cmd.index("--candidate-seeds") + 1].split(",")[-1] if "--candidate-seeds" in cmd else ""
+            run = f"n8-{name}-24M" + (f"-s{seed}" if seed else "")
+            if run in self.results:
+                ledger.record(dict(self.results[run]))
+        return super().run(cmd, timeout_h, nice)
+
+
+def _gen8_champion(st):
+    from evo.engine import compare_arch as ca
+
+    st["champion"].update({"name": "NOVA8-24M-v1", "override": ca.CANDIDATES["24M"]["nslot"],
+                           "recipe": {"steps": 300000, "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35}})
+
+
+def test_when_learning_stalls_the_director_measures_noise_then_candidates_and_a_winner_becomes_a_generation(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.engine import ledger
+
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    (home / "evo/director/hypotheses.json").write_text(json.dumps({"24M": ["nslot-kv", "nslot8", "no-such-candidate"]}))
+    assert d.hypotheses("24M")[:2] == ["nslot-kv", "nslot8"]
+    ledger.record(_ledger_row("n8-nslot-24M", 3.0445, 3.6804))
+    results = {"n8-nslot-24M-s2001": _ledger_row("n8-nslot-24M-s2001", 3.0527, 3.6850),
+               "n8-nslot-24M-s3001": _ledger_row("n8-nslot-24M-s3001", 3.0391, 3.6770),
+               "n8-nslot-kv-24M": _ledger_row("n8-nslot-kv-24M", 3.0440, 3.6790),                    # inside the noise
+               "n8-nslot8-24M": _ledger_row("n8-nslot8-24M", 3.0450, 3.6800, state_kb=45.0)}         # same quality, smaller state
+    st, w = fresh(), ExploringWorld(results)
+    _gen8_champion(st)
+    st["rejected_in_a_row"] = d.EXPLORE_AFTER
+    assert d.cycle(st, w) == "explore:n8-nslot-24M-s2001" and st["phase"] == "exploring"
+    assert "--candidate-seeds" in w.cmds[-1] and w.cmds[-1][w.cmds[-1].index("--steps") + 1] == str(d.EXPLORE_STEPS)
+    assert d.cycle(st, w).startswith("attempt:")                       # between measurements the learning attempts go on
+    st["rejected_in_a_row"] = d.PLATEAU                                # nothing helps: measure until something does
+    assert d.cycle(st, w) == "explore:n8-nslot-24M-s3001"
+    assert d.cycle(st, w) == "explore:n8-nslot-kv-24M"
+    assert json.loads((home / "evo/director/ladder.json").read_text()) == []                         # not better than the noise
+    assert d.cycle(st, w) == "explore:n8-nslot8-24M"
+    ladder = json.loads((home / "evo/director/ladder.json").read_text())
+    assert [r["line"] for r in ladder] == ["NOVA8-24M-nslot8"] and ladder[0]["candidate"] == "nslot8"
+    assert ladder[0]["carry"] == 8 and ladder[0]["steps"] == 300000 and ladder[0]["override"]["slots"] == 8      # the champion's own recipe
+    events = [json.loads(l) for l in d.LOG.read_text().splitlines() if '"explore"' in l]
+    assert events[-1]["verdict"]["win"] and "lower cost" in events[-1]["verdict"]["reason"] and events[-2]["verdict"]["win"] is False
+    assert 0.1 < events[-2]["verdict"]["noise_percent"] < 0.3
+    assert d.cycle(st, w) == "grow" and st["grow"]["line"] == "NOVA8-24M-nslot8"                     # the winner starts at once
+    assert "Stav riaditeľa: trénuje novú generáciu" in d.report(st) and "vlastných meraní: 4" in d.report(st)
+
+
+def test_with_nothing_left_to_try_the_director_waits_for_a_new_hypothesis(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.engine import ledger
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", [])
+    assert d.hypotheses("24M") == []
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    for name in ("n8-nslot-24M", "n8-nslot-24M-s2001", "n8-nslot-24M-s3001"):
+        ledger.record(_ledger_row(name, 3.04, 3.68))
+    st, w = fresh(), FakeWorld()
+    _gen8_champion(st)
+    st["rejected_in_a_row"] = d.PLATEAU
+    assert d.cycle(st, w).startswith("attempt:")                       # one attempt a day (new texts keep coming) ...
+    before = len(w.cmds)
+    assert d.cycle(st, w) == "waiting_for_hypothesis" and d.cycle(st, w) == "waiting_for_hypothesis"
+    assert len(w.cmds) == before and st["phase"] == "waiting for a new hypothesis"                  # ... and nothing in between
+    assert "čaká na novú hypotézu" in d.report(st)
+    st["last_wait_attempt"] -= d.WAIT_RETRY_H * 3600 + 1
+    assert d.cycle(st, w).startswith("attempt:")
+
+
+def test_a_failed_measurement_is_not_repeated_and_progress_is_reported_as_a_vector(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.engine import ledger
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", ["nslot8"])
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    for name in ("n8-nslot-24M", "n8-nslot-24M-s2001", "n8-nslot-24M-s3001"):
+        ledger.record(_ledger_row(name, 3.04, 3.68))
+    st, w = fresh(), ExploringWorld({}, rc=1)                          # the run produces nothing
+    _gen8_champion(st)
+    st["rejected_in_a_row"] = d.PLATEAU
+    assert d.cycle(st, w) == "explore:n8-nslot8-24M"
+    assert ledger.tried(name="n8-nslot8-24M")[-1]["verdict"] == "failed"
+    assert not d.cycle(st, w).startswith("explore")                    # not tried again
+    st["progress"] = [{"name": "NOVA-24M-v1", "time": 0, "dataset": 3.148, "web": 3.410, "code": 40, "state_kb": 100.0},
+                      {"name": "NOVA8-24M-v1", "time": 10, "dataset": 2.95, "web": 3.25, "code": 55, "state_kb": 56.0}]
+    text = d.report(st, now=20)
+    assert "Pokrok od prvého modelu (NOVA-24M-v1 → NOVA8-24M-v1): strata dataset -6.29 %, strata web -4.69 %, programovanie 40 → 55, stav 100 → 56 kB" in text
+
+
+def test_a_champion_from_an_older_director_gets_its_architecture_and_recipe_filled_in(home):
+    rel = home / "evo/releases/NOVA8-24M-v1"
+    rel.mkdir(parents=True)
+    from evo.engine import compare_arch as ca
+
+    (rel / "MODEL.json").write_text(json.dumps({"name": "NOVA8-24M-v1", "config": {"vocab_size": 16384, "d_state": 640, **ca.CANDIDATES["24M"]["nslot"]}}))
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text(json.dumps([{"line": "NOVA8-24M", "override": ca.CANDIDATES["24M"]["nslot"], "steps": 300000,
+                                                               "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35}]))
+    st = fresh()
+    st["champion"].update({"name": "NOVA8-24M-v1", "checkpoint": str(rel / "nova_model_fp32.pt")})
+    st["grown"] = ["NOVA8-24M"]
+    d.champion_setup(st)
+    assert st["champion"]["override"]["pattern"] == "NSNSNSN" and st["champion"]["recipe"] == {"steps": 300000, "lr": 0.001, "compile": True,
+                                                                                               "carry": 8, "carry_share": 0.35}
+    from evo.engine import explore
+
+    assert explore.candidate_of(st["champion"]["override"], ca.CANDIDATES["24M"]) == "nslot"
+    cmd = d.train_command(d.RECIPES["gentle"], "champ.pt", Path("out.pt"), 7, "pl", trained=st["champion"]["recipe"])
+    assert "--compile" in cmd and cmd[cmd.index("--carry") + 1] == "8" and cmd[cmd.index("--carry-share") + 1] == "0.35"
+    assert "--compile" not in d.train_command(d.RECIPES["gentle"], "champ.pt", Path("out.pt"), 7, "pl")
+
+
+def test_measurements_can_be_asked_for_before_learning_stalls(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.engine import ledger
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", ["nslot8"])
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    ledger.record(_ledger_row("n8-nslot-24M", 3.0445, 3.6804))
+    st = fresh()
+    _gen8_champion(st)
+    d.save_state(st)
+    assert d.main(["--explore", "2"]) == 0
+    st = d.load_state()
+    assert st["explore_budget"] == 2 and "measurements" in st["interventions"][-1]["note"]
+    w = ExploringWorld({"n8-nslot-24M-s2001": _ledger_row("n8-nslot-24M-s2001", 3.05, 3.685),
+                        "n8-nslot-24M-s3001": _ledger_row("n8-nslot-24M-s3001", 3.04, 3.677)})
+    st["champion"]["scores"] = w.scores("")
+    assert st["rejected_in_a_row"] == 0
+    assert d.cycle(st, w) == "explore:n8-nslot-24M-s2001" and d.cycle(st, w) == "explore:n8-nslot-24M-s3001"
+    assert st["explore_budget"] == 0 and d.cycle(st, w).startswith("attempt:")       # then back to its own order
+
+
+# ------------------------------------------------------------------ learning from its own failed attempts
+
+def test_a_rejected_recipe_is_not_repeated_on_the_same_champion(home):
+    recipes = {k: d.RECIPES[k] for k in ("gentle", "code", "fresh-web")}
+    st, w = fresh(), FakeWorld()                               # every verdict: rejected
+    seen = [d.cycle(st, w, recipes=recipes) for _ in range(3)]
+    assert sorted(seen) == ["attempt:code", "attempt:fresh-web", "attempt:gentle"]
+    tried = d.tried_on(st)
+    assert {k: v["outcome"] for k, v in tried.items()} == {"gentle": "rejected", "code": "rejected", "fresh-web": "rejected"}
+    assert tried["gentle"]["gain"] == 0.05 and d.available(st, recipes=recipes) == []
+    before = len(w.cmds)
+    assert d.cycle(st, w, recipes=recipes) == "waiting_for_hypothesis" and len(w.cmds) == before        # nothing is trained in vain
+    assert st["phase"] == "waiting for a new hypothesis"
+    later = time.time() + d.FRESH_RETRY_H * 3600 + 5
+    assert d.available(st, now=later, recipes=recipes) == ["fresh-web"]                              # new texts: this one may come back
+    st["champion"]["name"] = "NOVA-24M-v9"                     # a new champion: everything is open again
+    assert sorted(d.available(st, recipes=recipes)) == ["code", "fresh-web", "gentle"]
+
+
+def test_a_recipe_that_was_stepped_back_or_is_impossible_is_remembered_too(home):
+    st, w = fresh(), FakeWorld(verdicts=[True])
+    d.attempt(st, w, "gentle")
+    assert st["champion"]["name"] == "NOVA-24M-v2" and st["champion"]["polish"] == ["gentle"] and st["probation"]["recipe"] == "gentle"
+    assert d.tried_on(st, "NOVA-24M-v1")["gentle"]["outcome"] == "accepted"
+    w.probation_result = {"n": 400, "diff": 0.02, "lo": 0.01, "hi": 0.03}
+    assert d.probation_step(st, w) == "probation:reverted"
+    assert st["champion"]["name"] == "NOVA-24M-v1" and d.tried_on(st)["gentle"]["outcome"] == "reverted"
+    assert "gentle" not in d.available(st)
+    w2 = FakeWorld()
+    w2.surgery = lambda *a, **k: None                          # this change of structure does not exist for the core
+    rec = d.attempt(st, w2, "wider-view")
+    assert rec["rc"] == 1 and d.tried_on(st)["wider-view"]["outcome"] == "impossible" and "wider-view" not in d.available(st)
+    crashed = FakeWorld(rc=1)
+    d.attempt(st, crashed, "code")
+    assert d.tried_on(st)["code"]["outcome"] == "failed" and "code" in d.available(st)              # a crash is not a verdict
+
+
+def test_the_memory_is_rebuilt_from_the_history_of_an_older_director(home):
+    st = fresh()
+    st["champion"].update({"name": "NOVA8-24M-v2", "checkpoint": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt"})
+    st["releases"] += ["NOVA8-24M-v1", "NOVA8-24M-v2", "NOVA8-24M-v3"]
+    st["reverted"] = ["NOVA8-24M-v3"]
+    rej = {"accept": False, "decision": {"gain_percent": -0.87}}
+    st["history"] = [
+        {"attempt": 11, "recipe": "average-of-5", "champion": "NOVA8-24M-v1", "released": "NOVA8-24M-v2", "verdict": {"accept": True, "decision": {"gain_percent": 0.98}}},
+        {"attempt": 18, "recipe": "teachers", "champion": "NOVA8-24M-v2", "verdict": rej},
+        {"attempt": 21, "recipe": "wider-view", "champion": "NOVA8-24M-v2", "rc": 1, "note": "this change of structure is not possible for the champion (size limit or range)"},
+        {"attempt": 35, "recipe": "collective", "champion": "NOVA8-24M-v2", "released": "NOVA8-24M-v3", "verdict": {"accept": True, "decision": {"gain_percent": 0.3}}},
+        {"attempt": 35, "recipe": "collective", "rc": 0, "reverted": "NOVA8-24M-v3"},
+        {"attempt": 36, "recipe": "gentle", "champion": "NOVA8-24M-v2", "rc": 1},                    # a crash: no verdict
+    ]
+    d.champion_setup(st)
+    assert st["champion"]["polish"] == ["average-of-5"]                                             # v3 did not stand its probation
+    tried = d.tried_on(st)
+    assert tried["teachers"]["outcome"] == "rejected" and tried["teachers"]["gain"] == -0.87
+    assert tried["wider-view"]["outcome"] == "impossible" and tried["collective"]["outcome"] == "reverted" and "gentle" not in tried
+    left = d.available(st)
+    assert "teachers" not in left and "collective" not in left and "wider-view" not in left and "gentle" in left and "continue" in left
+
+
+def test_a_new_generation_gets_the_champions_polish_before_the_last_word(home):
+    st, w = fresh(), FakeWorld(verdicts=[False, True])                       # raw: rejected; polished: accepted
+    st["champion"]["polish"] = ["average-of-5", "collective"]
+    d.save_state(st)
+    row = {"line": "NOVA8-24M-nslot8", "override": {"arch": "nova8", "pattern": "NSNSNSN", "slots": 8}, "candidate": "nslot8", "group": "24M",
+           "steps": 300000, "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35}
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text(json.dumps([row]))
+    line = home / "evo/lines/NOVA8-24M-nslot8"
+    line.mkdir(parents=True)
+    (line / "state.json").write_text(json.dumps({"steps_done": 300000, "best_val": 3.0, "finished": True, "best_checkpoint": "raw.pt"}))
+    st["champion"]["scores"] = w.scores("")
+    assert d.cycle(st, w) == "grow"
+    assert [c for _, c in w.judged][0] == "raw.pt" and "polish-NOVA8-24M-nslot8-0" in [c for _, c in w.judged][1]
+    clones = [c for c in w.cmds if "evo.engine.long_train" in c]
+    assert len(clones) == 5 and all(c[c.index("--init") + 1] == "raw.pt" and "--compile" in c and "--carry" in c for c in clones)   # the collective is not replayed
+    assert w.released == [("NOVA8-24M-nslot8-v1", str(d.DIR / "challengers" / "polish-NOVA8-24M-nslot8-0.pt"))]
+    champ = st["champion"]
+    assert champ["name"] == "NOVA8-24M-nslot8-v1" and champ["polish"] == ["average-of-5", "collective"] and champ["candidate"] == "nslot8"
+    event = [json.loads(l) for l in d.LOG.read_text().splitlines()][-1]
+    assert event["verdict"]["accept"] and event["verdict_raw"]["accept"] is False and event["polished_with"] == ["average-of-5", "collective"]
+
+
+def test_the_continue_recipe_keeps_the_generations_training():
+    cmd = d.train_command(d.RECIPES["continue"], "champ.pt", Path("out.pt"), 7, "pl", trained={"compile": True, "carry": 8, "carry_share": 0.35})
+    assert cmd[cmd.index("--steps") + 1] == "40000" and cmd[cmd.index("--lr") + 1] == "1e-4" and "--compile" in cmd and cmd[cmd.index("--carry") + 1] == "8"
+    assert d.RECIPES["fresh-web"]["fresh"] and d.RECIPES["teachers"]["fresh"] and not d.RECIPES["gentle"].get("fresh")
+
+
+def test_a_recipe_that_made_two_champions_in_a_row_worse_is_left_out_for_the_next_one(home):
+    st = fresh()
+    st["releases"] = ["NOVA-24M-v2", "NOVA8-24M-v1", "NOVA8-24M-v2", "NOVA8-24M-v3", "NOVA8-24M-v4"]
+    st["reverted"] = ["NOVA8-24M-v3"]
+    st["champion"]["name"] = "NOVA8-24M-v4"
+    now = time.time()
+    for champion in ("NOVA8-24M-v1", "NOVA8-24M-v2"):
+        d.remember(st, champion, "teachers", "rejected", -0.87, now=now)
+        d.remember(st, champion, "wider-view", "impossible", None, now=now)
+        d.remember(st, champion, "average-of-5", "rejected", 0.18, now=now)          # close to the threshold: worth another look
+    d.remember(st, "NOVA8-24M-v2", "code", "rejected", -0.04, now=now)               # only once so far
+    d.remember(st, "NOVA-24M-v2", "gentle", "rejected", -0.5, now=now)               # another generation does not count
+    d.remember(st, "NOVA8-24M-v3", "gentle", "rejected", -0.5, now=now)              # a champion that was stepped back neither
+    left = d.available(st, now=now + 10)
+    assert "teachers" not in left and "wider-view" not in left
+    assert "average-of-5" in left and "code" in left and "gentle" in left and "continue" in left
+    assert "teachers" in d.available(st, now=now + d.FRESH_RETRY_H * 3600 + 10)      # lives on new texts: may come back later
+    assert "wider-view" not in d.available(st, now=now + d.FRESH_RETRY_H * 3600 + 10)

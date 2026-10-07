@@ -450,6 +450,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="save the final weights (no optimizer) here; with --no-activate this is how a clone/node is trained")
     ap.add_argument("--boost-frac", type=float, default=0.15, help="share of the bulk part given to --boost-lang")
     ap.add_argument("--seed", type=int, default=1001)
+    ap.add_argument("--init-seed", type=int, default=None,
+                    help="seed for the random start of a model trained from scratch (default: the library's fixed start, as always); "
+                         "with --seed it makes a truly different run of the same experiment")
     ap.add_argument("--compile", action="store_true", help="compile the training forward pass (faster for the generation-8 core)")
     ap.add_argument("--carry", type=int, default=0,
                     help="read the web corpus as running text: this many consecutive rows per stream with the state carried over")
@@ -506,6 +509,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.init and ck.get("config"):  # a clone keeps the shape of the model it was cloned from
             config = dict(ck["config"])
             meta["config"] = config
+    if args.init_seed is not None:
+        torch.manual_seed(args.init_seed)
     model = build_model(config)
     if ck is not None:
         model.load_state_dict({k: v.float() if v.is_floating_point() else v for k, v in ck["model_state_dict"].items()})

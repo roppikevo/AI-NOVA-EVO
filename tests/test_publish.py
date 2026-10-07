@@ -128,3 +128,26 @@ def test_auto_publishes_a_new_release_and_only_then(repo, tmp_path, monkeypatch)
     assert _git(public, "rev-parse", "refs/heads/main") != first
     assert _git(public, "log", "-1", "--format=%s", "main") == "Release B-v1"
     assert "B-v1" in _git(public, "show", "main:evo/releases/README.md")
+
+
+def test_releases_on_probation_or_stepped_back_do_not_go_public(tmp_path):
+    (tmp_path / "evo/director").mkdir(parents=True)
+    (tmp_path / "evo/director/state.json").write_text(json.dumps({"probation": {"name": "NOVA8-24M-v5"}, "reverted": ["NOVA8-24M-v3"]}))
+    hide = publish.not_standing(tmp_path)
+    assert hide == {"probation": {"NOVA8-24M-v5"}, "reverted": {"NOVA8-24M-v3"}}
+    assert publish.not_standing(tmp_path / "nothing") == {"probation": set(), "reverted": set()}
+    files = {f"evo/releases/{n}/{f}": size for n in ("NOVA8-24M-v2", "NOVA8-24M-v3", "NOVA8-24M-v5")
+             for f, size in (("MODEL.json", 500), ("nova_model.pt", 60_000_000), ("core8.py", 9000))}
+    files["README.md"] = 100
+    public = {"evo/releases/NOVA8-24M-v3/MODEL.json", "evo/releases/NOVA8-24M-v3/nova_model.pt"}      # went out before it was stepped back
+    chosen = publish.select(files, public, 100.0, hidden=hide["probation"] | hide["reverted"])
+    assert sorted(publish.release_names(set(chosen["keep"]))) == ["NOVA8-24M-v2"] and "README.md" in chosen["keep"]
+    assert all("NOVA8-24M-v3" not in p and "NOVA8-24M-v5" not in p for p in chosen["keep"]) and chosen["weights_mb"] == 160.0
+    assert len(publish.select(files, public, 100.0)["keep"]) == 10                                   # nothing hidden: everything goes
+    root = tmp_path / "evo/releases"
+    for n in ("NOVA8-24M-v2", "NOVA8-24M-v3", "NOVA8-24M-v5"):
+        (root / n).mkdir(parents=True)
+        (root / n / "MODEL.json").write_text(json.dumps({"name": n, "frozen": "2026-10-06 03:00:00", "scores": {"val": 3.0}}))
+    text = publish.index_text(root, hide)
+    assert "[NOVA8-24M-v2]" in text and "[NOVA8-24M-v3]" not in text and "[NOVA8-24M-v5]" not in text
+    assert "stepped back after probation" in text and "NOVA8-24M-v3." in text

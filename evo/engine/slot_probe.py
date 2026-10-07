@@ -36,7 +36,7 @@ def slot_forward(mixer, u: torch.Tensor, mode: str = "normal", stats: dict | Non
 
     b, t, _ = u.shape
     w = mixer.write(u).float()
-    q = mixer.query(u).view(b, t, mixer.heads, mixer.ds).float()
+    q = mixer.query(u).view(b, t, mixer.heads, mixer.dk).float()
     value, gate = w[..., :mixer.ds], torch.sigmoid(w[..., -1:])
     address = torch.softmax(w[..., mixer.ds:mixer.ds + mixer.slots], dim=-1)
     if mode == "uniform_write":
@@ -44,12 +44,11 @@ def slot_forward(mixer, u: torch.Tensor, mode: str = "normal", stats: dict | Non
     share = address * gate
     log_keep = torch.log1p(-share.clamp(max=1.0 - math.exp(-MAX_DECAY))).unsqueeze(-1)
     table = lru_scan(log_keep, share.unsqueeze(-1) * value.unsqueeze(-2), None)
-    match = torch.einsum("bthd,btsd->bths", q, table) / math.sqrt(mixer.ds)
-    attention = torch.softmax(match, dim=-1)
+    read, attention = mixer.read(q, table)
     if mode == "uniform_read":
         attention = torch.full_like(attention, 1.0 / mixer.slots)
-    read = torch.einsum("bths,btsd->bthd", attention, table)
-    y = mixer.out(read.reshape(b, t, mixer.heads * mixer.ds).to(u.dtype))
+        read = attention @ (table[..., mixer.dk:] if mixer.split else table)
+    y = mixer.out(read.reshape(b, t, mixer.heads * mixer.dv).to(u.dtype))
     if mode == "off":
         y = torch.zeros_like(y)
     if stats is not None:
@@ -174,12 +173,112 @@ def text(name: str, r: dict) -> str:
     return "\n".join(L)
 
 
+KINDS = ("word start", "capital word start", "inside a word", "number", "punctuation", "line break", "other")
+
+
+def kind_of(piece: str) -> str:
+    """A rough class of a token from its text (as the tokenizer decodes it)."""
+    body = piece.strip(" ")
+    if "\n" in piece:
+        return "line break"
+    if not body:
+        return "other"
+    if body[0].isdigit():
+        return "number"
+    if not any(c.isalnum() for c in body):
+        return "punctuation"
+    if piece[:1] == " ":
+        return "capital word start" if body[0].isupper() else "word start"
+    return "inside a word"
+
+
+def _information(joint: torch.Tensor) -> float:
+    """Mutual information (bits) between the rows and the columns of a table of weights."""
+    p = joint / joint.sum().clamp(min=1e-12)
+    outer = p.sum(1, keepdim=True) * p.sum(0, keepdim=True)
+    mask = p > 0
+    return float((p[mask] * (p[mask] / outer[mask]).log2()).sum())
+
+
+@torch.no_grad()
+def contents(model, rows: np.ndarray, decode, langs: tuple[str, ...] = ("sk", "cs", "pl", "en"), batch: int = 32, top: int = 6) -> dict:
+    """What is written into each slot: which kinds of tokens, which languages, which tokens, where in the row.
+
+    `rows` hold equal shares of the languages in the order of `langs`; `decode(token_id)` gives a token's text."""
+    model = model.float().eval()
+    blocks = slot_blocks(model)
+    vocab, seq = model.embedding.num_embeddings, rows.shape[1] - 1
+    per_lang = max(1, len(rows) // len(langs))
+    kinds = torch.tensor([KINDS.index(kind_of(decode(i))) for i in range(vocab)])
+    by_token = {i: torch.zeros(model.blocks[i].mixer.slots, vocab, dtype=torch.float64) for i in blocks}
+    by_lang = {i: torch.zeros(model.blocks[i].mixer.slots, len(langs), dtype=torch.float64) for i in blocks}
+    by_pos = {i: torch.zeros(model.blocks[i].mixer.slots, seq, dtype=torch.float64) for i in blocks}
+    seen: dict[int, torch.Tensor] = {}
+    hooks = [model.blocks[i].mixer.register_forward_pre_hook(lambda m, args, _i=i: seen.__setitem__(_i, args[0])) for i in blocks]
+    try:
+        for start in range(0, len(rows), batch):
+            ids = torch.from_numpy(np.ascontiguousarray(rows[start:start + batch])).long()[:, :-1]
+            model(ids)
+            lang = torch.clamp(torch.arange(start, start + len(ids)) // per_lang, max=len(langs) - 1)
+            for i in blocks:
+                mx = model.blocks[i].mixer
+                w = mx.write(seen[i]).float()
+                share = (torch.softmax(w[..., mx.ds:mx.ds + mx.slots], dim=-1) * torch.sigmoid(w[..., -1:])).double()      # [b, t, slots]
+                by_token[i].index_add_(1, ids.reshape(-1), share.reshape(-1, mx.slots).t())
+                by_lang[i].index_add_(1, lang, share.sum(1).t())
+                by_pos[i] += share.sum(0).t()
+    finally:
+        for h in hooks:
+            h.remove()
+    out: dict = {}
+    for i in blocks:
+        mass = by_token[i]                                                    # [slots, vocab]
+        by_kind = torch.zeros(mass.shape[0], len(KINDS), dtype=torch.float64).index_add_(1, kinds, mass)
+        total = mass.sum().clamp(min=1e-12)
+        kind_all, lang_all = by_kind.sum(0) / total, by_lang[i].sum(0) / total
+        slots = []
+        for s in range(mass.shape[0]):
+            m = mass[s].sum().clamp(min=1e-12)
+            kind_share, lang_share = by_kind[s] / m, by_lang[i][s] / m
+            k = int((kind_share / kind_all.clamp(min=1e-9)).argmax())
+            best = torch.topk(mass[s], top)
+            slots.append({"slot": s, "share_of_writing": round(float(m / total), 4),
+                          "kind": KINDS[int(kind_share.argmax())], "kind_share": round(float(kind_share.max()), 3),
+                          "most_typical_kind": KINDS[k], "typical_lift": round(float(kind_share[k] / kind_all[k].clamp(min=1e-9)), 2),
+                          "languages": {l: round(float(v), 3) for l, v in zip(langs, lang_share)},
+                          "mean_position": round(float((by_pos[i][s] * torch.arange(seq)).sum() / m), 1),
+                          "tokens": [[decode(int(t)), round(float(v / m), 3)] for v, t in zip(best.values, best.indices)]})
+        slots.sort(key=lambda r: -r["share_of_writing"])
+        out[str(i)] = {"all_writing": {"kinds": {k: round(float(v), 3) for k, v in zip(KINDS, kind_all)},
+                                       "languages": {l: round(float(v), 3) for l, v in zip(langs, lang_all)}},
+                       "bits_slot_tells_about": {"kind of token": round(_information(by_kind), 3), "language": round(_information(by_lang[i]), 3),
+                                                 "token": round(_information(mass), 3), "position in the row": round(_information(by_pos[i]), 3)},
+                       "slots": slots}
+    return out
+
+
+def contents_text(name: str, c: dict, show: int = 8) -> str:
+    L = [f"{name}: what is written into the slots"]
+    for i, b in c.items():
+        info = b["bits_slot_tells_about"]
+        L.append(f"  block {i}: knowing the slot tells " + ", ".join(f"{v} bits about the {k}" for k, v in info.items())
+                 + "; all writing: " + ", ".join(f"{k} {100 * v:.0f} %" for k, v in b["all_writing"]["kinds"].items() if v >= 0.005))
+        for r in b["slots"][:show]:
+            langs = " ".join(f"{l} {100 * v:.0f}" for l, v in r["languages"].items())
+            toks = " ".join(repr(t) for t, _ in r["tokens"])
+            L.append(f"    slot {r['slot']:>2}: {100 * r['share_of_writing']:4.1f} % of writing | mostly {r['kind']} ({100 * r['kind_share']:.0f} %), "
+                     f"typical: {r['most_typical_kind']} x{r['typical_lift']} | {langs} | position {r['mean_position']:.0f} | {toks}")
+    return "\n".join(L)
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--models", required=True, help="comma list of checkpoints")
     ap.add_argument("--web-dir", default="data/bulk_val_v1")
     ap.add_argument("--rows", type=int, default=100, help="rows per language")
     ap.add_argument("--threads", type=int, default=4)
+    ap.add_argument("--contents", action="store_true", help="also: what is written into each slot (kinds of tokens, languages, tokens)")
+    ap.add_argument("--only-contents", action="store_true", help="skip the ablations")
     args = ap.parse_args(argv)
 
     from evo.engine.long_context import web_rows
@@ -188,12 +287,24 @@ def main(argv: list[str] | None = None) -> int:
     torch.set_num_threads(args.threads)
     rows = web_rows(Path(args.web_dir), args.rows)
     results = json.loads(OUT.read_text()) if OUT.exists() else {}
+    decode = None
+    if args.contents or args.only_contents:
+        from nova.tokenizer import NovaTokenizer
+
+        dataset = Path(json.loads(Path("evo/engine/evo_state.json").read_text(encoding="utf-8"))["best_known"]["dataset"])
+        tok = NovaTokenizer.load(dataset / "tokenizer.json")
+        decode = lambda i: tok.decode([i], skip_special=False)   # noqa: E731
     for path in [p for p in args.models.split(",") if p]:
         model, _ = load_checkpoint_model(path)
-        results[Path(path).stem] = probe(model, rows)
+        name = Path(path).stem
+        if not args.only_contents:
+            results[name] = {**results.get(name, {}), **probe(model, rows)}
+            print(text(name, results[name]), flush=True)
+        if decode is not None:
+            results.setdefault(name, {})["contents"] = contents(model, rows, decode)
+            print(contents_text(name, results[name]["contents"]), flush=True)
         OUT.parent.mkdir(parents=True, exist_ok=True)
-        OUT.write_text(json.dumps(results, indent=1))
-        print(text(Path(path).stem, results[Path(path).stem]), flush=True)
+        OUT.write_text(json.dumps(results, indent=1, ensure_ascii=False))
     return 0
 
 

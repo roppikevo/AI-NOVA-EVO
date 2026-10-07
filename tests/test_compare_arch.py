@@ -216,3 +216,11 @@ def test_the_best_candidates_are_picked_for_the_run_on_running_text():
     assert ca.best_candidates(results, ["24M"], 2) == ["win", "hash"]
     plan = ca.candidate_round(["24M"], ca.best_candidates(results, ["24M"], 2), "1e-3", True, 8)
     assert [v["name"] for v in plan] == ["n8-win-24M-carry8", "n8-hash-24M-carry8"] and plan[0]["compile"] and plan[0]["carry"] == 8
+
+
+def test_candidates_can_be_repeated_with_other_seeds_to_measure_the_noise():
+    plan = ca.candidate_round(["24M"], ["nslot"], "1e-3", True, seeds=(1001, 2001, 3001))
+    assert [v["name"] for v in plan] == ["n8-nslot-24M", "n8-nslot-24M-s2001", "n8-nslot-24M-s3001"]
+    assert "seed" not in plan[0] and plan[1]["seed"] == 2001 and all(v["override"] == plan[0]["override"] for v in plan)
+    results = {v["name"]: {**v, "loss": {"dataset": 3.0 + i / 100, "web": 3.6}} for i, v in enumerate(reversed(plan))}
+    assert ca.best_candidates(results, ["24M"], 3) == ["nslot"]                    # repeats do not count as other candidates

@@ -58,7 +58,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--bulk-dir", default="data/bulk_v1")
     ap.add_argument("--bulk-frac", type=float, default=0.8)
     ap.add_argument("--code-frac", type=float, default=0.05)
-    ap.add_argument("--extra-dirs", default="data/teacher_v1,data/web_v1")
+    ap.add_argument("--extra-dirs", default="data/teacher_v1,data/web_v1,data/self_v2")
     ap.add_argument("--val-extra-dir", default="", help="held-out web validation (parts never used for training)")
     ap.add_argument("--compile", action="store_true", help="compile the training forward pass (faster for the generation-8 core)")
     ap.add_argument("--carry", type=int, default=0,

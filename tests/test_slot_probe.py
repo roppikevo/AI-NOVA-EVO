@@ -64,3 +64,23 @@ def test_the_modes_replace_exactly_one_part():
         sp.slot_forward(mixer, u, "uniform_write", stats)
     assert abs(stats["address_slots_per_token"] - 8) < 1e-3 and abs(stats["slots_in_use"] - 8) < 1e-3     # every slot holds the same
     assert abs(stats["read_slots_per_query"] - 8) < 1e-2
+
+
+def test_what_is_written_into_the_slots():
+    m = _model()
+    rows = np.random.default_rng(2).integers(12, 120, size=(40, 24)).astype(np.int32)
+    words = {i: (" word" if i % 3 == 0 else "ing" if i % 3 == 1 else ",") for i in range(120)}
+    words[20], words[21], words[22] = " Bratislava", "7", "\n  "
+    c = sp.contents(m, rows, lambda i: words[i], langs=("sk", "en"), batch=16)
+    assert set(c) == {"1", "3"}
+    b = c["1"]
+    assert abs(sum(r["share_of_writing"] for r in b["slots"]) - 1) < 1e-3 and len(b["slots"]) == 8
+    assert b["slots"][0]["share_of_writing"] >= b["slots"][-1]["share_of_writing"]
+    assert abs(sum(b["all_writing"]["kinds"].values()) - 1) < 2e-2 and abs(sum(b["all_writing"]["languages"].values()) - 1) < 1e-2
+    r = b["slots"][0]
+    assert r["kind"] in sp.KINDS and abs(sum(r["languages"].values()) - 1) < 1e-2 and 0 <= r["mean_position"] <= 22 and len(r["tokens"]) == 6
+    assert all(v >= 0 for v in b["bits_slot_tells_about"].values())
+    assert [sp.kind_of(w) for w in (" word", " Bratislava", "ing", "7", ",", "\n  ", " ")] == [
+        "word start", "capital word start", "inside a word", "number", "punctuation", "line break", "other"]
+    t = sp.contents_text("m", c)
+    assert "block 1" in t and "slot" in t and "bits about the language" in t

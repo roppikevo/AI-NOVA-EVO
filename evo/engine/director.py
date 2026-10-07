@@ -52,6 +52,10 @@ OUTBOX = Path.home() / "nova-agent" / "outbox"
 PY = sys.executable
 
 PLATEAU = 16           # rejected attempts in a row before a new generation is trained from scratch (the slow way)
+EXPLORE_AFTER = 6      # rejected attempts in a row before the director measures an architecture candidate by itself
+EXPLORE_STEPS = 18000  # length of such a short run (the same as in every tournament so far)
+WAIT_RETRY_H = 24.0    # waiting for a new hypothesis: one learning attempt per this many hours (new texts keep coming)
+FRESH_RETRY_H = 72.0   # a rejected recipe that depends on new texts may be tried again on the same champion after this long
 COOLDOWN_H = 24.0      # a recipe that failed twice in a row rests this long
 DISCOUNT = 0.93
 GPU_BUSY_MB = 1500     # more than this in use by somebody else -> wait
@@ -60,16 +64,18 @@ TEACHER = "Qwen3.6-35B-A3B"
 MAX_OWN_RECIPES = 8    # recipes the director derived itself (variations of what worked)
 
 TRAIN_COMMON = ["--no-activate", "--batch-size", "64", "--warmup", "100", "--eval-every", "2000", "--patience", "99",
-                "--extra-dirs", "data/teacher_v1,data/web_v1", "--bulk-dir", "data/bulk_v1"]
+                "--extra-dirs", "data/teacher_v1,data/web_v1,data/self_v2", "--bulk-dir", "data/bulk_v1"]
 
 # Trial and error, fast: every attempt is 15-30 minutes. WEAK is replaced by the champion's weakest language.
 RECIPES: dict[str, dict[str, Any]] = {
     # --- ways to learn
     "gentle": {"steps": 4000, "flags": {"--lr": "2e-5", "--bulk-frac": "0.95", "--code-frac": "0.03"}},
-    "fresh-web": {"steps": 5000, "flags": {"--lr": "5e-5", "--bulk-frac": "0.97", "--code-frac": "0.02"}},
-    "weak-language": {"steps": 4000, "flags": {"--lr": "3e-5", "--bulk-frac": "0.9", "--code-frac": "0.03",
+    # the generation's own training, continued: the loss was still falling when its 300 000 steps ran out
+    "continue": {"steps": 40000, "flags": {"--lr": "1e-4", "--bulk-frac": "0.8", "--code-frac": "0.05"}},
+    "fresh-web": {"steps": 5000, "fresh": True, "flags": {"--lr": "5e-5", "--bulk-frac": "0.97", "--code-frac": "0.02"}},
+    "weak-language": {"fresh": True, "steps": 4000, "flags": {"--lr": "3e-5", "--bulk-frac": "0.9", "--code-frac": "0.03",
                                                "--boost-lang": "WEAK", "--boost-frac": "0.5"}},
-    "teachers": {"steps": 3000, "flags": {"--lr": "3e-5", "--bulk-frac": "0.6", "--code-frac": "0.03",
+    "teachers": {"fresh": True, "steps": 3000, "flags": {"--lr": "3e-5", "--bulk-frac": "0.6", "--code-frac": "0.03",
                                           "--focus": "teacher", "--focus-frac": "0.5"}},
     "code": {"steps": 4000, "flags": {"--lr": "3e-5", "--bulk-frac": "0.8", "--code-frac": "0.25"}},
     # --- changes of its own structure, in place (nova/surgery.py): the edited model starts as an exact copy
@@ -128,8 +134,16 @@ def save_state(state: dict, path: Path | None = None) -> None:
 def log_event(rec: dict, path: Path | None = None) -> None:
     path = path or LOG
     path.parent.mkdir(parents=True, exist_ok=True)
+    full = {"time": time.time(), "date": time.strftime("%Y-%m-%d %H:%M"), **rec}
     with path.open("a", encoding="utf-8") as f:
-        f.write(json.dumps({"time": time.time(), "date": time.strftime("%Y-%m-%d %H:%M"), **rec}, ensure_ascii=False) + "\n")
+        f.write(json.dumps(full, ensure_ascii=False) + "\n")
+    if path == LOG:
+        try:                                    # everything that was judged goes into the experiment ledger
+            from evo.engine import ledger
+
+            ledger.record(ledger.from_director_event(full))
+        except Exception:
+            pass
 
 
 def next_release_name(name: str) -> str:
@@ -211,9 +225,45 @@ def learn_from(state: dict, name: str, accepted: bool) -> str | None:
     return made
 
 
+def tried_on(state: dict, champion: str | None = None) -> dict:
+    """What was already tried on a champion and how it ended: {recipe: {"outcome", "gain", "time"}}."""
+    return state.setdefault("tried", {}).setdefault(champion or state["champion"]["name"], {})
+
+
+def remember(state: dict, champion: str, recipe: str, outcome: str, gain: float | None = None, now: float | None = None) -> None:
+    tried_on(state, champion)[recipe] = {"outcome": outcome, "gain": gain, "time": time.time() if now is None else now}
+
+
+def worth_trying(state: dict, name: str, recipe: dict, now: float) -> bool:
+    """The same recipe on the same champion gives the same result: do not repeat what was rejected, stepped back
+    after probation or is not possible for this core. A recipe that lives on new texts may come back after a while."""
+    t = tried_on(state).get(name)
+    if t and t["outcome"] in ("rejected", "reverted", "impossible"):
+        return bool(recipe.get("fresh")) and t["outcome"] == "rejected" and now - t["time"] >= FRESH_RETRY_H * 3600
+    if t:
+        return True
+    # not tried on this champion yet: a recipe that made the last two champions of this generation worse is left out
+    line = re.sub(r"-v\d+$", "", state["champion"]["name"])
+    before = [r for r in state.get("releases", []) if r != state["champion"]["name"] and re.sub(r"-v\d+$", "", r) == line
+              and r not in state.get("reverted", [])]
+    worse = 0
+    for champion in reversed(before):
+        past = state.get("tried", {}).get(champion, {}).get(name)
+        if not past:
+            continue
+        if past["outcome"] == "impossible" or (past["outcome"] == "rejected" and (past.get("gain") or 0) <= 0):
+            worse += 1
+        else:
+            break
+        if worse >= 2:
+            return bool(recipe.get("fresh")) and now - past["time"] >= FRESH_RETRY_H * 3600
+    return True
+
+
 def available(state: dict, now: float | None = None, recipes: dict | None = None) -> list[str]:
     now = time.time() if now is None else now
-    return [n for n in (recipes or all_recipes(state)) if recipe_stats(state, n)["rest_until"] <= now]
+    recipes = recipes or all_recipes(state)
+    return [n for n in recipes if recipe_stats(state, n)["rest_until"] <= now and worth_trying(state, n, recipes[n], now)]
 
 
 def choose(state: dict, now: float | None = None, recipes: dict | None = None, exploration: float = 0.5) -> str | None:
@@ -388,6 +438,16 @@ class World:
 
         return judge.judge(champion, challenger, self.dataset, self.web_dir)
 
+    def identity(self, checkpoint: str) -> dict | None:
+        """The identity test of a new core (None if it could not be run: the judge still decides)."""
+        try:
+            from evo.engine import identity
+
+            return identity.check_checkpoint(checkpoint)
+        except Exception as exc:
+            log_event({"event": "identity_error", "checkpoint": checkpoint, "error": f"{type(exc).__name__}: {exc}"[:300]})
+            return None
+
     def release_name(self, champion_name: str, params: int | None = None) -> str:
         return free_release_name(champion_name, params=params)
 
@@ -443,7 +503,7 @@ class World:
             small.append(str(rel / "nova_model.pt"))
         env = {**os.environ, "GIT_TERMINAL_PROMPT": "0"}
         subprocess.run(["git", "add", "-f"] + [f for f in small if Path(f).exists()], env=env)
-        subprocess.run(["git", "add", "-f", str(STATE), str(LOG), str(REPORT)], env=env, capture_output=True)
+        subprocess.run(["git", "add", "-f", str(STATE), str(LOG), str(REPORT), "evo/ledger.jsonl"], env=env, capture_output=True)
         subprocess.run(["git", "commit", "-qm", f"Director: release {name} (accepted by the judge)"], env=env)
         subprocess.run(["git", "tag", "-a", name.lower(), "-m", f"{name}: released by the director"], env=env, capture_output=True)
         subprocess.run(["git", "push", "-q", "origin", "master"], env=env, capture_output=True, timeout=600)
@@ -472,12 +532,19 @@ def _broken(exc: Exception) -> bool:
 
 # ------------------------------------------------------------------ one attempt
 
-def train_command(recipe: dict, champion: str, out: Path, seed: int, weak: str, steps: int | None = None) -> list[str]:
+def train_command(recipe: dict, champion: str, out: Path, seed: int, weak: str, steps: int | None = None,
+                  trained: dict | None = None) -> list[str]:
+    """`trained`: how the champion itself was trained (compiled, on running text) - an attempt keeps to it."""
     n = steps or recipe["steps"]
     cmd = [PY, "-m", "evo.engine.long_train", "--init", champion, "--out-checkpoint", str(out), "--steps", str(n),
            "--seed", str(seed), "--max-hours", str(round(n / 9000 + 0.3, 2))] + TRAIN_COMMON
     for k, v in recipe["flags"].items():
         cmd += [k, weak if v == "WEAK" else v]
+    trained = trained or {}
+    if trained.get("compile"):
+        cmd += ["--compile"]
+    if trained.get("carry"):
+        cmd += ["--carry", str(trained["carry"])] + (["--carry-share", str(trained["carry_share"])] if trained.get("carry_share") else [])
     return cmd
 
 
@@ -535,7 +602,7 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
         parts, rc, tail = [], 0, ""
         for i in range(int(recipe["soup"])):
             part = out.with_name(f"attempt-{n}-clone{i}.pt")
-            rc, tail = world.run(train_command(recipe, champ["checkpoint"], part, state["seed"] * 10 + i, weak),
+            rc, tail = world.run(train_command(recipe, champ["checkpoint"], part, state["seed"] * 10 + i, weak, trained=champ.get("recipe")),
                                  timeout_h=recipe["steps"] / 9000 + 0.8)
             if rc != 0 or not part.exists():
                 rc = rc or 1
@@ -560,7 +627,7 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
                 side = side_command(state, world)
                 if side:
                     world.start_side(side)
-            rc, tail = world.run(train_command(recipe, init, out, state["seed"], weak, 30 if smoke else None),
+            rc, tail = world.run(train_command(recipe, init, out, state["seed"], weak, 30 if smoke else None, trained=champ.get("recipe")),
                                  timeout_h=recipe["steps"] / 9000 + 0.8)
         edited.unlink(missing_ok=True)
         challenger = str(out) if rc == 0 and out.exists() else None
@@ -577,7 +644,9 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
                 new = world.release_name(champ["name"], v.get("params"))
                 released = world.release(new, challenger)
                 if released:
-                    state["champion"] = {"name": new, "checkpoint": released, "since": time.time()}
+                    state["champion"] = {"name": new, "checkpoint": released, "since": time.time(),
+                                         **{k: champ[k] for k in ("override", "recipe", "candidate", "group", "state_kb", "class") if k in champ},
+                                         "polish": list(champ.get("polish", [])) + [name]}
                     state["releases"].append(new)
                     state["accepted"] += 1
                     rec["released"] = new
@@ -600,6 +669,11 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
         for f in (Path("evo/collective/runs") / f"director-{n}").glob("*.pt"):
             f.unlink(missing_ok=True)
     state["attempts"] = n
+    if not state.get("halted") and not smoke:
+        seen = (rec.get("verdict") or {}).get("decision", {}).get("gain_percent")
+        outcome = ("accepted" if rec.get("released") else "impossible" if str(rec.get("note", "")).startswith("this change of structure")
+                   else "failed" if failed else "rejected")
+        remember(state, champ["name"], name, outcome, seen)
     if not state.get("halted"):
         record(state, name, gain, failed)
         made = learn_from(state, name, bool(rec.get("released")))
@@ -662,6 +736,7 @@ def probation_step(state: dict, world: World) -> str:
     if back:
         state["champion"] = dict(pr["previous"])
         state.setdefault("reverted", []).append(pr["name"])
+        remember(state, pr["previous"]["name"], pr["recipe"], "reverted", float(pr.get("gain", 0.0)))
         state["rejected_in_a_row"] += 1
         s = recipe_stats(state, pr["recipe"])                      # the recipe loses the credit it got
         s["gain"] = max(0.0, s["gain"] - float(pr.get("gain", 0.0)))
@@ -673,6 +748,43 @@ def probation_step(state: dict, world: World) -> str:
 
 
 # ------------------------------------------------------------------ next generation
+
+def polish(state: dict, world: World, checkpoint: str, names: list[str], tag: str, trained: dict | None = None) -> str | None:
+    """Give a freshly trained generation the same finishing the champion got: the recipes that were accepted since
+    the champion's own generation, replayed in order. Without it a new core is compared raw with a polished one.
+
+    Only recipes that train a single model or average clones are replayed (no surgery, no collective)."""
+    recipes = all_recipes(state)
+    weak = weakest_language(state["champion"].get("scores"))
+    out_dir = DIR / "challengers"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    current = checkpoint
+    for k, name in enumerate(names):
+        recipe = recipes.get(name)
+        if not recipe or recipe.get("collective") or recipe.get("surgery"):
+            continue
+        state["seed"] += 1
+        out = out_dir / f"polish-{tag}-{k}.pt"
+        if recipe.get("soup"):
+            parts = []
+            for i in range(int(recipe["soup"])):
+                part = out_dir / f"polish-{tag}-{k}-clone{i}.pt"
+                rc, _ = world.run(train_command(recipe, current, part, state["seed"] * 10 + i, weak, trained=trained),
+                                  timeout_h=recipe["steps"] / 9000 + 0.8)
+                if rc != 0 or not part.exists():
+                    break
+                parts.append(str(part))
+            if len(parts) >= 2:
+                world.average(parts, out)
+            for f in out_dir.glob(f"polish-{tag}-{k}-clone*.pt"):
+                f.unlink(missing_ok=True)
+        else:
+            world.run(train_command(recipe, current, out, state["seed"], weak, trained=trained), timeout_h=recipe["steps"] / 9000 + 0.8)
+        if not out.exists():
+            return None
+        current = str(out)
+    return current if current != checkpoint else None
+
 
 def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] | None = None) -> dict | None:
     """Train the next (bigger) generation for one segment; when it is finished, let the judge decide."""
@@ -712,13 +824,35 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
     if line.get("finished") and line.get("best_checkpoint") and state.get("grow"):
         champ = state["champion"]
         try:
-            v = world.judge(champ["checkpoint"], line["best_checkpoint"])
+            # identity first: a core whose state grows with the text is not NOVA, whatever its loss
+            ident = world.identity(line["best_checkpoint"])
+            if ident:
+                rec["identity"] = {k: ident[k] for k in ("pass", "class", "state_kb", "growth_bytes_per_token") if k in ident}
+            if ident and not ident.get("pass"):
+                v = {"accept": False, "reasons": [f"identity test failed: class {ident.get('class')}, the state grows by "
+                                                  f"{ident.get('growth_bytes_per_token')} bytes per token"]}
+            else:
+                v = world.judge(champ["checkpoint"], line["best_checkpoint"])
             rec["verdict"] = {k: v[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator") if k in v}
+            winner, polished_with = line["best_checkpoint"], []
+            trained = {k: g[k] for k in ("steps", "lr", "compile", "carry", "carry_share") if g.get(k)}
+            if not v["accept"] and not (ident and not ident.get("pass")) and champ.get("polish"):
+                # the champion was polished after its own generation: the new core gets the same before the last word
+                better = polish(state, world, line["best_checkpoint"], champ["polish"], g["line"], trained)
+                if better:
+                    v2 = world.judge(champ["checkpoint"], better)
+                    rec["verdict_raw"], polished_with = rec["verdict"], list(champ["polish"])
+                    rec["verdict"] = {k: v2[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator") if k in v2}
+                    rec["polished_with"] = polished_with
+                    v, winner = v2, better
             if v["accept"]:
                 name = f"{g['line']}-v1"
-                released = world.release(name, line["best_checkpoint"])
+                released = world.release(name, winner)
                 if released:
-                    state["champion"] = {"name": name, "checkpoint": released, "since": time.time()}
+                    state["champion"] = {"name": name, "checkpoint": released, "since": time.time(), "override": g.get("override"),
+                                         "recipe": trained, "polish": polished_with,
+                                         **{k: g[k] for k in ("candidate", "group") if g.get(k)},
+                                         **({"state_kb": ident["state_kb"], "class": ident.get("class")} if ident else {})}
                     state["releases"].append(name)
                     state["accepted"] += 1
                     state["rejected_in_a_row"] = 0
@@ -729,6 +863,8 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
                 halt(state, str(exc))
                 log_event(rec)
                 return rec
+        for f in (DIR / "challengers").glob(f"polish-{g['line']}-*.pt") if (DIR / "challengers").exists() else []:
+            f.unlink(missing_ok=True)
         state["grown"].append(g["line"])
         state["grow"] = None
         if not rec.get("released"):
@@ -740,6 +876,46 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
 
 
 # ------------------------------------------------------------------ report (for the Creator, in Slovak)
+
+PHASES = {"generation": "trénuje novú generáciu", "improving the champion": "skúša zlepšiť šampióna",
+          "exploring": "sám meria (šum, kandidát na novú stavbu jadra)",
+          "waiting for a new hypothesis": "čaká na novú hypotézu (všetko známe je vyskúšané; raz denne skúsi učenie na nových textoch)"}
+
+
+def note_progress(state: dict, now: float | None = None) -> None:
+    """Remember the champion's numbers once per champion: progress is a vector, not one number."""
+    c = state["champion"]
+    s = c.get("scores") or {}
+    log = state.setdefault("progress", [])
+    if not s or any(p["name"] == c["name"] for p in log):
+        return
+    log.append({"name": c["name"], "time": time.time() if now is None else now, "dataset": s.get("dataset"), "web": s.get("web"),
+                "code": s.get("code"), "state_kb": c.get("state_kb"), "class": c.get("class")})
+
+
+def progress_lines(state: dict, now: float) -> list[str]:
+    """Quality, code and state against the first champion and against a week ago (lower loss = better)."""
+    log = state.get("progress") or []
+    if len(log) < 2:
+        return []
+
+    def line(label: str, a: dict, b: dict) -> str:
+        parts = []
+        for key, name in (("dataset", "strata dataset"), ("web", "strata web")):
+            if a.get(key) and b.get(key):
+                parts.append(f"{name} {100 * (b[key] / a[key] - 1):+.2f} %")
+        if a.get("code") is not None and b.get("code") is not None:
+            parts.append(f"programovanie {a['code']} → {b['code']}")
+        if a.get("state_kb") and b.get("state_kb"):
+            parts.append(f"stav {a['state_kb']:.0f} → {b['state_kb']:.0f} kB")
+        return f"{label} ({a['name']} → {b['name']}): " + ", ".join(parts)
+
+    out = [line("Pokrok od prvého modelu", log[0], log[-1])]
+    week = [p for p in log if p["time"] <= now - 7 * 86400]
+    if week and week[-1]["name"] not in (log[0]["name"], log[-1]["name"]):
+        out.append(line("Pokrok za posledných 7 dní", week[-1], log[-1]))
+    return out
+
 
 def report(state: dict, now: float | None = None) -> str:
     now = time.time() if now is None else now
@@ -755,6 +931,10 @@ def report(state: dict, now: float | None = None) -> str:
          f"(zásahov spolu: {len(state['interventions'])})",
          f"Pokusy o zlepšenie: {state['attempts']}, prijaté: {state['accepted']}, odmietnuté za sebou: {state['rejected_in_a_row']} (pri {PLATEAU} sa začne generácia od nuly)",
          f"Vydania: {', '.join(state['releases'])}"]
+    if state.get("phase"):
+        L.insert(3, f"Stav riaditeľa: {PHASES.get(state['phase'], state['phase'])}"
+                    + (f"; vlastných meraní: {state['explored']}" if state.get("explored") else ""))
+    L += progress_lines(state, now)
     if s:
         L.append(f"Strata na odloženom texte: dataset {s.get('dataset')}, web {s.get('web')}; programovanie {s.get('code')}/79; "
                  f"pozná tvorcu: {'áno' if s.get('creator', -9) >= -0.7 else 'NIE'}")
@@ -842,8 +1022,115 @@ def gpu_is_free(world: World) -> bool:
     return world.gpu_used_mb() <= GPU_BUSY_MB
 
 
+def champion_setup(state: dict) -> None:
+    """Fill in what a champion released by an older director does not carry: its architecture and how it was trained."""
+    champ = state["champion"]
+    if "override" not in champ:
+        info = Path(champ["checkpoint"]).parent / "MODEL.json"
+        try:
+            champ["override"] = json.loads(info.read_text(encoding="utf-8")).get("config") or {}
+        except (OSError, ValueError):
+            champ["override"] = {}
+    if "recipe" not in champ:
+        line = re.sub(r"-v\d+$", "", champ["name"])
+        row = next((r for r in load_ladder() if r.get("line") == line), None) or {}
+        champ["recipe"] = {k: row[k] for k in ("steps", "lr", "compile", "carry", "carry_share") if row.get(k)}
+        if not champ["recipe"] and champ["override"].get("arch") == "nova8":
+            champ["recipe"] = {"compile": True}
+    line = re.sub(r"-v\d+$", "", champ["name"])
+    if "polish" not in champ:
+        # recipes that were accepted (and stood their probation) since this generation was trained, in order
+        champ["polish"] = [h["recipe"] for h in state.get("history", [])
+                           if str(h.get("released", "")).startswith(line + "-v") and h["released"] not in state.get("reverted", [])]
+    if "tried" not in state:
+        for h in state.get("history", []):
+            if h.get("reverted"):
+                continue
+            v = h.get("verdict")
+            if h.get("champion") and h.get("recipe") and (v or str(h.get("note", "")).startswith("this change of structure")):
+                outcome = "impossible" if not v else "accepted" if h.get("released") else "rejected"
+                remember(state, h["champion"], h["recipe"], outcome, (v or {}).get("decision", {}).get("gain_percent"),
+                         now=time.time() - 1)
+        for h in state.get("history", []):
+            prev = next((x for x in state.get("history", []) if x.get("released") == h.get("reverted")), None) if h.get("reverted") else None
+            if prev and prev.get("champion"):
+                remember(state, prev["champion"], h["recipe"], "reverted", now=time.time() - 1)
+        state.setdefault("tried", {})
+
+
+def hypotheses(group: str) -> list[str]:
+    """Names of the candidate architectures the director may try by itself, in order (strategy, not constitution)."""
+    from evo.engine import compare_arch as ca
+
+    f = DIR / "hypotheses.json"
+    try:
+        rows = json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
+    except (OSError, ValueError):
+        rows = None
+    if isinstance(rows, dict) and isinstance(rows.get(group), list):
+        return [str(n) for n in rows[group]]
+    return list(ca.EXPLORE_ORDER.get(group, []))
+
+
+def explore_step(state: dict, world: World) -> dict | None:
+    """The director's own tournament step: measure the noise, then the next untried candidate architecture.
+
+    A candidate that beats the champion's architecture in a short run (identity, then quality well above the
+    noise, then cost - evo.engine.explore) is added to the ladder as the next generation. Returns None when
+    there is nothing to measure: the champion is not from the registry, or every candidate was tried."""
+    from evo.engine import compare_arch as ca
+    from evo.engine import explore, ledger
+
+    champ = state["champion"]
+    group = champ.get("group") or "24M"
+    registry = ca.CANDIDATES.get(group, {})
+    cand = champ.get("candidate") or explore.candidate_of(champ.get("override"), registry)
+    if not cand or cand not in registry:
+        return None
+    act = explore.next_action(ledger.load(), cand, group, {n: registry[n] for n in hypotheses(group) if n in registry})
+    if act is None:
+        return None
+    state["current"] = {"what": "explore", "recipe": f"{act['what']} {act['name']}", "since": time.time()}
+    save_state(state)
+    cmd = [PY, "-m", "evo.engine.compare_arch", "--steps", str(EXPLORE_STEPS), "--groups", group, "--only-candidates",
+           "--candidates", act["name"], "--candidate-lr", "1e-3", "--compile-candidates"]
+    if act.get("seed"):
+        cmd += ["--candidate-seeds", f"{explore.SEEDS[0]},{act['seed']}"]
+    rc, tail = world.run(cmd, timeout_h=3.0)
+    rows = ledger.load()
+    run = explore.run_name(act["name"], group, act.get("seed", explore.SEEDS[0]))
+    entry = next((r for r in reversed(rows) if r.get("name") == run), None)
+    rec: dict[str, Any] = {"event": "explore", **act, "run": run, "rc": rc}
+    if entry is None:
+        rec["tail"] = tail[-300:]
+        ledger.record({"key": f"tournament:{run}:lost", "kind": "tournament", "name": run, "verdict": "failed",
+                       "reason": f"no result (exit code {rc})", "source": "director"})          # never tried twice in vain
+    else:
+        rec["metrics"] = entry.get("metrics")
+        if act["what"] == "candidate" and act["name"] != cand:
+            base = next((r for r in explore.base_runs(rows, cand, group) if r.get("name") == explore.run_name(cand, group)), None)
+            if base is not None:
+                v = explore.verdict(entry, base, explore.noise_pct(rows, cand, group))
+                rec["verdict"] = v
+                line = explore.generation_row(act["name"], group, registry, champ.get("recipe"))
+                ladder = load_ladder()
+                if v["win"] and line["line"] not in state["grown"] and all(r["line"] != line["line"] for r in ladder):
+                    (DIR / "ladder.json").write_text(json.dumps(ladder + [line], indent=1), encoding="utf-8")
+                    rec["next_generation"] = line["line"]
+        else:
+            rec["noise_percent"] = explore.noise_pct(rows, cand, group)
+    state["explored"] = state.get("explored", 0) + 1
+    state["current"] = None
+    save_state(state)
+    log_event(rec)
+    return rec
+
+
 def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
-    """One step of the loop. Returns what happened (for the log and the tests)."""
+    """One step of the loop. Returns what happened (for the log and the tests).
+
+    The director is always in one of these phases: a generation in training, an attempt to improve the champion,
+    a measurement of its own (noise, a candidate architecture), or waiting for a new hypothesis."""
     if not gpu_is_free(world):
         return "gpu_busy"
     if state.get("probation"):
@@ -851,14 +1138,48 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
     if "scores" not in state["champion"]:
         state["champion"]["scores"] = world.scores(state["champion"]["checkpoint"])
         save_state(state)
-    if state.get("grow") or state["rejected_in_a_row"] >= PLATEAU:
-        rec = grow_step(state, world)
-        if rec is not None:
+    champion_setup(state)
+    note_progress(state)
+    stalled = state["rejected_in_a_row"]
+    won = any(r.get("candidate") and r["line"] not in state["grown"] for r in load_ladder())     # a winner of the director's own tournament
+    if state.get("grow") or won or stalled >= PLATEAU:
+        state["phase"] = "generation"
+        if grow_step(state, world) is not None:
             return "grow"
-        state["rejected_in_a_row"] = 0     # nothing bigger left to try: keep learning
+    if stalled < state.get("explored_at", 0):
+        state["explored_at"] = 0                                 # something was accepted since: count from the start again
+    asked = state.get("explore_budget", 0) > 0                   # measurements asked for by hand (--explore N) come first
+    if asked or stalled >= PLATEAU or stalled - state.get("explored_at", 0) >= EXPLORE_AFTER:
+        state["phase"] = "exploring"
+        rec = explore_step(state, world)
+        if asked:
+            state["explore_budget"] = state["explore_budget"] - 1 if rec is not None else 0
+        if rec is not None:
+            state["explored_at"] = min(stalled, PLATEAU)
+            save_state(state)
+            return f"explore:{rec['run']}"
+        state["explored_at"] = stalled                           # nothing to explore now: do not ask again every cycle
+    if stalled >= PLATEAU:
+        # nothing bigger to train, no untried candidate: wait for a new hypothesis instead of repeating what was rejected
+        state["phase"] = "waiting for a new hypothesis"
+        if time.time() - state.get("last_wait_attempt", 0) < WAIT_RETRY_H * 3600:
+            save_state(state)
+            return "waiting_for_hypothesis"
+        state["last_wait_attempt"] = time.time()
+    else:
+        state["phase"] = "improving the champion"
     name = choose(state, recipes=recipes)
     if name is None:
-        return "all_recipes_resting"
+        # every recipe was tried on this champion (or rests): measure something of its own instead of repeating
+        state["phase"] = "exploring"
+        rec = explore_step(state, world)
+        if rec is not None:
+            save_state(state)
+            return f"explore:{rec['run']}"
+        state["phase"] = "waiting for a new hypothesis"
+        save_state(state)
+        return "waiting_for_hypothesis" if not available(state, recipes=recipes) and any(
+            not worth_trying(state, n, r, time.time()) for n, r in (recipes or all_recipes(state)).items()) else "all_recipes_resting"
     attempt(state, world, name, recipes=recipes)
     return f"attempt:{name}"
 
@@ -874,7 +1195,21 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--start-generation", default="",
                     help="begin training this line of the ladder from scratch now instead of waiting for the plateau "
                          "(recorded as an intervention; the director must not be running)")
+    ap.add_argument("--explore", type=int, default=0,
+                    help="let the director do this many measurements of its own (noise, candidate architectures) before "
+                         "anything else (recorded as an intervention; the director must not be running)")
     args = ap.parse_args(argv)
+    if args.explore:
+        st = load_state()
+        if st is None:
+            print("no state yet")
+            return 2
+        st["explore_budget"] = args.explore
+        st["interventions"].append({"time": time.time(), "date": time.strftime("%Y-%m-%d %H:%M"), "note": f"asked for {args.explore} measurements of its own"})
+        save_state(st)
+        log_event({"event": "intervention", "note": f"explore {args.explore}"})
+        print(f"the director will do {args.explore} measurements of its own first")
+        return 0
     if args.start_generation:
         st = load_state()
         row = next((r for r in load_ladder() if r["line"] == args.start_generation), None)
@@ -957,7 +1292,7 @@ def main(argv: list[str] | None = None) -> int:
         what = cycle(state, world)
         write_report(state)
         print(f"{time.strftime('%Y-%m-%d %H:%M')} {what}", flush=True)
-        if what in ("gpu_busy", "all_recipes_resting"):
+        if what in ("gpu_busy", "all_recipes_resting", "waiting_for_hypothesis"):
             world.sleep(300)
         cycles += 1
         if args.max_cycles and cycles >= args.max_cycles:

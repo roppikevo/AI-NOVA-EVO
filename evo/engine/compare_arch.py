@@ -60,13 +60,23 @@ CANDIDATES = {
         "nwin16": {**N8, "pattern": "NNWNNWN", "mlp_hidden": 1184, "window": 16},
         "nwin3": {**N8, "pattern": "NWNWNWN", "mlp_hidden": 1184, "window": 32},
         "nsw": {**N8, "pattern": "NSWNSWN", "mlp_hidden": 1264, "slots": 16, "window": 32},
+        # third round, from the probe of the slots (half of them unused, reading spread over ten slots): the winner
+        # nslot with a sharper reading, with slots split into key and value, with fewer slots - all at 56 kB or less
+        "nslot-sharp": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1296, "slots": 16, "slot_sharp": True},
+        "nslot-kv": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1360, "slots": 16, "slot_key": 56},
+        "nslot-kvs": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1360, "slots": 16, "slot_key": 56, "slot_sharp": True},
+        "nslot8": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1296, "slots": 8},
     },
 }
+# Hypotheses the director may measure by itself when learning stalls, in this order (evo/director/hypotheses.json
+# replaces the list). Candidates that are not listed are measured only when somebody asks for them.
+EXPLORE_ORDER = {"24M": ["nslot-sharp", "nslot-kv", "nslot8", "nslot-kvs"]}
 LR, LR_HIGH = "3e-4", "1e-3"
+SEED = 1001                    # every run uses it unless a candidate is repeated to measure the noise
 LONG_CONTEXTS = (1024, 4096)   # speed only: both models are trained on 128-token sequences
 COMMON = ["--from-scratch", "--no-activate", "--batch-size", "64", "--warmup", "500", "--eval-every", "3000",
           "--patience", "99", "--extra-dirs", "data/teacher_v1,data/web_v1", "--bulk-dir", "data/bulk_v1",
-          "--bulk-frac", "0.7", "--code-frac", "0.05", "--seed", "1001"]
+          "--bulk-frac", "0.7", "--code-frac", "0.05", "--seed", str(SEED)]
 
 
 def first_round(groups: list[str]) -> list[dict]:
@@ -110,16 +120,21 @@ def extra_round(results: dict[str, dict], groups: list[str], nova_lrs: list[str]
     return rows
 
 
-def candidate_round(groups: list[str], names: list[str], lr: str, compiled: bool = False, carry: int = 0, share: float = 0.0) -> list[dict]:
-    """Generation-8 candidates of the NOVA core, each trained once at `lr` (carry > 1: on running text)."""
+def candidate_round(groups: list[str], names: list[str], lr: str, compiled: bool = False, carry: int = 0, share: float = 0.0,
+                    seeds: tuple[int, ...] = (SEED,)) -> list[dict]:
+    """Generation-8 candidates of the NOVA core, each trained at `lr` (carry > 1: on running text), once per seed.
+
+    Repeating a candidate with other seeds measures the noise: how much the same experiment differs by chance."""
     rows = []
     for g in groups:
         for n in names:
             shape = CANDIDATES.get(g, {}).get(n)
-            if shape:
-                name = f"n8-{n}-{g}" + ("" if lr == LR_HIGH else f"-lr{lr}") + (f"-carry{carry}" + ("mix" if share > 0 else "") if carry > 1 else "")
+            for seed in (seeds if shape else ()):
+                name = (f"n8-{n}-{g}" + ("" if lr == LR_HIGH else f"-lr{lr}") + (f"-carry{carry}" + ("mix" if share > 0 else "") if carry > 1 else "")
+                        + ("" if seed == SEED else f"-s{seed}"))
                 rows.append({"name": name, "group": g, "arch": "nova8", "override": shape, "lr": lr,
-                             **({"compile": True} if compiled else {}), **({"carry": carry} if carry > 1 else {}), **({"carry_share": share} if carry > 1 and share > 0 else {})})
+                             **({"compile": True} if compiled else {}), **({"carry": carry} if carry > 1 else {}),
+                             **({"carry_share": share} if carry > 1 and share > 0 else {}), **({"seed": seed} if seed != SEED else {})})
     return rows
 
 
@@ -127,7 +142,7 @@ def best_candidates(results: dict[str, dict], groups: list[str], n: int) -> list
     """Names (as in CANDIDATES) of the n generation-8 candidates with the lowest mean loss, trained the plain way."""
     names = []
     for g in groups:
-        rows = [r for r in results.values() if r["group"] == g and r["arch"] == "nova8" and r.get("loss") and not r.get("carry")]
+        rows = [r for r in results.values() if r["group"] == g and r["arch"] == "nova8" and r.get("loss") and not r.get("carry") and not r.get("seed")]
         rows.sort(key=lambda r: sum(r["loss"].values()) / len(r["loss"]))
         for r in rows[:n]:
             short = r["name"][len("n8-"):].split(f"-{g}")[0]
@@ -164,6 +179,8 @@ def train(v: dict, steps: int, max_hours: float, runner=subprocess.run) -> dict:
         cmd += ["--carry", str(v["carry"])]   # the web text as running text, the state carried from row to row
         if v.get("carry_share"):
             cmd += ["--carry-share", str(v["carry_share"])]   # only this share of a batch; the rest starts cold
+    if v.get("seed"):
+        cmd += ["--seed", str(v["seed"]), "--init-seed", str(v["seed"])]     # the last --seed counts: other data order, other random start
     p = runner(cmd, capture_output=True, text=True, timeout=int(max_hours * 3600) + 1800)
     if p.returncode != 0 or not out.exists():
         raise RuntimeError((p.stderr or p.stdout or "")[-800:])
@@ -205,6 +222,16 @@ def cpu_speed(model, vocab: int, prompt_len: int = 127, gen: int = 64, threads: 
                         tok = st.step(tok).argmax(-1)
                     write = min(write, time.perf_counter() - t0)
                     state = st.state_bytes()
+                elif getattr(m, "carries_state", False):           # generation 8: its fused one-token step
+                    from nova.stepper8 import Stepper8
+
+                    st8 = Stepper8(m)
+                    tok = st8.prime(x).argmax(-1)
+                    t0 = time.perf_counter()
+                    for _ in range(gen):
+                        tok = st8.step(tok).argmax(-1)
+                    write = min(write, time.perf_counter() - t0)
+                    state = st8.state_bytes()
                 else:
                     logits, cache = m(x)[:2]
                     tok = logits[:, -1:].argmax(-1)
@@ -237,10 +264,27 @@ def evaluate(v: dict, sets: dict[str, np.ndarray], tokenizer: str, exam_keys: li
     node = load_node(v["name"], str(OUT / f"{v['name']}.pt"), tokenizer, "", device)
     seq = {s: seq_loss(node, rows) for s, rows in sets.items()}
     res = {"loss": {s: round(float(a.mean()), 4) for s, a in seq.items()},
-           "code_solved": len(solved_tasks(node, exam_keys)), "code_tasks": len(exam_keys),
-           "cpu": cpu_speed(node.model, int(node.model.embedding.num_embeddings))}
+           "code_solved": len(solved_tasks(node, exam_keys)), "code_tasks": len(exam_keys)}
+    try:                                           # the finer reading of the same exam: partial credit and likelihood
+        from evo.learning import fine_exam
+        from evo.learning.code_school import solution_nll
+
+        tasks = fine_exam.exam_tasks(exam_keys)
+        bodies = {k: b[0] for k, b in node.solve(exam_keys, 0).items() if b}
+        res["code_fine"] = {**fine_exam.grade(tasks, bodies), "nll": solution_nll(node.model, node.tok, tasks)}
+    except Exception as exc:
+        res["code_fine_error"] = f"{type(exc).__name__}: {exc}"[:200]
+    finally:
+        node.model.to(node.device)                 # the likelihood is measured on the CPU: put the model back
+    res["cpu"] = cpu_speed(node.model, int(node.model.embedding.num_embeddings))
     if "web" in sets:
         res["web_carried"] = carried_loss(node.model, sets["web"], device)
+    try:
+        from evo.engine import identity
+
+        res["identity"] = identity.check(node.model, int(node.model.embedding.num_embeddings))
+    except Exception as exc:                       # the identity test must never cost a measured run
+        res["identity_error"] = f"{type(exc).__name__}: {exc}"[:200]
     # writing speed and memory as the text behind the model grows (the NOVA state does not grow, a key/value cache does)
     res["cpu_by_context"] = {str(n): cpu_speed(node.model, int(node.model.embedding.num_embeddings), prompt_len=n, gen=32, repeats=1)
                              for n in LONG_CONTEXTS}
@@ -359,6 +403,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="afterwards train the N best candidates once more on running text (--candidate-carry rows per stream)")
     ap.add_argument("--candidate-carry", type=int, default=0,
                     help="train the candidates on running text: this many consecutive rows with the state carried over")
+    ap.add_argument("--candidate-seeds", default="",
+                    help="comma list of seeds: every candidate is trained once per seed (default: the one common seed)")
     ap.add_argument("--candidate-carry-share", type=float, default=0.0,
                     help="with --candidate-carry: the share of every batch that is running text (mixed batches)")
     args = ap.parse_args(argv)
@@ -405,6 +451,12 @@ def main(argv: list[str] | None = None) -> int:
                 row["error"] = f"{type(exc).__name__}: {exc}"[:600]
             report["results"][v["name"]] = row
             rep_file.write_text(json.dumps(report, indent=1, ensure_ascii=False))
+            try:
+                from evo.engine import ledger
+
+                ledger.record(ledger.from_report_row(row, time.strftime("%Y-%m-%d %H:%M"), args.steps))
+            except Exception as exc:
+                print(f"ledger: {type(exc).__name__}: {exc}", flush=True)
             print(json.dumps({k: x for k, x in row.items() if k != "curve"}, ensure_ascii=False), flush=True)
 
     lrs = lambda text: [x.strip() for x in text.split(",") if x.strip()]   # noqa: E731
@@ -416,7 +468,8 @@ def main(argv: list[str] | None = None) -> int:
             run(extra_round(report["results"], groups, lrs(args.nova_lrs), lrs(args.tf_lrs)))
     if args.candidates:
         carry, share = args.candidate_carry, args.candidate_carry_share
-        run(candidate_round(groups, lrs(args.candidates), args.candidate_lr, args.compile_candidates, 0 if args.carry_best else carry, share))
+        seeds = tuple(int(x) for x in lrs(args.candidate_seeds)) or (SEED,)
+        run(candidate_round(groups, lrs(args.candidates), args.candidate_lr, args.compile_candidates, 0 if args.carry_best else carry, share, seeds))
         if args.carry_best and carry > 1:
             run(candidate_round(groups, best_candidates(report["results"], groups, args.carry_best), args.candidate_lr,
                                 args.compile_candidates, carry, share))

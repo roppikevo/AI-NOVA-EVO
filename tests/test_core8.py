@@ -136,3 +136,41 @@ def test_a_long_text_is_read_in_pieces_with_the_same_result():
         whole, _ = m._read(x)
     assert (pieces - whole).abs().max() < 2e-4 * max(1.0, float(whole.abs().max()))
     assert core8.state_bytes(states) == core8.state_bytes(m(x[:, :40])[1])
+
+
+@pytest.mark.parametrize("options", [{"slot_key": 3}, {"slot_sharp": True}, {"slot_key": 5, "slot_sharp": True, "slots": 6}])
+def test_slot_options_keep_the_exact_token_by_token_reading_and_the_size_of_the_state(options):
+    torch.manual_seed(0)
+    m = build_model({**BASE, "pattern": "NSS", **options}).eval()
+    plain = build_model({**BASE, "pattern": "NSS", "slots": options.get("slots", 16)}).eval()
+    with torch.no_grad():
+        for blk in m.blocks:
+            blk.fc_out.weight.mul_(20)
+            blk.mixer.out.weight.mul_(20)
+        for blk in m.blocks[1:]:
+            blk.mixer.query.weight.mul_(30)                          # sharp reading: the choice among slots matters
+            if blk.mixer.sharp is not None:
+                blk.mixer.sharp.copy_(torch.tensor([0.7, -0.3]))
+        x = torch.randint(12, 200, (2, 30))
+        full, st_full = m(x)
+        parts, states, pos = [], None, 0
+        for size in (11, 1, 1, 7, 1, 9):
+            out, states = m(x[:, pos:pos + size], states)
+            parts.append(out)
+            pos += size
+        _, st_plain = plain(x)
+    assert (full - torch.cat(parts, dim=1)).abs().max() < 2e-4 * max(1.0, float(full.abs().max()))
+    assert core8.state_bytes(st_full) == core8.state_bytes(states) == core8.state_bytes(st_plain)     # the options cost no state
+    mixer = m.blocks[1].mixer
+    assert mixer.dk + (mixer.dv if mixer.split else 0) == mixer.ds and (mixer.sharp is not None) == bool(options.get("slot_sharp"))
+
+
+def test_sharpness_starts_as_no_sharpness_and_old_weights_still_load():
+    torch.manual_seed(0)
+    plain = build_model({**BASE, "pattern": "NS"}).eval()
+    sharp = build_model({**BASE, "pattern": "NS", "slot_sharp": True}).eval()
+    missing = sharp.load_state_dict(plain.state_dict(), strict=False)
+    assert missing.missing_keys == ["blocks.1.mixer.sharp"] and not missing.unexpected_keys
+    x = torch.randint(12, 200, (2, 20))
+    with torch.no_grad():
+        assert torch.allclose(plain(x)[0], sharp(x)[0], atol=1e-6)

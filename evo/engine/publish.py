@@ -86,10 +86,31 @@ def published_weights_mb(cwd: str | Path = ".") -> float:
     return sum(int(x) for x in out) / 1e6
 
 
-def select(files: dict[str, int], already_public: set[str], used_mb: float, budget_mb: float = BUDGET_MB) -> dict:
-    """Which files of the tree go public. Weights of a new release only while the budget lasts."""
+RELEASE_FILE = re.compile(r"^evo/releases/([^/]+)/")
+DIRECTOR_STATE = Path("evo/director/state.json")
+
+
+def not_standing(cwd: str | Path = ".") -> dict[str, set[str]]:
+    """Releases that are not (or not yet) the system's word: still on probation, or stepped back after it.
+
+    A release on probation is published once it has stood it; one that was stepped back leaves the public tree."""
+    try:
+        st = json.loads((Path(cwd) / DIRECTOR_STATE).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {"probation": set(), "reverted": set()}
+    return {"probation": {st["probation"]["name"]} if st.get("probation") else set(), "reverted": set(st.get("reverted") or [])}
+
+
+def select(files: dict[str, int], already_public: set[str], used_mb: float, budget_mb: float = BUDGET_MB,
+           hidden: set[str] | None = None) -> dict:
+    """Which files of the tree go public. Weights of a new release only while the budget lasts; nothing of a
+    release in `hidden` (on probation or stepped back)."""
     keep, dropped, no_weights = [], [], []
     for path in sorted(files):
+        r = RELEASE_FILE.match(path)
+        if r and hidden and r.group(1) in hidden:
+            dropped.append(path)
+            continue
         m = RELEASE_WEIGHTS.match(path)
         if m:
             size = files[path] / 1e6
@@ -147,10 +168,13 @@ def _parameters(config: dict | None) -> str:
         return "?"
 
 
-def index_text(root: Path = Path("evo/releases")) -> str:
+def index_text(root: Path = Path("evo/releases"), hidden: dict[str, set[str]] | None = None) -> str:
     """Table of the released cores (evo/releases/README.md)."""
+    hidden = not_standing() if hidden is None else hidden
     rows = []
     for info_file in sorted(root.glob("*/MODEL.json")):
+        if info_file.parent.name in hidden["probation"] | hidden["reverted"]:
+            continue
         info = json.loads(info_file.read_text(encoding="utf-8"))
         s = info.get("scores") or {}
         code = s.get("code") or {}
@@ -164,6 +188,9 @@ def index_text(root: Path = Path("evo/releases")) -> str:
          "Losses are measured on text no training run has seen (lower is better); the code exam has 79 tasks.", "",
          "| Release | Parameters | Frozen | Loss, dataset | Loss, web | Code exam | Weights |", "|---|---|---|---|---|---|---|"]
     L += [r for _, r in sorted(rows)]
+    if hidden["reverted"]:
+        L += ["", "Accepted by the judge but stepped back after probation (worse on fresh text), not kept here: "
+              + ", ".join(sorted(hidden["reverted"])) + "."]
     L += ["", "Use one: `python -m nova.demo --release <name> --lang en --prompt \"The river\"` (see [INSTALL.md](../../INSTALL.md)).", "",
           "`nova_model.pt` holds the weights as 16-bit floats; the full-precision file named in `SHA256SUMS` is too large for a git repository.",
           "", "Licence: free for research, experiments and other non-commercial use; commercial use needs the creator's permission "
@@ -175,7 +202,8 @@ def build(message: str, cwd: str | Path = ".", budget_mb: float = BUDGET_MB) -> 
     """Make the public commit from HEAD. Returns what happened; changes only the local ref refs/public/main."""
     files = tracked(cwd)
     old = tracked(cwd, PUBLIC_REF) if ref_exists(PUBLIC_REF, cwd) else {}
-    chosen = select(files, set(old), published_weights_mb(cwd), budget_mb)
+    hide = not_standing(cwd)
+    chosen = select(files, set(old), published_weights_mb(cwd), budget_mb, hide["probation"] | hide["reverted"])
     found = scan(chosen["keep"], cwd)
     out = {**{k: chosen[k] for k in ("dropped", "without_weights", "weights_mb")}, "files": len(chosen["keep"]),
            "problems": found["problems"], "commit": None, "changed": False,
@@ -247,22 +275,26 @@ def main(argv: list[str] | None = None) -> int:
         if not ref_exists(PUBLIC_REF):
             print("nothing is public yet - the first publication is made by hand")
             return 0
-        new = sorted(release_names(tracked()) - release_names(tracked(ref=PUBLIC_REF)))
-        if not new:
-            print("no new release - nothing to publish")
+        hide = not_standing()
+        public = release_names(tracked(ref=PUBLIC_REF))
+        new = sorted(release_names(tracked()) - public - hide["probation"] - hide["reverted"])
+        gone = sorted(public & hide["reverted"])                  # public, then stepped back: taken out of the tree
+        if not new and not gone:
+            print("no new release - nothing to publish" + (f" (on probation: {', '.join(sorted(hide['probation']))})" if hide["probation"] else ""))
             return 0
         Path("evo/releases/README.md").write_text(index_text(), encoding="utf-8")
         git("add", "evo/releases/README.md")
         if git("status", "--porcelain", "--", "evo/releases/README.md").strip():
-            git("commit", "-qm", f"Index of released cores: {', '.join(new)}", "--", "evo/releases/README.md")
-        args.push, args.message = True, f"Release {', '.join(new)}"
+            git("commit", "-qm", f"Index of released cores: {', '.join(new) or 'stepped back ' + ', '.join(gone)}", "--", "evo/releases/README.md")
+        args.push, args.message = True, (f"Release {', '.join(new)}" if new else f"Stepped back after probation: {', '.join(gone)}")
     if args.index:
         Path("evo/releases/README.md").write_text(index_text(), encoding="utf-8")
         print("evo/releases/README.md written")
     if args.check:
         files = tracked()
         old = tracked(ref=PUBLIC_REF) if ref_exists(PUBLIC_REF) else {}
-        chosen = select(files, set(old), published_weights_mb())
+        hide = not_standing()
+        chosen = select(files, set(old), published_weights_mb(), hidden=hide["probation"] | hide["reverted"])
         found = scan(chosen["keep"])
         print(f"public files: {len(chosen['keep'])}  ({sum(files[p] for p in chosen['keep']) / 1e6:.0f} MB), left out: {len(chosen['dropped'])}")
         print("left out: " + ", ".join(chosen["dropped"][:40]) + (" ..." if len(chosen["dropped"]) > 40 else ""))
