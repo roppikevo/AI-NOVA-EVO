@@ -10,6 +10,7 @@ Every release is frozen: the files never change and `SHA256SUMS` lists their che
 | [NOVA8-24M-v1](NOVA8-24M-v1/) | 24.2 M | 2026-10-06 | 3.0061 | 3.1696 | 53 / 79 | 63 MB |
 | [NOVA8-24M-v2](NOVA8-24M-v2/) | 24.2 M | 2026-10-06 | 2.9609 | 3.1562 | 53 / 79 | 63 MB |
 | [NOVA8-24M-v3](NOVA8-24M-v3/) | 24.2 M | 2026-10-06 | 2.9435 | 3.1567 | 52 / 79 | 63 MB |
+| [NOVA8-24M-v4](NOVA8-24M-v4/) | 24.2 M | 2026-10-07 | 2.9431 | 3.1568 | 52 / 79 | 63 MB |
 
 Use one: `python -m nova.demo --release <name> --lang en --prompt "The river"` (see [INSTALL.md](../../INSTALL.md)).
 
