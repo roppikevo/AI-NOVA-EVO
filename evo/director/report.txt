@@ -1,18 +1,20 @@
-NOVA: hlásenie riaditeľa (2026-10-07 17:53)
+NOVA: hlásenie riaditeľa (2026-10-08 17:10)
 
-Súčasný model (šampión): NOVA8-24M-v2
-Stav riaditeľa: sám meria (šum, kandidát na novú stavbu jadra); vlastných meraní: 6
-Riaditeľ beží 3.0 dňa; bez zásahu zvonka 0.2 dňa (zásahov spolu: 2)
-Pokusy o zlepšenie: 65, prijaté: 5, odmietnuté za sebou: 9 (pri 16 sa začne generácia od nuly)
-Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4
-Strata na odloženom texte: dataset 2.8537, web 3.2073; programovanie 53/79; pozná tvorcu: áno
-Web po jazykoch: sk 2.8835, cs 3.2303, pl 3.159, en 3.5563 (najslabší: en)
+Súčasný model (šampión): NOVA8-24M-v5
+Stav riaditeľa: trénuje novú generáciu; vlastných meraní: 6
+Riaditeľ beží 4.0 dňa; bez zásahu zvonka 1.1 dňa (zásahov spolu: 2)
+Pokusy o zlepšenie: 66, prijaté: 6, odmietnuté za sebou: 0 (pri 16 sa začne generácia od nuly)
+Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5
+Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-24M-v5): strata dataset -0.74 %, strata web -0.03 %, programovanie 53 → 54
+Strata na odloženom texte: dataset 2.8327, web 3.2063; programovanie 54/79; pozná tvorcu: áno
+Web po jazykoch: sk 2.8837, cs 3.2296, pl 3.1604, en 3.5514 (najslabší: en)
 Stavba: 7 vrstiev, šírka 448, pohľad na 4 susedných slov, 24.2 M parametrov, jadro generácie 8 (NSNSNSN)
+Trénuje sa nová generácia od nuly: NOVA8-53M (351940 z 400000 krokov, najlepšia strata 2.9889); po dokončení rozhodne sudca.
 Vrátené späť po skúšobnej lehote: NOVA8-24M-v3, NOVA8-24M-v4
-Vlastné recepty (obmeny úspešných): average-of-5~web0.77
+Vlastné recepty (obmeny úspešných): average-of-5~web0.77, continue~web0.70
+Nová generácia NOVA8-53M: 351940 z 400000 krokov, najlepšia strata 2.9889
 
 Posledné pokusy:
-  2026-10-07 08:54  narrower-view  zlyhalo (rc 1) this change of structure is not possible for the champion (size limit or range)
   2026-10-07 08:54  gentle         odmietnuté (zisk -0.08 %): gain -0.08 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.32 %; the vault does not confirm it (-0.10 %)
   2026-10-07 09:13  fresh-web      odmietnuté (zisk -0.21 %): gain -0.21 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.63 %; the vault does not confirm it (-0.21 %)
   2026-10-07 09:36  weak-language  odmietnuté (zisk -0.07 %): gain -0.07 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.07 %)
@@ -20,9 +22,9 @@ Posledné pokusy:
   2026-10-07 10:10  code           odmietnuté (zisk -0.03 %): gain -0.03 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.01 %)
   2026-10-07 10:29  one-more-layer odmietnuté (zisk -0.14 %): gain -0.14 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.49 %; the vault does not confirm it (-0.12 %)
   2026-10-07 10:59  average-of-5   odmietnuté (zisk 0.19 %): gain +0.19 % on the decision sets is below 0.3 % or not certain
-Recepty, ktoré oddychujú po dvoch zlyhaniach: wider-view, narrower-view
+  2026-10-07 17:54  continue       PRIJATÉ, vydané ako NOVA8-24M-v5 (zisk 0.36 %)
 
-Poučenia z vlastných pokusov (54 pokusov = 18 rôznych experimentov na 3 šampiónoch):
+Poučenia z vlastných pokusov (55 pokusov = 19 rôznych experimentov na 3 šampiónoch):
   opakovanie toho istého pokusu: zisk kolíše o 0.009 %, skúška z kódu o 0.877 úlohy (najviac 4)
   average-of-5: pomáha (istota vysoká; experimenty: 3, šampióni: 2, zisk +0.16 až +0.98 %)
   teachers: škodí (istota stredná; experimenty: 2, šampióni: 2, zisk -1.36 až -0.87 %)
@@ -30,8 +32,8 @@ Poučenia z vlastných pokusov (54 pokusov = 18 rôznych experimentov na 3 šamp
   one-more-layer: škodí (istota stredná; experimenty: 2, šampióni: 2, zisk -0.24 až -0.14 %)
   code: bez zreteľného účinku (istota stredná; experimenty: 2, šampióni: 2, zisk -0.17 až -0.04 %)
   weak-language: škodí (istota stredná; experimenty: 2, šampióni: 2, zisk -0.10 až -0.06 %)
-  podiel webu: nižšie hodnoty vyšli lepšie (o 0.31 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
-  rýchlosť učenia: vyššie hodnoty vyšli lepšie (o 0.23 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
-  podiel kódu: vyššie hodnoty vyšli lepšie (o 0.31 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
-  počet krokov: nižšie hodnoty vyšli lepšie (o 0.20 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
-  počet klonov: vyššie hodnoty vyšli lepšie (o 0.31 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
+  podiel webu: nižšie hodnoty vyšli lepšie (o 0.32 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
+  rýchlosť učenia: vyššie hodnoty vyšli lepšie (o 0.25 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
+  podiel kódu: vyššie hodnoty vyšli lepšie (o 0.32 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
+  počet krokov: nižšie hodnoty vyšli lepšie (o 0.18 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
+  počet klonov: vyššie hodnoty vyšli lepšie (o 0.27 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
