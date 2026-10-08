@@ -1,28 +1,26 @@
-NOVA: hlásenie riaditeľa (2026-10-08 17:10)
+NOVA: hlásenie riaditeľa (2026-10-08 19:56)
 
-Súčasný model (šampión): NOVA8-24M-v5
-Stav riaditeľa: trénuje novú generáciu; vlastných meraní: 6
-Riaditeľ beží 4.0 dňa; bez zásahu zvonka 1.1 dňa (zásahov spolu: 2)
-Pokusy o zlepšenie: 66, prijaté: 6, odmietnuté za sebou: 0 (pri 16 sa začne generácia od nuly)
-Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5
-Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-24M-v5): strata dataset -0.74 %, strata web -0.03 %, programovanie 53 → 54
-Strata na odloženom texte: dataset 2.8327, web 3.2063; programovanie 54/79; pozná tvorcu: áno
-Web po jazykoch: sk 2.8837, cs 3.2296, pl 3.1604, en 3.5514 (najslabší: en)
-Stavba: 7 vrstiev, šírka 448, pohľad na 4 susedných slov, 24.2 M parametrov, jadro generácie 8 (NSNSNSN)
-Trénuje sa nová generácia od nuly: NOVA8-53M (351940 z 400000 krokov, najlepšia strata 2.9889); po dokončení rozhodne sudca.
+Súčasný model (šampión): NOVA8-53M-v1
+Stav riaditeľa: skúša zlepšiť šampióna; vlastných meraní: 6
+Riaditeľ beží 4.1 dňa; bez zásahu zvonka 1.3 dňa (zásahov spolu: 2)
+Pokusy o zlepšenie: 68, prijaté: 7, odmietnuté za sebou: 0 (pri 16 sa začne generácia od nuly)
+Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5, NOVA8-53M-v1
+Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-53M-v1): strata dataset -1.31 %, strata web -3.48 %, programovanie 53 → 59
+Strata na odloženom texte: dataset 2.8163, web 3.0958; programovanie 59/79; pozná tvorcu: áno
+Web po jazykoch: sk 2.7699, cs 3.1352, pl 3.0367, en 3.4414 (najslabší: en)
+Stavba: 7 vrstiev, šírka 704, pohľad na 4 susedných slov, 53.0 M parametrov, jadro generácie 8 (NSNSNSN)
 Vrátené späť po skúšobnej lehote: NOVA8-24M-v3, NOVA8-24M-v4
 Vlastné recepty (obmeny úspešných): average-of-5~web0.77, continue~web0.70
-Nová generácia NOVA8-53M: 351940 z 400000 krokov, najlepšia strata 2.9889
 
 Posledné pokusy:
-  2026-10-07 08:54  gentle         odmietnuté (zisk -0.08 %): gain -0.08 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.32 %; the vault does not confirm it (-0.10 %)
-  2026-10-07 09:13  fresh-web      odmietnuté (zisk -0.21 %): gain -0.21 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.63 %; the vault does not confirm it (-0.21 %)
   2026-10-07 09:36  weak-language  odmietnuté (zisk -0.07 %): gain -0.07 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.07 %)
   2026-10-07 09:56  teachers       odmietnuté (zisk -0.87 %): gain -0.87 % on the decision sets is below 0.3 % or not certain; dataset got worse by 1.35 %; web got worse by 0.44 %; the vault does not co
   2026-10-07 10:10  code           odmietnuté (zisk -0.03 %): gain -0.03 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.01 %)
   2026-10-07 10:29  one-more-layer odmietnuté (zisk -0.14 %): gain -0.14 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.49 %; the vault does not confirm it (-0.12 %)
   2026-10-07 10:59  average-of-5   odmietnuté (zisk 0.19 %): gain +0.19 % on the decision sets is below 0.3 % or not certain
   2026-10-07 17:54  continue       PRIJATÉ, vydané ako NOVA8-24M-v5 (zisk 0.36 %)
+  2026-10-08 19:56  wider-view     zlyhalo (rc 1) this change of structure is not possible for the champion (size limit or range)
+  2026-10-08 19:56  narrower-view  zlyhalo (rc 1) this change of structure is not possible for the champion (size limit or range)
 
 Poučenia z vlastných pokusov (55 pokusov = 19 rôznych experimentov na 3 šampiónoch):
   opakovanie toho istého pokusu: zisk kolíše o 0.009 %, skúška z kódu o 0.877 úlohy (najviac 4)

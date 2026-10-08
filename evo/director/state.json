@@ -1,130 +1,130 @@
 {
  "champion": {
-  "name": "NOVA8-24M-v5",
-  "checkpoint": "evo/releases/NOVA8-24M-v5/nova_model_fp32.pt",
-  "since": 1791402306.3605814,
+  "name": "NOVA8-53M-v1",
+  "checkpoint": "evo/releases/NOVA8-53M-v1/nova_model_fp32.pt",
+  "since": 1791489339.0178134,
   "override": {
-   "vocab_size": 16384,
-   "d_model": 448,
-   "d_state": 384,
-   "num_layers": 6,
-   "conv_kernel": 5,
-   "forget_bias": 1.125,
-   "learnable_initial_state": false,
    "arch": "nova8",
+   "d_model": 704,
    "heads": 8,
    "pattern": "NSNSNSN",
-   "mlp_hidden": 1296,
+   "mlp_hidden": 2032,
    "slots": 16
   },
   "recipe": {
-   "steps": 300000,
+   "steps": 400000,
    "lr": 0.001,
    "compile": true,
    "carry": 8,
-   "carry_share": 0.35
+   "carry_share": 0.35,
+   "batch_size": 48
   },
-  "polish": [
-   "average-of-5",
-   "continue"
-  ],
+  "polish": [],
+  "state_kb": 88.0,
+  "class": "NOVA",
   "scores": {
-   "dataset": 2.8327,
-   "dataset_vault": 3.0756,
-   "web": 3.2063,
-   "web_vault": 3.1044,
+   "dataset": 2.8163,
+   "dataset_vault": 3.0408,
+   "web": 3.0958,
+   "web_vault": 3.0067,
    "web_by_language": {
-    "sk": 2.8837,
-    "cs": 3.2296,
-    "pl": 3.1604,
-    "en": 3.5514
+    "sk": 2.7699,
+    "cs": 3.1352,
+    "pl": 3.0367,
+    "en": 3.4414
    },
-   "code": 54,
-   "creator": -0.0,
-   "params": 24167975,
+   "code": 59,
+   "creator": -0.001,
+   "params": 52959271,
    "genome": {
     "layers": 7,
-    "width": 448,
+    "width": 704,
     "kernel": 4,
     "pattern": "NSNSNSN",
-    "parameters": 24167975
+    "parameters": 52959271
    }
   }
  },
  "started": 1791138088.0559714,
- "attempts": 66,
- "accepted": 6,
+ "attempts": 68,
+ "accepted": 7,
  "rejected_in_a_row": 0,
  "recipes": {
   "gentle": {
-   "runs": 1.0549159527831775,
+   "runs": 0.9123968075621703,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web": {
-   "runs": 1.1343182287991156,
+   "runs": 0.9810718360883551,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "weak-language": {
-   "runs": 1.2196970202141026,
+   "runs": 1.0549159527831775,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "teachers": {
-   "runs": 1.3115021722732285,
+   "runs": 1.1343182287991156,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code": {
-   "runs": 1.4102173895411059,
+   "runs": 1.2196970202141026,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "one-more-layer": {
-   "runs": 1.5163627844528018,
+   "runs": 1.3115021722732285,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "wider-view": {
-   "runs": 0.013819552009674045,
+   "runs": 0.011952530533167083,
    "gain": 0.0,
-   "fails": 0,
+   "fails": 1,
    "rest_until": 1791449651.3599472
   },
   "narrower-view": {
-   "runs": 0.014859733343735531,
+   "runs": 0.012852183368996862,
    "gain": 0.0,
-   "fails": 0,
+   "fails": 1,
    "rest_until": 1791449651.563071
   },
   "collective": {
-   "runs": 0.7643248143932292,
+   "runs": 0.661064531968704,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5": {
-   "runs": 1.6748165217734146,
-   "gain": 0.01810457132449996,
+   "runs": 1.4485488096818264,
+   "gain": 0.01565864373856002,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5~web0.77": {
-   "runs": 0.8301633639087255,
+   "runs": 0.7180082934446568,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue": {
-   "runs": 1.0,
-   "gain": 0.36,
+   "runs": 0.8649000000000001,
+   "gain": 0.31136400000000003,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "continue~web0.70": {
+   "runs": 0.0,
+   "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   }
@@ -4484,6 +4484,54 @@
    },
    "released": "NOVA8-24M-v5",
    "new_recipe": "continue~web0.70"
+  },
+  {
+   "attempt": 67,
+   "recipe": "wider-view",
+   "champion": "NOVA8-53M-v1",
+   "date": "2026-10-08 19:56",
+   "start": "evo/releases/NOVA8-53M-v1/nova_model_fp32.pt",
+   "steps": 4000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": 2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
+  },
+  {
+   "attempt": 68,
+   "recipe": "narrower-view",
+   "champion": "NOVA8-53M-v1",
+   "date": "2026-10-08 19:56",
+   "start": "evo/releases/NOVA8-53M-v1/nova_model_fp32.pt",
+   "steps": 5000,
+   "flags": {
+    "--lr": "4e-5",
+    "--warmup": "300",
+    "--bulk-frac": "0.95",
+    "--code-frac": "0.03"
+   },
+   "clones": 1,
+   "surgery": {
+    "op": "kernel",
+    "delta": -2
+   },
+   "note": "this change of structure is not possible for the champion (size limit or range)",
+   "rc": 1,
+   "hours": 0.0,
+   "weak": "en",
+   "tail": "this change of structure is not possible for the champion (size limit or range)"
   }
  ],
  "releases": [
@@ -4493,43 +4541,20 @@
   "NOVA8-24M-v2",
   "NOVA8-24M-v3",
   "NOVA8-24M-v4",
-  "NOVA8-24M-v5"
+  "NOVA8-24M-v5",
+  "NOVA8-53M-v1"
  ],
- "grow": {
-  "line": "NOVA8-53M",
-  "override": {
-   "arch": "nova8",
-   "d_model": 704,
-   "heads": 8,
-   "pattern": "NSNSNSN",
-   "mlp_hidden": 2032,
-   "slots": 16
-  },
-  "steps": 400000,
-  "lr": 0.001,
-  "compile": true,
-  "carry": 8,
-  "carry_share": 0.35,
-  "teacher": "evo/releases/NOVA8-24M-v2/nova_model_fp32.pt",
-  "teacher_until": 120000,
-  "now": true,
-  "batch_size": 48,
-  "since": 1791403012.4259734,
-  "segments": 8,
-  "steps_done": 351940,
-  "best_val": 2.9889,
-  "last_rc": 0,
-  "fails": 0
- },
+ "grow": null,
  "grown": [
-  "NOVA8-24M"
+  "NOVA8-24M",
+  "NOVA8-53M"
  ],
  "current": {
-  "what": "grow",
-  "line": "NOVA8-53M",
-  "since": 1791479452.2429595
+  "what": "attempt",
+  "recipe": "continue~web0.70",
+  "since": 1791489374.3387723
  },
- "seed": 7137,
+ "seed": 7141,
  "interventions": [
   {
    "time": 1791208662.8603675,
@@ -4687,6 +4712,18 @@
     "gain": 0.36,
     "time": 1791402306.361113
    }
+  },
+  "NOVA8-53M-v1": {
+   "wider-view": {
+    "outcome": "impossible",
+    "gain": null,
+    "time": 1791489374.0683773
+   },
+   "narrower-view": {
+    "outcome": "impossible",
+    "gain": null,
+    "time": 1791489374.2404552
+   }
   }
  },
  "progress": [
@@ -4707,9 +4744,18 @@
    "code": 54,
    "state_kb": null,
    "class": null
+  },
+  {
+   "name": "NOVA8-53M-v1",
+   "time": 1791489374.023929,
+   "dataset": 2.8163,
+   "web": 3.0958,
+   "code": 59,
+   "state_kb": 88.0,
+   "class": "NOVA"
   }
  ],
- "phase": "generation",
+ "phase": "improving the champion",
  "explored": 6,
- "explored_at": 9
+ "explored_at": 0
 }
