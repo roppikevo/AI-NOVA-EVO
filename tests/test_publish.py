@@ -151,3 +151,16 @@ def test_releases_on_probation_or_stepped_back_do_not_go_public(tmp_path):
     text = publish.index_text(root, hide)
     assert "[NOVA8-24M-v2]" in text and "[NOVA8-24M-v3]" not in text and "[NOVA8-24M-v5]" not in text
     assert "stepped back after probation" in text and "NOVA8-24M-v3." in text
+
+
+def test_a_large_new_release_is_split_into_parts_and_committed(repo, monkeypatch):
+    monkeypatch.chdir(repo)
+    rel = repo / "evo/releases/NOVA8-BIG-v1"
+    rel.mkdir(parents=True)
+    (rel / "nova_model.pt").write_bytes(b"x" * 2500)
+    assert publish.split_large_weights("NOVA8-BIG-v1", limit=1e9) == []          # small enough: left as it is
+    paths = publish.split_large_weights("NOVA8-BIG-v1", limit=1000)
+    import nova.parts as parts
+    assert len(paths) == len(parts.parts_of(rel / "nova_model.pt")) >= 1
+    assert all(p in _git(repo, "ls-files") for p in paths)
+    assert publish.split_large_weights("NOVA8-BIG-v1", limit=1000) == []         # already in parts

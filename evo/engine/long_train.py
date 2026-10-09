@@ -25,6 +25,7 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import time
 from pathlib import Path
 from typing import Any, Callable
@@ -256,7 +257,7 @@ def long_train(
     torch.manual_seed(seed)
     rng = np.random.default_rng(seed)
     model.to(device).train()
-    opt = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
+    opt = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=lr, weight_decay=weight_decay)
     # a teacher: an earlier, smaller core whose knowledge the new one starts from. On rows read with a fresh state
     # the student also learns the teacher's next-token distribution (its `teacher_topk` likeliest tokens); the
     # weight falls linearly to zero at step `teacher_until`, so the student is free to pass its teacher afterwards
@@ -501,6 +502,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--carry-share", type=float, default=0.0,
                     help="with --carry: this share of every batch is running text, the rest the usual mix read with a fresh "
                          "state (0 = whole batches of running text alternating with whole batches of the rest)")
+    ap.add_argument("--train-only", default="",
+                    help="regular expression: only parameters whose names match are trained, the rest stay as they are "
+                         "(e.g. 'mixer' after a transplant of new memory blocks)")
     ap.add_argument("--teacher", default="", help="checkpoint of an earlier core to learn from as well (see teacher_loss)")
     ap.add_argument("--teacher-weight", type=float, default=0.5)
     ap.add_argument("--teacher-until", type=int, default=0, help="the teacher's weight falls to zero at this step (0 = no teacher)")
@@ -563,6 +567,15 @@ def main(argv: list[str] | None = None) -> int:
         print(f"init from {init}")
         if ck.get("kind") == "long_train" and ck.get("optimizer"):
             warm_opt = ck["optimizer"]
+    if args.train_only:
+        rx = re.compile(args.train_only)
+        for name, prm in model.named_parameters():
+            prm.requires_grad = bool(rx.search(name))
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"training only /{args.train_only}/: {trainable / 1e6:.2f} M of {sum(p.numel() for p in model.parameters()) / 1e6:.2f} M parameters")
+        if not trainable:
+            raise SystemExit(f"--train-only {args.train_only}: no parameter matches")
+        warm_opt = None
 
     t0 = time.time()
     train = load_tokens(dataset / "train.txt")

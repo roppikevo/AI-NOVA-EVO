@@ -147,7 +147,7 @@ So today: at 24 M parameters and a short training run the generation-8 core is a
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 331 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 337 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
@@ -276,7 +276,7 @@ The installer puts every library into a private `.venv/`, verifies the checksums
 source .venv/bin/activate                # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed              # tokens per second on your CPU
-python -m pytest -q                      # 331 tests
+python -m pytest -q                      # 337 tests
 python -m evo.engine.speed_bench --cpu-only          # against a transformer of the same size
 ```
 

@@ -22,6 +22,8 @@ with the text:
                    under an address computed from its context and reads what is stored under addresses of its
                    own; newer writes replace older ones.   state: slots x slot_dim numbers
   mixer "N"        the generation-7 memory as it was (for comparison: what the non-linear layer alone adds)
+  mixer "Q"        NOVA-Q: a complex unit state turned by every token, read like a measurement (nova/quantum.py).
+                   state: heads x dim phases
 
 A model is a string of mixers, e.g. "LLLLLLL" (pure recurrent), "LLMLLML", "LLWLLWL".
 
@@ -435,7 +437,8 @@ class WinMixer(nn.Module):
 
 class Block8(nn.Module):
     def __init__(self, d_model: int, kind: str, mlp_hidden: int, heads: int, window: int, lru_expand: float, lru_kernel: int,
-                 mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, slot_key: int = 0, slot_sharp: bool = False) -> None:
+                 mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, slot_key: int = 0, slot_sharp: bool = False,
+                 q_heads: int = 4, q_dim: int = 256) -> None:
         super().__init__()
         self.kind = kind
         self.norm1 = RMSNorm(d_model)
@@ -451,8 +454,12 @@ class Block8(nn.Module):
             self.mixer = HashMixer(d_model, slots=hash_slots, heads=max(1, heads // 2))
         elif kind == "W":
             self.mixer = WinMixer(d_model, heads=heads, window=window)
+        elif kind == "Q":
+            from nova.quantum import QMixer
+
+            self.mixer = QMixer(d_model, heads=q_heads, dim=q_dim)
         else:
-            raise ValueError(f"unknown mixer '{kind}' (L, H, S, M, W or N)")
+            raise ValueError(f"unknown mixer '{kind}' (L, H, S, M, W, N or Q)")
         self.norm2 = RMSNorm(d_model)
         self.fc_a = nn.Linear(d_model, mlp_hidden)
         self.fc_b = nn.Linear(d_model, mlp_hidden)
@@ -470,12 +477,12 @@ class Nova8Model(nn.Module):
 
     def __init__(self, vocab_size: int, d_model: int, pattern: str, mlp_hidden: int, heads: int = 8, window: int = 32,
                  lru_expand: float = 1.0, lru_kernel: int = 4, mem_positions: bool = True, slots: int = 16, hash_slots: int = 128, pad_token_id: int = 0,
-                 slot_key: int = 0, slot_sharp: bool = False) -> None:
+                 slot_key: int = 0, slot_sharp: bool = False, q_heads: int = 4, q_dim: int = 256) -> None:
         super().__init__()
         self.pattern = pattern
         self.embedding = nn.Embedding(vocab_size, d_model, padding_idx=pad_token_id)
         self.blocks = nn.ModuleList([Block8(d_model, kind, mlp_hidden, heads, window, lru_expand, lru_kernel, mem_positions, slots, hash_slots,
-                                            slot_key, slot_sharp) for kind in pattern])
+                                            slot_key, slot_sharp, q_heads, q_dim) for kind in pattern])
         self.final_norm = RMSNorm(d_model)
         self.lm_head = nn.Linear(d_model, vocab_size, bias=False)
         self.lm_head.weight = self.embedding.weight
@@ -529,4 +536,5 @@ def build_nova8(config: dict) -> Nova8Model:
                       mlp_hidden=int(config.get("mlp_hidden") or 3 * d), heads=int(config.get("heads") or max(1, d // 64)),
                       window=int(config.get("window", 32)), lru_expand=float(config.get("lru_expand", 1.0)),
                       lru_kernel=int(config.get("lru_kernel", 4)), mem_positions=bool(config.get("mem_positions", True)), slots=int(config.get("slots", 16)), hash_slots=int(config.get("hash_slots", 128)),
-                      slot_key=int(config.get("slot_key", 0)), slot_sharp=bool(config.get("slot_sharp", False)))
+                      slot_key=int(config.get("slot_key", 0)), slot_sharp=bool(config.get("slot_sharp", False)),
+                      q_heads=int(config.get("q_heads", 4)), q_dim=int(config.get("q_dim", 256)))

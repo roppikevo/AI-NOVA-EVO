@@ -101,6 +101,20 @@ def not_standing(cwd: str | Path = ".") -> dict[str, set[str]]:
     return {"probation": {st["probation"]["name"]} if st.get("probation") else set(), "reverted": set(st.get("reverted") or [])}
 
 
+def split_large_weights(name: str, cwd: str | Path = ".", limit: float = 95e6) -> list[str]:
+    """A release whose weight file is too large for one file in git gets it in parts (nova.parts), committed
+    beside it, so it can go public; a fresh install joins and checks them on first use."""
+    from nova.parts import parts_of, split
+
+    f = Path(cwd) / "evo/releases" / name / "nova_model.pt"
+    if not f.exists() or f.stat().st_size < limit or parts_of(f):
+        return []
+    paths = [str(p.relative_to(Path(cwd))) for p in split(f)]
+    git("add", "-f", *paths, cwd=cwd)
+    git("commit", "-qm", f"{name}: weights in parts for publication", "--", *paths, cwd=cwd)
+    return paths
+
+
 def select(files: dict[str, int], already_public: set[str], used_mb: float, budget_mb: float = BUDGET_MB,
            hidden: set[str] | None = None) -> dict:
     """Which files of the tree go public. Weights of a new release only while the budget lasts; nothing of a
@@ -285,6 +299,8 @@ def main(argv: list[str] | None = None) -> int:
         if not new and not gone:
             print("no new release - nothing to publish" + (f" (on probation: {', '.join(sorted(hide['probation']))})" if hide["probation"] else ""))
             return 0
+        for name in new:
+            split_large_weights(name)
         Path("evo/releases/README.md").write_text(index_text(), encoding="utf-8")
         git("add", "evo/releases/README.md")
         if git("status", "--porcelain", "--", "evo/releases/README.md").strip():
