@@ -30,7 +30,7 @@ PUBLIC_REF = "refs/public/main"
 REMOTE = "public"
 AUTHOR = ("roppik", "roppikevo@users.noreply.github.com")
 BUDGET_MB = 900
-RELEASE_WEIGHTS = re.compile(r"^evo/releases/([^/]+)/nova_model\.pt$")
+RELEASE_WEIGHTS = re.compile(r"^evo/releases/([^/]+)/nova_model\.pt(?:\.part\d\d)?$")      # whole, or in parts (nova.parts)
 RELEASE_INFO = re.compile(r"^evo/releases/([^/]+)/MODEL\.json$")
 DROP = [re.compile(p) for p in (
     r"\.(pt|pth|safetensors|gguf|err|lock|patch|log|tmp|bak)$", r"\.bak-", r"(^|/)STOP[A-Z_]*$",
@@ -106,6 +106,7 @@ def select(files: dict[str, int], already_public: set[str], used_mb: float, budg
     """Which files of the tree go public. Weights of a new release only while the budget lasts; nothing of a
     release in `hidden` (on probation or stepped back)."""
     keep, dropped, no_weights = [], [], []
+    weights: dict[str, list[str]] = {}          # a release's weights go together: one file, or all of its parts
     for path in sorted(files):
         r = RELEASE_FILE.match(path)
         if r and hidden and r.group(1) in hidden:
@@ -113,16 +114,18 @@ def select(files: dict[str, int], already_public: set[str], used_mb: float, budg
             continue
         m = RELEASE_WEIGHTS.match(path)
         if m:
-            size = files[path] / 1e6
-            if path in already_public:
-                keep.append(path)
-            elif files[path] < 95e6 and used_mb + size <= budget_mb:
-                keep.append(path)
-                used_mb += size
-            else:
-                no_weights.append(m.group(1))
+            weights.setdefault(m.group(1), []).append(path)
             continue
         (dropped if any(p.search(path) for p in DROP) else keep).append(path)
+    for name, paths in sorted(weights.items()):
+        new = [x for x in paths if x not in already_public]
+        size = sum(files[x] for x in new) / 1e6
+        if not new or (all(files[x] < 95e6 for x in new) and used_mb + size <= budget_mb):
+            keep.extend(paths)
+            used_mb += size
+        else:
+            keep.extend(x for x in paths if x in already_public)
+            no_weights.append(name)
     return {"keep": keep, "dropped": dropped, "without_weights": no_weights, "weights_mb": round(used_mb, 1)}
 
 

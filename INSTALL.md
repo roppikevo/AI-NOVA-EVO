@@ -90,6 +90,7 @@ What a release folder holds:
 | `tokenizer.json` | the 16 384-token vocabulary shared by all six languages |
 | `MODEL.json` | settings of the core, scores at release time, source commit |
 | `SHA256SUMS` | checksums; `nova_model_fp32.pt` is listed but too large for a git repository |
+| `nova_model.pt.part00`, `.part01`, ... | a release whose weights are larger than one file of the repository allows: the demo joins the parts into `nova_model.pt` on first use and checks the result against `SHA256SUMS` (`python -m nova.parts --join <path>` does it by hand) |
 | `blocks_scan.py`, `model_scan.py`, `config.py` | the exact source of the core at release time (a generation-8 release holds `core8.py` instead) |
 
 ## 4. Experiment with the core

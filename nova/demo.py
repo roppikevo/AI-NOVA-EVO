@@ -27,7 +27,10 @@ SAMPLES = [("sk", "Bratislava je", 0.7), ("en", "The river", 0.7), ("py", 'def t
 def releases(root: Path | None = None) -> list[Path]:
     """Release folders that hold weights, oldest first."""
     root = RELEASES if root is None else root
-    found = [p for p in root.iterdir() if (p / "nova_model.pt").exists() and (p / "MODEL.json").exists()] if root.exists() else []
+    from nova.parts import parts_of
+
+    found = [p for p in root.iterdir() if ((p / "nova_model.pt").exists() or parts_of(p / "nova_model.pt")) and (p / "MODEL.json").exists()] \
+        if root.exists() else []
     return sorted(found, key=lambda p: (json.loads((p / "MODEL.json").read_text(encoding="utf-8")).get("frozen", ""), p.name))
 
 
@@ -57,8 +60,10 @@ def verify(release: Path) -> dict:
 def load(release: Path):
     """Model and tokenizer of a release. Refuses a file whose checksum does not match."""
     from nova.generate import load_checkpoint_model
+    from nova.parts import join
     from nova.tokenizer import NovaTokenizer
 
+    join(release / "nova_model.pt")                   # a large release comes in parts: joined once, then checked below
     check = verify(release)
     if check["bad"]:
         raise SystemExit(f"{release.name}: checksum mismatch for {', '.join(check['bad'])} - download the release again")
@@ -127,7 +132,9 @@ def main(argv: list[str] | None = None) -> int:
                   f"code exam {s.get('code', {}).get('solved', '?')}/{s.get('code', {}).get('tasks', '?')}")
         return 0
     release = RELEASES / args.release if args.release else found[-1]
-    if not (release / "nova_model.pt").exists():
+    from nova.parts import join
+
+    if not join(release / "nova_model.pt"):
         print(f"no such release: {release} (try --list)")
         return 2
 

@@ -2,7 +2,7 @@
 
 **A small recurrent language-model core that writes at constant speed and constant memory on a CPU, trained from scratch on one consumer GPU — inside a system built to improve the core by itself, under rules it cannot change.**
 
-NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: our generation-7 core lost clearly to a transformer of the same size. The generation-8 core that came out of a tournament of candidates has closed most of that gap – level on web text, 2 % behind on the dataset – but it is not ahead (point 5). Trained in full, it replaced generation 7 as the champion: the judge accepted it with +6.1 % on held-out text at half the state. The self-improvement loop then released one improvement on its own and wasted the following 34 hours repeating itself. After a fix it measured its own noise, turned down four of our ideas for the core, released a second improvement, and is now training a 53 M core of the same build; what went wrong and what was changed is under "The self-improvement loop".
+NOVA-EVO is an independent research project by **roppik**. It is not another fine-tune of a large model. The core, the tokenizer, the training pipeline, the evaluation and the self-improvement loop are built from zero and every claim below comes with the number, the conditions and the file it was measured in. Results that went against us are listed too – the most important one: our generation-7 core lost clearly to a transformer of the same size. The generation-8 core that came out of a tournament of candidates has closed most of that gap – level on web text, 2 % behind on the dataset – but it is not ahead (point 5). Trained in full, it replaced generation 7 as the champion: the judge accepted it with +6.1 % on held-out text at half the state. The self-improvement loop then released one improvement on its own and wasted the following 34 hours repeating itself. After a fix it measured its own noise, turned down four of our ideas for the core, released a second improvement, then trained a 53 M core of the same build that the judge accepted (+2.1 %) and improved once more on its own (+1.85 %); what went wrong and what was changed is under "The self-improvement loop".
 
 > **Who this is for:** people who work on small, efficient, non-transformer sequence cores; on-device and CPU inference; architecture search; self-improving training loops; federated or collective training of small models.
 
@@ -35,6 +35,8 @@ What is *not* in our favour: reading a prompt in one batched pass is faster with
 | NOVA-24M-v2 | 23.7 M | the above + one round of the collective (point 4) | 3.250 / 3.366 | 43 of 79 |
 | NOVA8-24M-v1 | 24.2 M | generation 8, RTX 4060, from scratch, 300 000 steps, 12.2 h | 3.006 / 3.170 | 53 of 79 |
 | NOVA8-24M-v2 | 24.2 M | the above + average of five checkpoints (the director's own step) | 2.961 / 3.156 | 53 of 79 |
+| NOVA8-24M-v5 | 24.2 M | the above + 40 000 more steps (the director's own step) | 2.945 / 3.155 | 54 of 79 |
+| NOVA8-53M-v1 | 53.0 M | generation 8 at width 704, RTX 4060, from scratch, 400 000 steps at batch 48, ~24 h | 2.927 / 3.051 | 59 of 79 |
 
 Four natural languages (Slovak, Czech, Polish, English) plus Python and Rust, one 16 384-token vocabulary. Releases are frozen with checksums in `evo/releases/`. (Frozen files are not rewritten, so two slips stay in them: `MODEL.json` of the releases up to NOVA8-24M-v2 counts the token table twice in `parameters`, and NOVA8-24M-v2 carries the label of an older core. The table here and the index in `evo/releases/` have the right numbers.)
 
@@ -145,7 +147,7 @@ So today: at 24 M parameters and a short training run the generation-8 core is a
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 317 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 323 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
@@ -210,7 +212,17 @@ What was changed after that (2026-10-07): the director keeps a memory of every r
 6. From its own log the director now draws what its attempts say together (`python -m evo.engine.lessons`): 54 judged attempts were 18 different experiments on 3 champions. Averaging five clones helps (three experiments on two champions, +0.16 to +0.98 %); learning from the teachers' texts, fresh web text, one more layer, a gentle continuation and extra text in the weakest language all made the champion worse (by 0.06 to 1.4 %) on two champions each; the collective passes the judge by a hair and does not hold on fresh text. Repeats of one attempt differ by 0.009 % in gain and by 0.9 task in the code exam (the widest range: 4 tasks). What looks better among the settings – less web text, a higher learning rate, five clones – is not separated from the recipe it came with yet; the director tests those one at a time.
 
 7. With every other recipe used up on this champion, the director ran the one that was left – simply continuing the champion's own training for 40 000 more steps (a recipe we had added after the failure above). **Accepted: +0.36 %** (dataset 2.8537 → 2.8327, web unchanged, code exam 53 → 54), it held on probation, released as NOVA8-24M-v5. So the 300 000 steps had not exhausted the core; short continuations and the variations of the slots had all landed within ±0.3 %.
-8. **A bigger core is in training** (since 2026-10-07): NOVA8-53M, the same build at width 704, 53.0 M parameters – the largest of three sizes that passed a trial run on the 8 GB card (batch 48 instead of 64, 400 000 steps for the same number of tokens, 6.5 GB). The size was our decision; the trial, the training in three-hour segments, the averaging at the end and the verdict are the director's. For the first 30 % of the run the new core also learns the next-token distribution of the 24 M champion (`long_train --teacher`), with a weight that falls to zero. **Whether that teaching helps is not measured** – there is no run without it to compare with. The 24 M line is closed with NOVA8-24M-v5.
+8. **A bigger core: NOVA8-53M** (2026-10-07 to 10-09): the same build at width 704, 53.0 M parameters – the largest of three sizes that passed a trial run on the 8 GB card (batch 48 instead of 64, 400 000 steps for the same number of tokens, 6.5 GB). The size was our decision; the trial, the training in nine three-hour segments, the verdict and the release were the director's. For the first 30 % of the run it also learned the next-token distribution of the 24 M champion (`long_train --teacher`), with a weight that fell to zero. **Whether that teaching helped is not measured** – there is no run without it to compare with.
+
+   | Judge's sets | NOVA8-24M-v5 | NOVA8-53M-v1 | NOVA8-53M-v2 |
+   |---|---|---|---|
+   | Loss, dataset | 2.8327 | 2.8163 | **2.7401** |
+   | Loss, web | 3.2063 | 3.0958 | **3.0626** |
+   | Code exam | 54 / 79 | 59 / 79 | **60 / 79** |
+   | Verdict | – | accepted, +2.10 % (vault +2.14 %) | accepted, +1.85 % |
+
+   Two things went against our expectation. We expected the dataset loss to fall by 3–4 %; it fell by 0.6 % (the web loss by 3.4 %): the small dataset holds the bigger core back more than its size. And the bigger core writes slower on a CPU: 101 tokens per second against 178 for the 24 M core (4 threads), with a state of 88 kB instead of 56 kB – still the same after any length of text.
+9. The director's next step on the 53 M core was a variation of the recipe that had worked on the 24 M line – it turns one setting of a recipe that produced a champion – continuing the training with less web text (0.70 instead of 0.80). The judge accepted it (+1.85 %, NOVA8-53M-v2). On that champion, continuing with a doubled learning rate came out at −2.13 % and the plain continuation at −0.25 %: a controlled pair, and the first setting the lessons could separate from its recipe – the lower learning rate is the better one. Repeating the winning variation did not help a second time (−1.29 %), and a collective round kept the base.
 
 Failures will keep being reported here.
 
@@ -264,7 +276,7 @@ The installer puts every library into a private `.venv/`, verifies the checksums
 source .venv/bin/activate                # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed              # tokens per second on your CPU
-python -m pytest -q                      # 263 tests
+python -m pytest -q                      # 323 tests
 python -m evo.engine.speed_bench --cpu-only          # against a transformer of the same size
 ```
 
@@ -276,7 +288,28 @@ python examples/train_on_text.py --text my_notes.txt --lang en --steps 2000 \
     --fresh '{"d_model": 256, "d_state": 256, "num_layers": 4}'
 ```
 
-Details, manual installation and troubleshooting: [INSTALL.md](INSTALL.md). Released cores and their scores: [evo/releases/](evo/releases/).
+Details, manual installation and troubleshooting: [INSTALL.md](INSTALL.md). Released cores and their scores: [evo/releases/](evo/releases/). A release larger than one file of the repository allows (NOVA8-53M) comes in parts and is joined and checked on first use.
+
+## Other sizes
+
+The same build at any size, for people with more compute than one 8 GB card. `python -m nova.sizes` lays the core out for a target number of parameters or for the memory of a card, with its state, the memory of a training step and an estimate of the training time:
+
+```bash
+python -m nova.sizes --presets          # the table below
+python -m nova.sizes --vram-gb 24       # the largest core one 24 GB card can train
+python -m nova.sizes --params 1e9 --json   # settings for evo.engine.train_line --config-override
+```
+
+| Core | Parameters | Width x blocks | State | Weights (16-bit) | Training step, batch 64 / 16 | 20 tokens per parameter | Trained by us |
+|---|---|---|---|---|---|---|---|
+| 24M | 24.2 M | 448 x 7 | 56.0 kB | 63 MB | 5.0 / 1.7 GB | 0.5 B tokens, ~2 h at 9 TFLOP/s | yes |
+| 53M | 53.0 M | 704 x 7 | 88.0 kB | 129 MB | 7.1 / 2.6 GB | 1.1 B tokens, ~10 h at 9 TFLOP/s | yes |
+| 100M | 100.8 M | 896 x 9 | 144.0 kB | 231 MB | 10.7 / 4.0 GB | 2.0 B tokens, ~38 h at 9 TFLOP/s | no |
+| 300M | 306.6 M | 1344 x 13 | 312.0 kB | 657 MB | 22.5 / 9.3 GB | 6.1 B tokens, ~348 h at 9 TFLOP/s | no |
+| 1B | 1118.4 M | 2112 x 19 | 716.6 kB | 2306 MB | 55.5 / 26.6 GB | 22.4 B tokens, ~4633 h at 9 TFLOP/s | no |
+| 3B | 3296.5 M | 3072 x 25 | 1371.4 kB | 6694 MB | 121.8 / 67.5 GB | 65.9 B tokens, ~40248 h at 9 TFLOP/s | no |
+
+Only the first two rows were trained by us; the rules behind the table are fitted to them and to a measured step of a 37 M core, and everything larger is an extrapolation. The hours assume about 9 TFLOP/s of useful work, which is what one RTX 4060 gives; pass `--tflops` for another card. 20 tokens per parameter is a minimum: our cores saw 46 and 100 and kept improving. Training on several cards at once is not implemented yet, and a billion-parameter core needs it or one large card.
 
 ## Licence
 
