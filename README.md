@@ -147,7 +147,7 @@ So today: at 24 M parameters and a short training run the generation-8 core is a
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 323 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 331 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
@@ -276,7 +276,7 @@ The installer puts every library into a private `.venv/`, verifies the checksums
 source .venv/bin/activate                # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed              # tokens per second on your CPU
-python -m pytest -q                      # 323 tests
+python -m pytest -q                      # 331 tests
 python -m evo.engine.speed_bench --cpu-only          # against a transformer of the same size
 ```
 
@@ -310,6 +310,17 @@ python -m nova.sizes --params 1e9 --json   # settings for evo.engine.train_line 
 | 3B | 3296.5 M | 3072 x 25 | 1371.4 kB | 6694 MB | 121.8 / 67.5 GB | 65.9 B tokens, ~40248 h at 9 TFLOP/s | no |
 
 Only the first two rows were trained by us; the rules behind the table are fitted to them and to a measured step of a 37 M core, and everything larger is an extrapolation. The hours assume about 9 TFLOP/s of useful work, which is what one RTX 4060 gives; pass `--tflops` for another card. 20 tokens per parameter is a minimum: our cores saw 46 and 100 and kept improving. Training on several cards at once is not implemented yet, and a billion-parameter core needs it or one large card.
+
+To build one on your own machine, `python -m nova.build` (also `python install.py --size ...`) looks at the machine first – the graphics card and its memory, the processor, the memory – and plans from that:
+
+```bash
+python -m nova.build                                    # what this machine can train, by the rules above
+python -m nova.build --size auto --text my.txt          # the largest core that the card, the text and the time allow
+python -m nova.build --size 100M --text my.txt --run    # build it and train it on my.txt
+python -m nova.build --size 53M                         # a size we released: the finished core is used
+```
+
+A size we released is taken as it is. Any other size is built new from the same design, and our largest released core teaches it for the first 30 % of its training (the new core also learns the teacher's next-token distribution; both use the same tokenizer). Before training, a few real steps on the card measure the memory and the speed; when the card runs out of memory, the next smaller batch is taken. The time estimate comes from that measurement. When the text is too small for the size, it says so and names a size that fits.
 
 ## Licence
 

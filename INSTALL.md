@@ -117,6 +117,16 @@ print(sum(p.numel() for p in core.parameters()))
 
 Compare the core with a transformer of the same size on your machine: `python -m evo.engine.speed_bench --cpu-only`.
 
+A core of the size you choose, fitted to your machine (graphics card, memory, a trial run on the card, a time estimate); a size we released is used as it is, another is built new with our largest core as its teacher:
+
+```bash
+python -m nova.build                                   # what this machine can train
+python -m nova.build --size auto --text my_notes.txt   # the plan for the largest sensible core
+python -m nova.build --size 100M --text my_notes.txt --run --hours 6
+```
+
+The installer does the same with `python install.py --size auto` (add `--text my_notes.txt --train` to train).
+
 ## 5. The full system (training lines, collective, self-improvement loop)
 
 The released cores were trained by the pipeline in `evo/` on the author's server (one RTX 4060, 8 GB). That pipeline expects a built corpus in `data/` and its own state files, which are not part of the repository; its tools are documented at the top of each file:
@@ -168,6 +178,14 @@ source .venv/bin/activate          # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed
 python examples/train_on_text.py --text moj_text.txt --lang sk --steps 300
+```
+
+Vlastné jadro zvolenej veľkosti, prispôsobené vášmu počítaču (karta, pamäť, skúšobný beh na karte, odhad času). Veľkosť, ktorú sme vydali, sa použije hotová; inú postaví nanovo a na začiatku ju učí naše najväčšie jadro:
+
+```bash
+python -m nova.build                                    # čo tento počítač dokáže natrénovať
+python -m nova.build --size auto --text moj_text.txt --lang sk
+python -m nova.build --size 100M --text moj_text.txt --lang sk --run --hours 6
 ```
 
 Jadrá sú voľne dostupné na pokusy, výskum a štúdium. Na komerčné použitie treba písomný súhlas tvorcu – napíšte cez „issue“ v repozitári.

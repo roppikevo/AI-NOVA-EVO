@@ -7,6 +7,8 @@ NOVA-EVO installer. Needs only Python 3.10+; everything else goes into a private
     python install.py --gpu        # force the default PyTorch build (CUDA on Linux)
     python install.py --tests      # also run the full test suite (about a minute)
     python install.py --corpus     # also the libraries for building a training corpus
+    python install.py --size auto  # also: what core this machine can build (card, memory, a trial run on the card)
+    python install.py --size 100M --text my.txt --train   # build and train a core of that size on your text
 
 What it does:
   1. checks the Python version
@@ -14,6 +16,8 @@ What it does:
   3. installs PyTorch (CPU build unless an NVIDIA card is found) and requirements.txt
   4. verifies the checksums of the released cores in evo/releases/
   5. lets the newest core write a few lines and measures its speed on your processor
+  6. with --size: python -m nova.build - a size we released is used as it is; any other is built from the same
+     design, taught by our largest core at the start, with a time estimate measured on your card
 
 Run it again any time; finished steps are skipped.
 """
@@ -102,6 +106,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--corpus", action="store_true", help="also install requirements-corpus.txt")
     ap.add_argument("--venv", default=".venv", help="folder for the private environment")
     ap.add_argument("--no-demo", action="store_true", help="skip the first run of the core")
+    ap.add_argument("--size", default="", help="auto, or parameters (24M, 100M, 1B): plan a core of this size for this machine")
+    ap.add_argument("--text", default="", help="with --size: a UTF-8 text file to train the core on")
+    ap.add_argument("--hours", type=float, default=0.0, help="with --size: the time available for training")
+    ap.add_argument("--train", action="store_true", help="with --size and --text: train the core after the plan")
     args = ap.parse_args(argv)
 
     say(f"1/5 Python {platform.python_version()} on {platform.system()} {platform.machine()}")
@@ -134,6 +142,15 @@ def main(argv: list[str] | None = None) -> int:
         say("5/5 first run")
         if run([py, "-m", "nova.demo"]) != 0:
             raise SystemExit("the core did not run - please open an issue with the lines above")
+
+    if args.size:
+        say("6 your core")
+        cmd = [py, "-m", "nova.build", "--size", args.size]
+        cmd += ["--text", args.text] if args.text else []
+        cmd += ["--hours", str(args.hours)] if args.hours else []
+        cmd += ["--run"] if args.train and args.text else []
+        if run(cmd) != 0:
+            raise SystemExit("the plan for the core failed - see the lines above")
 
     if args.tests:
         say("tests")
