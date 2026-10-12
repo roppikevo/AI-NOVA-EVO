@@ -1,5 +1,5 @@
 {
- "version": 1,
+ "version": 2,
  "title": "Rules the director may never change by itself. Only the Creator changes them and seals them again.",
  "min_gain_pct": 0.3,
  "max_set_decline_pct": 0.3,
@@ -16,5 +16,12 @@
  "vault_must_confirm": true,
  "releases_are_never_overwritten": true,
  "creator": "roppik",
- "max_parameters": 60000000
+ "max_parameters": 100000000,
+ "changes": [
+  {
+   "date": "2026-10-12",
+   "by": "roppik",
+   "what": "max_parameters 60000000 -> 100000000 (the Creator's decision, so that a 88M core can become champion)"
+  }
+ ]
 }

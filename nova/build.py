@@ -413,9 +413,8 @@ def main(argv: list[str] | None = None) -> int:
 
         tpath = next(x for x in rel if x["name"] == p["teacher"])["path"]
         join(tpath / "nova_model.pt")
-        teacher = load_teacher(tpath / "nova_model.pt").to(device)
-        if device == "cuda" and torch.cuda.is_bf16_supported():
-            teacher = teacher.to(torch.bfloat16)
+        teacher = load_teacher(tpath / "nova_model.pt").to(device)      # full precision, as in long_train: parts of the
+                                                                         # core compute in float32 outside autocast
     batch = p.get("batch") or (16 if device == "cuda" else 4)
     if not args.no_trial:
         t = trial(p["config"], batch, device, teacher)

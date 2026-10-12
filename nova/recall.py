@@ -30,6 +30,7 @@ import torch
 import torch.nn.functional as F
 
 DISTANCES = (0, 128, 512, 2048, 8192, 32768)
+PIECE = 512          # filler tokens read per call
 FACTS = {"sk": ("Tajný kód je {}.", "Tajný kód je"), "en": ("The secret code is {}.", "The secret code is"),
          "cs": ("Tajný kód je {}.", "Tajný kód je"), "pl": ("Tajny kod to {}.", "Tajny kod to")}
 
@@ -94,10 +95,11 @@ def recall(model, tok, filler: np.ndarray, distances=DISTANCES, samples: int = 8
         start = rng.randrange(0, max(1, len(filler) - distances[-1]))
         done = 0
         for d in distances:
-            if d > done:
-                chunk = torch.tensor(filler[start + done:start + d], dtype=torch.long, device=device).expand(2, -1)
+            while done < d:                            # in pieces: the predictions of a long piece would not fit the card
+                step = min(PIECE, d - done)
+                chunk = torch.tensor(filler[start + done:start + done + step], dtype=torch.long, device=device).expand(2, -1)
                 _, states = model(chunk, states)
-                done = d
+                done += step
             la = answer_logprob(model, states, qa, ans_a, device)      # [read A, read B]
             lb = answer_logprob(model, states, qb, ans_b, device)
             per[d].append(float((la[0] - la[1] + lb[1] - lb[0]) / 2))

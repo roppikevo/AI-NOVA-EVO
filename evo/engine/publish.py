@@ -31,6 +31,7 @@ REMOTE = "public"
 AUTHOR = ("roppik", "roppikevo@users.noreply.github.com")
 BUDGET_MB = 900
 RELEASE_WEIGHTS = re.compile(r"^evo/releases/([^/]+)/nova_model\.pt(?:\.part\d\d)?$")      # whole, or in parts (nova.parts)
+LARGE_MB = 150     # a release with more weights than this is public without them; they are kept on the Creator's PC (decision 2026-10-10)
 RELEASE_INFO = re.compile(r"^evo/releases/([^/]+)/MODEL\.json$")
 DROP = [re.compile(p) for p in (
     r"\.(pt|pth|safetensors|gguf|err|lock|patch|log|tmp|bak)$", r"\.bak-", r"(^|/)STOP[A-Z_]*$",
@@ -107,8 +108,8 @@ def split_large_weights(name: str, cwd: str | Path = ".", limit: float = 95e6) -
     from nova.parts import parts_of, split
 
     f = Path(cwd) / "evo/releases" / name / "nova_model.pt"
-    if not f.exists() or f.stat().st_size < limit or parts_of(f):
-        return []
+    if not f.exists() or f.stat().st_size < limit or f.stat().st_size > LARGE_MB * 1e6 or parts_of(f):
+        return []                                         # too small to need parts, or so large it stays private
     paths = [str(p.relative_to(Path(cwd))) for p in split(f)]
     git("add", "-f", *paths, cwd=cwd)
     git("commit", "-qm", f"{name}: weights in parts for publication", "--", *paths, cwd=cwd)
@@ -134,7 +135,7 @@ def select(files: dict[str, int], already_public: set[str], used_mb: float, budg
     for name, paths in sorted(weights.items()):
         new = [x for x in paths if x not in already_public]
         size = sum(files[x] for x in new) / 1e6
-        if not new or (all(files[x] < 95e6 for x in new) and used_mb + size <= budget_mb):
+        if not new or (all(files[x] < 95e6 for x in new) and used_mb + size <= budget_mb and size <= LARGE_MB):
             keep.extend(paths)
             used_mb += size
         else:

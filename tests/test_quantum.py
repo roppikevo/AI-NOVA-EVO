@@ -92,8 +92,8 @@ def test_recall_at_a_distance_runs_and_tells_apart_the_two_facts_at_distance_zer
     torch.manual_seed(0)
     m = build_model({**BASE, "pattern": "QNQ", "q_heads": 2, "q_dim": 16}).eval()
     filler = np.array(tok.encode(" ".join(texts[2::3])) * 20, dtype=np.int64)
-    r = R.recall(m, tok, filler, distances=(0, 16, 64), samples=3, lang="sk")
-    assert set(r["recall_nats"]) == {"0", "16", "64"} and r["samples"] == 3
+    r = R.recall(m, tok, filler, distances=(0, 16, 64, 1100), samples=3, lang="sk")
+    assert set(r["recall_nats"]) == {"0", "16", "64", "1100"} and r["samples"] == 3
     assert all(np.isfinite(v) for v in r["recall_nats"].values())
     q, a = R.answer_ids(tok, "Tajný kód je", "1234")
     assert q and a and tok.encode("Tajný kód je 1234")[:len(q)] == q

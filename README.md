@@ -147,7 +147,7 @@ So today: at 24 M parameters and a short training run the generation-8 core is a
 ### 6. Everything is measured the same way
 
 - Decisions use text no training run has seen, with a paired bootstrap over test sequences and a verdict: improvement, decline or no clear change (`evo/collective/stats.py`).
-- 337 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
+- 345 automated tests cover the core, the stepper, the collective, the statistics, the self-improvement loop and the installer path (`python -m pytest -q`).
 
 ---
 
@@ -236,6 +236,7 @@ Failures will keep being reported here.
 - **Probation:** a new champion is checked again on fresh text; if it is worse, the system steps back to the previous one.
 - **Constitution** (`evo/constitution.json`): the director may change the strategy, never the rules. The judge's thresholds and the held-out texts are sealed outside the project and verified before every verdict; if they differ, everything stops.
 - **Teachers:** local open models (through llama.cpp) write explanations and code for the weakest language while the GPU trains.
+- **Learning a topic** (`evo/learning/topics.py`): `python -m evo.learning.topics add "photosynthesis" --lang en` queues a topic for the director; with nothing untried left, the director queues one itself from its weakest spot (the language with the highest loss on the judge's web texts, the weakest level of the code exam). For a topic a teacher names concrete subtopics and explains each of them (for code: writes programs), Wikipedia adds articles on them for language topics, and 15 % of the documents are set aside as the topic's own exam. The champion is then trained on its usual mix with a share of every batch from the topic's material, and the judge decides as for any other attempt; the topic exam before and after is reported beside the verdict but decides nothing. The main dataset is never changed.
 - **What the model is told about itself** (`evo/corpus/self_v2.py`): a small set of training texts with its creator's authority first, then that getting better – confirmed by the judge – is its first task, then measured facts about its current core. This is text the model learns to write, not a mechanism: the drive to improve is in the director, which never idles while something untried is left.
 
 ## Goals
@@ -276,7 +277,7 @@ The installer puts every library into a private `.venv/`, verifies the checksums
 source .venv/bin/activate                # Windows: .venv\Scripts\activate
 python -m nova.demo --lang sk --prompt "Bratislava je" --tokens 80
 python -m nova.demo --speed              # tokens per second on your CPU
-python -m pytest -q                      # 337 tests
+python -m pytest -q                      # 345 tests
 python -m evo.engine.speed_bench --cpu-only          # against a transformer of the same size
 ```
 
@@ -287,6 +288,36 @@ python examples/train_on_text.py --text my_notes.txt --lang en --steps 300
 python examples/train_on_text.py --text my_notes.txt --lang en --steps 2000 \
     --fresh '{"d_model": 256, "d_state": 256, "num_layers": 4}'
 ```
+
+### Running a `.nova` file (models on Hugging Face)
+
+`.nova` is NOVA's own single-file format: weights, tokenizer, configuration and the core's learning history in one file, read straight from the disk, with smaller 8-bit and 4-bit variants. It exists because NOVA's recurrent core is not an architecture GGUF tools (llama.cpp, Ollama, LM Studio) can run. Released cores are on Hugging Face, for example [devilart1980/NOVA8-53M](https://huggingface.co/devilart1980/NOVA8-53M). After the quick start above:
+
+```bash
+# download a core (66 MB; any browser download of the same link works too)
+curl -L -o NOVA8-53M-v3-int8.nova https://huggingface.co/devilart1980/NOVA8-53M/resolve/main/NOVA8-53M-v3-int8.nova
+
+python -m nova.novafile info NOVA8-53M-v3-int8.nova                       # what is inside and what it has learned
+python -m nova.novafile ask  NOVA8-53M-v3-int8.nova "Bratislava je" --lang sk --tokens 60
+python -m nova.novafile ask  NOVA8-53M-v3-int8.nova "def times_4(x):" --lang py --temperature 0
+```
+
+Languages for `--lang`: `sk`, `cs`, `pl`, `en`, `py`, `rs`. Everything runs on the CPU; loading and a short text take a few seconds.
+
+Make your own `.nova` from a released core, and check that it answers like the original:
+
+```bash
+python -m nova.novafile pack  evo/releases/NOVA8-53M-v3 --dtype int8      # f32, f16, int8 (default), int4
+python -m nova.novafile check NOVA8-53M-v3-int8.nova evo/releases/NOVA8-53M-v3
+```
+
+| type | NOVA8-53M size | loss on the check texts | same next token as the original |
+|---|---|---|---|
+| f16 | 130 MB | 2.5309 (equal) | 100 % |
+| int8 | 66 MB | 2.5310 | 95 % |
+| int4 | 38 MB | 2.5781 | 90 % |
+
+NOVA is not a chat bot. To make it learn something, give it a topic: `python -m nova.novafile learn NOVA8-53M-v3-int8.nova "photosynthesis" --langs en` puts the topic into the learning queue of the self-improvement loop (below), which collects material, keeps part of it aside as an exam, trains and lets the judge decide. A better core is released as a new `.nova` whose history lists the topic. This needs the full setup with a graphics card and the director running.
 
 Details, manual installation and troubleshooting: [INSTALL.md](INSTALL.md). Released cores and their scores: [evo/releases/](evo/releases/). A release larger than one file of the repository allows (NOVA8-53M) comes in parts and is joined and checked on first use.
 
@@ -321,6 +352,8 @@ python -m nova.build --size 53M                         # a size we released: th
 ```
 
 A size we released is taken as it is. Any other size is built new from the same design, and our largest released core teaches it for the first 30 % of its training (the new core also learns the teacher's next-token distribution; both use the same tokenizer). Before training, a few real steps on the card measure the memory and the speed; when the card runs out of memory, the next smaller batch is taken. The time estimate comes from that measurement. When the text is too small for the size, it says so and names a size that fits.
+
+Releases whose weights are larger than 150 MB (cores above about 60 M parameters) are listed here with their measurements, but their weights are not published; they are kept by the creator.
 
 ## Licence
 

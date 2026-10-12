@@ -164,3 +164,11 @@ def test_a_large_new_release_is_split_into_parts_and_committed(repo, monkeypatch
     assert len(paths) == len(parts.parts_of(rel / "nova_model.pt")) >= 1
     assert all(p in _git(repo, "ls-files") for p in paths)
     assert publish.split_large_weights("NOVA8-BIG-v1", limit=1000) == []         # already in parts
+
+
+def test_a_large_release_goes_public_without_its_weights():
+    files = {"evo/releases/BIG-v1/MODEL.json": 100, "evo/releases/BIG-v1/nova_model.pt.part00": 90_000_000,
+             "evo/releases/BIG-v1/nova_model.pt.part01": 90_000_000, "evo/releases/SMALL-v1/nova_model.pt": 60_000_000}
+    chosen = publish.select(files, set(), 0.0)
+    assert chosen["without_weights"] == ["BIG-v1"] and "evo/releases/BIG-v1/MODEL.json" in chosen["keep"]
+    assert "evo/releases/SMALL-v1/nova_model.pt" in chosen["keep"] and chosen["weights_mb"] == 60.0

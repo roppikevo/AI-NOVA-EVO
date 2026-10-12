@@ -51,6 +51,8 @@ STATE, LOG, STOP, REPORT = DIR / "state.json", DIR / "log.jsonl", DIR / "STOP", 
 OUTBOX = Path.home() / "nova-agent" / "outbox"
 PY = sys.executable
 
+TOPIC_STEPS = 4000      # training on a topic's material (see evo.learning.topics)
+TOPIC_GAP_H = 24        # at most one topic of its own (from its weak spots) per this many hours
 PLATEAU = 16           # rejected attempts in a row before a new generation is trained from scratch (the slow way)
 EXPLORE_AFTER = 6      # rejected attempts in a row before the director measures an architecture candidate by itself
 EXPLORE_STEPS = 18000  # length of such a short run (the same as in every tournament so far)
@@ -460,6 +462,16 @@ class World:
             pass
         return out
 
+    def code_solved(self, checkpoint: str) -> list[str] | None:
+        """Keys of the exam tasks the core solves (from the judge's cache), for finding its weakest code level."""
+        try:
+            from evo.engine import judge
+
+            sets = judge.held_out_sets(self.dataset, self.web_dir)
+            return list(judge.score(checkpoint, sets, str(self.dataset / "tokenizer.json"))["code"] or [])
+        except Exception:
+            return None
+
     def judge(self, champion: str, challenger: str) -> dict:
         from evo.engine import judge
 
@@ -539,6 +551,7 @@ class World:
         if tar.exists() and OUTBOX.exists():                      # a copy for the Creator's PC, offered for 20 minutes
             dst = OUTBOX / f"release-{name}.tar.gz"
             subprocess.run(["cp", str(tar), str(dst)])
+            subprocess.run(["bash", "-c", f"cd '{tar.parent}' && sha256sum '{tar.name}' > '{OUTBOX}/release-{name}.sha256'"])
             subprocess.Popen(["bash", "-c", f"sleep 1200; rm -f '{dst}'"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         return str(out)
 
@@ -692,6 +705,12 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
                 halt(state, str(exc))
     elif failed:
         rec["tail"] = tail[-500:]
+    if challenger and recipe.get("topic") and not smoke:
+        # the topic's own exam before and after (it informs the report; the judge above decided)
+        rec["topic"] = recipe["topic"]
+        world.run([PY, "-m", "evo.learning.topics", "exam", recipe["topic"], "--before", champ["checkpoint"], "--after", challenger,
+                   "--tokenizer", str(world.dataset / "tokenizer.json") if hasattr(world, "dataset") else "",
+                   "--store", str(DIR / "topics.json")], timeout_h=0.5)
     if challenger and Path(challenger).exists() and str(Path(challenger).parent) == str(out.parent):
         Path(challenger).unlink(missing_ok=True)       # released weights live in evo/releases; challengers are thrown away
     if recipe.get("collective"):
@@ -911,7 +930,8 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
 
 PHASES = {"generation": "trénuje novú generáciu", "improving the champion": "skúša zlepšiť šampióna",
           "exploring": "sám meria (šum, kandidát na novú stavbu jadra)",
-          "waiting for a new hypothesis": "čaká na novú hypotézu (všetko známe je vyskúšané; raz denne skúsi učenie na nových textoch)"}
+          "waiting for a new hypothesis": "čaká na novú hypotézu (všetko známe je vyskúšané; raz denne skúsi učenie na nových textoch)",
+          "collecting material for a topic": "zbiera látku na tému (uč sa <téma>)", "learning a topic": "učí sa tému (uč sa <téma>)"}
 
 
 def note_progress(state: dict, now: float | None = None) -> None:
@@ -993,6 +1013,24 @@ def report(state: dict, now: float | None = None) -> str:
     cur = state.get("current")
     if cur:
         L.append(f"Práve beží: {cur.get('what')} {cur.get('recipe') or cur.get('line') or ''}")
+    try:
+        from evo.learning import topics as _topics
+
+        tl = _topics.load(DIR / "topics.json")[-5:]
+    except Exception:
+        tl = []
+    if tl:
+        L += ["", "Témy na učenie (uč sa <téma>):"]
+        names = {"queued": "čaká", "collected": "látka zozbieraná", "training": "trénuje sa", "accepted": "PRIJATÉ",
+                 "rejected": "odmietnuté", "failed": "nevyšlo"}
+        for t in tl:
+            ex = t.get("exam") or {}
+            L.append(f"  {t['date']}  {t['text'][:60]} ({'tvorca' if t['source'] == 'creator' else 'riaditeľ: ' + t.get('why', '')[:60]}): "
+                     f"{names.get(t['status'], t['status'])}"
+                     + (f", látka {t['train_docs']} textov (+{t.get('exam_docs')} na skúšku)" if t.get("train_docs") is not None else "")
+                     + (f", skúška z témy {ex.get('before')} -> {ex.get('after')} ({ex.get('percent'):+.1f} %)" if ex.get("percent") is not None else "")
+                     + (f", sudca: zisk {t['verdict']} %" if t.get("verdict") is not None else "")
+                     + (f" - {t['note']}" if t.get("note") else ""))
     L += ["", "Posledné pokusy:"]
     for h in state["history"][-8:]:
         v = h.get("verdict") or {}
@@ -1165,6 +1203,75 @@ def explore_step(state: dict, world: World) -> dict | None:
     return rec
 
 
+TOPIC_PASSES = 2.0      # how often the topic's material is seen in one training (the first topic saw it ~10x and forgot the rest)
+DATASET_ROWS_PER_STEP = 9.6   # batch 48 x (1 - bulk share 0.8): the part of a batch the topic's share is taken from
+
+
+def topic_recipe(topic: dict) -> dict:
+    """Training on a topic: the usual mix plus the topic's material; the share of every batch from it is set so that
+    the material is seen about TOPIC_PASSES times (more material, larger share - at most 40 %)."""
+    d = f"data/topic_v1/{topic['slug']}"
+    code = topic.get("kind") == "code"
+    rows = max(1.0, 0.85 * float(topic.get("chars") or 0) / 512)          # ~4 characters per token, 128 tokens per row
+    share = min(0.4, max(0.03, TOPIC_PASSES * rows / (TOPIC_STEPS * DATASET_ROWS_PER_STEP)))
+    return {"steps": TOPIC_STEPS, "topic": topic["slug"],
+            "flags": {"--lr": "5e-5", "--bulk-frac": "0.8", "--code-frac": "0.1" if code else "0.03",
+                      "--extra-dirs": f"data/teacher_v1,data/web_v1,data/self_v2,{d}", "--focus": f"dir:{d}",
+                      "--focus-frac": f"{share:.3f}"}}
+
+
+def topic_step(state: dict, world: World, topic: dict) -> str:
+    """One step of learning a topic: collect its material, or train on it (the judge decides as always)."""
+    from evo.learning import topics
+
+    path = DIR / "topics.json"
+    slug = topic["slug"]
+    if topic["status"] == "queued":
+        state["phase"] = "collecting material for a topic"
+        state["current"] = {"what": "collecting", "recipe": f"topic:{slug}", "since": time.time()}
+        save_state(state)
+        world.wait_side()
+        rc, tail = world.run([PY, "-m", "evo.learning.topics", "collect", slug, "--store", str(path)], timeout_h=1.5, nice=5)
+        now = topics.get(slug, path) or {}
+        if now.get("status") == "queued":        # the collection did not finish: do not try the same thing forever
+            topics.update(slug, path, status="failed", note=f"collection ended with {rc}: {str(tail)[-200:]}")
+            now = topics.get(slug, path) or {}
+        state["current"] = None
+        save_state(state)
+        log_event({"event": "topic", "step": "collect", "topic": slug, "text": topic["text"], "source": topic["source"],
+                   "status": now.get("status"), "train_docs": now.get("train_docs"), "exam_docs": now.get("exam_docs"), "rc": rc})
+        return f"collect:{slug}"
+    state["phase"] = "learning a topic"
+    world.unload_teachers()
+    name = f"topic:{slug}"
+    topics.update(slug, path, status="training", started=time.time())
+    rec = attempt(state, world, name, recipes={name: topic_recipe(topic)})
+    v = rec.get("verdict") or {}
+    topics.update(slug, path, status="accepted" if rec.get("released") else "failed" if rec.get("rc") or rec.get("error") else "rejected",
+                  attempt=rec.get("attempt"), released=rec.get("released"), finished=time.time(),
+                  verdict=(v.get("decision") or {}).get("gain_percent"), reasons=v.get("reasons", []))
+    return f"topic:{slug}"
+
+
+def gap_topic(state: dict, world: World) -> str | None:
+    """Nothing new to try: queue a topic from the champion's weakest spot (new material is a new hypothesis).
+    At most one per TOPIC_GAP_H hours; none that was worked on in the last days."""
+    from evo.learning import topics
+
+    if time.time() - state.get("last_gap", 0) < TOPIC_GAP_H * 3600:
+        return None
+    state["last_gap"] = time.time()
+    solved = world.code_solved(state["champion"]["checkpoint"]) if hasattr(world, "code_solved") else None
+    gaps = topics.find_gaps(state["champion"].get("scores"), solved, topics.load(DIR / "topics.json"))
+    save_state(state)
+    if not gaps:
+        return None
+    g = gaps[0]
+    t = topics.add(g["text"], g["langs"], g["kind"], "director", DIR / "topics.json", level=g.get("level"), why=g["why"])
+    log_event({"event": "topic", "step": "queued", "topic": t["slug"], "text": t["text"], "source": "director", "why": g["why"]})
+    return f"topic_queued:{t['slug']}"
+
+
 def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
     """One step of the loop. Returns what happened (for the log and the tests).
 
@@ -1179,6 +1286,13 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
         save_state(state)
     champion_setup(state)
     note_progress(state)
+    if recipes is None and not state.get("grow"):
+        # "uč sa <téma>": a topic the Creator asked for (or one the director found in its weak spots) goes first
+        from evo.learning import topics
+
+        t = topics.next_topic(topics.load(DIR / "topics.json"))
+        if t is not None:
+            return topic_step(state, world, t)
     stalled = state["rejected_in_a_row"]
     # a winner of the director's own tournament, or a generation the Creator asked for ("now"), starts at once
     won = any((r.get("candidate") or r.get("now")) and r["line"] not in state["grown"] for r in load_ladder())
@@ -1205,6 +1319,10 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
         # test of its own lessons - is a new hypothesis and goes at once; otherwise wait instead of repeating
         new = [n for n in available(state, recipes=recipes) if n not in tried_on(state)]
         name = new[0] if new else lesson_recipe(state) if recipes is None else None
+        if name is None and recipes is None:
+            queued = gap_topic(state, world)
+            if queued:
+                return queued
         if name is None:
             state["phase"] = "waiting for a new hypothesis"
             if time.time() - state.get("last_wait_attempt", 0) < WAIT_RETRY_H * 3600:
@@ -1224,6 +1342,10 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
         if rec is not None:
             save_state(state)
             return f"explore:{rec['run']}"
+        if recipes is None:
+            queued = gap_topic(state, world)
+            if queued:
+                return queued
         state["phase"] = "waiting for a new hypothesis"
         save_state(state)
         return "waiting_for_hypothesis" if not available(state, recipes=recipes) and any(

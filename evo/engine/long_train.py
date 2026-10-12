@@ -514,7 +514,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="experiment: train and report, but leave the active weights untouched")
     ap.add_argument("--boost-lang", default="", help="sk/cs/pl/en: extra share of the bulk corpus for this language")
     ap.add_argument("--focus", default="",
-                    help="specialist: language of dataset rows to prefer (sk/cs/pl/en/py/rs) or 'teacher' (teacher answers)")
+                    help="specialist: language of dataset rows to prefer (sk/cs/pl/en/py/rs), 'teacher' (teacher answers) "
+                         "or dir:<one of --extra-dirs> (e.g. a topic's material, evo.learning.topics)")
     ap.add_argument("--focus-frac", type=float, default=0.6, help="share of the dataset part of a batch taken from --focus rows")
     ap.add_argument("--seq-mult", type=int, default=1,
                     help="train on N consecutive 128-token sequences joined together (longer context)")
@@ -581,13 +582,16 @@ def main(argv: list[str] | None = None) -> int:
     train = load_tokens(dataset / "train.txt")
     val = load_tokens(dataset / "val.txt")
     n_dataset, teacher_rows = len(train), np.zeros(0, dtype=np.int64)
+    rows_of_dir: dict[str, np.ndarray] = {}
     if args.extra_dirs:
         n_extra = 0
         for d in [Path(x) for x in args.extra_dirs.split(",") if x]:
             extra = extra_sequences(dataset, [d])
             if len(extra):
+                where = np.arange(len(train), len(train) + len(extra))
+                rows_of_dir[str(d).rstrip("/")] = where
                 if "web" not in d.name:
-                    teacher_rows = np.concatenate([teacher_rows, np.arange(len(train), len(train) + len(extra))])
+                    teacher_rows = np.concatenate([teacher_rows, where])
                 train = np.concatenate([train, extra])
                 n_extra += len(extra)
         print(f"extra teacher/web sequences: {n_extra}")
@@ -597,6 +601,8 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("--focus cannot be combined with --seq-mult")
         if args.focus == "teacher":
             focus = teacher_rows
+        elif args.focus.startswith("dir:"):          # the rows of one of the --extra-dirs (a topic's material)
+            focus = rows_of_dir.get(args.focus[4:].rstrip("/"), np.zeros(0, dtype=np.int64))
         else:
             ids = {"sk": 4, "cs": 5, "pl": 6, "en": 7, "py": 8, "rs": 9}
             if args.focus not in ids:

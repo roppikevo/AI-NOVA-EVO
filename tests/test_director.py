@@ -555,6 +555,9 @@ def test_with_nothing_left_to_try_the_director_waits_for_a_new_hypothesis(home, 
             break
         done.append(r)
     assert len(done) >= 5 and len(set(done)) == len(done)              # ... every recipe once, nothing twice
+    queued = r                                                         # nothing new to try: a topic from its weakest spot
+    assert queued.startswith("topic_queued:") and "English" in json.loads((home / "evo/director/topics.json").read_text())[0]["text"]
+    assert d.cycle(st, w) == "collect:" + queued.split(":", 1)[1]      # the fake world collects nothing: the topic fails
     before = len(w.cmds)
     assert d.cycle(st, w) == "waiting_for_hypothesis" and d.cycle(st, w) == "waiting_for_hypothesis"
     assert len(w.cmds) == before and st["phase"] == "waiting for a new hypothesis"                  # then nothing is trained in vain
@@ -767,7 +770,8 @@ def test_with_no_recipe_left_the_director_tests_its_own_lessons_one_setting_at_a
         if not r.startswith("attempt:"):
             break
         names.append(r.split(":", 1)[1])
-    assert r == "waiting_for_hypothesis" and len(set(names)) == len(names)
+    assert r.startswith("topic_queued:") and len(set(names)) == len(names)     # then new material: a topic of its own
+    assert d.cycle(st, w).startswith("collect:") and d.cycle(st, w) == "waiting_for_hypothesis"
     tests = [n for n in names if st.get("own_recipes", {}).get(n, {}).get("lesson")]
     assert 1 <= len(tests) <= d.LESSON_TESTS and st["lesson_tests"][st["champion"]["name"]] == len(tests)
     assert names.index(tests[0]) > names.index("gentle")              # only after the known recipes were judged on this champion
@@ -806,3 +810,54 @@ def test_a_generation_asked_for_starts_at_once_and_learns_from_the_champion_as_a
     trained = {"steps": 300000, "lr": 0.001, "compile": True, "carry": 8, "carry_share": 0.35, "batch_size": 48}
     later = d.train_command(d.RECIPES["gentle"], "x.pt", Path("out.pt"), 1, "en", trained=trained)
     assert later[-2:] == ["--batch-size", "48"]                                                                       # its later attempts keep the batch that fits
+
+
+def test_a_topic_from_the_creator_goes_first_collect_then_train_then_judge(home, monkeypatch):
+    from evo.learning import topics
+
+    st, w = fresh(), FakeWorld(verdicts=[False])
+    store = home / "evo/director/topics.json"
+    t = topics.add("fotosyntéza rastlín", ["sk"], path=store)
+    real_run = w.run
+
+    def run(cmd, timeout_h, nice=0):
+        if "collect" in cmd:                                           # the material arrives
+            topics.update(t["slug"], store, status="collected", train_docs=40, exam_docs=6)
+        if "exam" in cmd:
+            topics.update(t["slug"], store, exam={"before": 3.2, "after": 3.0, "percent": -6.25})
+        return real_run(cmd, timeout_h, nice)
+    w.run = run
+    assert d.cycle(st, w) == f"collect:{t['slug']}" and topics.get(t["slug"], store)["status"] == "collected"
+    assert d.cycle(st, w) == f"topic:{t['slug']}"
+    train = next(c for c in w.cmds if "--out-checkpoint" in c)
+    assert train[train.index("--focus") + 1] == f"dir:data/topic_v1/{t['slug']}"
+    assert f"data/topic_v1/{t['slug']}" in train[len(train) - 1 - train[::-1].index("--extra-dirs") + 1]
+    assert any("exam" in c and t["slug"] in c for c in w.cmds) and len(w.judged) == 1
+    done = topics.get(t["slug"], store)
+    assert done["status"] == "rejected" and done["verdict"] == 0.05 and done["exam"]["percent"] == -6.25
+    rep = d.report(st)
+    assert "Témy na učenie" in rep and "fotosyntéza" in rep and "-6.2 %" in rep
+    assert d.cycle(st, w).startswith("attempt:")                       # nothing open any more: the usual work again
+
+
+def test_resting_recipes_below_the_plateau_also_lead_to_a_topic_of_its_own(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", [])
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    st, w = fresh(), FakeWorld()
+    st["rejected_in_a_row"] = d.PLATEAU - 1
+    monkeypatch.setattr(d, "choose", lambda *a, **k: None)          # every recipe rests
+    monkeypatch.setattr(d, "lesson_recipe", lambda *a, **k: None)
+    monkeypatch.setattr(d, "explore_step", lambda *a, **k: None)
+    assert d.cycle(st, w).startswith("topic_queued:")
+    assert d.cycle(st, w).startswith("collect:")                    # the fake world collects nothing
+    assert d.cycle(st, w) in ("waiting_for_hypothesis", "all_recipes_resting")      # and not again within a day
+
+
+def test_the_share_of_a_topic_follows_the_amount_of_its_material():
+    small = d.topic_recipe({"slug": "a", "chars": 700_000})["flags"]["--focus-frac"]
+    large = d.topic_recipe({"slug": "b", "chars": 20_000_000})["flags"]["--focus-frac"]
+    assert 0.03 <= float(small) < 0.1 and float(large) == 0.4                 # ~2 passes over little material, at most 40 %
+    assert d.topic_recipe({"slug": "c", "kind": "code", "chars": 0})["flags"]["--code-frac"] == "0.1"

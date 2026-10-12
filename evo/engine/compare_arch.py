@@ -66,6 +66,10 @@ CANDIDATES = {
         "nslot-kv": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1360, "slots": 16, "slot_key": 56},
         "nslot-kvs": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1360, "slots": 16, "slot_key": 56, "slot_sharp": True},
         "nslot8": {**N8, "pattern": "NSNSNSN", "mlp_hidden": 1296, "slots": 8},
+        # NOVA-Q (a separate line, nova/quantum.py): a 256-dimensional complex unit state per block, turned by every
+        # token and read like a measurement; the per-token layer is widened so the size matches nslot (24.2 M)
+        "qq": {**N8, "pattern": "QQQQQQQ", "mlp_hidden": 1440, "q_heads": 1, "q_dim": 256},
+        "nq": {**N8, "pattern": "NQNQNQN", "mlp_hidden": 1296, "q_heads": 1, "q_dim": 256},
     },
 }
 # Hypotheses the director may measure by itself when learning stalls, in this order (evo/director/hypotheses.json
