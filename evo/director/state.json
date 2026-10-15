@@ -1,8 +1,8 @@
 {
  "champion": {
-  "name": "NOVA8-53M-v4",
-  "checkpoint": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
-  "since": 1792079106.7980988,
+  "name": "NOVA8-53M-v5",
+  "checkpoint": "evo/releases/NOVA8-53M-v5/nova_model_fp32.pt",
+  "since": 1792093527.5173535,
   "override": {
    "arch": "nova8",
    "d_model": 704,
@@ -24,18 +24,19 @@
   "polish": [
    "continue~web0.70",
    "gentle~steps12000",
-   "drive:longer:deduction+rulelab+compare"
+   "drive:longer:deduction+rulelab+compare",
+   "drive:gentle:rulelab+recall+code"
   ],
   "scores": {
-   "dataset": 2.7541,
-   "dataset_vault": 2.9674,
-   "web": 3.0711,
-   "web_vault": 2.9788,
+   "dataset": 2.755,
+   "dataset_vault": 2.9662,
+   "web": 3.0671,
+   "web_vault": 2.9767,
    "web_by_language": {
-    "sk": 2.7458,
-    "cs": 3.1096,
-    "pl": 3.0066,
-    "en": 3.4226
+    "sk": 2.7421,
+    "cs": 3.1057,
+    "pl": 3.0037,
+    "en": 3.417
    },
    "code": 59,
    "creator": -0.0,
@@ -50,192 +51,192 @@
   }
  },
  "started": 1791138088.0559714,
- "attempts": 123,
- "accepted": 10,
- "rejected_in_a_row": 3,
+ "attempts": 125,
+ "accepted": 11,
+ "rejected_in_a_row": 1,
  "recipes": {
   "gentle": {
-   "runs": 0.17059030875325015,
+   "runs": 0.14754355804068606,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web": {
-   "runs": 0.4965622412276253,
+   "runs": 0.4294766824377732,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "weak-language": {
-   "runs": 0.5698894870603681,
+   "runs": 0.49289741735851245,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "teachers": {
-   "runs": 0.6127843946885678,
+   "runs": 0.5299972229661424,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code": {
-   "runs": 0.240311653798659,
+   "runs": 0.20784554937046018,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "one-more-layer": {
-   "runs": 0.2583996277404935,
+   "runs": 0.22348983803275288,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "wider-view": {
-   "runs": 0.0002053548577936408,
+   "runs": 0.00017761141650571993,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 1791584551.0460124
   },
   "narrower-view": {
-   "runs": 0.00022081167504692557,
+   "runs": 0.00019098001774808595,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 1791584551.2527158
   },
   "collective": {
-   "runs": 0.14534324770652016,
+   "runs": 0.1257073749413693,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5": {
-   "runs": 0.2785076291833007,
-   "gain": 0.00026902910218471024,
+   "runs": 0.24088124848063677,
+   "gain": 0.00023268327047955593,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5~web0.77": {
-   "runs": 0.15640652748462272,
+   "runs": 0.1352760056214502,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue": {
-   "runs": 0.1394663271860076,
-   "gain": 0.005349504003744792,
+   "runs": 0.12062442638317798,
+   "gain": 0.004626786012838871,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue~web0.70": {
-   "runs": 0.11651790671123591,
-   "gain": 0.03417699688808667,
+   "runs": 0.10077633751454795,
+   "gain": 0.029559684608506165,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue~lr2.0e-4": {
-   "runs": 0.10777224301418106,
+   "runs": 0.09321221298296521,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web~steps4000": {
-   "runs": 0.5325104461992524,
+   "runs": 0.46056828491773344,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~steps12000": {
-   "runs": 0.15018560657588526,
-   "gain": 0.018289283311573232,
+   "runs": 0.12989553112748317,
+   "gain": 0.015818401136179692,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.85": {
-   "runs": 0.06821330570221891,
+   "runs": 0.05899768810184915,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:general-knowledge-in-english-nature-scie": {
-   "runs": 0.21784215250621045,
+   "runs": 0.18841167770262143,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:fotosynteza": {
-   "runs": 0.23423887366259186,
+   "runs": 0.20259320183077573,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:matematika": {
-   "runs": 0.25186975662644284,
+   "runs": 0.21784215250621045,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:chemia": {
-   "runs": 0.27082769529725037,
+   "runs": 0.23423887366259186,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:fyzika": {
-   "runs": 0.29121257558844127,
+   "runs": 0.25186975662644284,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.90": {
-   "runs": 0.4185962974793708,
+   "runs": 0.3620439376899079,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.98": {
-   "runs": 0.4501035456767428,
+   "runs": 0.3892945566558149,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr2e-5-w0.80-c0.02-s4400": {
-   "runs": 0.48398230717929336,
+   "runs": 0.4185962974793708,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr2e-5-w0.81-c0.076-s3600": {
-   "runs": 0.5204110829884875,
+   "runs": 0.4501035456767428,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~code0.03": {
-   "runs": 0.5595818096650402,
+   "runs": 0.48398230717929336,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code~code0.03": {
-   "runs": 0.6017008706075702,
+   "runs": 0.5204110829884875,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr6e-5-w0.70-c0.04-s12000": {
-   "runs": 0.6469901834490002,
+   "runs": 0.5595818096650402,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "drive:practice:deduction+rulelab+compare": {
-   "runs": 0.6956883693000001,
+   "runs": 0.6017008706075702,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "drive:longer:deduction+rulelab+compare": {
-   "runs": 0.7480520100000001,
+   "runs": 0.6469901834490002,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
@@ -247,19 +248,31 @@
    "rest_until": 0.0
   },
   "drive:longer:rulelab+recall+code": {
-   "runs": 0.93,
+   "runs": 0.8043570000000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "drive:practice:rulelab+recall+code": {
-   "runs": 0.8649000000000001,
+   "runs": 0.7480520100000001,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "drive:focus-errors:rulelab+recall+code": {
-   "runs": 1.0,
+   "runs": 1.8649,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:gentle:rulelab+recall+code": {
+   "runs": 0.93,
+   "gain": 0.04650000000000001,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:gentle:rulelab+recall+code~web0.67": {
+   "runs": 0.0,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
@@ -8415,6 +8428,167 @@
      0.18
     ]
    }
+  },
+  {
+   "attempt": 124,
+   "recipe": "drive:gentle:rulelab+recall+code",
+   "champion": "NOVA8-53M-v4",
+   "date": "2026-10-15 19:11",
+   "start": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "5e-5",
+    "--bulk-frac": "0.6",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/gentle-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/gentle-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.3"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.38,
+   "weak": "en",
+   "abilities": {
+    "better": [
+     "skills/ordering/new"
+    ],
+    "worse": []
+   },
+   "verdict": {
+    "accept": true,
+    "reasons": [],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": 0.05,
+     "diff": -0.0015,
+     "lo": -0.0022,
+     "hi": -0.0009,
+     "n": 3200,
+     "verdict": "improvement"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": 0.05
+    },
+    "code": {
+     "before": 59,
+     "after": 59,
+     "gained": 0,
+     "lost": 0
+    },
+    "creator": -0.0
+   },
+   "sets": {
+    "dataset": [
+     2.7541,
+     2.755,
+     0.04
+    ],
+    "dataset_vault": [
+     2.9674,
+     2.9662,
+     -0.04
+    ],
+    "web": [
+     3.0711,
+     3.0671,
+     -0.13
+    ],
+    "web_vault": [
+     2.9788,
+     2.9767,
+     -0.07
+    ]
+   },
+   "released": "NOVA8-53M-v5",
+   "new_recipe": "drive:gentle:rulelab+recall+code~web0.67"
+  },
+  {
+   "attempt": 125,
+   "recipe": "drive:focus-errors:rulelab+recall+code",
+   "champion": "NOVA8-53M-v5",
+   "date": "2026-10-15 19:46",
+   "start": "evo/releases/NOVA8-53M-v5/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus": "dir:data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.38,
+   "weak": "en",
+   "abilities": {
+    "better": [
+     "skills/code/form",
+     "skills/deduction/form"
+    ],
+    "worse": []
+   },
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "text drifted 1.03 % from the last text champion (the tolerance for new abilities is 1.0 % in total, not per step)"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.38,
+     "diff": 0.011,
+     "lo": 0.0101,
+     "hi": 0.012,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.34
+    },
+    "code": {
+     "before": 59,
+     "after": 58,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.755,
+     2.7685,
+     0.49
+    ],
+    "dataset_vault": [
+     2.9662,
+     2.9789,
+     0.43
+    ],
+    "web": [
+     3.0671,
+     3.0757,
+     0.28
+    ],
+    "web_vault": [
+     2.9767,
+     2.9841,
+     0.25
+    ]
+   }
   }
  ],
  "releases": [
@@ -8428,7 +8602,8 @@
   "NOVA8-53M-v1",
   "NOVA8-53M-v2",
   "NOVA8-53M-v3",
-  "NOVA8-53M-v4"
+  "NOVA8-53M-v4",
+  "NOVA8-53M-v5"
  ],
  "grow": null,
  "grown": [
@@ -8438,10 +8613,10 @@
  ],
  "current": {
   "what": "attempt",
-  "recipe": "drive:gentle:rulelab+recall+code",
-  "since": 1792091463.7075613
+  "recipe": "drive:longer:rulelab+recall+code",
+  "since": 1792095008.146506
  },
- "seed": 7266,
+ "seed": 7270,
  "interventions": [
   {
    "time": 1791208662.8603675,
@@ -8473,19 +8648,6 @@
    },
    "parent": "gentle",
    "lesson": "steps"
-  },
-  "gentle~xp-lr6e-5-w0.70-c0.04-s12000": {
-   "steps": 12000,
-   "flags": {
-    "--lr": "5.5e-5",
-    "--bulk-frac": "0.70",
-    "--code-frac": "0.04"
-   },
-   "parent": "gentle",
-   "experience": {
-    "predicted": 0.414,
-    "sd": 0.451
-   }
   },
   "drive:practice:deduction+rulelab+compare": {
    "steps": 6000,
@@ -8988,6 +9150,18 @@
     "outcome": "rejected",
     "gain": -0.21,
     "time": 1792091460.9742997
+   },
+   "drive:gentle:rulelab+recall+code": {
+    "outcome": "accepted",
+    "gain": 0.05,
+    "time": 1792093527.5318997
+   }
+  },
+  "NOVA8-53M-v5": {
+   "drive:focus-errors:rulelab+recall+code": {
+    "outcome": "rejected",
+    "gain": -0.38,
+    "time": 1792095007.8414688
    }
   }
  },
@@ -9045,6 +9219,15 @@
    "code": 59,
    "state_kb": 88.0,
    "class": "NOVA"
+  },
+  {
+   "name": "NOVA8-53M-v5",
+   "time": 1792093571.778726,
+   "dataset": 2.755,
+   "web": 3.0671,
+   "code": 59,
+   "state_kb": 88.0,
+   "class": "NOVA"
   }
  ],
  "phase": "improving an ability",
@@ -9075,7 +9258,8 @@
  },
  "text_anchor": 2.8924,
  "drive_wins": {
-  "longer": 1
+  "longer": 1,
+  "gentle": 1
  },
  "initiative_next": "core-structured"
 }

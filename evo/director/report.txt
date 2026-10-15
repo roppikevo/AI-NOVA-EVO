@@ -1,17 +1,17 @@
-NOVA: hlásenie riaditeľa (2026-10-15 19:11)
+NOVA: hlásenie riaditeľa (2026-10-15 20:10)
 
-Súčasný model (šampión): NOVA8-53M-v4
+Súčasný model (šampión): NOVA8-53M-v5
 Stav riaditeľa: improving an ability; vlastných meraní: 6
-Riaditeľ beží 11.0 dňa; bez zásahu zvonka 8.2 dňa (zásahov spolu: 2)
-Pokusy o zlepšenie: 123, prijaté: 10, odmietnuté za sebou: 3 (pri 16 sa začne generácia od nuly)
-Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5, NOVA8-53M-v1, NOVA8-53M-v2, NOVA8-53M-v3, NOVA8-53M-v4
-Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-53M-v4): strata dataset -3.49 %, strata web -4.25 %, programovanie 53 → 59
-Pokrok za posledných 7 dní (NOVA8-24M-v5 → NOVA8-53M-v4): strata dataset -2.77 %, strata web -4.22 %, programovanie 54 → 59
-Strata na odloženom texte: dataset 2.7541, web 3.0711; programovanie 59/79; pozná tvorcu: áno
-Web po jazykoch: sk 2.7458, cs 3.1096, pl 3.0066, en 3.4226 (najslabší: en)
+Riaditeľ beží 11.1 dňa; bez zásahu zvonka 8.3 dňa (zásahov spolu: 2)
+Pokusy o zlepšenie: 125, prijaté: 11, odmietnuté za sebou: 1 (pri 16 sa začne generácia od nuly)
+Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5, NOVA8-53M-v1, NOVA8-53M-v2, NOVA8-53M-v3, NOVA8-53M-v4, NOVA8-53M-v5
+Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-53M-v5): strata dataset -3.46 %, strata web -4.37 %, programovanie 53 → 59
+Pokrok za posledných 7 dní (NOVA8-53M-v1 → NOVA8-53M-v5): strata dataset -2.18 %, strata web -0.93 %, programovanie 59 → 59, stav 88 → 88 kB
+Strata na odloženom texte: dataset 2.755, web 3.0671; programovanie 59/79; pozná tvorcu: áno
+Web po jazykoch: sk 2.7421, cs 3.1057, pl 3.0037, en 3.417 (najslabší: en)
 Stavba: 7 vrstiev, šírka 704, pohľad na 4 susedných slov, 53.0 M parametrov, jadro generácie 8 (NSNSNSN)
 Vrátené späť po skúšobnej lehote: NOVA8-24M-v3, NOVA8-24M-v4
-Vlastné recepty (obmeny úspešných): continue~web0.70, gentle~steps12000, gentle~xp-lr6e-5-w0.70-c0.04-s12000, drive:practice:deduction+rulelab+compare, drive:longer:deduction+rulelab+compare, drive:longer:rulelab+recall+code, drive:practice:rulelab+recall+code, drive:focus-errors:rulelab+recall+code
+Vlastné recepty (obmeny úspešných): continue~web0.70, gentle~steps12000, drive:practice:deduction+rulelab+compare, drive:longer:deduction+rulelab+compare, drive:longer:rulelab+recall+code, drive:practice:rulelab+recall+code, drive:focus-errors:rulelab+recall+code, drive:gentle:rulelab+recall+code
 
 Témy na učenie (uč sa <téma>):
   2026-10-15 04:03  organická chémia (riaditeľ: curriculum (nothing else to try)): package, látka 67 textov (+5 na skúšku)
@@ -21,71 +21,71 @@ Témy na učenie (uč sa <téma>):
   2026-10-15 14:29  infekčné choroby a imunita (riaditeľ: curriculum (nothing else to try)): čaká
 
 Posledné pokusy:
-  2026-10-14 23:14  code~code0.03  odmietnuté (zisk -0.1 %): gain -0.10 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.06 %)
-  2026-10-14 23:30  gentle~xp-lr6e-5-w0.70-c0.04-s12000 odmietnuté (zisk -0.39 %): gain -0.39 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.47 %; web got worse by 0.32 %; the vault does not co
   2026-10-15 14:38  drive:practice:deduction+rulelab+compare odmietnuté (zisk -0.78 %): gain -0.78 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.74 %; web got worse by 0.83 %; the vault does not co
   2026-10-15 15:01  drive:longer:deduction+rulelab+compare PRIJATÉ, vydané ako NOVA8-53M-v4 (zisk -0.7 %)
   2026-10-15 15:45  drive:longer:rulelab+recall+code zlyhalo (rc 1) 
   2026-10-15 17:42  drive:practice:rulelab+recall+code odmietnuté (zisk -0.25 %): gain -0.25 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.28 %); no ability significantly better
   2026-10-15 18:05  drive:longer:rulelab+recall+code odmietnuté (zisk -0.16 %): gain -0.16 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.34 %; the vault does not confirm it (-0.11 %); no ab
   2026-10-15 18:48  drive:focus-errors:rulelab+recall+code odmietnuté (zisk -0.21 %): gain -0.21 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.21 %); no ability significantly better
+  2026-10-15 19:11  drive:gentle:rulelab+recall+code PRIJATÉ, vydané ako NOVA8-53M-v5 (zisk 0.05 %)
+  2026-10-15 19:46  drive:focus-errors:rulelab+recall+code odmietnuté (zisk -0.38 %): text drifted 1.03 % from the last text champion (the tolerance for new abilities is 1.0 % in total, not per step)
 
-Poučenia z vlastných pokusov (104 pokusov = 64 rôznych experimentov na 7 šampiónoch):
+Poučenia z vlastných pokusov (106 pokusov = 66 rôznych experimentov na 8 šampiónoch):
   opakovanie toho istého pokusu: zisk kolíše o 0.013 %, skúška z kódu o 0.847 úlohy (najviac 4)
   teachers: škodí (istota vysoká; experimenty: 4, šampióni: 4, zisk -1.36 až -0.56 %)
   code: bez zreteľného účinku (istota vysoká; experimenty: 5, šampióni: 4, zisk -0.17 až +0.05 %)
   continue: závisí od podmienok (istota stredná; experimenty: 8, šampióni: 4, zisk -2.41 až +1.85 %)
+  drive:focus-errors:rulelab+recall+code: škodí (istota stredná; experimenty: 2, šampióni: 2, zisk -0.38 až -0.21 %)
   one-more-layer: závisí od podmienok (istota stredná; experimenty: 4, šampióni: 4, zisk -0.24 až +0.24 %)
   fresh-web: závisí od podmienok (istota stredná; experimenty: 6, šampióni: 4, zisk -0.25 až +0.24 %)
-  gentle: závisí od podmienok (istota stredná; experimenty: 13, šampióni: 4, zisk -0.39 až +0.31 %)
   podiel webu: vyššie hodnoty vyšli lepšie (o 0.08 %), istota vysoká; potvrdené riadenými pármi: 5
   rýchlosť učenia: nižšie hodnoty vyšli lepšie (o 0.01 %), istota vysoká; potvrdené riadenými pármi: 2
   počet krokov: vyššie hodnoty vyšli lepšie (o 0.20 %), istota vysoká; potvrdené riadenými pármi: 3
   počet klonov: vyššie hodnoty vyšli lepšie (o 0.23 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
 
-Schopnosti (NOVA8-53M-v4, 20 meraní po 200 úloh):
-  rulelab/deeper               0.48 (náhoda 0.17)
-  rulelab/phrasing             0.31 (náhoda 0.24)
-  rulelab/same                 0.45 (náhoda 0.23)
+Schopnosti (NOVA8-53M-v5, 20 meraní po 200 úloh):
+  rulelab/deeper               0.47 (náhoda 0.17)
+  rulelab/phrasing             0.34 (náhoda 0.24)
+  rulelab/same                 0.44 (náhoda 0.23)
   rulelab/words                0.40 (náhoda 0.23)
-  skills/arith/form            0.32 (náhoda 0.25)
-  skills/arith/new             0.29 (náhoda 0.25)
+  skills/arith/form            0.29 (náhoda 0.25)
+  skills/arith/new             0.30 (náhoda 0.25)
   skills/code/form             0.14 (náhoda 0.25)
-  skills/code/new              0.25 (náhoda 0.25)
-  skills/compare/form          0.94 (náhoda 0.50)
-  skills/compare/new           0.98 (náhoda 0.50)
-  skills/deduction/form        0.34 (náhoda 0.33)
+  skills/code/new              0.19 (náhoda 0.25)
+  skills/compare/form          0.93 (náhoda 0.50)
+  skills/compare/new           0.97 (náhoda 0.50)
+  skills/deduction/form        0.32 (náhoda 0.33)
   skills/deduction/new         0.64 (náhoda 0.33)
   skills/logic-if/form         0.34 (náhoda 0.33)
-  skills/logic-if/new          0.66 (náhoda 0.33)
-  skills/ordering/form         0.34 (náhoda 0.29)
-  skills/ordering/new          0.72 (náhoda 0.29)
-  skills/recall/form           0.24 (náhoda 0.27)
-  skills/recall/new            0.28 (náhoda 0.27)
-  skills/sequence/form         0.27 (náhoda 0.25)
-  skills/sequence/new          0.28 (náhoda 0.25)
-ZHORŠENIA (riešim prednostne): rulelab/phrasing 0.31 (najlepšie 0.43, NOVA8-53M-v3); skills/recall/form 0.24 (najlepšie 0.33, NOVA8-53M-v3); skills/code/form 0.14 (najlepšie 0.20, NOVA8-53M-v3)
-Zvládnuteľné schopnosti pod cieľom 0.90: skills/ordering/new 0.72; skills/logic-if/new 0.66; rulelab/same 0.45; skills/arith/new 0.29; skills/recall/new 0.28
-Hranice (cieľ: potvrdené zlepšenie, nie pevná hranica): skills/compare/form 0.94; skills/deduction/new 0.64; rulelab/deeper 0.48; rulelab/words 0.40; skills/logic-if/form 0.34
+  skills/logic-if/new          0.67 (náhoda 0.33)
+  skills/ordering/form         0.36 (náhoda 0.29)
+  skills/ordering/new          0.78 (náhoda 0.29)
+  skills/recall/form           0.25 (náhoda 0.27)
+  skills/recall/new            0.29 (náhoda 0.27)
+  skills/sequence/form         0.25 (náhoda 0.25)
+  skills/sequence/new          0.30 (náhoda 0.25)
+ZHORŠENIA (riešim prednostne): rulelab/phrasing 0.34 (najlepšie 0.43, NOVA8-53M-v3); skills/recall/form 0.25 (najlepšie 0.33, NOVA8-53M-v3); skills/code/new 0.19 (najlepšie 0.25, NOVA8-53M-v4); skills/code/form 0.14 (najlepšie 0.20, NOVA8-53M-v3)
+Zvládnuteľné schopnosti pod cieľom 0.90: skills/ordering/new 0.78; skills/logic-if/new 0.67; rulelab/same 0.44; skills/arith/new 0.30; skills/sequence/new 0.30
+Hranice (cieľ: potvrdené zlepšenie, nie pevná hranica): skills/compare/form 0.93; skills/deduction/new 0.64; rulelab/deeper 0.47; rulelab/words 0.40; skills/ordering/form 0.36
 Register problémov (otvorené / odložené / vyriešené):
-  [open, hranica] vzťahy – dlhšie reťaze: 0.48 -> 0.48 (±0.07, potvrdenie 0.38); skúšané: practice, longer, focus-errors; pokusov 3
-  [open, hranica] vzťahy – nová formulácia: 0.31 -> 0.31 (±0.06, potvrdenie 0.30); skúšané: practice, longer, focus-errors; pokusov 3
-  [open] vzťahy – nové úlohy: 0.45 -> 0.45 (±0.07, potvrdenie 0.43); skúšané: practice, longer, focus-errors; pokusov 3
-  [open, hranica] vzťahy – nové slová: 0.40 -> 0.40 (±0.07, potvrdenie 0.48); skúšané: practice, longer, focus-errors; pokusov 3
-  [open, hranica] počítanie (neznámy tvar otázky): 0.32 -> 0.32 (±0.06, potvrdenie 0.23); skúšané: -; pokusov 0
-  [open] počítanie (nové úlohy): 0.29 -> 0.29 (±0.06, potvrdenie 0.30); skúšané: -; pokusov 0
-  [open, hranica] čítanie kódu (neznámy tvar otázky): 0.14 -> 0.14 (±0.05, potvrdenie 0.15); skúšané: practice, longer, focus-errors; pokusov 3
-  [open] čítanie kódu (nové úlohy): 0.25 -> 0.25 (±0.06, potvrdenie 0.28); skúšané: practice, longer, focus-errors; pokusov 3
-  [open, hranica] porovnávanie čísel (neznámy tvar otázky): 0.94 -> 0.94 (±0.03, potvrdenie 0.92); skúšané: -; pokusov 0
-  [open, hranica] logické vyvodzovanie (neznámy tvar otázky): 0.34 -> 0.34 (±0.07, potvrdenie 0.37); skúšané: -; pokusov 0
-  [open, hranica] logické vyvodzovanie (nové úlohy): 0.64 -> 0.64 (±0.07, potvrdenie 0.61); skúšané: -; pokusov 0
-  [open, hranica] ak–potom (neznámy tvar otázky): 0.34 -> 0.34 (±0.07, potvrdenie 0.37); skúšané: -; pokusov 0
-  [open] ak–potom (nové úlohy): 0.66 -> 0.66 (±0.07, potvrdenie 0.65); skúšané: -; pokusov 0
-  [open, hranica] poradie a vzťahy (neznámy tvar otázky): 0.34 -> 0.34 (±0.07, potvrdenie 0.41); skúšané: -; pokusov 0
-  [open] poradie a vzťahy (nové úlohy): 0.72 -> 0.72 (±0.06, potvrdenie 0.73); skúšané: -; pokusov 0
-  [open, hranica] vybavenie z kontextu (neznámy tvar otázky): 0.24 -> 0.24 (±0.06, potvrdenie 0.30); skúšané: practice, longer, focus-errors; pokusov 3
-  [open] vybavenie z kontextu (nové úlohy): 0.28 -> 0.28 (±0.06, potvrdenie 0.24); skúšané: practice, longer, focus-errors; pokusov 3
-  [open, hranica] postupnosti (neznámy tvar otázky): 0.27 -> 0.27 (±0.06, potvrdenie 0.24); skúšané: -; pokusov 0
-  [open] postupnosti (nové úlohy): 0.28 -> 0.28 (±0.06, potvrdenie 0.25); skúšané: -; pokusov 0
-Účinnosť spôsobov: practice 1/8 (zisk/h +0.034); longer 1/8 (zisk/h +0.036); focus-errors 0/8 (zisk/h +0.038)
-Kto navrhol a s akým výsledkom (iniciatíva jadra vs naprogramované pravidlá): core-structured: 1/16 podporené, priemerný zisk +0.013, zisk/h +0.036; programmed: 1/8 podporené, priemerný zisk +0.025, zisk/h +0.036
+  [open, hranica] vzťahy – dlhšie reťaze: 0.48 -> 0.47 (±0.07, potvrdenie 0.37); skúšané: focus-errors; pokusov 5
+  [open, hranica] vzťahy – nová formulácia: 0.31 -> 0.34 (±0.07, potvrdenie 0.37); skúšané: focus-errors; pokusov 5
+  [open] vzťahy – nové úlohy: 0.45 -> 0.44 (±0.07, potvrdenie 0.42); skúšané: focus-errors; pokusov 5
+  [open, hranica] vzťahy – nové slová: 0.40 -> 0.40 (±0.07, potvrdenie 0.47); skúšané: focus-errors; pokusov 5
+  [open, hranica] počítanie (neznámy tvar otázky): 0.32 -> 0.29 (±0.06, potvrdenie 0.25); skúšané: -; pokusov 0
+  [open] počítanie (nové úlohy): 0.29 -> 0.30 (±0.06, potvrdenie 0.29); skúšané: -; pokusov 0
+  [open, hranica] čítanie kódu (neznámy tvar otázky): 0.14 -> 0.14 (±0.05, potvrdenie 0.15); skúšané: focus-errors; pokusov 5
+  [open] čítanie kódu (nové úlohy): 0.25 -> 0.19 (±0.05, potvrdenie 0.23); skúšané: focus-errors; pokusov 5
+  [open, hranica] porovnávanie čísel (neznámy tvar otázky): 0.94 -> 0.93 (±0.04, potvrdenie 0.92); skúšané: -; pokusov 0
+  [open, hranica] logické vyvodzovanie (neznámy tvar otázky): 0.34 -> 0.32 (±0.06, potvrdenie 0.34); skúšané: -; pokusov 0
+  [open, hranica] logické vyvodzovanie (nové úlohy): 0.64 -> 0.64 (±0.07, potvrdenie 0.63); skúšané: -; pokusov 0
+  [open, hranica] ak–potom (neznámy tvar otázky): 0.34 -> 0.34 (±0.07, potvrdenie 0.34); skúšané: -; pokusov 0
+  [open] ak–potom (nové úlohy): 0.66 -> 0.67 (±0.07, potvrdenie 0.65); skúšané: -; pokusov 0
+  [open, hranica] poradie a vzťahy (neznámy tvar otázky): 0.34 -> 0.36 (±0.07, potvrdenie 0.40); skúšané: -; pokusov 0
+  [open] poradie a vzťahy (nové úlohy): 0.72 -> 0.78 (±0.06, potvrdenie 0.79); skúšané: -; pokusov 0
+  [open, hranica] vybavenie z kontextu (neznámy tvar otázky): 0.24 -> 0.25 (±0.06, potvrdenie 0.30); skúšané: focus-errors; pokusov 5
+  [open] vybavenie z kontextu (nové úlohy): 0.28 -> 0.29 (±0.06, potvrdenie 0.28); skúšané: focus-errors; pokusov 5
+  [open, hranica] postupnosti (neznámy tvar otázky): 0.27 -> 0.25 (±0.06, potvrdenie 0.23); skúšané: -; pokusov 0
+  [open] postupnosti (nové úlohy): 0.28 -> 0.30 (±0.06, potvrdenie 0.27); skúšané: -; pokusov 0
+Účinnosť spôsobov: practice 1/8 (zisk/h +0.034); longer 1/8 (zisk/h +0.036); focus-errors 2/16 (zisk/h +0.059); gentle 0/8 (zisk/h -0.013)
+Kto navrhol a s akým výsledkom (iniciatíva jadra vs naprogramované pravidlá): core-structured: 3/24 podporené, priemerný zisk +0.019, zisk/h +0.051; programmed: 1/16 podporené, priemerný zisk +0.010, zisk/h +0.019
