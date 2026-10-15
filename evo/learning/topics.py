@@ -42,7 +42,7 @@ LANGS = ("sk", "cs", "pl", "en")
 EXAM_SHARE = 0.15
 MIN_DOCS = 12                 # less material than this: the topic is marked failed, not trained
 GAP_REPEAT_DAYS = 7           # a gap topic is not suggested again within this many days
-OPEN = ("queued", "collected")
+OPEN = ("queued", "collected", "queued-package")   # queued-package: learned as a domain package, next setting
 
 # what a weak language is taught with: broad everyday knowledge, split into subtopics by the teacher
 GAP_TEXT = {

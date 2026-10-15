@@ -310,10 +310,17 @@ def long_train(
                             "tag": meta.get("tag"), "time": time.time()}) + "\n")
     log(f"start: step {start_step}/{steps}, val {val_start:.4f}, device {device}, bf16 {use_bf16}")
 
+    from nova import adapters
+
+    packaged = adapters.has_packages(model)
+
     def save(path: Path, step: int, val_loss: float) -> None:
+        # with a domain package the checkpoint holds base + package merged (an ordinary core) and the package apart
+        sd = adapters.merged_state_dict(model) if packaged else {k: v.detach().cpu() for k, v in model.state_dict().items()}
+        extra = {"package": adapters.package_state(model)} if packaged else {}
         torch.save({**meta, "step": step, "val_loss": val_loss, "best_val": best,
                     "bad_evals": bad_evals, "select_metric": metric, "best_parts": best_parts,
-                    "model_state_dict": {k: v.detach().cpu() for k, v in model.state_dict().items()},
+                    "model_state_dict": sd, **extra,
                     "optimizer": opt.state_dict()}, path)
 
     stop_reason = "steps_done"
@@ -489,6 +496,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--bulk-dir", default="", help="bulk web corpus (evo.corpus.bulk_web), e.g. data/bulk_v1")
     ap.add_argument("--bulk-frac", type=float, default=0.7, help="share of each batch taken from the bulk corpus")
     ap.add_argument("--init", default="", help="start from this checkpoint instead of the active weights")
+    ap.add_argument("--package-rank", type=int, default=0,
+                    help="train a domain package of this rank (8-32) on top of the frozen core instead of the core itself")
+    ap.add_argument("--package-out", default="", help="where the trained package is stored (with --package-rank)")
+    ap.add_argument("--package-name", default="")
     ap.add_argument("--out-checkpoint", default="",
                     help="save the final weights (no optimizer) here; with --no-activate this is how a clone/node is trained")
     ap.add_argument("--boost-frac", type=float, default=0.15, help="share of the bulk part given to --boost-lang")
@@ -568,6 +579,16 @@ def main(argv: list[str] | None = None) -> int:
         print(f"init from {init}")
         if ck.get("kind") == "long_train" and ck.get("optimizer"):
             warm_opt = ck["optimizer"]
+    package_base = None
+    if args.package_rank > 0:                          # a domain package: the base stays frozen, only the package learns
+        from nova import adapters
+
+        package_base = adapters.base_fingerprint(model.state_dict())
+        wrapped = adapters.inject(model, args.package_rank)
+        trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"domain package: rank {args.package_rank} on {len(wrapped)} layers, {trainable / 1e6:.2f} M trainable "
+              f"parameters, base {package_base} frozen")
+        meta["package"] = {"rank": args.package_rank, "base": package_base, "layers": len(wrapped)}
     if args.train_only:
         rx = re.compile(args.train_only)
         for name, prm in model.named_parameters():
@@ -662,6 +683,17 @@ def main(argv: list[str] | None = None) -> int:
         Path(args.out_checkpoint).parent.mkdir(parents=True, exist_ok=True)
         torch.save(ck_out, args.out_checkpoint)
         report["out_checkpoint"] = args.out_checkpoint
+    if args.package_out and package_base and (report["last_checkpoint"] or report["best_checkpoint"]):
+        from nova import adapters
+
+        # the last state: "best" is chosen by the general loss, which a package trades a little for its field
+        ck_best = torch.load(report["last_checkpoint"] or report["best_checkpoint"], map_location="cpu", weights_only=False)
+        if ck_best.get("package"):
+            adapters.save_package(args.package_out, ck_best["package"], package_base,
+                                  {"rank": args.package_rank, "targets": adapters.TARGETS, "step": ck_best.get("step"),
+                                   "val_loss": ck_best.get("val_loss"), "name": args.package_name or Path(args.package_out).stem})
+            report["package_out"] = args.package_out
+            print(f"domain package saved: {args.package_out}")
     if args.no_activate:
         print("experiment run (--no-activate): active weights unchanged")
         for f in (report["best_checkpoint"], report["last_checkpoint"]):

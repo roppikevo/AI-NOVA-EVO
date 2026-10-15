@@ -1,38 +1,67 @@
-NOVA: hlásenie riaditeľa (2026-10-09 10:42)
+NOVA: hlásenie riaditeľa (2026-10-15 15:01)
 
-Súčasný model (šampión): NOVA8-53M-v2
-Stav riaditeľa: skúša zlepšiť šampióna; vlastných meraní: 6
-Riaditeľ beží 4.7 dňa; bez zásahu zvonka 1.9 dňa (zásahov spolu: 2)
-Pokusy o zlepšenie: 84, prijaté: 8, odmietnuté za sebou: 13 (pri 16 sa začne generácia od nuly)
-Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5, NOVA8-53M-v1, NOVA8-53M-v2
-Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-53M-v2): strata dataset -3.98 %, strata web -4.51 %, programovanie 53 → 60
-Strata na odloženom texte: dataset 2.7401, web 3.0626; programovanie 60/79; pozná tvorcu: áno
-Web po jazykoch: sk 2.7368, cs 3.1018, pl 3.0015, en 3.4101 (najslabší: en)
+Súčasný model (šampión): NOVA8-53M-v3
+Stav riaditeľa: improving an ability; vlastných meraní: 6
+Riaditeľ beží 10.9 dňa; bez zásahu zvonka 8.1 dňa (zásahov spolu: 2)
+Pokusy o zlepšenie: 118, prijaté: 9, odmietnuté za sebou: 16 (pri 16 sa začne generácia od nuly)
+Vydania: NOVA-24M-v1, NOVA-24M-v2, NOVA8-24M-v1, NOVA8-24M-v2, NOVA8-24M-v3, NOVA8-24M-v4, NOVA8-24M-v5, NOVA8-53M-v1, NOVA8-53M-v2, NOVA8-53M-v3
+Pokrok od prvého modelu (NOVA8-24M-v2 → NOVA8-53M-v3): strata dataset -4.18 %, strata web -4.89 %, programovanie 53 → 60
+Pokrok za posledných 7 dní (NOVA8-24M-v5 → NOVA8-53M-v3): strata dataset -3.47 %, strata web -4.86 %, programovanie 54 → 60
+Strata na odloženom texte: dataset 2.7344, web 3.0504; programovanie 60/79; pozná tvorcu: áno
+Web po jazykoch: sk 2.7277, cs 3.091, pl 2.9886, en 3.3944 (najslabší: en)
 Stavba: 7 vrstiev, šírka 704, pohľad na 4 susedných slov, 53.0 M parametrov, jadro generácie 8 (NSNSNSN)
 Vrátené späť po skúšobnej lehote: NOVA8-24M-v3, NOVA8-24M-v4
-Vlastné recepty (obmeny úspešných): average-of-5~web0.77, continue~web0.70, continue~lr2.0e-4, fresh-web~steps4000
+Vlastné recepty (obmeny úspešných): continue~web0.70, gentle~steps12000, gentle~xp-lr2e-5-w0.80-c0.02-s4400, gentle~xp-lr2e-5-w0.81-c0.076-s3600, gentle~code0.03, code~code0.03, gentle~xp-lr6e-5-w0.70-c0.04-s12000, drive:practice:deduction+rulelab+compare
+
+Témy na učenie (uč sa <téma>):
+  2026-10-15 04:03  organická chémia (riaditeľ: curriculum (nothing else to try)): package, látka 67 textov (+5 na skúšku)
+  2026-10-15 05:34  bunková biológia (riaditeľ: curriculum (nothing else to try)): package, látka 59 textov (+7 na skúšku)
+  2026-10-15 07:06  genetika (riaditeľ: curriculum (nothing else to try)): package, látka 69 textov (+10 na skúšku)
+  2026-10-15 09:32  ľudské telo a anatómia (riaditeľ: curriculum (nothing else to try)): odmietnuté, látka 47 textov (+5 na skúšku)
+  2026-10-15 14:29  infekčné choroby a imunita (riaditeľ: curriculum (nothing else to try)): čaká
 
 Posledné pokusy:
-  2026-10-09 07:05  gentle         odmietnuté (zisk 0.2 %): gain +0.20 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 07:29  fresh-web      odmietnuté (zisk 0.24 %): gain +0.24 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 07:54  weak-language  odmietnuté (zisk 0.18 %): gain +0.18 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 08:13  teachers       odmietnuté (zisk -0.56 %): gain -0.56 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.86 %; the vault does not confirm it (-0.53 %)
-  2026-10-09 08:28  code           odmietnuté (zisk 0.05 %): gain +0.05 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 08:46  one-more-layer odmietnuté (zisk 0.24 %): gain +0.24 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 09:21  average-of-5   odmietnuté (zisk 0.1 %): gain +0.10 % on the decision sets is below 0.3 % or not certain
-  2026-10-09 10:25  fresh-web~steps4000 odmietnuté (zisk 0.18 %): gain +0.18 % on the decision sets is below 0.3 % or not certain
-Recepty, ktoré oddychujú po dvoch zlyhaniach: wider-view, narrower-view
+  2026-10-13 17:20  gentle~web0.90 odmietnuté (zisk -0.02 %): gain -0.02 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.02 %)
+  2026-10-13 17:40  gentle~web0.98 odmietnuté (zisk 0.03 %): gain +0.03 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.00 %)
+  2026-10-14 22:27  gentle~xp-lr2e-5-w0.80-c0.02-s4400 odmietnuté (zisk -0.07 %): gain -0.07 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.04 %)
+  2026-10-14 22:46  gentle~xp-lr2e-5-w0.81-c0.076-s3600 odmietnuté (zisk -0.1 %): gain -0.10 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.07 %)
+  2026-10-14 22:59  gentle~code0.03 odmietnuté (zisk -0.09 %): gain -0.09 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.05 %)
+  2026-10-14 23:14  code~code0.03  odmietnuté (zisk -0.1 %): gain -0.10 % on the decision sets is below 0.3 % or not certain; the vault does not confirm it (-0.06 %)
+  2026-10-14 23:30  gentle~xp-lr6e-5-w0.70-c0.04-s12000 odmietnuté (zisk -0.39 %): gain -0.39 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.47 %; web got worse by 0.32 %; the vault does not co
+  2026-10-15 14:38  drive:practice:deduction+rulelab+compare odmietnuté (zisk -0.78 %): gain -0.78 % on the decision sets is below 0.3 % or not certain; dataset got worse by 0.74 %; web got worse by 0.83 %; the vault does not co
 
-Poučenia z vlastných pokusov (68 pokusov = 32 rôznych experimentov na 5 šampiónoch):
-  opakovanie toho istého pokusu: zisk kolíše o 0.009 %, skúška z kódu o 0.877 úlohy (najviac 4)
-  teachers: škodí (istota vysoká; experimenty: 3, šampióni: 3, zisk -1.36 až -0.56 %)
-  code: bez zreteľného účinku (istota vysoká; experimenty: 3, šampióni: 3, zisk -0.17 až +0.05 %)
-  average-of-5: pomáha (istota vysoká; experimenty: 5, šampióni: 3, zisk +0.10 až +0.98 %)
-  continue: závisí od podmienok (istota stredná; experimenty: 5, šampióni: 3, zisk -2.13 až +1.85 %)
-  one-more-layer: závisí od podmienok (istota stredná; experimenty: 3, šampióni: 3, zisk -0.24 až +0.24 %)
-  fresh-web: závisí od podmienok (istota stredná; experimenty: 4, šampióni: 3, zisk -0.25 až +0.24 %)
-  podiel webu: vyššie hodnoty vyšli lepšie (o 0.16 %), istota vysoká; potvrdené riadenými pármi: 2
-  rýchlosť učenia: nižšie hodnoty vyšli lepšie (o 0.22 %), istota stredná; potvrdené riadenými pármi: 1
-  podiel kódu: vyššie hodnoty vyšli lepšie (o 0.16 %), istota stredná; nie je to oddelené od vplyvu receptu, treba overiť
-  počet krokov: vyššie hodnoty vyšli lepšie (o 0.36 %), istota stredná; potvrdené riadenými pármi: 1
-  počet klonov: vyššie hodnoty vyšli lepšie (o 0.24 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
+Poučenia z vlastných pokusov (100 pokusov = 60 rôznych experimentov na 6 šampiónoch):
+  opakovanie toho istého pokusu: zisk kolíše o 0.013 %, skúška z kódu o 0.847 úlohy (najviac 4)
+  teachers: škodí (istota vysoká; experimenty: 4, šampióni: 4, zisk -1.36 až -0.56 %)
+  code: bez zreteľného účinku (istota vysoká; experimenty: 5, šampióni: 4, zisk -0.17 až +0.05 %)
+  continue: závisí od podmienok (istota stredná; experimenty: 8, šampióni: 4, zisk -2.41 až +1.85 %)
+  one-more-layer: závisí od podmienok (istota stredná; experimenty: 4, šampióni: 4, zisk -0.24 až +0.24 %)
+  fresh-web: závisí od podmienok (istota stredná; experimenty: 6, šampióni: 4, zisk -0.25 až +0.24 %)
+  gentle: závisí od podmienok (istota stredná; experimenty: 13, šampióni: 4, zisk -0.39 až +0.31 %)
+  podiel webu: vyššie hodnoty vyšli lepšie (o 0.08 %), istota vysoká; potvrdené riadenými pármi: 5
+  rýchlosť učenia: nižšie hodnoty vyšli lepšie (o 0.01 %), istota vysoká; potvrdené riadenými pármi: 2
+  počet krokov: vyššie hodnoty vyšli lepšie (o 0.20 %), istota vysoká; potvrdené riadenými pármi: 3
+  počet klonov: vyššie hodnoty vyšli lepšie (o 0.23 %), istota nízka; nie je to oddelené od vplyvu receptu, treba overiť
+
+Schopnosti (NOVA8-53M-v3, 20 meraní po 200 úloh):
+  rulelab/deeper               0.12 (náhoda 0.17)
+  rulelab/phrasing             0.43 (náhoda 0.24)
+  rulelab/same                 0.26 (náhoda 0.23)
+  rulelab/words                0.23 (náhoda 0.23)
+  skills/arith/form            0.32 (náhoda 0.25)
+  skills/arith/new             0.29 (náhoda 0.25)
+  skills/code/form             0.20 (náhoda 0.25)
+  skills/code/new              0.24 (náhoda 0.25)
+  skills/compare/form          0.52 (náhoda 0.50)
+  skills/compare/new           0.53 (náhoda 0.50)
+  skills/deduction/form        0.23 (náhoda 0.33)
+  skills/deduction/new         0.64 (náhoda 0.33)
+  skills/logic-if/form         0.31 (náhoda 0.33)
+  skills/logic-if/new          0.33 (náhoda 0.33)
+  skills/ordering/form         0.27 (náhoda 0.29)
+  skills/ordering/new          0.28 (náhoda 0.29)
+  skills/recall/form           0.33 (náhoda 0.27)
+  skills/recall/new            0.29 (náhoda 0.27)
+  skills/sequence/form         0.23 (náhoda 0.25)
+  skills/sequence/new          0.26 (náhoda 0.25)
+Najslabšie: skills/deduction/new 0.64; rulelab/phrasing 0.43; skills/compare/new 0.53; skills/compare/form 0.52; skills/recall/form 0.33

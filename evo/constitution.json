@@ -1,5 +1,5 @@
 {
- "version": 2,
+ "version": 4,
  "title": "Rules the director may never change by itself. Only the Creator changes them and seals them again.",
  "min_gain_pct": 0.3,
  "max_set_decline_pct": 0.3,
@@ -22,6 +22,29 @@
    "date": "2026-10-12",
    "by": "roppik",
    "what": "max_parameters 60000000 -> 100000000 (the Creator's decision, so that a 88M core can become champion)"
+  },
+  {
+   "date": "2026-10-14",
+   "by": "roppik",
+   "what": "rules for domain packages added (the Creator's decision 2026-10-14): field exam +1.0 % at least, general text -2.0 % at most with the package on, base unchanged"
+  },
+  {
+   "date": "2026-10-15",
+   "by": "roppik",
+   "what": "abilities (the Creator's decision 2026-10-15: NOVA must not be content when it gets worse): the judge also compares the fixed abilities suite item by item (McNemar, Holm); no ability may get significantly worse on either path; a champion may be accepted for at least one significantly better ability if text is at most 1.0 % worse (vault 1.0 %), and the drift from the last text champion is bounded by the same 1.0 % in total"
   }
- ]
+ ],
+ "packages": {
+  "min_topic_gain_pct": 1.0,
+  "max_general_decline_pct": 2.0,
+  "base_unchanged": true,
+  "note": "a domain package learns one field on top of the frozen champion; it is accepted when the field's own exam improves and general text with the package switched on does not lose more than the limit; the base core never changes"
+ },
+ "abilities": {
+  "text_tolerance_pct": 1.0,
+  "vault_tolerance_pct": 1.0,
+  "min_better": 1,
+  "max_worse": 0,
+  "note": "abilities = evo/engine/abilities.py suite (skills new+form, RuleLab parts); text_tolerance applies to every decision set and to the total drift from the last champion accepted on text"
+ }
 }

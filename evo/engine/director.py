@@ -61,10 +61,12 @@ FRESH_RETRY_H = 72.0   # a rejected recipe that depends on new texts may be trie
 COOLDOWN_H = 24.0      # a recipe that failed twice in a row rests this long
 DISCOUNT = 0.93
 GPU_BUSY_MB = 1500     # more than this in use by somebody else -> wait
+GPU_RESERVED = DIR / "GPU_RESERVED"   # "<pid> <why>": a long run of the Creator's holds the card while that process lives
 SIDE_RAM_GB = 24       # free RAM a teacher on the CPU needs next to a training run
 TEACHER = "Qwen3.6-35B-A3B"
 MAX_OWN_RECIPES = 8    # recipes the director derived itself (variations of what worked)
 LESSON_TESTS = 4       # controlled tests of its own lessons per champion (one setting of a known recipe moved)
+EXPERIENCE_TESTS = 3   # attempts per champion proposed by its model of its own experience (evo.engine.experience)
 
 TRAIN_COMMON = ["--no-activate", "--batch-size", "64", "--warmup", "100", "--eval-every", "2000", "--patience", "99",
                 "--extra-dirs", "data/teacher_v1,data/web_v1,data/self_v2", "--bulk-dir", "data/bulk_v1"]
@@ -289,6 +291,30 @@ def lesson_recipe(state: dict) -> str | None:
     return made["name"]
 
 
+def experience_recipe(state: dict) -> str | None:
+    """With no untried recipe and no lesson left to test: the combination of settings its own experience (a model of
+    every judged attempt so far) expects to beat the champion with the best chance. A few per champion."""
+    champion = state["champion"]["name"]
+    done = state.setdefault("experience_tests", {})
+    if done.get(champion, 0) >= EXPERIENCE_TESTS:
+        return None
+    try:
+        from evo.engine import experience, lessons
+
+        made = experience.propose(lessons.load_rows(LOG), all_recipes(state), champion, set(tried_on(state)),
+                                  seed=state.get("seed", 0) * 7 + state.get("attempts", 0))
+    except Exception as exc:                    # the experience must never stop the loop
+        log_event({"event": "experience_error", "error": f"{type(exc).__name__}: {exc}"[:300]})
+        return None
+    if not made:
+        return None
+    state.setdefault("own_recipes", {})[made["name"]] = made["recipe"]
+    done[champion] = done.get(champion, 0) + 1
+    log_event({"event": "experience", "champion": champion,
+               **{k: made[k] for k in ("name", "settings", "predicted", "sd", "expected_improvement", "base", "experiments", "reason")}})
+    return made["name"]
+
+
 def available(state: dict, now: float | None = None, recipes: dict | None = None) -> list[str]:
     now = time.time() if now is None else now
     recipes = recipes or all_recipes(state)
@@ -472,10 +498,38 @@ class World:
         except Exception:
             return None
 
-    def judge(self, champion: str, challenger: str) -> dict:
+    def judge(self, champion: str, challenger: str, abilities: dict | None = None) -> dict:
         from evo.engine import judge
 
-        return judge.judge(champion, challenger, self.dataset, self.web_dir)
+        return judge.judge(champion, challenger, self.dataset, self.web_dir, abilities=abilities)
+
+    def core_rank(self, checkpoint: str, problem: dict, diag: dict, allowed: list[str]) -> list[tuple[str, float]]:
+        """The core itself ranks the possible causes of its weakness (structured questions; CPU, a few seconds)."""
+        import torch
+
+        from evo.engine import initiative
+        from nova.generate import load_checkpoint_model
+        from nova.tokenizer import NovaTokenizer
+
+        torch.set_num_threads(4)
+        model, _ = load_checkpoint_model(checkpoint)
+        tok = NovaTokenizer.load(self.dataset / "tokenizer.json")
+        try:
+            return initiative.core_choice(model.float().eval(), tok, problem, diag, allowed, device="cpu")
+        finally:
+            del model
+
+    def abilities(self, checkpoint: str, name: str, role: str = "challenger", sample: str = "select") -> dict | None:
+        """The abilities suite (evo.engine.abilities) on a core, in its own process; None if it could not run.
+        sample "confirm": the reserved items no decision ever uses (they only confirm a result)."""
+        out = DIR / f"abilities-{role}-{sample}.json"
+        out.unlink(missing_ok=True)
+        rc, tail = self.run([PY, "-m", "evo.engine.abilities", "measure", checkpoint, "--name", name, "--role", role,
+                             "--sample", sample, "--tokenizer", str(self.dataset / "tokenizer.json"), "--out", str(out)], timeout_h=1.0)
+        if rc != 0 or not out.exists():
+            log_event({"event": "abilities_error", "checkpoint": checkpoint, "tail": str(tail)[-300:]})
+            return None
+        return json.loads(out.read_text(encoding="utf-8"))
 
     def identity(self, checkpoint: str) -> dict | None:
         """The identity test of a new core (None if it could not be run: the judge still decides)."""
@@ -610,8 +664,209 @@ def side_command(state: dict, world: World) -> list[str] | None:
     return [PY, "-m", "evo.corpus.bulk_web", "--mchars", "sk=40,cs=25,pl=25,en=40", "--max-gb", "24"]
 
 
+# ------------------------------------------------------------------ abilities: never content with getting worse
+
+def _ability_rules() -> dict:
+    try:
+        from evo.engine import constitution
+
+        return constitution.load().get("abilities") or {}
+    except Exception:
+        return {}
+
+
+def ensure_champion_board(state: dict, world: World) -> dict | None:
+    """The champion's abilities, measured once per champion (kept in evo/director/abilities.jsonl)."""
+    from evo.engine import abilities
+
+    champ = state["champion"]
+    board = abilities.board_of(champ["name"])
+    if board is None and hasattr(world, "abilities"):
+        board = world.abilities(champ["checkpoint"], champ["name"], role="champion")
+        if board is not None:
+            log_event({"event": "abilities", "champion": champ["name"], "scores": {k: v["accuracy"] for k, v in board.items()}})
+    return board
+
+
+def ability_compare(state: dict, world: World, challenger: str) -> dict | None:
+    """The challenger against the champion, item by item on the whole abilities suite."""
+    from evo.engine import abilities
+
+    before = ensure_champion_board(state, world)
+    if before is None:
+        return None
+    after = world.abilities(challenger, f"challenger-{state['attempts'] + 1}", role="challenger")
+    if after is None:
+        return None
+    state["_last_board"] = after
+    return abilities.compare(before, after)
+
+
+def ability_tolerance_loss(v: dict) -> float:
+    """The text tolerance of a new ability in loss units (for the probation of such a champion)."""
+    tol = float(_ability_rules().get("text_tolerance_pct", 0.0))
+    web = (v.get("sets") or {}).get("web", {}).get("before")
+    return round(tol / 100 * float(web), 4) if web else 0.0
+
+
+def text_anchor_check(state: dict, v: dict) -> dict:
+    """A new ability may cost a little text - but not a little every time: the text of the champion accepted on text
+    last is the anchor, and a champion accepted for an ability may not drift further from it than the tolerance."""
+    sets = v.get("sets") or {}
+    if not sets.get("dataset") or not sets.get("web"):
+        return v
+    mean_after = (sets["dataset"]["after"] + sets["web"]["after"]) / 2
+    if v.get("accept") and v.get("path") == "abilities":
+        anchor = state.setdefault("text_anchor", (sets["dataset"]["before"] + sets["web"]["before"]) / 2)
+        tol = float(_ability_rules().get("text_tolerance_pct", 0.0))
+        if mean_after > anchor * (1 + tol / 100):
+            v = {**v, "accept": False, "reasons": [f"text drifted {100 * (mean_after / anchor - 1):.2f} % from the last text champion "
+                                                    f"(the tolerance for new abilities is {tol} % in total, not per step)"]}
+    elif v.get("accept"):
+        state["text_anchor"] = mean_after
+    return v
+
+
+def keep_board(state: dict, name: str, checkpoint: str) -> None:
+    """The released challenger's abilities become the new champion's (measured already, no second run)."""
+    board = state.get("_last_board")
+    if board is None:
+        return
+    from evo.engine import abilities
+
+    abilities.record(name, checkpoint, board, role="champion")
+
+
+def ensure_confirm_board(state: dict, world: World) -> dict | None:
+    """The champion on the confirmation sample (reserved items no decision ever looks at), once per champion."""
+    from evo.engine import abilities
+
+    champ = state["champion"]
+    board = abilities.board_of(champ["name"], role="confirm")
+    if board is None and hasattr(world, "abilities"):
+        try:
+            board = world.abilities(champ["checkpoint"], champ["name"], role="confirm", sample="confirm")
+        except TypeError:                                  # a world without confirmation samples
+            board = None
+    return board
+
+
+def drive_step(state: dict, world: World) -> str | None:
+    """The autonomous cycle on NOVA's weak and lost abilities (the Creator's conditions 15.10):
+    diagnosis (abilities + the core's own error patterns and certainty) -> the problem register (what is open, what
+    was tried, what comes back) -> a hypothesis with a prediction -> material made for it -> training -> the judge
+    -> the result written to the problem (supported or refuted, side effects, cost) -> the next step.
+    A way already tried on a problem is not repeated under the same conditions."""
+    from evo.engine import abilities, problems
+    from evo.learning import drive
+
+    board = ensure_champion_board(state, world)
+    if board is None:
+        return None
+    confirm = ensure_confirm_board(state, world)
+    champ = state["champion"]["name"]
+    gaps = abilities.deficits(abilities.load(), champ)
+    reg = problems.load()
+    strategies = list(drive.STRATEGIES)
+    for note in problems.sync(reg, champ, board, confirm, gaps, strategies):
+        log_event({"event": "problem", "champion": champ, "note": note})
+    order = drive.order(state)
+    date = time.strftime("%Y-%m-%d %H:%M")
+    while True:
+        pick = problems.choose(reg, gaps, strategies, order)
+        if pick is None:
+            problems.save(reg)
+            if gaps and not state.setdefault("drive_exhausted", {}).get(champ):
+                state["drive_exhausted"][champ] = time.time()
+                log_event({"event": "drive_exhausted", "champion": champ, "deficits": [g["metric"] for g in gaps[:8]],
+                           "note": "every way of practising failed for the open problems - they are parked until a reason to come back"})
+            return None
+        metric, strategy = pick
+        diag = abilities.diagnose(board[metric])
+        p = reg["problems"][metric]
+        allowed = [x for x in order if x not in p["tried"] and (x != "focus-errors" or diag.get("patterns"))]
+        if not allowed:
+            for x in order:                                  # e.g. only focus-errors left and no pattern to aim at
+                if x not in p["tried"]:
+                    p["tried"].append(x)
+                    p["history"].append({"date": date, "champion": champ, "strategy": x, "skipped": "no error pattern"})
+            problems.park_if_exhausted(p, strategies, champ, date)
+            continue
+        break
+    # who proposes: the core and the programmed rules take turns, so that the register shows whose proposals work
+    from evo.engine import initiative
+
+    author, help_used, alternatives = state.get("initiative_next", "core-structured"), None, list(allowed)
+    ranking: list = []
+    if author == "core-structured" and hasattr(world, "core_rank"):
+        try:
+            ranking = world.core_rank(state["champion"]["checkpoint"], p, diag, allowed)
+        except Exception as exc:
+            log_event({"event": "initiative_error", "error": f"{type(exc).__name__}: {exc}"[:300]})
+    if author == "core-structured" and ranking:
+        strategy, alternatives = ranking[0][0], [r[0] for r in ranking]
+        help_used = "štruktúrované otázky s dôkazmi z vlastných chýb (pomoc zaznamenaná, výber je jadra)"
+    else:
+        author, strategy = "programmed", allowed[0]
+    state["initiative_next"] = "programmed" if author == "core-structured" else "core-structured"
+    fam, name = metric.split("/")[0], metric.split("/")[1]
+    primary = f"skills/{name}" if fam == "skills" else "rulelab"
+    targets = [primary]
+    for g in gaps:                                       # other open problems this way has not been tried on
+        p = reg["problems"].get(g["metric"])
+        f2, n2 = g["metric"].split("/")[0], g["metric"].split("/")[1]
+        t = f"skills/{n2}" if f2 == "skills" else "rulelab"
+        if p and p["status"] == "open" and strategy not in p["tried"] and t not in targets:
+            targets.append(t)
+        if len(targets) >= drive.MAX_TARGETS:
+            break
+    hyp = problems.hypothesis(strategy, metric, diag)
+    prop = initiative.proposal(p, metric, strategy, hyp, author, alternatives, help_used)
+    if ranking:
+        prop["core_ranking"] = ranking
+    pattern = hyp.get("pattern")
+    material = drive.build_material(targets, strategy, seed=state["attempts"] + 1, pattern=pattern,
+                                    pattern_target=primary if pattern else None)
+    rname, rec = drive.recipe(targets, strategy, material)
+    state.setdefault("own_recipes", {})[rname] = rec
+    log_event({"event": "drive", "champion": champ, "problem": metric, "targets": targets, "strategy": strategy,
+               "proposal": prop, "hypothesis": hyp.get("cause"), "prediction": hyp.get("prediction"), "diagnosis": diag,
+               "deficits": [{k: g[k] for k in ("metric", "kind", "now") if k in g} for g in gaps[:6]]})
+    state["phase"] = "improving an ability"
+    state.pop("_last_board", None)
+    attempt(state, world, rname)
+    last = (state.get("history") or [{}])[-1]
+    chall = state.pop("_last_board", None)
+    crashed = last.get("recipe") == rname and last.get("rc") not in (0, None)
+    if crashed:
+        crashes = state.setdefault("drive_crashes", {}).setdefault(champ, {})
+        key = f"{metric}:{strategy}"
+        crashes[key] = crashes.get(key, 0) + 1
+        crashed = crashes[key] < 2                       # two crashes of the same way: it counts as tried
+    in_targets = [m for m in board if (f"skills/{m.split('/')[1]}" if m.startswith("skills") else "rulelab") in targets]
+    for m in in_targets:
+        if m not in reg["problems"] or reg["problems"][m]["status"] != "open":
+            continue
+        entry = {"date": date, "champion": champ, "strategy": strategy, "targets": targets, "material": str(material),
+                 "hypothesis": hyp if m == metric else {"cause": f"(spolu s {metric}) " + hyp.get("cause", "")},
+                 "proposal": prop if m == metric else {**prop, "cannot_do": f"(spolu s {metric}) " + prop["cannot_do"]},
+                 "steps": rec["steps"], "hours": last.get("hours"), "before": board[m]["accuracy"],
+                 "after": (chall or {}).get(m, {}).get("accuracy"), "accepted": bool(last.get("released")),
+                 "released": last.get("released"), "crashed": crashed,
+                 "side_effects": (last.get("abilities") or {}).get("worse", []),
+                 "verdict_reasons": ((last.get("verdict") or {}).get("reasons") or [])[:3]}
+        problems.record(reg, m, entry, strategies, champ)
+        log_event({"event": "experiment", "problem": m, "strategy": strategy, "supported": entry.get("supported"),
+                   "before": entry["before"], "after": entry["after"], "accepted": entry["accepted"], "crashed": crashed})
+    problems.save(reg)
+    return f"drive:{rname}"
+
+
 def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: dict | None = None) -> dict:
     """Train one challenger with recipe `name`, judge it, release it if accepted."""
+    release = getattr(world, "release_gpu", None)
+    if release:
+        release()                                   # what judging and probation cached on the card goes back first
     recipe = (recipes or all_recipes(state))[name]
     champ = state["champion"]
     state["seed"] += 1
@@ -678,7 +933,13 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
     gain = 0.0
     if challenger:
         try:
-            v = world.judge(champ["checkpoint"], challenger)
+            cmp = None
+            if not smoke and hasattr(world, "abilities"):
+                cmp = ability_compare(state, world, challenger)
+                if cmp is not None:
+                    rec["abilities"] = {"better": cmp["better"], "worse": cmp["worse"]}
+            v = world.judge(champ["checkpoint"], challenger, abilities=cmp) if cmp is not None else world.judge(champ["checkpoint"], challenger)
+            v = text_anchor_check(state, v)
             rec["verdict"] = {k: v[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator") if k in v}
             rec["sets"] = {k: [s["before"], s["after"], s["percent"]] for k, s in v["sets"].items()}
             gain = v["decision"]["gain_percent"] if v["accept"] else 0.0
@@ -693,8 +954,13 @@ def attempt(state: dict, world: World, name: str, smoke: bool = False, recipes: 
                     state["accepted"] += 1
                     rec["released"] = new
                     # on probation: checked once more on text no decision has used; worst case it steps back
-                    state["probation"] = {"name": new, "recipe": name, "gain": gain,
+                    state["probation"] = {"name": new, "recipe": name, "gain": gain, "path": v.get("path", "text"),
+                                          "tolerance_loss": ability_tolerance_loss(v),
                                           "previous": {k: champ[k] for k in ("name", "checkpoint", "scores") if k in champ}}
+                    keep_board(state, new, released)
+                    if recipe.get("drive"):
+                        st = recipe["drive"]["strategy"]
+                        state.setdefault("drive_wins", {})[st] = int(state.get("drive_wins", {}).get(st, 0)) + 1
                 else:
                     rec["note"] = "accepted, but the release failed"
                     failed = True
@@ -779,7 +1045,9 @@ def probation_step(state: dict, world: World) -> str:
         log_event({"event": "probation_error", "name": pr["name"], "error": f"{type(exc).__name__}: {exc}"[:300]})
         save_state(state)
         return "probation:error"
-    back = r.get("n", 0) > 0 and r["lo"] > 0                      # the whole interval says: worse than before
+    # the whole interval says: worse than before (a champion accepted for a new ability may be worse on text by
+    # at most the constitution's tolerance - it steps back only beyond it)
+    back = r.get("n", 0) > 0 and r["lo"] > float(pr.get("tolerance_loss", 0.0) if pr.get("path") == "abilities" else 0.0)
     rec = {"event": "probation", "name": pr["name"], "previous": pr["previous"]["name"], "result": r, "reverted": back}
     if back:
         state["champion"] = dict(pr["previous"])
@@ -792,6 +1060,9 @@ def probation_step(state: dict, world: World) -> str:
                                                  "rc": 0, "reverted": pr["name"], "probation": r}])[-200:]
     save_state(state)
     log_event(rec)
+    release = getattr(world, "release_gpu", None)
+    if release:
+        release()
     return "probation:reverted" if back else "probation:kept"
 
 
@@ -1057,6 +1328,26 @@ def write_report(state: dict) -> None:
         txt += "\n" + "\n".join(lessons.lines_sk(lessons.write(DIR / "lessons.json", lessons.load_rows(LOG)))) + "\n"
     except Exception:
         pass
+    try:
+        from evo.engine import abilities
+
+        txt += "\n" + "\n".join(abilities.text(abilities.load(), state["champion"]["name"])) + "\n"
+        from evo.engine import problems
+
+        reg = problems.load()
+        txt += "\n".join(problems.text(reg)) + "\n"
+        from evo.engine import initiative
+
+        au = initiative.authors_summary(reg)
+        if au:
+            txt += "Kto navrhol a s akým výsledkom (iniciatíva jadra vs naprogramované pravidlá): " + "; ".join(
+                f"{a}: {v['supported']}/{v['tries']} podporené, priemerný zisk {v['mean_gain']:+.3f}, zisk/h {v['gain_per_hour']:+.3f}"
+                for a, v in au.items()) + "\n"
+        ex = state.get("drive_exhausted", {}).get(state["champion"]["name"])
+        if ex:
+            txt += "Všetky spôsoby cvičenia pre najslabšie schopnosti zlyhali - potrebujú novú hypotézu (hlásim tvorcovi).\n"
+    except Exception:
+        pass
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(txt, encoding="utf-8")
     if OUTBOX.exists():
@@ -1087,7 +1378,21 @@ def others_mb(total_mb: int, apps: str, own_pid: int) -> int:
     return max(0, total_mb - own)
 
 
+def gpu_reserved(path: Path | None = None) -> str | None:
+    """The card is promised to a long run (a script that trains in stages: between two stages the card is empty for
+    a moment, and a package started in that moment ran out of memory). The promise ends when its process ends."""
+    path = path or GPU_RESERVED
+    try:
+        pid, _, why = path.read_text(encoding="utf-8").strip().partition(" ")
+        os.kill(int(pid), 0)
+    except (OSError, ValueError):
+        return None
+    return why or pid
+
+
 def gpu_is_free(world: World) -> bool:
+    if gpu_reserved():
+        return False
     release = getattr(world, "release_gpu", None)
     if release:
         release()
@@ -1241,16 +1546,46 @@ def topic_step(state: dict, world: World, topic: dict) -> str:
         log_event({"event": "topic", "step": "collect", "topic": slug, "text": topic["text"], "source": topic["source"],
                    "status": now.get("status"), "train_docs": now.get("train_docs"), "exam_docs": now.get("exam_docs"), "rc": rc})
         return f"collect:{slug}"
+    # a topic is learned as a domain package on top of the frozen champion (evo.learning.packages): the base cannot
+    # forget anything, the constitution's package rules decide (topics trained into the core itself were all turned
+    # down: the field improved 2-15 %, the rest lost 0.13 %). A failed try moves the topic to its next setting.
     state["phase"] = "learning a topic"
+    state["current"] = {"what": "package", "recipe": f"package:{slug}", "since": time.time()}
+    save_state(state)
     world.unload_teachers()
-    name = f"topic:{slug}"
-    topics.update(slug, path, status="training", started=time.time())
-    rec = attempt(state, world, name, recipes={name: topic_recipe(topic)})
-    v = rec.get("verdict") or {}
-    topics.update(slug, path, status="accepted" if rec.get("released") else "failed" if rec.get("rc") or rec.get("error") else "rejected",
-                  attempt=rec.get("attempt"), released=rec.get("released"), finished=time.time(),
-                  verdict=(v.get("decision") or {}).get("gain_percent"), reasons=v.get("reasons", []))
-    return f"topic:{slug}"
+    rc, tail = world.run([PY, "-m", "evo.learning.packages", "learn", slug, "--champion", state["champion"]["checkpoint"]],
+                         timeout_h=4.5)
+    res: dict[str, Any] = {}
+    for line in reversed(str(tail).splitlines()):
+        if line.startswith("{"):
+            try:
+                res = json.loads(line)
+            except ValueError:
+                res = {}
+            break
+    if rc != 0 or not res:
+        topics.update(slug, path, status="failed", note=f"package training ended with {rc}: {str(tail)[-200:]}")
+    state["current"] = None
+    save_state(state)
+    log_event({"event": "package", "topic": slug, "text": topic["text"], "rc": rc, "accept": res.get("accept"),
+               "variant": res.get("variant"), "topic_gain_pct": res.get("topic_gain_pct"),
+               "general_decline_pct": res.get("general_decline_pct"), "reasons": res.get("reasons"),
+               "next_variant": res.get("next_variant")})
+    return f"package:{slug}"
+
+
+def curriculum_topic(state: dict) -> str | None:
+    """Never idle: with nothing else to try, the next field of the curriculum is queued (learned as a package)."""
+    from evo.learning import packages, topics
+
+    nxt = packages.next_curriculum(DIR / "topics.json")
+    if nxt is None:
+        return None
+    t = topics.add(nxt[0], nxt[1], "explain", "curriculum", DIR / "topics.json", why="curriculum (nothing else to try)")
+    if packages.is_basic(t["text"]):
+        topics.update(t["slug"], DIR / "topics.json", depth="basic")
+    log_event({"event": "topic", "step": "queued", "topic": t["slug"], "text": t["text"], "source": "curriculum"})
+    return f"topic_queued:{t['slug']}"
 
 
 def gap_topic(state: dict, world: World) -> str | None:
@@ -1291,6 +1626,17 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
         from evo.learning import topics
 
         t = topics.next_topic(topics.load(DIR / "topics.json"))
+        if t is not None and t.get("source") == "creator":
+            return topic_step(state, world, t)              # what the Creator asked for goes first
+        # abilities that got worse or are weak come before its own topics and more recipes on text:
+        # it does not rest while it is worse
+        try:
+            what = drive_step(state, world)
+        except Exception as exc:                    # the drive must never stop the loop
+            log_event({"event": "drive_error", "error": f"{type(exc).__name__}: {exc}"[:300]})
+            what = None
+        if what:
+            return what
         if t is not None:
             return topic_step(state, world, t)
     stalled = state["rejected_in_a_row"]
@@ -1318,9 +1664,9 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
         # nothing bigger to train, no untried candidate. A recipe never judged on this champion - or a controlled
         # test of its own lessons - is a new hypothesis and goes at once; otherwise wait instead of repeating
         new = [n for n in available(state, recipes=recipes) if n not in tried_on(state)]
-        name = new[0] if new else lesson_recipe(state) if recipes is None else None
+        name = new[0] if new else (lesson_recipe(state) or experience_recipe(state)) if recipes is None else None
         if name is None and recipes is None:
-            queued = gap_topic(state, world)
+            queued = gap_topic(state, world) or curriculum_topic(state)
             if queued:
                 return queued
         if name is None:
@@ -1334,7 +1680,7 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
     if name is None:
         name = choose(state, recipes=recipes)
     if name is None and recipes is None:
-        name = lesson_recipe(state)
+        name = lesson_recipe(state) or experience_recipe(state)
     if name is None:
         # every recipe was tried on this champion (or rests): measure something of its own instead of repeating
         state["phase"] = "exploring"
@@ -1343,7 +1689,7 @@ def cycle(state: dict, world: World, recipes: dict | None = None) -> str:
             save_state(state)
             return f"explore:{rec['run']}"
         if recipes is None:
-            queued = gap_topic(state, world)
+            queued = gap_topic(state, world) or curriculum_topic(state)
             if queued:
                 return queued
         state["phase"] = "waiting for a new hypothesis"

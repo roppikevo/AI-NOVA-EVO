@@ -32,7 +32,7 @@ CACHE = Path("evo/director/scores")
 # Thresholds are not here on purpose: they are the constitution (evo/constitution.json, sealed).
 DEFAULT_RULES = {"min_gain_pct": 0.3, "max_set_decline_pct": 0.3, "max_code_loss": 2, "creator_min": -0.7,
                  "decision_sets": ["dataset", "web"], "vault_sets": ["dataset_vault", "web_vault"], "vault_must_confirm": True,
-                 "max_parameters": 60000000}
+                 "max_parameters": 100000000}
 
 
 def held_out_sets(dataset: Path, web_dir: Path, per_lang: int = 400) -> dict[str, np.ndarray]:
@@ -96,8 +96,17 @@ def score(checkpoint: str | Path, sets: dict[str, np.ndarray], tokenizer: str, d
     return {"seq": seq, "code": code, "creator": creator, "params": params}
 
 
-def decide(champion: dict, challenger: dict, rules: dict | None = None) -> dict[str, Any]:
-    """The verdict. `champion` and `challenger` are results of score() on the same sets."""
+def decide(champion: dict, challenger: dict, rules: dict | None = None, abilities: dict | None = None) -> dict[str, Any]:
+    """The verdict. `champion` and `challenger` are results of score() on the same sets.
+
+    `abilities`: the item-by-item comparison of the two cores on the abilities suite (evo.engine.abilities.compare).
+    With the constitution's "abilities" rules there are two ways to be accepted:
+      text       the text rules as always - and no ability significantly worse (NOVA may not get worse at what it
+                 can do just because it predicts text a little better)
+      abilities  at least `min_better` abilities significantly better, none significantly worse, and text not worse
+                 than `text_tolerance_pct` (vault: `vault_tolerance_pct`) - a real new ability is worth a small,
+                 bounded cost in text
+    Code exam, size and the Creator check hold for both."""
     from evo.collective.stats import paired_bootstrap, percent, verdict
 
     rules = rules or DEFAULT_RULES
@@ -105,6 +114,7 @@ def decide(champion: dict, challenger: dict, rules: dict | None = None) -> dict[
     MAX_CODE_LOSS, CREATOR_MIN = int(rules["max_code_loss"]), float(rules["creator_min"])
     DECISION, VAULT = tuple(rules["decision_sets"]), tuple(rules["vault_sets"])
     out: dict[str, Any] = {"sets": {}, "reasons": []}
+    text_reasons: list[str] = []
     for name in champion["seq"]:
         a, b = champion["seq"][name], challenger["seq"][name]
         ci = paired_bootstrap(a, b, n=1000, seed=len(name))
@@ -117,10 +127,10 @@ def decide(champion: dict, challenger: dict, rules: dict | None = None) -> dict[
     gain = -percent(float(a.mean()), float(b.mean()))
     out["decision"] = {"sets": used, "gain_percent": round(gain, 2), **ci, "verdict": verdict(ci)}
     if not (gain >= MIN_GAIN_PCT and ci["hi"] < 0):
-        out["reasons"].append(f"gain {gain:+.2f} % on the decision sets is below {MIN_GAIN_PCT} % or not certain")
+        text_reasons.append(f"gain {gain:+.2f} % on the decision sets is below {MIN_GAIN_PCT} % or not certain")
     for n in used:
         if out["sets"][n]["percent"] > MAX_SET_DECLINE_PCT:
-            out["reasons"].append(f"{n} got worse by {out['sets'][n]['percent']:.2f} %")
+            text_reasons.append(f"{n} got worse by {out['sets'][n]['percent']:.2f} %")
     vault = [n for n in VAULT if n in champion["seq"]]
     if vault:
         va = np.concatenate([champion["seq"][n] for n in vault])
@@ -128,7 +138,7 @@ def decide(champion: dict, challenger: dict, rules: dict | None = None) -> dict[
         vgain = -percent(float(va.mean()), float(vb.mean()))
         out["vault"] = {"sets": vault, "gain_percent": round(vgain, 2)}
         if vgain <= 0 and rules.get("vault_must_confirm", True):
-            out["reasons"].append(f"the vault does not confirm it ({vgain:+.2f} %)")
+            text_reasons.append(f"the vault does not confirm it ({vgain:+.2f} %)")
     if champion.get("code") is not None and challenger.get("code") is not None:
         ca, cb = set(champion["code"]), set(challenger["code"])
         out["code"] = {"before": len(ca), "after": len(cb), "gained": len(cb - ca), "lost": len(ca - cb)}
@@ -140,24 +150,55 @@ def decide(champion: dict, challenger: dict, rules: dict | None = None) -> dict[
     out["creator"] = challenger["creator"]
     if challenger["creator"] < CREATOR_MIN:
         out["reasons"].append(f"does not know the Creator ({challenger['creator']})")
+    ab_rules = rules.get("abilities")
+    path_text = not text_reasons
+    if abilities is not None:
+        better, worse = list(abilities.get("better", [])), list(abilities.get("worse", []))
+        out["abilities"] = {"better": better, "worse": worse}
+        max_worse = int((ab_rules or {}).get("max_worse", 0))
+        if len(worse) > max_worse:
+            text_reasons.append(f"abilities significantly worse: {', '.join(worse)}")
+            path_text = False
+        if ab_rules and not path_text:
+            tol, vtol = float(ab_rules["text_tolerance_pct"]), float(ab_rules["vault_tolerance_pct"])
+            ok = (len(better) >= int(ab_rules.get("min_better", 1)) and len(worse) <= max_worse and gain >= -tol
+                  and all(out["sets"][n]["percent"] <= tol for n in used)
+                  and ("vault" not in out or out["vault"]["gain_percent"] >= -vtol))
+            if ok:
+                out["path"] = "abilities"
+                out["accept"] = not out["reasons"]
+                out["text_reasons_waived"] = text_reasons
+                return out
+            if len(better) < int(ab_rules.get("min_better", 1)):
+                text_reasons.append("no ability significantly better")
+            if gain < -tol or any(out["sets"][n]["percent"] > tol for n in used):
+                text_reasons.append(f"text worse than the tolerance for a new ability ({tol} %)")
+            if "vault" in out and out["vault"]["gain_percent"] < -vtol:
+                text_reasons.append(f"the vault worse than the tolerance for a new ability ({vtol} %)")
+    if path_text:
+        out["path"] = "text"
+    out["reasons"] = text_reasons + out["reasons"]
     out["accept"] = not out["reasons"]
     return out
 
 
-def judge(champion: str, challenger: str, dataset: Path, web_dir: Path = Path("data/bulk_val_v1"), device: str = "auto") -> dict:
+def judge(champion: str, challenger: str, dataset: Path, web_dir: Path = Path("data/bulk_val_v1"), device: str = "auto",
+          abilities: dict | None = None) -> dict:
     """Judge by the sealed constitution. Raises ConstitutionError if the rules or the held-out data were changed."""
     from evo.engine import constitution
 
     sets = held_out_sets(dataset, web_dir)
     rules = constitution.verify(sets)
     tokenizer = str(dataset / "tokenizer.json")
-    return decide(score(champion, sets, tokenizer, device), score(challenger, sets, tokenizer, device, cache=None), rules)
+    return decide(score(champion, sets, tokenizer, device), score(challenger, sets, tokenizer, device, cache=None), rules, abilities)
 
 
 def text(v: dict) -> str:
     d = v["decision"]
-    L = [f"{'ACCEPTED' if v['accept'] else 'rejected'}: gain {d['gain_percent']:+.2f} % on {'+'.join(d['sets'])} "
-         f"[{d['lo']:+.4f}, {d['hi']:+.4f}]"]
+    L = [f"{'ACCEPTED' if v['accept'] else 'rejected'}{' (' + v['path'] + ')' if v.get('accept') and v.get('path') else ''}: "
+         f"gain {d['gain_percent']:+.2f} % on {'+'.join(d['sets'])} [{d['lo']:+.4f}, {d['hi']:+.4f}]"]
+    if "abilities" in v:
+        L.append(f"  abilities better: {', '.join(v['abilities']['better']) or '-'} | worse: {', '.join(v['abilities']['worse']) or '-'}")
     for n, s in v["sets"].items():
         L.append(f"  {n}: {s['before']} -> {s['after']} ({s['percent']:+.2f} %) {s['verdict']}")
     if "code" in v:

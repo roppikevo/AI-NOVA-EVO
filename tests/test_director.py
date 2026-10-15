@@ -400,10 +400,10 @@ def test_a_winning_recipe_gets_a_variation_and_losing_variations_are_dropped(hom
 def test_judge_refuses_a_model_that_outgrew_the_limit():
     good = {"dataset": -0.03, "web": -0.03, "dataset_vault": -0.03, "web_vault": -0.03}
     champ, chall = pair(good)
-    chall["params"] = 61_000_000
+    chall["params"] = 101_000_000                                       # constitution v2: the limit is 100 M
     v = j.decide(champ, chall)
     assert not v["accept"] and any("too big" in r for r in v["reasons"])
-    chall["params"] = 59_000_000
+    chall["params"] = 99_000_000
     assert j.decide(champ, chall)["accept"]
 
 
@@ -536,6 +536,9 @@ def test_when_learning_stalls_the_director_measures_noise_then_candidates_and_a_
 
 
 def test_with_nothing_left_to_try_the_director_waits_for_a_new_hypothesis(home, monkeypatch):
+    from evo.learning import packages
+
+    monkeypatch.setattr(packages, "CURRICULUM", [])                    # the curriculum is tested on its own below
     from evo.engine import compare_arch as ca
     from evo.engine import ledger
 
@@ -745,6 +748,9 @@ def test_a_recipe_that_made_two_champions_in_a_row_worse_is_left_out_for_the_nex
 
 
 def test_with_no_recipe_left_the_director_tests_its_own_lessons_one_setting_at_a_time(home, monkeypatch):
+    from evo.learning import packages
+
+    monkeypatch.setattr(packages, "CURRICULUM", [])                    # the curriculum is tested on its own below
     from evo.engine import compare_arch as ca
     from evo.engine import ledger
 
@@ -812,10 +818,10 @@ def test_a_generation_asked_for_starts_at_once_and_learns_from_the_champion_as_a
     assert later[-2:] == ["--batch-size", "48"]                                                                       # its later attempts keep the batch that fits
 
 
-def test_a_topic_from_the_creator_goes_first_collect_then_train_then_judge(home, monkeypatch):
+def test_a_topic_from_the_creator_goes_first_collect_then_learn_it_as_a_package(home, monkeypatch):
     from evo.learning import topics
 
-    st, w = fresh(), FakeWorld(verdicts=[False])
+    st, w = fresh(), FakeWorld()
     store = home / "evo/director/topics.json"
     t = topics.add("fotosyntéza rastlín", ["sk"], path=store)
     real_run = w.run
@@ -823,24 +829,52 @@ def test_a_topic_from_the_creator_goes_first_collect_then_train_then_judge(home,
     def run(cmd, timeout_h, nice=0):
         if "collect" in cmd:                                           # the material arrives
             topics.update(t["slug"], store, status="collected", train_docs=40, exam_docs=6)
-        if "exam" in cmd:
-            topics.update(t["slug"], store, exam={"before": 3.2, "after": 3.0, "percent": -6.25})
-        return real_run(cmd, timeout_h, nice)
+        rc, tail = real_run(cmd, timeout_h, nice)
+        if "evo.learning.packages" in cmd:                             # the package was learned and accepted
+            topics.update(t["slug"], store, status="package", exam={"before": 3.2, "after": 3.0})
+            tail = 'training...\n{"slug": "%s", "accept": true, "variant": 0, "topic_gain_pct": 6.25, ' \
+                   '"general_decline_pct": 0.4, "reasons": [], "next_variant": 1}' % t["slug"]
+        return rc, tail
     w.run = run
     assert d.cycle(st, w) == f"collect:{t['slug']}" and topics.get(t["slug"], store)["status"] == "collected"
-    assert d.cycle(st, w) == f"topic:{t['slug']}"
-    train = next(c for c in w.cmds if "--out-checkpoint" in c)
-    assert train[train.index("--focus") + 1] == f"dir:data/topic_v1/{t['slug']}"
-    assert f"data/topic_v1/{t['slug']}" in train[len(train) - 1 - train[::-1].index("--extra-dirs") + 1]
-    assert any("exam" in c and t["slug"] in c for c in w.cmds) and len(w.judged) == 1
-    done = topics.get(t["slug"], store)
-    assert done["status"] == "rejected" and done["verdict"] == 0.05 and done["exam"]["percent"] == -6.25
-    rep = d.report(st)
-    assert "Témy na učenie" in rep and "fotosyntéza" in rep and "-6.2 %" in rep
+    assert d.cycle(st, w) == f"package:{t['slug']}"
+    cmd = w.cmds[-1]
+    assert cmd[cmd.index("learn") + 1] == t["slug"] and cmd[cmd.index("--champion") + 1] == st["champion"]["checkpoint"]
+    assert not w.judged                                                # the base core is not judged: it does not change
+    ev = [json.loads(l) for l in d.LOG.read_text().splitlines() if '"package"' in l][-1]
+    assert ev["accept"] and ev["topic_gain_pct"] == 6.25 and topics.get(t["slug"], store)["status"] == "package"
     assert d.cycle(st, w).startswith("attempt:")                       # nothing open any more: the usual work again
 
 
+def test_with_nothing_else_to_try_the_director_takes_the_next_field_of_the_curriculum(home, monkeypatch):
+    from evo.engine import compare_arch as ca
+    from evo.learning import packages, topics
+
+    monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", [])
+    monkeypatch.setattr(packages, "CURRICULUM", [("geometria", ["sk", "en"]), ("genetika", ["sk", "en"])])
+    (home / "evo/director").mkdir(parents=True, exist_ok=True)
+    (home / "evo/director/ladder.json").write_text("[]")
+    st, w = fresh(), FakeWorld()
+    st["rejected_in_a_row"] = d.PLATEAU - 1
+    monkeypatch.setattr(d, "choose", lambda *a, **k: None)
+    monkeypatch.setattr(d, "lesson_recipe", lambda *a, **k: None)
+    monkeypatch.setattr(d, "experience_recipe", lambda *a, **k: None)
+    monkeypatch.setattr(d, "explore_step", lambda *a, **k: None)
+    monkeypatch.setattr(d, "gap_topic", lambda *a, **k: None)          # its own weak spots were used today
+    seen = []
+    for _ in range(6):
+        r = d.cycle(st, w)
+        seen.append(r)
+    queued = [r for r in seen if r.startswith("topic_queued:")]
+    assert queued[:2] == ["topic_queued:geometria", "topic_queued:genetika"]       # never idle while a field is left
+    assert {t["source"] for t in topics.load(home / "evo/director/topics.json")} == {"curriculum"}
+    assert seen[-1] in ("waiting_for_hypothesis", "all_recipes_resting")           # the curriculum used up: then it waits
+
+
 def test_resting_recipes_below_the_plateau_also_lead_to_a_topic_of_its_own(home, monkeypatch):
+    from evo.learning import packages
+
+    monkeypatch.setattr(packages, "CURRICULUM", [])                    # the curriculum is tested on its own below
     from evo.engine import compare_arch as ca
 
     monkeypatch.setitem(ca.EXPLORE_ORDER, "24M", [])
@@ -850,6 +884,7 @@ def test_resting_recipes_below_the_plateau_also_lead_to_a_topic_of_its_own(home,
     st["rejected_in_a_row"] = d.PLATEAU - 1
     monkeypatch.setattr(d, "choose", lambda *a, **k: None)          # every recipe rests
     monkeypatch.setattr(d, "lesson_recipe", lambda *a, **k: None)
+    monkeypatch.setattr(d, "experience_recipe", lambda *a, **k: None)
     monkeypatch.setattr(d, "explore_step", lambda *a, **k: None)
     assert d.cycle(st, w).startswith("topic_queued:")
     assert d.cycle(st, w).startswith("collect:")                    # the fake world collects nothing
@@ -861,3 +896,74 @@ def test_the_share_of_a_topic_follows_the_amount_of_its_material():
     large = d.topic_recipe({"slug": "b", "chars": 20_000_000})["flags"]["--focus-frac"]
     assert 0.03 <= float(small) < 0.1 and float(large) == 0.4                 # ~2 passes over little material, at most 40 %
     assert d.topic_recipe({"slug": "c", "kind": "code", "chars": 0})["flags"]["--code-frac"] == "0.1"
+
+
+def test_a_reserved_card_is_left_alone_while_its_owner_lives(home):
+    import os
+    st, w = fresh(), FakeWorld(verdicts=[False])
+    w.gpu = 300
+    d.GPU_RESERVED.parent.mkdir(parents=True, exist_ok=True)
+    d.GPU_RESERVED.write_text(f"{os.getpid()} 88M-v2")
+    assert d.gpu_reserved() == "88M-v2" and d.cycle(st, w) == "gpu_busy" and not w.cmds
+    d.GPU_RESERVED.write_text("999999999 old run")                 # its process is gone: the promise is over
+    assert d.gpu_reserved() is None and d.cycle(st, w) != "gpu_busy"
+
+
+# ------------------------------------------------------------------ abilities: it does not rest while worse
+
+class AbilityWorld(FakeWorld):
+    def __init__(self, champ_board, chall_boards, verdicts=()):
+        super().__init__(verdicts)
+        self.champ_board, self.chall_boards, self.abilities_seen = champ_board, list(chall_boards), []
+
+    def abilities(self, checkpoint, name, role="challenger", sample="select"):
+        if role == "confirm":
+            return None
+        if role == "champion":
+            from evo.engine import abilities as A
+            A.record(name, checkpoint, self.champ_board, role="champion")
+            return self.champ_board
+        return self.chall_boards.pop(0) if self.chall_boards else self.champ_board
+
+    def judge(self, champion, challenger, abilities=None):
+        self.abilities_seen.append(abilities)
+        return super().judge(champion, challenger)
+
+
+def _board(acc, seed=0, n=200):
+    rng = np.random.default_rng(seed)
+    out = {}
+    for k, a in acc.items():
+        c = (rng.random(n) < a).astype(int)
+        out[k] = {"accuracy": round(float(c.mean()), 3), "chance": 0.25, "correct": "".join(map(str, c))}
+    return out
+
+
+def test_a_weak_ability_gets_verified_practice_judged_with_the_abilities_and_failed_ways_are_not_repeated(home, monkeypatch):
+    monkeypatch.setattr(d, "gpu_is_free", lambda w: True)
+    monkeypatch.setattr("evo.learning.drive.build_material", lambda targets, strategy, root=None, seed=0, **kw: Path(f"data/drive_v1/{strategy}"))
+    champ = _board({"skills/ordering/new": 0.3, "skills/compare/new": 0.97, "rulelab/deeper": 0.97})
+    w = AbilityWorld(champ, [champ, champ, champ, champ], verdicts=[False, False, False, False])
+    st = fresh()
+    whats = [d.cycle(st, w) for _ in range(4)]
+    drives = [x for x in whats if x.startswith("drive:")]
+    assert len(drives) == 3 and len(set(drives)) == 3                       # practice, longer, gentle - each once
+    assert all("ordering" in x for x in drives) and not whats[3].startswith("drive:")
+    assert w.abilities_seen[0] is not None and "better" in w.abilities_seen[0]
+    train = next(c for c in w.cmds if "--out-checkpoint" in c)
+    assert train[train.index("--focus") + 1].startswith("dir:data/drive_v1/")
+    events = [json.loads(l) for l in (home / "evo/director/log.jsonl").read_text().splitlines()]
+    assert any(e["event"] == "drive_exhausted" for e in events)
+    assert [e["strategy"] for e in events if e["event"] == "drive"] == ["practice", "longer", "gentle"]
+
+
+def test_a_crashed_practice_run_may_be_tried_again_once(home, monkeypatch):
+    monkeypatch.setattr(d, "gpu_is_free", lambda w: True)
+    monkeypatch.setattr("evo.learning.drive.build_material", lambda targets, strategy, root=None, seed=0, **kw: Path(f"data/drive_v1/{strategy}"))
+    champ = _board({"skills/ordering/new": 0.3, "skills/compare/new": 0.97, "rulelab/deeper": 0.97})
+    w = AbilityWorld(champ, [champ] * 6, verdicts=[False] * 6)
+    w.rc = 1                                                               # every training crashes
+    st = fresh()
+    whats = [d.cycle(st, w) for _ in range(6)]
+    strategies = [x.split(":")[2] for x in whats if x.startswith("drive:")]
+    assert strategies[:2] == ["practice", "practice"] and strategies.count("practice") == 2

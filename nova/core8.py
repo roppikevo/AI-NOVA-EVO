@@ -68,8 +68,8 @@ class RMSNorm(nn.Module):
 
 def two_linear(first: nn.Linear, second: nn.Linear, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
     """Two linear layers on the same input as one product (same numbers, one operation on the card)."""
-    if x.shape[0] * x.shape[1] <= 64:              # a few tokens: joining the weights would cost more than it saves
-        return first(x), second(x)
+    if x.shape[0] * x.shape[1] <= 64 or type(first) is not nn.Linear or type(second) is not nn.Linear:
+        return first(x), second(x)                 # a few tokens, or a layer with a domain package: one by one
     y = F.linear(x, torch.cat([first.weight, second.weight]), torch.cat([first.bias, second.bias]))
     return y[..., :first.out_features], y[..., first.out_features:]
 
