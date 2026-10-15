@@ -81,3 +81,16 @@ def test_the_written_order_is_read_back_and_checked():
     for i in range(50):
         p = R.problem(i, "deeper")
         assert R.parse_order(R.order_line(p)) == ([p["order"]] if p["gap"] is None else [p["order"][:p["gap"] + 1], p["order"][p["gap"] + 1:]])
+
+
+def test_chain_lengths_are_a_single_change_and_seven_is_never_trained(tmp_path):
+    lens = {len(R.problem(i, "same", lengths=(2, 3, 4, 5, 6))["order"]) for i in range(300)}
+    assert lens == {2, 3, 4, 5, 6}
+    assert {len(R.problem(i, "same")["order"]) for i in range(100)} == {3, 4}                 # the default is unchanged
+    assert all(len(R.problem(R.EXAM_SEED + i, "seven")["order"]) == 7 for i in range(20))
+    for i in range(200):
+        p = R.problem(R.EXAM_SEED + i, "seven")
+        assert solve(p) == p["answer"]
+    rows = [json.loads(l) for l in R.material("rule", 300, tmp_path, lengths=(2, 3, 4, 5, 6), name="rule-len26").read_text().splitlines()]
+    assert len(rows) == 300 and (tmp_path / "rule-len26" / "material.jsonl").exists()
+    assert max(r["text"].split("\n")[0].count(">") for r in rows) == 5                    # 6 people in an order line

@@ -1,8 +1,8 @@
 {
  "champion": {
-  "name": "NOVA8-53M-v3",
-  "checkpoint": "evo/releases/NOVA8-53M-v3/nova_model_fp32.pt",
-  "since": 1791545425.1646123,
+  "name": "NOVA8-53M-v4",
+  "checkpoint": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+  "since": 1792079106.7980988,
   "override": {
    "arch": "nova8",
    "d_model": 704,
@@ -23,20 +23,21 @@
   "class": "NOVA",
   "polish": [
    "continue~web0.70",
-   "gentle~steps12000"
+   "gentle~steps12000",
+   "drive:longer:deduction+rulelab+compare"
   ],
   "scores": {
-   "dataset": 2.7344,
-   "dataset_vault": 2.948,
-   "web": 3.0504,
-   "web_vault": 2.9605,
+   "dataset": 2.7541,
+   "dataset_vault": 2.9674,
+   "web": 3.0711,
+   "web_vault": 2.9788,
    "web_by_language": {
-    "sk": 2.7277,
-    "cs": 3.091,
-    "pl": 2.9886,
-    "en": 3.3944
+    "sk": 2.7458,
+    "cs": 3.1096,
+    "pl": 3.0066,
+    "en": 3.4226
    },
-   "code": 60,
+   "code": 59,
    "creator": -0.0,
    "params": 52959271,
    "genome": {
@@ -49,185 +50,215 @@
   }
  },
  "started": 1791138088.0559714,
- "attempts": 118,
- "accepted": 9,
- "rejected_in_a_row": 16,
+ "attempts": 123,
+ "accepted": 10,
+ "rejected_in_a_row": 3,
  "recipes": {
   "gentle": {
-   "runs": 0.24521081030131017,
+   "runs": 0.17059030875325015,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web": {
-   "runs": 0.7137710836351409,
+   "runs": 0.4965622412276253,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "weak-language": {
-   "runs": 0.8191735153396189,
+   "runs": 0.5698894870603681,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "teachers": {
-   "runs": 0.8808317369243214,
+   "runs": 0.6127843946885678,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code": {
-   "runs": 0.3454300293110548,
+   "runs": 0.240311653798659,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "one-more-layer": {
-   "runs": 0.37143013904414496,
+   "runs": 0.2583996277404935,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "wider-view": {
-   "runs": 0.0002951822494894781,
+   "runs": 0.0002053548577936408,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 1791584551.0460124
   },
   "narrower-view": {
-   "runs": 0.000317400268268256,
+   "runs": 0.00022081167504692557,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 1791584551.2527158
   },
   "collective": {
-   "runs": 0.208920048286511,
+   "runs": 0.14534324770652016,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5": {
-   "runs": 0.40033388723105195,
-   "gain": 0.000386709213574185,
+   "runs": 0.2785076291833007,
+   "gain": 0.00026902910218471024,
    "fails": 0,
    "rest_until": 0.0
   },
   "average-of-5~web0.77": {
-   "runs": 0.2248226855395018,
+   "runs": 0.15640652748462272,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue": {
-   "runs": 0.20047241457599502,
-   "gain": 0.007689511913398019,
+   "runs": 0.1394663271860076,
+   "gain": 0.005349504003744792,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue~web0.70": {
-   "runs": 0.1674857764669487,
-   "gain": 0.04912687691253983,
+   "runs": 0.11651790671123591,
+   "gain": 0.03417699688808667,
    "fails": 0,
    "rest_until": 0.0
   },
   "continue~lr2.0e-4": {
-   "runs": 0.15491453899483934,
+   "runs": 0.10777224301418106,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "fresh-web~steps4000": {
-   "runs": 0.7654439396982631,
+   "runs": 0.5325104461992524,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~steps12000": {
-   "runs": 0.21588057699886753,
-   "gain": 0.02628947689606463,
+   "runs": 0.15018560657588526,
+   "gain": 0.018289283311573232,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.85": {
-   "runs": 0.09805152524089909,
+   "runs": 0.06821330570221891,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:general-knowledge-in-english-nature-scie": {
-   "runs": 0.31313180170800137,
+   "runs": 0.21784215250621045,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:fotosynteza": {
-   "runs": 0.33670086205161437,
+   "runs": 0.23423887366259186,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:matematika": {
-   "runs": 0.3620439376899079,
+   "runs": 0.25186975662644284,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:chemia": {
-   "runs": 0.3892945566558149,
+   "runs": 0.27082769529725037,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "topic:fyzika": {
-   "runs": 0.4185962974793708,
+   "runs": 0.29121257558844127,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.90": {
-   "runs": 0.6017008706075702,
+   "runs": 0.4185962974793708,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~web0.98": {
-   "runs": 0.6469901834490002,
+   "runs": 0.4501035456767428,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr2e-5-w0.80-c0.02-s4400": {
-   "runs": 0.6956883693000001,
+   "runs": 0.48398230717929336,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr2e-5-w0.81-c0.076-s3600": {
-   "runs": 0.7480520100000001,
+   "runs": 0.5204110829884875,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~code0.03": {
-   "runs": 0.8043570000000001,
+   "runs": 0.5595818096650402,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "code~code0.03": {
-   "runs": 0.8649000000000001,
+   "runs": 0.6017008706075702,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "gentle~xp-lr6e-5-w0.70-c0.04-s12000": {
-   "runs": 0.93,
+   "runs": 0.6469901834490002,
    "gain": 0.0,
    "fails": 0,
    "rest_until": 0.0
   },
   "drive:practice:deduction+rulelab+compare": {
+   "runs": 0.6956883693000001,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:longer:deduction+rulelab+compare": {
+   "runs": 0.7480520100000001,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:longer:deduction+rulelab+compare~web0.50": {
+   "runs": 0.0,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:longer:rulelab+recall+code": {
+   "runs": 0.93,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:practice:rulelab+recall+code": {
+   "runs": 0.8649000000000001,
+   "gain": 0.0,
+   "fails": 0,
+   "rest_until": 0.0
+  },
+  "drive:focus-errors:rulelab+recall+code": {
    "runs": 1.0,
    "gain": 0.0,
    "fails": 0,
@@ -8035,6 +8066,355 @@
      0.76
     ]
    }
+  },
+  {
+   "attempt": 119,
+   "recipe": "drive:longer:deduction+rulelab+compare",
+   "champion": "NOVA8-53M-v3",
+   "date": "2026-10-15 15:01",
+   "start": "evo/releases/NOVA8-53M-v3/nova_model_fp32.pt",
+   "steps": 12000,
+   "flags": {
+    "--lr": "7e-5",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/longer-skills_deduction-rulelab-skills_compare",
+    "--focus": "dir:data/drive_v1/longer-skills_deduction-rulelab-skills_compare",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.7,
+   "weak": "en",
+   "abilities": {
+    "better": [
+     "rulelab/deeper",
+     "rulelab/same",
+     "rulelab/words",
+     "skills/compare/form",
+     "skills/compare/new",
+     "skills/deduction/form",
+     "skills/logic-if/new",
+     "skills/ordering/new"
+    ],
+    "worse": []
+   },
+   "verdict": {
+    "accept": true,
+    "reasons": [],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.7,
+     "diff": 0.0202,
+     "lo": 0.019,
+     "hi": 0.0214,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.64
+    },
+    "code": {
+     "before": 60,
+     "after": 59,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.0
+   },
+   "sets": {
+    "dataset": [
+     2.7344,
+     2.7541,
+     0.72
+    ],
+    "dataset_vault": [
+     2.948,
+     2.9674,
+     0.66
+    ],
+    "web": [
+     3.0504,
+     3.0711,
+     0.68
+    ],
+    "web_vault": [
+     2.9605,
+     2.9788,
+     0.62
+    ]
+   },
+   "released": "NOVA8-53M-v4",
+   "new_recipe": "drive:longer:deduction+rulelab+compare~web0.50"
+  },
+  {
+   "attempt": 120,
+   "recipe": "drive:longer:rulelab+recall+code",
+   "champion": "NOVA8-53M-v4",
+   "date": "2026-10-15 15:45",
+   "start": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+   "steps": 12000,
+   "flags": {
+    "--lr": "7e-5",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 1,
+   "hours": 0.02,
+   "weak": "en",
+   "tail": "ion for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)\ninit from evo/releases/NOVA8-53M-v4/nova_model_fp32.pt\nextra teacher/web sequences: 48165\nfocus dir:data/drive_v1/longer-rulelab-skills_recall-skills_code: 45401 rows (share 0.5)\nbulk corpus: 12691132 sequences\ncode-school practice sequences: 171 (share 0.03)\ndata: train (169621, 128), val (7741, 128) (11s)\nstart: step 0/12000, val 2.8802, device cuda, bf16 True\n"
+  },
+  {
+   "attempt": 121,
+   "recipe": "drive:practice:rulelab+recall+code",
+   "champion": "NOVA8-53M-v4",
+   "date": "2026-10-15 17:42",
+   "start": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/practice-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/practice-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.37,
+   "weak": "en",
+   "abilities": {
+    "better": [],
+    "worse": []
+   },
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.25 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.28 %)",
+     "no ability significantly better"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.25,
+     "diff": 0.0072,
+     "lo": 0.0063,
+     "hi": 0.0082,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.28
+    },
+    "code": {
+     "before": 59,
+     "after": 59,
+     "gained": 1,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.7541,
+     2.7619,
+     0.28
+    ],
+    "dataset_vault": [
+     2.9674,
+     2.9771,
+     0.33
+    ],
+    "web": [
+     3.0711,
+     3.0777,
+     0.21
+    ],
+    "web_vault": [
+     2.9788,
+     2.9857,
+     0.23
+    ]
+   }
+  },
+  {
+   "attempt": 122,
+   "recipe": "drive:longer:rulelab+recall+code",
+   "champion": "NOVA8-53M-v4",
+   "date": "2026-10-15 18:05",
+   "start": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+   "steps": 12000,
+   "flags": {
+    "--lr": "7e-5",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.7,
+   "weak": "en",
+   "abilities": {
+    "better": [],
+    "worse": []
+   },
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.16 % on the decision sets is below 0.3 % or not certain",
+     "dataset got worse by 0.34 %",
+     "the vault does not confirm it (-0.11 %)",
+     "no ability significantly better"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.16,
+     "diff": 0.0046,
+     "lo": 0.0036,
+     "hi": 0.0055,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.11
+    },
+    "code": {
+     "before": 59,
+     "after": 59,
+     "gained": 1,
+     "lost": 1
+    },
+    "creator": -0.0
+   },
+   "sets": {
+    "dataset": [
+     2.7541,
+     2.7635,
+     0.34
+    ],
+    "dataset_vault": [
+     2.9674,
+     2.9731,
+     0.19
+    ],
+    "web": [
+     3.0711,
+     3.0709,
+     -0.01
+    ],
+    "web_vault": [
+     2.9788,
+     2.9796,
+     0.03
+    ]
+   }
+  },
+  {
+   "attempt": 123,
+   "recipe": "drive:focus-errors:rulelab+recall+code",
+   "champion": "NOVA8-53M-v4",
+   "date": "2026-10-15 18:48",
+   "start": "evo/releases/NOVA8-53M-v4/nova_model_fp32.pt",
+   "steps": 6000,
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus": "dir:data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus-frac": "0.5"
+   },
+   "clones": 1,
+   "rc": 0,
+   "hours": 0.36,
+   "weak": "en",
+   "abilities": {
+    "better": [],
+    "worse": []
+   },
+   "verdict": {
+    "accept": false,
+    "reasons": [
+     "gain -0.21 % on the decision sets is below 0.3 % or not certain",
+     "the vault does not confirm it (-0.21 %)",
+     "no ability significantly better"
+    ],
+    "decision": {
+     "sets": [
+      "dataset",
+      "web"
+     ],
+     "gain_percent": -0.21,
+     "diff": 0.006,
+     "lo": 0.0051,
+     "hi": 0.007,
+     "n": 3200,
+     "verdict": "decline"
+    },
+    "vault": {
+     "sets": [
+      "dataset_vault",
+      "web_vault"
+     ],
+     "gain_percent": -0.21
+    },
+    "code": {
+     "before": 59,
+     "after": 58,
+     "gained": 0,
+     "lost": 1
+    },
+    "creator": -0.001
+   },
+   "sets": {
+    "dataset": [
+     2.7541,
+     2.761,
+     0.25
+    ],
+    "dataset_vault": [
+     2.9674,
+     2.9746,
+     0.24
+    ],
+    "web": [
+     3.0711,
+     3.0763,
+     0.17
+    ],
+    "web_vault": [
+     2.9788,
+     2.9842,
+     0.18
+    ]
+   }
   }
  ],
  "releases": [
@@ -8047,7 +8427,8 @@
   "NOVA8-24M-v5",
   "NOVA8-53M-v1",
   "NOVA8-53M-v2",
-  "NOVA8-53M-v3"
+  "NOVA8-53M-v3",
+  "NOVA8-53M-v4"
  ],
  "grow": null,
  "grown": [
@@ -8057,10 +8438,10 @@
  ],
  "current": {
   "what": "attempt",
-  "recipe": "drive:longer:deduction+rulelab+compare",
-  "since": 1792076488.8276947
+  "recipe": "drive:gentle:rulelab+recall+code",
+  "since": 1792091463.7075613
  },
- "seed": 7252,
+ "seed": 7266,
  "interventions": [
   {
    "time": 1791208662.8603675,
@@ -8092,56 +8473,6 @@
    },
    "parent": "gentle",
    "lesson": "steps"
-  },
-  "gentle~xp-lr2e-5-w0.80-c0.02-s4400": {
-   "steps": 4400,
-   "flags": {
-    "--lr": "1.5e-5",
-    "--bulk-frac": "0.80",
-    "--code-frac": "0.02"
-   },
-   "parent": "gentle",
-   "experience": {
-    "predicted": 1.078,
-    "sd": 0.542
-   }
-  },
-  "gentle~xp-lr2e-5-w0.81-c0.076-s3600": {
-   "steps": 3600,
-   "flags": {
-    "--lr": "1.9e-5",
-    "--bulk-frac": "0.81",
-    "--code-frac": "0.076"
-   },
-   "parent": "gentle",
-   "experience": {
-    "predicted": 0.595,
-    "sd": 0.537
-   }
-  },
-  "gentle~code0.03": {
-   "steps": 3600,
-   "flags": {
-    "--lr": "1.9e-5",
-    "--bulk-frac": "0.81",
-    "--code-frac": "0.03"
-   },
-   "parent": "gentle",
-   "experience": {
-    "predicted": 0.595,
-    "sd": 0.537
-   },
-   "lesson": "code"
-  },
-  "code~code0.03": {
-   "steps": 4000,
-   "flags": {
-    "--lr": "3e-5",
-    "--bulk-frac": "0.8",
-    "--code-frac": "0.03"
-   },
-   "parent": "code",
-   "lesson": "code"
   },
   "gentle~xp-lr6e-5-w0.70-c0.04-s12000": {
    "steps": 12000,
@@ -8192,6 +8523,82 @@
     "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/longer-skills_deduction-rulelab-skills_compare",
     "--focus": "dir:data/drive_v1/longer-skills_deduction-rulelab-skills_compare",
     "--focus-frac": "0.5"
+   }
+  },
+  "drive:longer:rulelab+recall+code": {
+   "steps": 12000,
+   "drive": {
+    "strategy": "longer",
+    "targets": [
+     "rulelab",
+     "skills/recall",
+     "skills/code"
+    ]
+   },
+   "flags": {
+    "--lr": "7e-5",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/longer-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.5"
+   }
+  },
+  "drive:practice:rulelab+recall+code": {
+   "steps": 6000,
+   "drive": {
+    "strategy": "practice",
+    "targets": [
+     "rulelab",
+     "skills/recall",
+     "skills/code"
+    ]
+   },
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/practice-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/practice-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.5"
+   }
+  },
+  "drive:focus-errors:rulelab+recall+code": {
+   "steps": 6000,
+   "drive": {
+    "strategy": "focus-errors",
+    "targets": [
+     "rulelab",
+     "skills/recall",
+     "skills/code"
+    ]
+   },
+   "flags": {
+    "--lr": "1e-4",
+    "--bulk-frac": "0.5",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus": "dir:data/drive_v1/focus-errors-rulelab-skills_recall-skills_code-cannot_tell-False",
+    "--focus-frac": "0.5"
+   }
+  },
+  "drive:gentle:rulelab+recall+code": {
+   "steps": 6000,
+   "drive": {
+    "strategy": "gentle",
+    "targets": [
+     "rulelab",
+     "skills/recall",
+     "skills/code"
+    ]
+   },
+   "flags": {
+    "--lr": "5e-5",
+    "--bulk-frac": "0.6",
+    "--code-frac": "0.03",
+    "--extra-dirs": "data/teacher_v1,data/web_v1,data/self_v2,data/drive_v1/gentle-rulelab-skills_recall-skills_code",
+    "--focus": "dir:data/drive_v1/gentle-rulelab-skills_recall-skills_code",
+    "--focus-frac": "0.3"
    }
   }
  },
@@ -8559,6 +8966,28 @@
     "outcome": "rejected",
     "gain": -0.78,
     "time": 1792076485.2088406
+   },
+   "drive:longer:deduction+rulelab+compare": {
+    "outcome": "accepted",
+    "gain": -0.7,
+    "time": 1792079106.807182
+   }
+  },
+  "NOVA8-53M-v4": {
+   "drive:longer:rulelab+recall+code": {
+    "outcome": "rejected",
+    "gain": -0.16,
+    "time": 1792090101.9518144
+   },
+   "drive:practice:rulelab+recall+code": {
+    "outcome": "rejected",
+    "gain": -0.25,
+    "time": 1792087510.071189
+   },
+   "drive:focus-errors:rulelab+recall+code": {
+    "outcome": "rejected",
+    "gain": -0.21,
+    "time": 1792091460.9742997
    }
   }
  },
@@ -8607,6 +9036,15 @@
    "code": 60,
    "state_kb": 88.0,
    "class": "NOVA"
+  },
+  {
+   "name": "NOVA8-53M-v4",
+   "time": 1792079153.7873561,
+   "dataset": 2.7541,
+   "web": 3.0711,
+   "code": 59,
+   "state_kb": 88.0,
+   "class": "NOVA"
   }
  ],
  "phase": "improving an ability",
@@ -8627,108 +9065,17 @@
     "practice",
     "longer"
    ]
+  },
+  "NOVA8-53M-v4": {
+   "rulelab+skills/recall+skills/code": [
+    "longer",
+    "practice"
+   ]
   }
  },
- "_last_board": {
-  "skills/arith/new": {
-   "accuracy": 0.325,
-   "chance": 0.25,
-   "correct": "00000000000100110011100010001011001000111000001110100000000000110010010000010001010000000001001001001110000010110000000111001000110000101100100110010110010010110101000100010011010101000000000101010000"
-  },
-  "skills/arith/form": {
-   "accuracy": 0.315,
-   "chance": 0.25,
-   "correct": "00001001100100001011101010001111011100000000111111000000010010010010011000101000000000100000000101000011000110100100011010001000000100100100100000011101010000100101000010000010010101000000000010010000"
-  },
-  "skills/compare/new": {
-   "accuracy": 0.97,
-   "chance": 0.5,
-   "correct": "11111111111100111111111101111110111111111111111111111111111111111111111111111111111111111110111111111111111111111111111111111111111111111111111111110111111111111111111111111111111111111111111111111111"
-  },
-  "skills/compare/form": {
-   "accuracy": 0.905,
-   "chance": 0.5,
-   "correct": "11111011111101111111111111111110111111111111111111101011111011111111111111111111111111111110111111110111110101111110111111110111011111111011111101111111111111111111111111101111110111111111111111110011"
-  },
-  "skills/sequence/new": {
-   "accuracy": 0.205,
-   "chance": 0.25,
-   "correct": "00000000001001000100001001000100100010100000001010101100000100000100001000010000010000001000000010000000100000100010001100000100000100000000000001101001000000000000100001010000110100010000101000000000"
-  },
-  "skills/sequence/form": {
-   "accuracy": 0.24,
-   "chance": 0.25,
-   "correct": "00010010000100010011000011000100100000000000010010100000010010000010100010000001001100001011100111000100000000001100100100000001000101010001000001001100011000000000000000001000010000100000100000010000"
-  },
-  "skills/deduction/new": {
-   "accuracy": 0.635,
-   "chance": 0.333,
-   "correct": "11001000111001110011111000111101100111101111011011110001101110101001111001001010101011111111101001111001100011010101111010111110010000111111001011110101110001111111101111101011101100111111110000100111"
-  },
-  "skills/deduction/form": {
-   "accuracy": 0.44,
-   "chance": 0.333,
-   "correct": "01011000100000010111000000101000100110101110011010111010011110100101110111000000001010110110001000100010101011000011001011011011000000010011000100110001100011101110110101001010101111010000101000010100"
-  },
-  "skills/logic-if/new": {
-   "accuracy": 0.66,
-   "chance": 0.333,
-   "correct": "01111101110011111101001011100111111111111111010111101110101110111001011001011111111001011111001100010100010101000111010011110111101111001011011100101111110011011101111101111111111001100001110000011110"
-  },
-  "skills/logic-if/form": {
-   "accuracy": 0.34,
-   "chance": 0.333,
-   "correct": "01011001010011111001001000100001100111110110000010001000100110101001011000001011000000001011001100000000000100000000000011100001101000000001010000000110010010000101111100111000110000100000110000001000"
-  },
-  "skills/ordering/new": {
-   "accuracy": 0.68,
-   "chance": 0.293,
-   "correct": "10100011001001011111111011000110111000110000111110100111111110101101110001010101111000111000111101011101110011111101111111111111111101111111011010110011111111101110101101110101011110001110100111111111"
-  },
-  "skills/ordering/form": {
-   "accuracy": 0.35,
-   "chance": 0.293,
-   "correct": "00100001001000011011100111000100001000000011110101000111100011001001100001110000001000001101000101010000000100010100110000001101100001010000111111001010000011100010000101010000000000100001010010000011"
-  },
-  "skills/recall/new": {
-   "accuracy": 0.3,
-   "chance": 0.27,
-   "correct": "10010001010111000001000100000000000001000100100000001111000000001000000010100100010110011010000000000100100000000010010010001001101001000010111000100100001100001111100011000100000110001110100000000011"
-  },
-  "skills/recall/form": {
-   "accuracy": 0.215,
-   "chance": 0.27,
-   "correct": "00000000010100000000000010100101000010001000000000010110100000001000000101000100000010010000000100000100011110000010000100001101000000010011000000000010000010000100001111000100000011000000000000001000"
-  },
-  "skills/code/new": {
-   "accuracy": 0.255,
-   "chance": 0.25,
-   "correct": "01010011010010100001001000001000000000001000000000000001000010110101000101100100001010100000000000000011010110110000000001011110000000000100100000001000100001000000111000001001011000000010010010000000"
-  },
-  "skills/code/form": {
-   "accuracy": 0.145,
-   "chance": 0.25,
-   "correct": "00100100010000000100000100000000010000000000000000010000010000000000100000000000000000001010000001001010001000100001100100000101000010000000000000000000010010000000010000000000000010001000001000010000"
-  },
-  "rulelab/same": {
-   "accuracy": 0.38,
-   "chance": 0.235,
-   "correct": "00100101010001001001100010010111011000000010010001111011000100001101101100110000011001001101010100000001010010000000000000101100011011001110100100100001110101001110100010111001011000001000100110000000"
-  },
-  "rulelab/phrasing": {
-   "accuracy": 0.345,
-   "chance": 0.236,
-   "correct": "10011000001111101001010110100100100100000000100010000011100101010000001000011000110101010010000010100010000001000100010100000110101001001101001010000000010001010000000010100010011101011100110010010100"
-  },
-  "rulelab/words": {
-   "accuracy": 0.345,
-   "chance": 0.234,
-   "correct": "00000010010000000001000100101001010010000010000010100000110010100101100100101000001001000101000101100001101101110111110101010100000000000100101000110000010111110000000100001111000001010000100111000101"
-  },
-  "rulelab/deeper": {
-   "accuracy": 0.38,
-   "chance": 0.167,
-   "correct": "00010101100011000011010000011010010011100001000100000001010100000110010001010000001101010100010001000010110011100001110011100001111010010011000010010000111110111001011100100001100000010000101010001010"
-  }
- }
+ "text_anchor": 2.8924,
+ "drive_wins": {
+  "longer": 1
+ },
+ "initiative_next": "core-structured"
 }

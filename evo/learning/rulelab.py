@@ -84,14 +84,14 @@ def chain_text(lang: str, dim: str, a, b, c) -> str:
     return f"{a} is {w[0]} than {b}, who is {w[0]} than {c}."
 
 
-def problem(seed: int, part: str = "same", rng: random.Random | None = None) -> dict:
+def problem(seed: int, part: str = "same", rng: random.Random | None = None, lengths: tuple[int, ...] | None = None) -> dict:
     """A hidden order of k people, facts between neighbours (shuffled, each stated 'more' or 'less'), a question.
     With some chance one fact is left out, so the order splits into two pieces and some questions cannot be told."""
     rng = rng or random.Random(f"rulelab:{part}:{seed}")
     lang = "sk" if rng.random() < 0.6 else "en"
     dims = EXAM_DIMS if part == "words" else TRAIN_DIMS
     dim = rng.choice(dims)
-    k = 5 if part == "deeper" else rng.choice([3, 3, 4])
+    k = 5 if part == "deeper" else 7 if part == "seven" else rng.choice(list(lengths) if lengths else [3, 3, 4])
     pool = PEOPLE_SK if lang == "sk" else PEOPLE_EN
     order = rng.sample(pool, k)                                  # order[0] is the most
     links = list(range(k - 1))                                   # link i: order[i] > order[i+1]
@@ -195,15 +195,16 @@ def contrast(p: dict, rng: random.Random) -> dict:
     return problem(p["seed"] + 7_777_777, p["part"], rng)              # a fresh sibling (rare)
 
 
-def material(method: str, n: int, root: Path = ROOT, accept=None) -> Path:
+def material(method: str, n: int, root: Path = ROOT, accept=None, lengths: tuple[int, ...] | None = None,
+             name: str | None = None) -> Path:
     exam = {problem(EXAM_SEED + i, part)["prompt"] for part in ("same", "phrasing", "words", "deeper") for i in range(400)}
-    path = Path(root) / method / "material.jsonl"
+    path = Path(root) / (name or method) / "material.jsonl"
     path.parent.mkdir(parents=True, exist_ok=True)
     written, seed = 0, 0
     with path.open("w", encoding="utf-8") as f:
         while written < n:
             rng = random.Random(f"rulelab-mat:{seed}")
-            p = problem(seed, "same", rng)
+            p = problem(seed, "same", rng, lengths)
             seed += 1
             if p["prompt"] in exam:
                 continue
@@ -273,7 +274,8 @@ def parse_order(line: str) -> list[list[str]] | None:
     return None
 
 
-def exam_self(checkpoint: str, tokenizer: str, n: int = 200, device: str = "auto") -> dict:
+def exam_self(checkpoint: str, tokenizer: str, n: int = 200, device: str = "auto",
+              parts: tuple[str, ...] = PARTS) -> dict:
     """The fair exam for the rule-trained core: it first WRITES the order itself (greedy, one line), an independent
     checker compares it with the true order, and only then the answer is chosen - after its own line, the way it
     learned. Measures the discoverer (is its order right?) and the use of it (is the answer right, given its order?)."""
@@ -288,7 +290,7 @@ def exam_self(checkpoint: str, tokenizer: str, n: int = 200, device: str = "auto
     model = model.float().to(device).eval()
     tok = NovaTokenizer.load(tokenizer)
     out: dict = {"checkpoint": checkpoint, "n": n, "kinds": {}}
-    for part in PARTS:
+    for part in parts:
         items = exam_items(part, n)
         lines, right_order, wellformed = [], [], []
         for it in items:
@@ -320,6 +322,8 @@ def main(argv: list[str] | None = None) -> int:
     ma = sub.add_parser("material")
     ma.add_argument("method", choices=["qa", "rule"])
     ma.add_argument("--n", type=int, default=60000)
+    ma.add_argument("--lengths", default=None, help="comma list of chain lengths for the material (default 3,3,4)")
+    ma.add_argument("--name", default=None)
     ex = sub.add_parser("exam")
     ex.add_argument("checkpoint")
     ex.add_argument("--tokenizer", default=None)
@@ -330,19 +334,23 @@ def main(argv: list[str] | None = None) -> int:
     es.add_argument("--tokenizer", default=None)
     es.add_argument("--n", type=int, default=200)
     es.add_argument("--device", default="auto")
+    es.add_argument("--parts", default=",".join(PARTS), help="comma list; 'seven' = chains of 7 (never in any material)")
     sh = sub.add_parser("show")
     sh.add_argument("part", choices=list(PARTS) + ["rule"])
     sh.add_argument("--n", type=int, default=3)
     args = ap.parse_args(argv)
     if args.cmd == "material":
-        print(material(args.method, args.n))
+        print(material(args.method, args.n, lengths=tuple(int(x) for x in args.lengths.split(",")) if args.lengths else None,
+                       name=args.name))
     elif args.cmd in ("exam", "exam-self"):
         tok = args.tokenizer
         if tok is None:
             st = json.loads(Path("evo/engine/evo_state.json").read_text(encoding="utf-8"))
             tok = str(Path(st["best_known"]["dataset"]) / "tokenizer.json")
-        f = exam if args.cmd == "exam" else exam_self
-        print(json.dumps(f(args.checkpoint, tok, args.n, args.device), ensure_ascii=False))
+        if args.cmd == "exam":
+            print(json.dumps(exam(args.checkpoint, tok, args.n, args.device), ensure_ascii=False))
+        else:
+            print(json.dumps(exam_self(args.checkpoint, tok, args.n, args.device, tuple(args.parts.split(","))), ensure_ascii=False))
     elif args.part == "rule":
         for s in range(args.n):
             rng = random.Random(f"rulelab-mat:{s}")
