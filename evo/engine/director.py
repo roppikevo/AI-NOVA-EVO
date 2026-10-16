@@ -770,6 +770,7 @@ def drive_step(state: dict, world: World) -> str | None:
     strategies = list(drive.STRATEGIES)
     for note in problems.sync(reg, champ, board, confirm, gaps, strategies):
         log_event({"event": "problem", "champion": champ, "note": note})
+    problems.save(reg)                 # at once: a restart during the attempt must not lose what the register learned
     order = drive.order(state)
     date = time.strftime("%Y-%m-%d %H:%M")
     while True:
@@ -1105,6 +1106,25 @@ def polish(state: dict, world: World, checkpoint: str, names: list[str], tag: st
     return current if current != checkpoint else None
 
 
+def grow_judge(state: dict, world: World, champ: dict, challenger: str, rec: dict, key: str) -> dict:
+    """A new generation is judged like every other challenger: text AND the whole abilities suite, item by item
+    (the same judge, the same rules of the constitution) - a bigger core that writes better text but can do less
+    is not better."""
+    state.pop("_last_board", None)
+    cmp = None
+    if hasattr(world, "abilities"):
+        try:
+            cmp = ability_compare(state, world, challenger)
+        except Exception as exc:                     # without the measurement the judge decides on text alone
+            rec[key + "_error"] = f"{type(exc).__name__}: {exc}"[:300]
+    if cmp is not None:
+        rec[key] = {"better": cmp["better"], "worse": cmp["worse"]}
+        v = world.judge(champ["checkpoint"], challenger, abilities=cmp)
+    else:
+        v = world.judge(champ["checkpoint"], challenger)
+    return text_anchor_check(state, v)
+
+
 def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] | None = None) -> dict | None:
     """Train the next (bigger) generation for one segment; when it is finished, let the judge decide."""
     ladder = load_ladder() if ladder is None else ladder
@@ -1121,11 +1141,16 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
     if side:
         world.start_side(side)
     rc, tail = world.run([PY, "-m", "evo.engine.train_line", "--name", g["line"], "--config-override", json.dumps(g["override"]),
-                          "--total-steps", str(g["steps"]), "--max-hours", str(hours), "--bulk-frac", "0.95", "--code-frac", "0.03",
+                          "--total-steps", str(g["steps"]), "--max-hours", str(hours), "--bulk-frac", str(g.get("bulk_frac", 0.95)),
+                          "--code-frac", str(g.get("code_frac", 0.03)),
                           "--val-extra-dir", str(world.web_dir)] + (["--lr", str(g["lr"])] if g.get("lr") else [])
                          + (["--compile"] if g.get("compile") else []) + (["--carry", str(g["carry"])] if g.get("carry") else [])
                          + (["--carry-share", str(g["carry_share"])] if g.get("carry") and g.get("carry_share") else [])
                          + (["--batch-size", str(g["batch_size"])] if g.get("batch_size") else [])
+                         + [a for k, f in (("accum", "--accum"), ("patience", "--patience"), ("warmup", "--warmup"),
+                                           ("eval_every", "--eval-every"), ("save_every", "--save-every"),
+                                           ("bulk_dir", "--bulk-dir"), ("extra_dirs", "--extra-dirs"))
+                            if g.get(k) for a in (f, str(g[k]))]
                          + (["--teacher", str(g["teacher"]), "--teacher-until", str(g.get("teacher_until") or int(0.3 * g["steps"])),
                              "--teacher-weight", str(g.get("teacher_weight", 0.5))] if g.get("teacher") and Path(str(g["teacher"])).exists() else []),
                          timeout_h=hours + 1.0)
@@ -1154,17 +1179,18 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
                 v = {"accept": False, "reasons": [f"identity test failed: class {ident.get('class')}, the state grows by "
                                                   f"{ident.get('growth_bytes_per_token')} bytes per token"]}
             else:
-                v = world.judge(champ["checkpoint"], line["best_checkpoint"])
-            rec["verdict"] = {k: v[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator") if k in v}
+                v = grow_judge(state, world, champ, line["best_checkpoint"], rec, "abilities_raw")
+            rec["verdict"] = {k: v[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator", "path") if k in v}
             winner, polished_with = line["best_checkpoint"], []
-            trained = {k: g[k] for k in ("steps", "lr", "compile", "carry", "carry_share", "batch_size") if g.get(k)}
+            trained = {k: g[k] for k in ("steps", "lr", "compile", "carry", "carry_share", "batch_size", "accum") if g.get(k)}
             if not v["accept"] and not (ident and not ident.get("pass")) and champ.get("polish"):
-                # the champion was polished after its own generation: the new core gets the same before the last word
+                # the champion was polished after its own generation (its drive practice included): the new core gets
+                # the same before the last word
                 better = polish(state, world, line["best_checkpoint"], champ["polish"], g["line"], trained)
                 if better:
-                    v2 = world.judge(champ["checkpoint"], better)
+                    v2 = grow_judge(state, world, champ, better, rec, "abilities")
                     rec["verdict_raw"], polished_with = rec["verdict"], list(champ["polish"])
-                    rec["verdict"] = {k: v2[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator") if k in v2}
+                    rec["verdict"] = {k: v2[k] for k in ("accept", "reasons", "decision", "vault", "code", "creator", "path") if k in v2}
                     rec["polished_with"] = polished_with
                     v, winner = v2, better
             if v["accept"]:
@@ -1179,6 +1205,7 @@ def grow_step(state: dict, world: World, hours: float = 3.0, ladder: list[dict] 
                     state["accepted"] += 1
                     state["rejected_in_a_row"] = 0
                     rec["released"] = name
+                    keep_board(state, name, released)        # the new core's abilities: the register follows it
         except Exception as exc:
             rec["error"] = f"{type(exc).__name__}: {exc}"[:400]
             if _broken(exc):                   # keep the finished generation: it is judged again once the Creator has looked

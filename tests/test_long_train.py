@@ -64,3 +64,17 @@ def test_load_tokens_caches(tmp_path):
     a = lt.load_tokens(p)
     assert a.shape == (2, 4) and (tmp_path / "train.npy").exists()
     assert (lt.load_tokens(p) == a).all()
+
+
+def test_gradient_accumulation(tmp_path):
+    """accum batches per optimizer step: one step, `accum` forward passes; the gradient is their mean."""
+    torch.manual_seed(0)
+    m = Tiny()
+    calls = []
+    orig = m.forward
+    m.forward = lambda *a: (calls.append(1), orig(*a))[1]
+    r = lt.long_train(m, _data(), _data(16), steps=6, out_dir=tmp_path, meta={"tag": "a"},
+                      batch_size=4, accum=3, lr=3e-3, warmup=1, eval_every=1000, save_every=1000,
+                      progress=tmp_path / "p.jsonl", stop_file=tmp_path / "STOP", log=lambda *_: None)
+    assert r["steps_done"] == 6
+    assert len(calls) >= 18          # 6 steps x 3 micro-batches (+ evaluation passes)

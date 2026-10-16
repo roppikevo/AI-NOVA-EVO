@@ -967,3 +967,23 @@ def test_a_crashed_practice_run_may_be_tried_again_once(home, monkeypatch):
     whats = [d.cycle(st, w) for _ in range(6)]
     strategies = [x.split(":")[2] for x in whats if x.startswith("drive:")]
     assert strategies[:2] == ["practice", "practice"] and strategies.count("practice") == 2
+
+
+def test_a_new_generation_gets_its_recipe_and_is_judged_on_the_abilities_too(home):
+    champ = _board({"skills/ordering/new": 0.6, "rulelab/same": 0.7})
+    w = AbilityWorld(champ, [champ], verdicts=[True])
+    st = fresh()
+    st["champion"]["scores"] = w.scores("")
+    ladder = [{"line": "NOVA8-88M-v3", "override": {"d_model": 896}, "steps": 500000, "batch_size": 16, "accum": 3,
+               "patience": 6, "bulk_dir": "data/bulk_v2", "bulk_frac": 0.93, "lr": 1e-3}]
+    line = home / "evo/lines/NOVA8-88M-v3"
+    line.mkdir(parents=True)
+    (line / "state.json").write_text(json.dumps({"steps_done": 1000, "finished": False}))
+    d.grow_step(st, w, ladder=ladder)
+    cmd = w.cmds[-1]
+    for flag, val in (("--accum", "3"), ("--patience", "6"), ("--bulk-dir", "data/bulk_v2"), ("--bulk-frac", "0.93"), ("--batch-size", "16")):
+        assert cmd[cmd.index(flag) + 1] == val
+    (line / "state.json").write_text(json.dumps({"steps_done": 300000, "finished": True, "best_checkpoint": "evo/lines/x/best.pt"}))
+    rec = d.grow_step(st, w, ladder=ladder)
+    assert w.abilities_seen and w.abilities_seen[-1] is not None             # the judge saw the abilities
+    assert rec.get("released") == "NOVA8-88M-v3-v1" and "abilities_raw" in rec

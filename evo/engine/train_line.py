@@ -51,6 +51,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--total-steps", type=int, required=True)
     ap.add_argument("--max-hours", type=float, default=5.4)
     ap.add_argument("--batch-size", type=int, default=64)
+    ap.add_argument("--accum", type=int, default=1, help="batches per optimizer step (a big core at a small batch: effective batch = batch x accum)")
+    ap.add_argument("--patience", type=int, default=10 ** 6,
+                    help="stop (and count the line as finished) after this many evaluations without a better validation - the length of a run by its validation, not fixed")
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--warmup", type=int, default=1000)
     ap.add_argument("--eval-every", type=int, default=5000)
@@ -112,19 +115,19 @@ def main(argv: list[str] | None = None) -> int:
     meta = {"tag": args.name, "candidate": args.name, "config": config, "dataset": str(dataset), "kind": "long_train",
             "line": args.name}
     rep = lt.long_train(model, train, val, steps=args.total_steps, out_dir=out, meta=meta,
-                        batch_size=args.batch_size, lr=args.lr, warmup=args.warmup, eval_every=args.eval_every,
-                        save_every=args.save_every, patience=10 ** 6, max_hours=args.max_hours, resume=resume,
+                        batch_size=args.batch_size, accum=args.accum, lr=args.lr, warmup=args.warmup, eval_every=args.eval_every,
+                        save_every=args.save_every, patience=args.patience, max_hours=args.max_hours, resume=resume,
                         bulk=bulk, bulk_frac=args.bulk_frac, code=code, code_frac=args.code_frac,
                         extra_val=extra_val, progress=out / "progress.jsonl", stop_file=lt.STOP_FILE,
                         compile_model=args.compile, carry=args.carry, carry_share=args.carry_share,
                         teacher=lt.load_teacher(args.teacher) if (resume["step"] if resume else 0) < args.teacher_until else None,
                         teacher_weight=args.teacher_weight, teacher_until=args.teacher_until)
-    finished = rep["steps_done"] >= args.total_steps
+    finished = rep["steps_done"] >= args.total_steps or rep["stop_reason"] == "early_stopping"
     st = {"name": args.name, "config": config, "params": params, "total_steps": args.total_steps,
           "steps_done": rep["steps_done"], "best_val": rep["best_val"], "finished": finished,
           "select_metric": rep.get("select_metric"), "best_parts": rep.get("best_parts"),
           "stop_reason": rep["stop_reason"], "best_checkpoint": rep["best_checkpoint"],
-          "last_checkpoint": rep["last_checkpoint"], "tokens_seen": rep["steps_done"] * args.batch_size * (train.shape[1] - 1),
+          "last_checkpoint": rep["last_checkpoint"], "tokens_seen": rep["steps_done"] * args.batch_size * args.accum * (train.shape[1] - 1),
           "hours_total": round(st.get("hours_total", 0.0) + rep["hours"], 2), "updated": time.strftime("%Y-%m-%d %H:%M")}
     (out / "state.json").write_text(json.dumps(st, indent=1))
     print("=== LINE STATE ===")

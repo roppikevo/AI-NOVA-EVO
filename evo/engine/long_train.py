@@ -238,6 +238,7 @@ def long_train(
     bulk_frac: float = 0.7,
     code: np.ndarray | None = None,
     code_frac: float = 0.0,
+    accum: int = 1,
     warm_optimizer: dict | None = None,
     boost: np.ndarray | None = None,
     boost_frac: float = 0.15,
@@ -339,95 +340,96 @@ def long_train(
     for step in range(start_step, steps):
         for g in opt.param_groups:
             g["lr"] = lr_at(step, steps, lr, warmup)
-        states_in = None
-        sb = None                                    # rows of running text in a mixed batch
-        if n_stream:
-            if stream is None:
-                stream = {"start": np.sort(rng.integers(0, len(bulk) - carry, size=n_stream)), "k": 0, "states": None}
-            sb = torch.from_numpy(np.asarray(bulk[stream["start"] + stream["k"]])).long().to(device)
-            rest = batch_size - n_stream
-            nc = int(rng.binomial(rest, min(1.0, code_frac * batch_size / rest))) if code is not None and len(code) and code_frac > 0 else 0
-            nb = int(rng.binomial(rest - nc, min(1.0, max(0.0, (batch_size * bulk_frac - n_stream) / rest))))
-            rows = [train[_dataset_rows(rng, len(train), rest - nb - nc, focus, focus_frac)]]
-            if nb:
-                rows.append(np.asarray(bulk[np.sort(rng.integers(0, len(bulk), size=nb))]))
-            if nc:
-                rows.append(code[rng.integers(0, len(code), size=nc)])
-            b = torch.from_numpy(np.concatenate(rows)).long().to(device)
-        elif stream_ok and stream is None and rng.random() < stream_p:
-            stream = {"start": np.sort(rng.integers(0, len(bulk) - carry, size=batch_size)), "k": 0, "states": None}
-        if n_stream:
-            pass
-        elif stream is not None:
-            b = torch.from_numpy(np.asarray(bulk[stream["start"] + stream["k"]])).long().to(device)
-            states_in = stream["states"]
-        elif stream_ok:
-            # between streams: a batch of the other material (dataset rows and code practice), read with a fresh state
-            share = min(1.0, code_frac / max(1e-9, 1.0 - bulk_frac))
-            nc = int(rng.binomial(batch_size, share)) if code is not None and len(code) and code_frac > 0 else 0
-            rows = [train[_dataset_rows(rng, len(train), batch_size - nc, focus, focus_frac)]]
-            if nc:
-                rows.append(code[rng.integers(0, len(code), size=nc)])
-            b = torch.from_numpy(np.concatenate(rows)).long().to(device)
-        elif (bulk is not None and len(bulk)) or (code is not None and len(code) and code_frac > 0):
-            # mix per batch: code-school practice (code_frac), big web corpus (bulk_frac), rest dataset
-            nc = int(rng.binomial(batch_size, code_frac)) if code is not None and len(code) else 0
-            nb = int(rng.binomial(batch_size - nc, bulk_frac)) if bulk is not None and len(bulk) else 0
-            rows = [train[_dataset_rows(rng, len(train), batch_size - nb - nc, focus, focus_frac)]]
-            if nb and boost is not None and len(boost):
-                # part of the web share goes to the language that fell behind (scoreboard)
-                nx = int(rng.binomial(nb, boost_frac))
-                if nx:
-                    rows.append(np.asarray(boost[rng.integers(0, len(boost), size=nx)]))
-                nb -= nx
-            if nb:
-                rows.append(np.asarray(bulk[np.sort(rng.integers(0, len(bulk), size=nb))]))
-            if nc:
-                rows.append(code[rng.integers(0, len(code), size=nc)])
-            b = torch.from_numpy(np.concatenate(rows)).long().to(device)
-        else:
-            idx = _dataset_rows(rng, len(train), batch_size, focus, focus_frac)
-            b = torch.from_numpy(train[idx]).long().to(device)
-        with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
-            # in a stream the whole row goes in (its last token too): the state must be the one the next row starts from
-            args_in = (b, states_in) if stream is not None and sb is None else (b[:, :-1],)
-            try:
-                out = forward(*args_in)
-                out_stream = forward(sb, stream["states"]) if sb is not None else None
-            except Exception as exc:
-                if forward is model:
-                    raise
-                log(f"the compiled model failed ({type(exc).__name__}: {str(exc)[:200]}) - going on without compiling")
-                forward = model
-                out = model(*args_in)
-                out_stream = model(sb, stream["states"]) if sb is not None else None
-            logits = _logits(out)
-            fresh = False
-            if sb is not None:
-                loss = (F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1), reduction="sum")
-                        + F.cross_entropy(out_stream[0][:, :-1].reshape(-1, logits.size(-1)).float(), sb[:, 1:].reshape(-1), reduction="sum")
-                        ) / (b[:, 1:].numel() + sb[:, 1:].numel())
-                stream["states"], stream["k"] = detach_states(out_stream[1]), stream["k"] + 1
-                if stream["k"] >= carry:
-                    stream = None
+        opt.zero_grad(set_to_none=True)
+        for _micro in range(accum):                  # gradient accumulation: one step = accum batches
+            states_in = None
+            sb = None                                    # rows of running text in a mixed batch
+            if n_stream:
+                if stream is None:
+                    stream = {"start": np.sort(rng.integers(0, len(bulk) - carry, size=n_stream)), "k": 0, "states": None}
+                sb = torch.from_numpy(np.asarray(bulk[stream["start"] + stream["k"]])).long().to(device)
+                rest = batch_size - n_stream
+                nc = int(rng.binomial(rest, min(1.0, code_frac * batch_size / rest))) if code is not None and len(code) and code_frac > 0 else 0
+                nb = int(rng.binomial(rest - nc, min(1.0, max(0.0, (batch_size * bulk_frac - n_stream) / rest))))
+                rows = [train[_dataset_rows(rng, len(train), rest - nb - nc, focus, focus_frac)]]
+                if nb:
+                    rows.append(np.asarray(bulk[np.sort(rng.integers(0, len(bulk), size=nb))]))
+                if nc:
+                    rows.append(code[rng.integers(0, len(code), size=nc)])
+                b = torch.from_numpy(np.concatenate(rows)).long().to(device)
+            elif stream_ok and stream is None and rng.random() < stream_p:
+                stream = {"start": np.sort(rng.integers(0, len(bulk) - carry, size=batch_size)), "k": 0, "states": None}
+            if n_stream:
+                pass
+            elif stream is not None:
+                b = torch.from_numpy(np.asarray(bulk[stream["start"] + stream["k"]])).long().to(device)
+                states_in = stream["states"]
+            elif stream_ok:
+                # between streams: a batch of the other material (dataset rows and code practice), read with a fresh state
+                share = min(1.0, code_frac / max(1e-9, 1.0 - bulk_frac))
+                nc = int(rng.binomial(batch_size, share)) if code is not None and len(code) and code_frac > 0 else 0
+                rows = [train[_dataset_rows(rng, len(train), batch_size - nc, focus, focus_frac)]]
+                if nc:
+                    rows.append(code[rng.integers(0, len(code), size=nc)])
+                b = torch.from_numpy(np.concatenate(rows)).long().to(device)
+            elif (bulk is not None and len(bulk)) or (code is not None and len(code) and code_frac > 0):
+                # mix per batch: code-school practice (code_frac), big web corpus (bulk_frac), rest dataset
+                nc = int(rng.binomial(batch_size, code_frac)) if code is not None and len(code) else 0
+                nb = int(rng.binomial(batch_size - nc, bulk_frac)) if bulk is not None and len(bulk) else 0
+                rows = [train[_dataset_rows(rng, len(train), batch_size - nb - nc, focus, focus_frac)]]
+                if nb and boost is not None and len(boost):
+                    # part of the web share goes to the language that fell behind (scoreboard)
+                    nx = int(rng.binomial(nb, boost_frac))
+                    if nx:
+                        rows.append(np.asarray(boost[rng.integers(0, len(boost), size=nx)]))
+                    nb -= nx
+                if nb:
+                    rows.append(np.asarray(bulk[np.sort(rng.integers(0, len(bulk), size=nb))]))
+                if nc:
+                    rows.append(code[rng.integers(0, len(code), size=nc)])
+                b = torch.from_numpy(np.concatenate(rows)).long().to(device)
             else:
-                fresh = stream is None                       # read with a fresh state: the teacher can read the same rows
-                if stream is not None:
-                    logits = logits[:, :-1]
-                    stream["states"], stream["k"] = detach_states(out[1]), stream["k"] + 1
+                idx = _dataset_rows(rng, len(train), batch_size, focus, focus_frac)
+                b = torch.from_numpy(train[idx]).long().to(device)
+            with torch.autocast(device_type=device.type, dtype=torch.bfloat16, enabled=use_bf16):
+                # in a stream the whole row goes in (its last token too): the state must be the one the next row starts from
+                args_in = (b, states_in) if stream is not None and sb is None else (b[:, :-1],)
+                try:
+                    out = forward(*args_in)
+                    out_stream = forward(sb, stream["states"]) if sb is not None else None
+                except Exception as exc:
+                    if forward is model:
+                        raise
+                    log(f"the compiled model failed ({type(exc).__name__}: {str(exc)[:200]}) - going on without compiling")
+                    forward = model
+                    out = model(*args_in)
+                    out_stream = model(sb, stream["states"]) if sb is not None else None
+                logits = _logits(out)
+                fresh = False
+                if sb is not None:
+                    loss = (F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1), reduction="sum")
+                            + F.cross_entropy(out_stream[0][:, :-1].reshape(-1, logits.size(-1)).float(), sb[:, 1:].reshape(-1), reduction="sum")
+                            ) / (b[:, 1:].numel() + sb[:, 1:].numel())
+                    stream["states"], stream["k"] = detach_states(out_stream[1]), stream["k"] + 1
                     if stream["k"] >= carry:
                         stream = None
-                loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1))
-            t_weight = teacher_weight * (1.0 - step / teacher_until) if teacher is not None and step < teacher_until else 0.0
-            plain = float(loss.detach())                         # the loss on the text alone is what the log shows
-            if t_weight > 0 and (sb is not None or fresh):
-                loss = loss + t_weight * teacher_loss(teacher, b[:, :-1], logits, teacher_topk)
-        opt.zero_grad(set_to_none=True)
-        loss.backward()
+                else:
+                    fresh = stream is None                       # read with a fresh state: the teacher can read the same rows
+                    if stream is not None:
+                        logits = logits[:, :-1]
+                        stream["states"], stream["k"] = detach_states(out[1]), stream["k"] + 1
+                        if stream["k"] >= carry:
+                            stream = None
+                    loss = F.cross_entropy(logits.reshape(-1, logits.size(-1)).float(), b[:, 1:].reshape(-1))
+                t_weight = teacher_weight * (1.0 - step / teacher_until) if teacher is not None and step < teacher_until else 0.0
+                plain = float(loss.detach())                         # the loss on the text alone is what the log shows
+                if t_weight > 0 and (sb is not None or fresh):
+                    loss = loss + t_weight * teacher_loss(teacher, b[:, :-1], logits, teacher_topk)
+            (loss / accum).backward()
+            running += plain
+            running_n += 1
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         opt.step()
-        running += plain
-        running_n += 1
 
         done = step + 1
         if done % eval_every == 0 or done == steps:
@@ -483,6 +485,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--steps", type=int, default=20000)
     ap.add_argument("--batch-size", type=int, default=16)
+    ap.add_argument("--accum", type=int, default=1, help="gradient accumulation: batches per optimizer step (effective batch = batch-size x accum)")
     ap.add_argument("--lr", type=float, default=3e-4)
     ap.add_argument("--warmup", type=int, default=500)
     ap.add_argument("--eval-every", type=int, default=1000)
@@ -662,7 +665,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"data: train {train.shape}, val {val.shape} ({time.time() - t0:.0f}s)")
 
     report = long_train(model, train, val, steps=args.steps, out_dir=OUT_DIR, meta=meta,
-                        batch_size=args.batch_size, lr=args.lr, warmup=args.warmup,
+                        batch_size=args.batch_size, accum=args.accum, lr=args.lr, warmup=args.warmup,
                         eval_every=args.eval_every, save_every=args.save_every,
                         patience=args.patience, max_hours=args.max_hours, resume=resume,
                         bulk=bulk, bulk_frac=args.bulk_frac, code=code, code_frac=args.code_frac,
@@ -673,7 +676,7 @@ def main(argv: list[str] | None = None) -> int:
     report["bulk_sequences"] = 0 if bulk is None else int(len(bulk))
     report["params"] = int(sum(p.numel() for p in model.parameters()))
     report["config"] = config
-    report["tokens_seen"] = report["steps_done"] * args.batch_size * (train.shape[1] - 1)
+    report["tokens_seen"] = report["steps_done"] * args.batch_size * args.accum * (train.shape[1] - 1)
     report["train_tokens"] = int(train.size)
 
     report["improved"] = bool(report["best_checkpoint"]) and report["best_val"] < report["val_start"]
